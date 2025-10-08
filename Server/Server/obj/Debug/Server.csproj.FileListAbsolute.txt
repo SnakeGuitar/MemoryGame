@@ -1,0 +1,7 @@
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.dll.config
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.dll
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.pdb
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.dll
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.pdb

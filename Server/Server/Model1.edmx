@@ -1,0 +1,612 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="memoryGameModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="amigo">
+          <Key>
+            <PropertyRef Name="idAmigo" />
+          </Key>
+          <Property Name="idAmigo" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="carta">
+          <Key>
+            <PropertyRef Name="idCarta" />
+          </Key>
+          <Property Name="idCarta" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="descripcion" Type="varchar" MaxLength="80" />
+          <Property Name="imagen" Type="varbinary(max)" Nullable="false" />
+          <Property Name="sonido" Type="varbinary(max)" Nullable="false" />
+          <Property Name="idInventario" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="historial">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+            <PropertyRef Name="idPartida" />
+            <PropertyRef Name="puntuacion" />
+            <PropertyRef Name="idGanador" />
+            <PropertyRef Name="usernameGanador" />
+          </Key>
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="idPartida" Type="int" Nullable="false" />
+          <Property Name="puntuacion" Type="int" Nullable="false" />
+          <Property Name="idGanador" Type="int" Nullable="false" />
+          <Property Name="usernameGanador" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="inventario">
+          <Key>
+            <PropertyRef Name="idInventario" />
+          </Key>
+          <Property Name="idInventario" Type="int" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="partida">
+          <Key>
+            <PropertyRef Name="idPartida" />
+          </Key>
+          <Property Name="idPartida" Type="int" Nullable="false" />
+          <Property Name="fechaHoraInicio" Type="datetime" Nullable="false" />
+          <Property Name="fechaHoraFin" Type="datetime" Nullable="false" />
+          <Property Name="idInventario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="redSocial">
+          <Key>
+            <PropertyRef Name="idRedSocial" />
+          </Key>
+          <Property Name="idRedSocial" Type="int" Nullable="false" />
+          <Property Name="cuenta" Type="varchar" MaxLength="50" />
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sancion">
+          <Key>
+            <PropertyRef Name="idSancion" />
+          </Key>
+          <Property Name="idSancion" Type="int" Nullable="false" />
+          <Property Name="tipo" Type="tinyint" Nullable="false" />
+          <Property Name="duracion" Type="datetime" Nullable="false" />
+          <Property Name="idPartida" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+          </Key>
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="nombreUsuario" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="contrasenia" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="avatar" Type="varbinary(max)" Nullable="false" />
+          <Property Name="idSancion" Type="int" />
+        </EntityType>
+        <Association Name="FK_amigo_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="amigo" Type="Self.amigo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="amigo">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_carta_inventario">
+          <End Role="inventario" Type="Self.inventario" Multiplicity="1" />
+          <End Role="carta" Type="Self.carta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="inventario">
+              <PropertyRef Name="idInventario" />
+            </Principal>
+            <Dependent Role="carta">
+              <PropertyRef Name="idInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_historial_partida">
+          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="historial" Type="Self.historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partida">
+              <PropertyRef Name="idPartida" />
+            </Principal>
+            <Dependent Role="historial">
+              <PropertyRef Name="idPartida" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_historial_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="historial" Type="Self.historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="historial">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_partida_inventario">
+          <End Role="inventario" Type="Self.inventario" Multiplicity="1" />
+          <End Role="partida" Type="Self.partida" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="inventario">
+              <PropertyRef Name="idInventario" />
+            </Principal>
+            <Dependent Role="partida">
+              <PropertyRef Name="idInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_redSocial_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="redSocial" Type="Self.redSocial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="redSocial">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sancion_partida">
+          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="sancion" Type="Self.sancion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partida">
+              <PropertyRef Name="idPartida" />
+            </Principal>
+            <Dependent Role="sancion">
+              <PropertyRef Name="idPartida" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_sancion">
+          <End Role="sancion" Type="Self.sancion" Multiplicity="0..1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sancion">
+              <PropertyRef Name="idSancion" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="idSancion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="memoryGameModelStoreContainer">
+          <EntitySet Name="amigo" EntityType="Self.amigo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="carta" EntityType="Self.carta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="inventario" EntityType="Self.inventario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="partida" EntityType="Self.partida" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="redSocial" EntityType="Self.redSocial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sancion" EntityType="Self.sancion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="historial" EntityType="Self.historial" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [historial].[idUsuario] AS [idUsuario], 
+    [historial].[idPartida] AS [idPartida], 
+    [historial].[puntuacion] AS [puntuacion], 
+    [historial].[idGanador] AS [idGanador], 
+    [historial].[usernameGanador] AS [usernameGanador]
+    FROM [dbo].[historial] AS [historial]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_amigo_usuario" Association="Self.FK_amigo_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="amigo" EntitySet="amigo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_carta_inventario" Association="Self.FK_carta_inventario">
+            <End Role="inventario" EntitySet="inventario" />
+            <End Role="carta" EntitySet="carta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_historial_partida" Association="Self.FK_historial_partida">
+            <End Role="partida" EntitySet="partida" />
+            <End Role="historial" EntitySet="historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_historial_usuario" Association="Self.FK_historial_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="historial" EntitySet="historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_partida_inventario" Association="Self.FK_partida_inventario">
+            <End Role="inventario" EntitySet="inventario" />
+            <End Role="partida" EntitySet="partida" />
+          </AssociationSet>
+          <AssociationSet Name="FK_redSocial_usuario" Association="Self.FK_redSocial_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="redSocial" EntitySet="redSocial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sancion_partida" Association="Self.FK_sancion_partida">
+            <End Role="partida" EntitySet="partida" />
+            <End Role="sancion" EntitySet="sancion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_sancion" Association="Self.FK_usuario_sancion">
+            <End Role="sancion" EntitySet="sancion" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="memoryGameModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="amigo">
+          <Key>
+            <PropertyRef Name="idAmigo" />
+          </Key>
+          <Property Name="idAmigo" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_amigo_usuario" FromRole="amigo" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="carta">
+          <Key>
+            <PropertyRef Name="idCarta" />
+          </Key>
+          <Property Name="idCarta" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="descripcion" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="imagen" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="sonido" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="idInventario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="inventario" Relationship="Self.FK_carta_inventario" FromRole="carta" ToRole="inventario" />
+        </EntityType>
+        <EntityType Name="inventario">
+          <Key>
+            <PropertyRef Name="idInventario" />
+          </Key>
+          <Property Name="idInventario" Type="Int32" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="carta" Relationship="Self.FK_carta_inventario" FromRole="inventario" ToRole="carta" />
+          <NavigationProperty Name="partida" Relationship="Self.FK_partida_inventario" FromRole="inventario" ToRole="partida" />
+        </EntityType>
+        <EntityType Name="partida">
+          <Key>
+            <PropertyRef Name="idPartida" />
+          </Key>
+          <Property Name="idPartida" Type="Int32" Nullable="false" />
+          <Property Name="fechaHoraInicio" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fechaHoraFin" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idInventario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="inventario" Relationship="Self.FK_partida_inventario" FromRole="partida" ToRole="inventario" />
+          <NavigationProperty Name="historial" Relationship="Self.FK_historial_partida" FromRole="partida" ToRole="historial" />
+          <NavigationProperty Name="sancion" Relationship="Self.FK_sancion_partida" FromRole="partida" ToRole="sancion" />
+        </EntityType>
+        <EntityType Name="redSocial">
+          <Key>
+            <PropertyRef Name="idRedSocial" />
+          </Key>
+          <Property Name="idRedSocial" Type="Int32" Nullable="false" />
+          <Property Name="cuenta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_redSocial_usuario" FromRole="redSocial" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="sancion">
+          <Key>
+            <PropertyRef Name="idSancion" />
+          </Key>
+          <Property Name="idSancion" Type="Int32" Nullable="false" />
+          <Property Name="tipo" Type="Byte" Nullable="false" />
+          <Property Name="duracion" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="idPartida" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="partida" Relationship="Self.FK_sancion_partida" FromRole="sancion" ToRole="partida" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_usuario_sancion" FromRole="sancion" ToRole="usuario" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="usuario">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+          </Key>
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <Property Name="nombreUsuario" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contrasenia" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="idSancion" Type="Int32" />
+          <NavigationProperty Name="amigo" Relationship="Self.FK_amigo_usuario" FromRole="usuario" ToRole="amigo" />
+          <NavigationProperty Name="redSocial" Relationship="Self.FK_redSocial_usuario" FromRole="usuario" ToRole="redSocial" />
+          <NavigationProperty Name="sancion" Relationship="Self.FK_usuario_sancion" FromRole="usuario" ToRole="sancion" />
+          <NavigationProperty Name="historial" Relationship="Self.FK_historial_usuario" FromRole="usuario" ToRole="historial" />
+        </EntityType>
+        <EntityType Name="historial">
+          <Key>
+            <PropertyRef Name="idUsuario" />
+            <PropertyRef Name="idPartida" />
+            <PropertyRef Name="puntuacion" />
+            <PropertyRef Name="idGanador" />
+            <PropertyRef Name="usernameGanador" />
+          </Key>
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <Property Name="idPartida" Type="Int32" Nullable="false" />
+          <Property Name="puntuacion" Type="Int32" Nullable="false" />
+          <Property Name="idGanador" Type="Int32" Nullable="false" />
+          <Property Name="usernameGanador" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="partida" Relationship="Self.FK_historial_partida" FromRole="historial" ToRole="partida" />
+          <NavigationProperty Name="usuario" Relationship="Self.FK_historial_usuario" FromRole="historial" ToRole="usuario" />
+        </EntityType>
+        <Association Name="FK_amigo_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="amigo" Type="Self.amigo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="amigo">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_carta_inventario">
+          <End Role="inventario" Type="Self.inventario" Multiplicity="1" />
+          <End Role="carta" Type="Self.carta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="inventario">
+              <PropertyRef Name="idInventario" />
+            </Principal>
+            <Dependent Role="carta">
+              <PropertyRef Name="idInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_partida_inventario">
+          <End Role="inventario" Type="Self.inventario" Multiplicity="1" />
+          <End Role="partida" Type="Self.partida" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="inventario">
+              <PropertyRef Name="idInventario" />
+            </Principal>
+            <Dependent Role="partida">
+              <PropertyRef Name="idInventario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_historial_partida">
+          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="historial" Type="Self.historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partida">
+              <PropertyRef Name="idPartida" />
+            </Principal>
+            <Dependent Role="historial">
+              <PropertyRef Name="idPartida" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_sancion_partida">
+          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="sancion" Type="Self.sancion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="partida">
+              <PropertyRef Name="idPartida" />
+            </Principal>
+            <Dependent Role="sancion">
+              <PropertyRef Name="idPartida" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_redSocial_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="redSocial" Type="Self.redSocial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="redSocial">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuario_sancion">
+          <End Role="sancion" Type="Self.sancion" Multiplicity="0..1" />
+          <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sancion">
+              <PropertyRef Name="idSancion" />
+            </Principal>
+            <Dependent Role="usuario">
+              <PropertyRef Name="idSancion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_historial_usuario">
+          <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+          <End Role="historial" Type="Self.historial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuario">
+              <PropertyRef Name="idUsuario" />
+            </Principal>
+            <Dependent Role="historial">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="memoryGameEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="amigo" EntityType="Self.amigo" />
+          <EntitySet Name="carta" EntityType="Self.carta" />
+          <EntitySet Name="inventario" EntityType="Self.inventario" />
+          <EntitySet Name="partida" EntityType="Self.partida" />
+          <EntitySet Name="redSocial" EntityType="Self.redSocial" />
+          <EntitySet Name="sancion" EntityType="Self.sancion" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="usuario" EntityType="Self.usuario" />
+          <EntitySet Name="historial" EntityType="Self.historial" />
+          <AssociationSet Name="FK_amigo_usuario" Association="Self.FK_amigo_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="amigo" EntitySet="amigo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_carta_inventario" Association="Self.FK_carta_inventario">
+            <End Role="inventario" EntitySet="inventario" />
+            <End Role="carta" EntitySet="carta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_partida_inventario" Association="Self.FK_partida_inventario">
+            <End Role="inventario" EntitySet="inventario" />
+            <End Role="partida" EntitySet="partida" />
+          </AssociationSet>
+          <AssociationSet Name="FK_historial_partida" Association="Self.FK_historial_partida">
+            <End Role="partida" EntitySet="partida" />
+            <End Role="historial" EntitySet="historial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_sancion_partida" Association="Self.FK_sancion_partida">
+            <End Role="partida" EntitySet="partida" />
+            <End Role="sancion" EntitySet="sancion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_redSocial_usuario" Association="Self.FK_redSocial_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="redSocial" EntitySet="redSocial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuario_sancion" Association="Self.FK_usuario_sancion">
+            <End Role="sancion" EntitySet="sancion" />
+            <End Role="usuario" EntitySet="usuario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_historial_usuario" Association="Self.FK_historial_usuario">
+            <End Role="usuario" EntitySet="usuario" />
+            <End Role="historial" EntitySet="historial" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="memoryGameModelStoreContainer" CdmEntityContainer="memoryGameEntities">
+          <EntitySetMapping Name="amigo">
+            <EntityTypeMapping TypeName="memoryGameModel.amigo">
+              <MappingFragment StoreEntitySet="amigo">
+                <ScalarProperty Name="idAmigo" ColumnName="idAmigo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="carta">
+            <EntityTypeMapping TypeName="memoryGameModel.carta">
+              <MappingFragment StoreEntitySet="carta">
+                <ScalarProperty Name="idCarta" ColumnName="idCarta" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="sonido" ColumnName="sonido" />
+                <ScalarProperty Name="idInventario" ColumnName="idInventario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="inventario">
+            <EntityTypeMapping TypeName="memoryGameModel.inventario">
+              <MappingFragment StoreEntitySet="inventario">
+                <ScalarProperty Name="idInventario" ColumnName="idInventario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="partida">
+            <EntityTypeMapping TypeName="memoryGameModel.partida">
+              <MappingFragment StoreEntitySet="partida">
+                <ScalarProperty Name="idPartida" ColumnName="idPartida" />
+                <ScalarProperty Name="fechaHoraInicio" ColumnName="fechaHoraInicio" />
+                <ScalarProperty Name="fechaHoraFin" ColumnName="fechaHoraFin" />
+                <ScalarProperty Name="idInventario" ColumnName="idInventario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="redSocial">
+            <EntityTypeMapping TypeName="memoryGameModel.redSocial">
+              <MappingFragment StoreEntitySet="redSocial">
+                <ScalarProperty Name="idRedSocial" ColumnName="idRedSocial" />
+                <ScalarProperty Name="cuenta" ColumnName="cuenta" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sancion">
+            <EntityTypeMapping TypeName="memoryGameModel.sancion">
+              <MappingFragment StoreEntitySet="sancion">
+                <ScalarProperty Name="idSancion" ColumnName="idSancion" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="duracion" ColumnName="duracion" />
+                <ScalarProperty Name="idPartida" ColumnName="idPartida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="memoryGameModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuario">
+            <EntityTypeMapping TypeName="memoryGameModel.usuario">
+              <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="nombreUsuario" ColumnName="nombreUsuario" />
+                <ScalarProperty Name="contrasenia" ColumnName="contrasenia" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="avatar" ColumnName="avatar" />
+                <ScalarProperty Name="idSancion" ColumnName="idSancion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="historial">
+            <EntityTypeMapping TypeName="memoryGameModel.historial">
+              <MappingFragment StoreEntitySet="historial">
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="idPartida" ColumnName="idPartida" />
+                <ScalarProperty Name="puntuacion" ColumnName="puntuacion" />
+                <ScalarProperty Name="idGanador" ColumnName="idGanador" />
+                <ScalarProperty Name="usernameGanador" ColumnName="usernameGanador" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
