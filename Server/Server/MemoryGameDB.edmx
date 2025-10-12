@@ -10,7 +10,7 @@
             <PropertyRef Name="idAmigo" />
           </Key>
           <Property Name="idAmigo" Type="int" Nullable="false" />
-          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="idUsuario" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="carta">
@@ -18,10 +18,8 @@
             <PropertyRef Name="idCarta" />
           </Key>
           <Property Name="idCarta" Type="int" Nullable="false" />
-          <Property Name="nombre" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="descripcion" Type="varchar" MaxLength="80" />
-          <Property Name="imagen" Type="varbinary(max)" Nullable="false" />
-          <Property Name="sonido" Type="varbinary(max)" Nullable="false" />
           <Property Name="idInventario" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -56,6 +54,16 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           <Property Name="fechaHoraFin" Type="datetime" Nullable="false" />
           <Property Name="idInventario" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="PendingRegistrations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pin" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ExpiryTime" Type="datetime" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="redSocial">
           <Key>
             <PropertyRef Name="idRedSocial" />
@@ -71,7 +79,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           <Property Name="idSancion" Type="int" Nullable="false" />
           <Property Name="tipo" Type="tinyint" Nullable="false" />
           <Property Name="duracion" Type="datetime" Nullable="false" />
-          <Property Name="idPartida" Type="int" Nullable="false" />
+          <Property Name="idPartida" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -88,10 +96,10 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             <PropertyRef Name="idUsuario" />
           </Key>
           <Property Name="idUsuario" Type="int" Nullable="false" />
-          <Property Name="nombreUsuario" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="nombreUsuario" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="contrasenia" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="avatar" Type="varbinary(max)" Nullable="false" />
+          <Property Name="avatar" Type="varbinary(max)" />
           <Property Name="idSancion" Type="int" />
         </EntityType>
         <Association Name="FK_amigo_usuario">
@@ -167,7 +175,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_sancion_partida">
-          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="partida" Type="Self.partida" Multiplicity="0..1" />
           <End Role="sancion" Type="Self.sancion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="partida">
@@ -190,11 +198,43 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="memoryGameModelStoreContainer">
           <EntitySet Name="amigo" EntityType="Self.amigo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="carta" EntityType="Self.carta" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="inventario" EntityType="Self.inventario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="partida" EntityType="Self.partida" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PendingRegistrations" EntityType="Self.PendingRegistrations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="redSocial" EntityType="Self.redSocial" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sancion" EntityType="Self.sancion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -251,7 +291,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             <PropertyRef Name="idAmigo" />
           </Key>
           <Property Name="idAmigo" Type="Int32" Nullable="false" />
-          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="idUsuario" Type="Int32" Nullable="false" />
           <NavigationProperty Name="usuario" Relationship="Self.FK_amigo_usuario" FromRole="amigo" ToRole="usuario" />
         </EntityType>
@@ -260,10 +300,8 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             <PropertyRef Name="idCarta" />
           </Key>
           <Property Name="idCarta" Type="Int32" Nullable="false" />
-          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="descripcion" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="imagen" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
-          <Property Name="sonido" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="idInventario" Type="Int32" Nullable="false" />
           <NavigationProperty Name="inventario" Relationship="Self.FK_carta_inventario" FromRole="carta" ToRole="inventario" />
         </EntityType>
@@ -288,6 +326,16 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           <NavigationProperty Name="historial" Relationship="Self.FK_historial_partida" FromRole="partida" ToRole="historial" />
           <NavigationProperty Name="sancion" Relationship="Self.FK_sancion_partida" FromRole="partida" ToRole="sancion" />
         </EntityType>
+        <EntityType Name="PendingRegistrations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pin" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExpiryTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         <EntityType Name="redSocial">
           <Key>
             <PropertyRef Name="idRedSocial" />
@@ -304,7 +352,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           <Property Name="idSancion" Type="Int32" Nullable="false" />
           <Property Name="tipo" Type="Byte" Nullable="false" />
           <Property Name="duracion" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="idPartida" Type="Int32" Nullable="false" />
+          <Property Name="idPartida" Type="Int32" />
           <NavigationProperty Name="partida" Relationship="Self.FK_sancion_partida" FromRole="sancion" ToRole="partida" />
           <NavigationProperty Name="usuario" Relationship="Self.FK_usuario_sancion" FromRole="sancion" ToRole="usuario" />
         </EntityType>
@@ -323,10 +371,10 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             <PropertyRef Name="idUsuario" />
           </Key>
           <Property Name="idUsuario" Type="Int32" Nullable="false" />
-          <Property Name="nombreUsuario" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombreUsuario" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="contrasenia" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="idSancion" Type="Int32" />
           <NavigationProperty Name="amigo" Relationship="Self.FK_amigo_usuario" FromRole="usuario" ToRole="amigo" />
           <NavigationProperty Name="redSocial" Relationship="Self.FK_redSocial_usuario" FromRole="usuario" ToRole="redSocial" />
@@ -398,7 +446,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_sancion_partida">
-          <End Role="partida" Type="Self.partida" Multiplicity="1" />
+          <End Role="partida" Type="Self.partida" Multiplicity="0..1" />
           <End Role="sancion" Type="Self.sancion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="partida">
@@ -450,6 +498,7 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
           <EntitySet Name="carta" EntityType="Self.carta" />
           <EntitySet Name="inventario" EntityType="Self.inventario" />
           <EntitySet Name="partida" EntityType="Self.partida" />
+          <EntitySet Name="PendingRegistrations" EntityType="Self.PendingRegistrations" />
           <EntitySet Name="redSocial" EntityType="Self.redSocial" />
           <EntitySet Name="sancion" EntityType="Self.sancion" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
@@ -487,7 +536,48 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
             <End Role="usuario" EntitySet="usuario" />
             <End Role="historial" EntitySet="historial" />
           </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(memoryGameModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(memoryGameModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -509,8 +599,6 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
                 <ScalarProperty Name="idCarta" ColumnName="idCarta" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="imagen" ColumnName="imagen" />
-                <ScalarProperty Name="sonido" ColumnName="sonido" />
                 <ScalarProperty Name="idInventario" ColumnName="idInventario" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -530,6 +618,17 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
                 <ScalarProperty Name="fechaHoraInicio" ColumnName="fechaHoraInicio" />
                 <ScalarProperty Name="fechaHoraFin" ColumnName="fechaHoraFin" />
                 <ScalarProperty Name="idInventario" ColumnName="idInventario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PendingRegistrations">
+            <EntityTypeMapping TypeName="memoryGameModel.PendingRegistrations">
+              <MappingFragment StoreEntitySet="PendingRegistrations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Pin" ColumnName="Pin" />
+                <ScalarProperty Name="ExpiryTime" ColumnName="ExpiryTime" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -586,6 +685,30 @@ warning 6002: The table/view 'memoryGame.dbo.historial' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="memoryGameModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="memoryGameModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="memoryGameModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="memoryGameModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="memoryGameModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="memoryGameModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="memoryGameModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="memoryGameModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="memoryGameModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

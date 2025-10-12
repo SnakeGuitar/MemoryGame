@@ -23,5 +23,10 @@ namespace Client.View.Session
         {
             InitializeComponent();
         }
+
+        private void ButtonLogIn(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -23,5 +23,50 @@ namespace Client.View.Game
         {
             InitializeComponent();
         }
+
+        private void ButtonSingleplayer(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonMultiplayer(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonOptions(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonGallery(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonExitGame(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonChangeProfilePicture(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonChangeFavouriteCardImage1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonChangeFavouriteCardImage2(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonChangeFavouriteCardImage3(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

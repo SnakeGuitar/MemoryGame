@@ -12,13 +12,12 @@ namespace Server
     using System;
     using System.Collections.Generic;
     
-    public partial class carta
+    public partial class PendingRegistrations
     {
-        public int idCarta { get; set; }
-        public string nombre { get; set; }
-        public string descripcion { get; set; }
-        public int idInventario { get; set; }
-    
-        public virtual inventario inventario { get; set; }
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string Pin { get; set; }
+        public System.DateTime ExpiryTime { get; set; }
+        public System.DateTime CreatedAt { get; set; }
     }
 }

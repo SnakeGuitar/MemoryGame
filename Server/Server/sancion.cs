@@ -23,7 +23,7 @@ namespace Server
         public int idSancion { get; set; }
         public byte tipo { get; set; }
         public System.DateTime duracion { get; set; }
-        public int idPartida { get; set; }
+        public Nullable<int> idPartida { get; set; }
     
         public virtual partida partida { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

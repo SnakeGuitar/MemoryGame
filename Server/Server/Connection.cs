@@ -12,7 +12,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            using (ServiceHost host = new ServiceHost(typeof(Server.Service1)))
+            using (ServiceHost host = new ServiceHost(typeof(Server.AuthenticationService.UserService)))
             {
                 try
                 {

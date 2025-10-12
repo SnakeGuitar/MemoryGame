@@ -23,5 +23,15 @@ namespace Client.View.Session
         {
             InitializeComponent();
         }
+
+        private void ButtonSignIn(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonGuest(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

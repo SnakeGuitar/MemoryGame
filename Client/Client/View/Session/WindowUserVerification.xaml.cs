@@ -23,5 +23,15 @@ namespace Client.View.Session
         {
             InitializeComponent();
         }
+
+        private void ButtonVerify(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonSendAgain(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

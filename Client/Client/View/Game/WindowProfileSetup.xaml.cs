@@ -23,5 +23,10 @@ namespace Client.View.Game
         {
             InitializeComponent();
         }
+
+        private void ButtonContinue(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

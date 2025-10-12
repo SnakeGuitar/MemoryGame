@@ -11,9 +11,9 @@
         <Rectangle HorizontalAlignment="Center" Height="283" Margin="0,161,0,0" Stroke="Black" VerticalAlignment="Top" Width="362" Fill="#FF231123" RadiusX="25.8" RadiusY="25.8"/>
         <Label Content="A verification email was sent to" HorizontalAlignment="Center" Margin="0,216,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White"/>
         <Label Content="email@example.com" HorizontalAlignment="Center" Margin="0,245,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" FontWeight="Bold"/>
-        <TextBox x:Name="TextBoxEmailInput" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="174" FontSize="16" Background="White" Height="30" Margin="0,309,0,0"/>
+        <TextBox x:Name="TextBoxPinInput" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="174" FontSize="16" Background="White" Height="30" Margin="0,309,0,0"/>
         <Label Content="Enter 5 digit code" HorizontalAlignment="Center" Margin="0,271,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White"/>
-        <Button Content="Verify" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Background="#FFC30F45" Foreground="White" BorderBrush="{x:Null}" FontFamily="Yu Gothic" Width="174" FontSize="16" Click="ButtonSignIn"/>
-        <Button Content="Send again?" HorizontalAlignment="Center" Margin="0,385,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" FontStyle="Italic" BorderBrush="{x:Null}"/>
+        <Button Content="Verify" HorizontalAlignment="Center" Margin="0,350,0,0" VerticalAlignment="Top" Background="#FFC30F45" Foreground="White" BorderBrush="{x:Null}" FontFamily="Yu Gothic" Width="174" FontSize="16" Click="ButtonVerify"/>
+        <Button Content="Send again?" HorizontalAlignment="Center" Margin="0,385,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" FontStyle="Italic" BorderBrush="{x:Null}" Click="ButtonSendAgain"/>
     </Grid>
 </Window>
