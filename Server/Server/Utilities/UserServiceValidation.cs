@@ -36,13 +36,6 @@ namespace Server.Utilities
             return true;
         }
 
-        public static bool sendVerificationEmail(string email)
-        {
-            // Placeholder for sending verification email logic
-            // In a real implementation, this would send an email to the user with a verification link or code
-            return true; // Assume email is sent successfully
-        }
-
         public static bool IsValidUsername(string username)
         {
             // Username must be between 3 and 20 characters long and contain only letters, digits, underscores, or hyphens

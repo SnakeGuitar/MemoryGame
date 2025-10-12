@@ -12,7 +12,10 @@ namespace Server.AuthenticationService
     internal interface IUserService
     {
         [OperationContract]
-        bool Register(string email, string password);
+        bool RequestRegistration(string email, string password);
+
+        [OperationContract]
+        bool VerifyRegistration(string email, string code);
 
         [OperationContract]
         bool Login(string email, string password);
