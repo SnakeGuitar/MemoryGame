@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 
 // DATABASE VARIABLES ARE IN SPANISH
@@ -20,110 +17,180 @@ namespace Server.AuthenticationService
         public bool RequestRegistration(string email, string password)
         {
 
-            if (!Utilities.UserServiceValidation.IsValidEmail(email) || 
-                !Utilities.UserServiceValidation.IsValidPassword(password))
-            {
-                return false; // Invalid email or password format
-            }
-
-            using (var db = new memoryGameEntities())
-            {
-                if (db.usuario.Any(u => u.correo == email))
-                {
-                    return false; // User already exists
-                }
-
-                var existingPending = db.PendingRegistrations
-                    .FirstOrDefault(p => p.Email == email && p.ExpiryTime > DateTime.Now);
-                if (existingPending != null)
-                {
-                    db.PendingRegistrations.Remove(existingPending); // Remove existing pending registration
-                }
-                string pin = GeneratePin();
-                var pendingRegistration = new PendingRegistrations
-                {
-                    Email = email,
-                    Pin = pin,
-                    ExpiryTime = DateTime.Now.AddMinutes(15), // PIN valid for 15 minutes
-                    CreatedAt = DateTime.Now
-                };
-
-                db.PendingRegistrations.Add(pendingRegistration);
-                db.SaveChanges();
-
-                if (!SendVerificationEmail(email, pin))
-                {
-                    db.PendingRegistrations.Remove(pendingRegistration);
-                    db.SaveChanges();
-                    return false; // Failed to send email
-                }
-                return true;
-            }
-        }
-
-        public bool VerifyRegistration(string email, string pin)
-        {
-            using (var db = new memoryGameEntities())
-            {
-                var pendingRegistration = db.PendingRegistrations
-                    .FirstOrDefault(p => p.Email == email &&
-                    p.Pin == pin &&
-                    p.ExpiryTime > DateTime.Now);
-
-                if (pendingRegistration == null)
-                {
-                    return false; // Invalid or expired PIN
-                }
-
-                // Move user from PendingRegistrations to usuario table
-                throw new NotImplementedException("Moving user from PendingRegistrations to usuario table is not implemented.");
-            }
-        }
-
-        public bool CompleteRegistration(string email, string pin, string password)
-        {
             if (!Utilities.UserServiceValidation.IsValidPassword(password))
             {
                 return false; // Invalid password format
             }
 
-            using (var db = new memoryGameEntities())
+            string hashedPassword = HashPassword(password);
+
+            try
             {
-                var pending = db.PendingRegistrations
-                    .FirstOrDefault(p => p.Email == email &&
-                    p.Pin == pin &&
-                    p.ExpiryTime > DateTime.Now);
-
-                if (pending == null)
+                using (var db = new memoryGameEntities())
                 {
-                    return false; // Invalid or expired PIN
+
+                    db.Database.Connection.Open();
+                    db.Database.Connection.Close();
+
+                    if (db.usuario.Any(u => u.correo == email))
+                    {
+                        return false; // User already exists
+                    }
+
+                    var existingPending = db.PendingRegistrations
+                        .FirstOrDefault(p => p.Email == email && p.ExpiryTime > DateTime.Now);
+                    if (existingPending != null)
+                    {
+                        db.PendingRegistrations.Remove(existingPending); // Remove existing pending registration
+                    }
+                    string pin = GeneratePin();
+                    var pendingRegistration = new PendingRegistrations
+                    {
+                        Email = email,
+                        Pin = pin,
+                        HashedPassword = hashedPassword,
+                        ExpiryTime = DateTime.Now.AddMinutes(15), // PIN valid for 15 minutes
+                        CreatedAt = DateTime.Now
+                    };
+
+                    db.PendingRegistrations.Add(pendingRegistration);
+                    db.SaveChanges();
+
+                    if (!SendVerificationEmail(email, pin))
+                    {
+                        db.PendingRegistrations.Remove(pendingRegistration);
+                        db.SaveChanges();
+                        return false; // Failed to send email
+                    }
+                    return true;
                 }
-
-                if (db.usuario.Any(u => u.correo == email))
-                {
-                    return false; // User already exists
-                }
-
-                string hashedPassword = HashPassword(password);
-                var newUser = new usuario
-                {
-                    correo = email,
-                    contrasenia = hashedPassword,
-                    nombreUsuario = email.Split('@')[0], // Default username from email prefix
-                };
-                db.usuario.Add(newUser);
-                db.PendingRegistrations.Remove(pending);
-                db.SaveChanges();
             }
-            return true; // Registration completed successfully
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"RequestRegistration Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                throw; // Re-throw the exception after logging
+            }
         }
+        public bool VerifyRegistration(string email, string pin)
+        {
+            try
+            {
+                using (var db = new memoryGameEntities())
+                {
+                    var pending = db.PendingRegistrations
+                        .FirstOrDefault(p => p.Email == email &&
+                        p.Pin == pin &&
+                        p.ExpiryTime > DateTime.Now);
+
+                    if (pending == null)
+                    {
+                        return false; // Invalid or expired PIN
+                    }
+
+                    var newUser = new usuario
+                    {
+                        correo = email,
+                        contrasenia = pending.HashedPassword,
+                        nombreUsuario = email.Split('@')[0], // Default username from email prefix
+                    };
+
+                    db.usuario.Add(newUser);
+                    db.SaveChanges();
+
+                    removePendingRegistration(email);
+                    db.SaveChanges();
+                    return true; // Registration completed successfully
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"VerifyRegistration Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                throw; // Re-throw the exception after logging
+            }
+        }
+
+        public bool removePendingRegistration(string email)
+        {
+            try
+            {
+                using (var db = new memoryGameEntities())
+                {
+                    var pending = db.PendingRegistrations
+                        .FirstOrDefault(p => p.Email == email);
+                    if (pending != null)
+                    {
+                        db.PendingRegistrations.Remove(pending);
+                        db.SaveChanges();
+                    }
+                    return true; // Successfully removed or no pending registration found
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"removePendingRegistration Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                throw; // Re-throw the exception after logging
+            }
+        }
+        public bool UpdateUserProfile(string email, string username, byte[] avatar)
+        {
+            try
+            {
+                using (var db = new memoryGameEntities())
+                {
+                    var user = db.usuario.FirstOrDefault(u => u.correo == email);
+                    if (user == null)
+                    {
+                        return false; // User not found
+                    }
+
+                    /*
+                    if (db.usuario.Any(u => u.nombreUsuario == username && u.correo != email))
+                    {
+                        return false; // Username already taken
+                    }
+                    */
+
+                    if (!Utilities.UserServiceValidation.IsValidUsername(username))
+                    {
+                        return false; // Invalid username format
+                    }
+
+                    user.nombreUsuario = username;
+                    user.avatar = avatar;
+                    db.SaveChanges();
+                    return true; // Profile updated successfully
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"UpdateUserProfile Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                throw; // Re-throw the exception after logging
+            }
+        }
+
         public bool Login(string email, string password)
         {
-            using (var db = new memoryGameEntities())
+            try
             {
-                string hashedPassword = HashPassword(password);
-                var user = db.usuario.FirstOrDefault(u => u.correo == email && u.contrasenia == hashedPassword);
-                return user != null; // Return true if user is found, otherwise false
+                using (var db = new memoryGameEntities())
+                {
+                    var user = db.usuario.FirstOrDefault(u => u.correo == email);
+                    if (user == null)
+                    {
+                        return false; // User not found
+                    }
+                    return user != null && BCrypt.Net.BCrypt.Verify(password, user.contrasenia);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Login Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
+                throw; // Re-throw the exception after logging
             }
         }
 
@@ -137,37 +204,33 @@ namespace Server.AuthenticationService
 
         private string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(password);
-                byte[] hash = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
-            }
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         private bool SendVerificationEmail(string email, string pin)
         {
             try
             {
-            var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
-            {
-                Port = 587,
-                Credentials = new System.Net.NetworkCredential("mail", "password app"),
-                EnableSsl = true
-            };
-            var mailMessage = new System.Net.Mail.MailMessage
-            {
-                From = new System.Net.Mail.MailAddress("sender mail"),
-                Subject = "Memory Game - Verify your email",
-                Body = $"Your verification code is: {pin}",
-                IsBodyHtml = false,
-            };
-            mailMessage.To.Add(email);
-            smtpClient.Send(mailMessage);
-            return true;
+                var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new System.Net.NetworkCredential("email", "password app"),
+                    EnableSsl = true
+                };
+                var mailMessage = new System.Net.Mail.MailMessage
+                {
+                    From = new System.Net.Mail.MailAddress("email"),
+                    Subject = "Memory Game - Verify your email",
+                    Body = $"Your verification code is: {pin}",
+                    IsBodyHtml = false,
+                };
+                mailMessage.To.Add(email);
+                smtpClient.Send(mailMessage);
+                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Failed to send verification email. Error: {ex.Message}");
                 return false;
             }
         }

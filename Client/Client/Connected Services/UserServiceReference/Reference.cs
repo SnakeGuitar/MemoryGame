@@ -15,11 +15,23 @@ namespace Client.UserServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserServiceReference.IUserService")]
     public interface IUserService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Register", ReplyAction="http://tempuri.org/IUserService/RegisterResponse")]
-        bool Register(string email, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RequestRegistration", ReplyAction="http://tempuri.org/IUserService/RequestRegistrationResponse")]
+        bool RequestRegistration(string email, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Register", ReplyAction="http://tempuri.org/IUserService/RegisterResponse")]
-        System.Threading.Tasks.Task<bool> RegisterAsync(string email, string password);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RequestRegistration", ReplyAction="http://tempuri.org/IUserService/RequestRegistrationResponse")]
+        System.Threading.Tasks.Task<bool> RequestRegistrationAsync(string email, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/VerifyRegistration", ReplyAction="http://tempuri.org/IUserService/VerifyRegistrationResponse")]
+        bool VerifyRegistration(string email, string pin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/VerifyRegistration", ReplyAction="http://tempuri.org/IUserService/VerifyRegistrationResponse")]
+        System.Threading.Tasks.Task<bool> VerifyRegistrationAsync(string email, string pin);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/UpdateUserProfile", ReplyAction="http://tempuri.org/IUserService/UpdateUserProfileResponse")]
+        bool UpdateUserProfile(string email, string username, byte[] avatar);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/UpdateUserProfile", ReplyAction="http://tempuri.org/IUserService/UpdateUserProfileResponse")]
+        System.Threading.Tasks.Task<bool> UpdateUserProfileAsync(string email, string username, byte[] avatar);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Login", ReplyAction="http://tempuri.org/IUserService/LoginResponse")]
         bool Login(string email, string password);
@@ -55,12 +67,28 @@ namespace Client.UserServiceReference {
                 base(binding, remoteAddress) {
         }
         
-        public bool Register(string email, string password) {
-            return base.Channel.Register(email, password);
+        public bool RequestRegistration(string email, string password) {
+            return base.Channel.RequestRegistration(email, password);
         }
         
-        public System.Threading.Tasks.Task<bool> RegisterAsync(string email, string password) {
-            return base.Channel.RegisterAsync(email, password);
+        public System.Threading.Tasks.Task<bool> RequestRegistrationAsync(string email, string password) {
+            return base.Channel.RequestRegistrationAsync(email, password);
+        }
+        
+        public bool VerifyRegistration(string email, string pin) {
+            return base.Channel.VerifyRegistration(email, pin);
+        }
+        
+        public System.Threading.Tasks.Task<bool> VerifyRegistrationAsync(string email, string pin) {
+            return base.Channel.VerifyRegistrationAsync(email, pin);
+        }
+        
+        public bool UpdateUserProfile(string email, string username, byte[] avatar) {
+            return base.Channel.UpdateUserProfile(email, username, avatar);
+        }
+        
+        public System.Threading.Tasks.Task<bool> UpdateUserProfileAsync(string email, string username, byte[] avatar) {
+            return base.Channel.UpdateUserProfileAsync(email, username, avatar);
         }
         
         public bool Login(string email, string password) {

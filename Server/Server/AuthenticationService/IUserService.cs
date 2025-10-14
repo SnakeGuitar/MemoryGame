@@ -15,7 +15,10 @@ namespace Server.AuthenticationService
         bool RequestRegistration(string email, string password);
 
         [OperationContract]
-        bool VerifyRegistration(string email, string code);
+        bool VerifyRegistration(string email, string pin);
+        
+        [OperationContract]
+        bool UpdateUserProfile(string email, string username, byte[] avatar);
 
         [OperationContract]
         bool Login(string email, string password);

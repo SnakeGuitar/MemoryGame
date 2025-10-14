@@ -26,12 +26,19 @@ namespace Client.View.Session
 
         private void ButtonSignIn(object sender, RoutedEventArgs e)
         {
+            new WindowSignIn().Show();
+            Window.GetWindow(this)?.Close();
 
         }
 
         private void ButtonGuest(object sender, RoutedEventArgs e)
         {
+            new MainWindow().Show();
+        }
 
+        private void ButtonLogIn(object sender, RoutedEventArgs e)
+        {
+            new WindowLogIn().Show();
         }
     }
 }

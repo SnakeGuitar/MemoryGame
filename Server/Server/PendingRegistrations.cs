@@ -19,5 +19,6 @@ namespace Server
         public string Pin { get; set; }
         public System.DateTime ExpiryTime { get; set; }
         public System.DateTime CreatedAt { get; set; }
+        public string HashedPassword { get; set; }
     }
 }

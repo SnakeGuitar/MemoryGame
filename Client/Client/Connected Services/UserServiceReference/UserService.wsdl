@@ -35,11 +35,23 @@
       <xsd:import schemaLocation="http://localhost:8085/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IUserService_Register_InputMessage">
-    <wsdl:part name="parameters" element="tns:Register" />
+  <wsdl:message name="IUserService_RequestRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestRegistration" />
   </wsdl:message>
-  <wsdl:message name="IUserService_Register_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  <wsdl:message name="IUserService_RequestRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUserProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserProfile" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUserProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserProfileResponse" />
   </wsdl:message>
   <wsdl:message name="IUserService_Login_InputMessage">
     <wsdl:part name="parameters" element="tns:Login" />
@@ -48,9 +60,17 @@
     <wsdl:part name="parameters" element="tns:LoginResponse" />
   </wsdl:message>
   <wsdl:portType name="IUserService">
-    <wsdl:operation name="Register">
-      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/Register" message="tns:IUserService_Register_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/RegisterResponse" message="tns:IUserService_Register_OutputMessage" />
+    <wsdl:operation name="RequestRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/RequestRegistration" message="tns:IUserService_RequestRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/RequestRegistrationResponse" message="tns:IUserService_RequestRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/VerifyRegistration" message="tns:IUserService_VerifyRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/VerifyRegistrationResponse" message="tns:IUserService_VerifyRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/UpdateUserProfile" message="tns:IUserService_UpdateUserProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/UpdateUserProfileResponse" message="tns:IUserService_UpdateUserProfile_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Login">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/Login" message="tns:IUserService_Login_InputMessage" />
@@ -60,8 +80,26 @@
   <wsdl:binding name="NetTcpBinding_IUserService" type="tns:IUserService">
     <wsp:PolicyReference URI="#NetTcpBinding_IUserService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Register">
-      <soap12:operation soapAction="http://tempuri.org/IUserService/Register" style="document" />
+    <wsdl:operation name="RequestRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/RequestRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/VerifyRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserProfile">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/UpdateUserProfile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

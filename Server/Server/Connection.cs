@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using Server;
+using Server.AuthenticationService;
 
 namespace Server
 {
@@ -17,6 +18,7 @@ namespace Server
                 try
                 {
                     host.Open();
+                    ConnectionTest.TestConnection();
                 }
                 catch (Exception ex)
                 {

@@ -14,5 +14,6 @@
         <Label Content="Enter an username" HorizontalAlignment="Left" Margin="71,339,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White"/>
         <Label Content="Select an avatar" HorizontalAlignment="Left" Margin="71,185,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" Width="117"/>
         <Button Content="Continue" HorizontalAlignment="Left" Margin="205,410,0,0" VerticalAlignment="Top" Background="#FFC30F45" Foreground="White" BorderBrush="{x:Null}" FontFamily="Yu Gothic" Width="132" FontSize="16" Click="ButtonContinue"/>
+        <Button Content="" HorizontalAlignment="Left" Margin="205,198,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.727,0.713" Width="132" Height="120" Click="ButtonSelectAvatar" BorderBrush="White" Background="{x:Null}" Foreground="{x:Null}"/>
     </Grid>
 </Window>
