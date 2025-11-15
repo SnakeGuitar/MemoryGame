@@ -1,0 +1,206 @@
+﻿using Client.Helpers;
+using Client.Properties.Langs;
+using Client.UserServiceReference;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.ServiceModel;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using static Client.Helpers.ValidationHelper;
+
+namespace Client.Views.Session
+{
+    /// <summary>
+    /// Lógica de interacción para SetupProfile.xaml
+    /// </summary>
+    public partial class SetupProfile : Window
+    {
+        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
+        private readonly string _email;
+        private byte[] profileImage;
+
+        public SetupProfile(string email)
+        {
+            InitializeComponent();
+            _email = email ?? throw new ArgumentNullException(nameof(email));
+        }
+
+        private void ButtonSelectAvatar_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = Lang.SetupProfile_Dialog_Title,
+                Filter = Lang.SetupProfile_Dialog_Filter,
+                Multiselect = false
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    byte[] originalBytes = System.IO.File.ReadAllBytes(dialog.FileName);
+                    profileImage = ImageHelper.ResizeImage(originalBytes, 200, 200);
+
+                    var bitmapImage = ImageHelper.ByteArrayToImageSource(profileImage);
+                    ProfilePicture.Source = bitmapImage;
+
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = string.Format(Lang.SetupProfile_Error_ImageLoad, ex.Message);
+                    var msgBox = new Views.Controls.CustomMessageBox(
+                        Lang.Global_Title_Error, errorMessage,
+                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    msgBox.ShowDialog();
+
+                    profileImage = null;
+                    ProfilePicture.Source = null;
+                }
+            }
+
+        }
+
+        private async void ButtonAcceptSetup_Click(object sender, RoutedEventArgs e)
+        {
+            string username = TextBoxUsername.Text.Trim();
+            LabelUsernameError.Content = "";
+
+            ValidationCode validationCode = Helpers.ValidationHelper.ValidateUsername(username);
+            if (validationCode != ValidationCode.Success)
+            {
+                LabelUsernameError.Content = Helpers.LocalizationManager.GetString(validationCode);
+                return;
+            }
+
+            ButtonAcceptSetupProfile.IsEnabled = false;
+
+            try
+            {
+                LoginResponse response = await _userServiceClient.FinalizeRegistrationAsync(
+                    _email,
+                    username,
+                    profileImage);
+
+                if (response.Success)
+                {
+                    UserSession.StartSession(response.SessionToken, response.User.Username);
+
+                    var msgBox = new Views.Controls.CustomMessageBox(
+                        Lang.Global_Title_Success,
+                        Lang.SetupProfile_Message_Success,
+                        this, Controls.CustomMessageBox.MessageBoxType.Information);
+                    msgBox.ShowDialog();
+
+                    var mainMenu = new MainMenu();
+                    mainMenu.WindowState = this.WindowState;
+                    mainMenu.Show();
+                    this.Close();
+
+                    if (this.Owner != null)
+                    {
+                        this.Owner.Close();
+                    }
+                }
+                else
+                {
+                    string errorMessage = GetServerErrorMessage(response.MessageKey);
+                    var msgBox = new Views.Controls.CustomMessageBox(
+                        Lang.Global_Title_Error, errorMessage,
+                        this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    msgBox.ShowDialog();
+
+                    ButtonAcceptSetupProfile.IsEnabled = true;
+                }
+            }
+            catch (EndpointNotFoundException ex)
+            {
+                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
+                var msgBox = new Views.Controls.CustomMessageBox(
+                    Lang.Global_Title_ServerOffline, errorMessage,
+                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                msgBox.ShowDialog();
+
+                ButtonAcceptSetupProfile.IsEnabled = true;
+            }
+            catch (CommunicationException ex)
+            {
+                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
+                var msgBox = new Views.Controls.CustomMessageBox(
+                    Lang.Global_Title_NetworkError, errorMessage,
+                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                msgBox.ShowDialog();
+
+                ButtonAcceptSetupProfile.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
+                var msgBox = new Views.Controls.CustomMessageBox(
+                    Lang.Global_Title_AppError, errorMessage,
+                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                msgBox.ShowDialog();
+
+                ButtonAcceptSetupProfile.IsEnabled = true;
+            }
+        }
+
+        private string GetServerErrorMessage(string messageKey)
+        {
+            switch (messageKey)
+            {
+                case "Global_Error_UsernameInvalid": // Reutilizamos esta clave
+                    return Lang.Global_Error_InvalidUsername;
+                case "Global_Error_RegistrationNotFound":
+                    return Lang.Global_Error_RegistrationNotFound;
+                default:
+                    return Lang.Global_ServiceError_Unknown;
+            }
+        }
+
+        private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
+        {
+            Window titleScreen = this.Owner;
+
+            if (titleScreen != null)
+            {
+                titleScreen.WindowState = this.WindowState;
+                titleScreen.Show();
+            }
+            this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            try
+            {
+                if (_userServiceClient?.State == System.ServiceModel.CommunicationState.Opened)
+                {
+                    _userServiceClient.Close();
+                }
+                else
+                {
+                    _userServiceClient.Abort();
+                }
+            }
+            catch
+            {
+                _userServiceClient.Abort();
+            }
+            base.OnClosed(e);
+        }
+    }
+}

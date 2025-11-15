@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6330E2EE-DA77-4175-A325-B72A2BB135AC}</ProjectGuid>
+    <ProjectGuid>{192966E6-7950-49D2-A342-5FCDE9C58AB8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Client</RootNamespace>
     <AssemblyName>Client</AssemblyName>
@@ -57,30 +57,107 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Connected Services\GameLobbyServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Connected Services\UserServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="View\Game\WindowMainMenu.xaml.cs">
-      <DependentUpon>WindowMainMenu.xaml</DependentUpon>
+    <Compile Include="Helpers\ClientHelper.cs" />
+    <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\LocalizationManager.cs" />
+    <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Views\Controls\CustomMessageBox.xaml.cs">
+      <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Game\WindowProfileSetup.xaml.cs">
-      <DependentUpon>WindowProfileSetup.xaml</DependentUpon>
+    <Compile Include="Views\Lobby\HostLobby.xaml.cs">
+      <DependentUpon>HostLobby.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Session\WindowLogIn.xaml.cs">
-      <DependentUpon>WindowLogIn.xaml</DependentUpon>
+    <Compile Include="Views\Lobby\Lobby.xaml.cs">
+      <DependentUpon>Lobby.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Session\WindowSignIn.xaml.cs">
-      <DependentUpon>WindowSignIn.xaml</DependentUpon>
+    <Compile Include="Views\MainMenu.xaml.cs">
+      <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Session\WindowUserSelection.xaml.cs">
-      <DependentUpon>WindowUserSelection.xaml</DependentUpon>
+    <Compile Include="Views\Multiplayer\JoinLobby.xaml.cs">
+      <DependentUpon>JoinLobby.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Session\WindowUserVerification.xaml.cs">
-      <DependentUpon>WindowUserVerification.xaml</DependentUpon>
+    <Compile Include="Views\Multiplayer\MultiplayerMenu.xaml.cs">
+      <DependentUpon>MultiplayerMenu.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Views\Multiplayer\PlayGameMultiplayer.xaml.cs">
+      <DependentUpon>PlayGameMultiplayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Session\EnterUsernameGuest.xaml.cs">
+      <DependentUpon>EnterUsernameGuest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Session\RegisterAccount.xaml.cs">
+      <DependentUpon>RegisterAccount.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Session\SetupProfile.xaml.cs">
+      <DependentUpon>SetupProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Session\VerifyCode.xaml.cs">
+      <DependentUpon>VerifyCode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Singleplayer\CustomizeGame.xaml.cs">
+      <DependentUpon>CustomizeGame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Singleplayer\PlayGameSingleplayer.xaml.cs">
+      <DependentUpon>PlayGameSingleplayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Singleplayer\SelectDifficulty.xaml.cs">
+      <DependentUpon>SelectDifficulty.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TitleScreen.xaml.cs">
+      <DependentUpon>TitleScreen.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Themes\MainTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\CustomMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Lobby\HostLobby.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Lobby\Lobby.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Multiplayer\JoinLobby.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Multiplayer\MultiplayerMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Multiplayer\PlayGameMultiplayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Session\EnterUsernameGuest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Session\Login.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -88,31 +165,39 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Views\Session\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\Game\WindowMainMenu.xaml">
+    <Page Include="Views\Session\RegisterAccount.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Game\WindowProfileSetup.xaml">
+    <Page Include="Views\Session\SetupProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Session\WindowLogIn.xaml">
+    <Page Include="Views\Session\VerifyCode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Session\WindowSignIn.xaml">
+    <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Session\WindowUserSelection.xaml">
+    <Page Include="Views\Singleplayer\CustomizeGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Session\WindowUserVerification.xaml">
+    <Page Include="Views\Singleplayer\PlayGameSingleplayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Singleplayer\SelectDifficulty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TitleScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,6 +205,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Langs\Lang.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Lang.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -131,14 +221,38 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Langs\Lang.es-MX.resx" />
+    <EmbeddedResource Include="Properties\Langs\Lang.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Lang.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Connected Services\GameLobbyServiceReference\GameLobbyService.wsdl" />
+    <None Include="Connected Services\GameLobbyServiceReference\item.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameLobbyServiceReference\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\GameLobbyServiceReference\item2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.LoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.ResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\UserServiceReference\item.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\UserServiceReference\item1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UserServiceReference\item2.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\UserServiceReference\UserService.wsdl" />
@@ -146,20 +260,45 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\Comico-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Pangolin-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\" />
-    <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\GameLobbyServiceReference\" />
     <WCFMetadataStorage Include="Connected Services\UserServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameLobbyServiceReference\item.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameLobbyServiceReference\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameLobbyServiceReference\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\GameLobbyServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Success.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Warning.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\UserServiceReference\item.disco" />

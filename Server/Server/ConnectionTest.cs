@@ -53,14 +53,14 @@ namespace Server.AuthenticationService
         {
             try
             {
-                using (var db = new memoryGameEntities())
+                using (var db = new memoryGameDBEntities())
                 {
                     // Intenta obtener la conexión
                     db.Database.Connection.Open();
                     Console.WriteLine("✓ Conexión Entity Framework: EXITOSA");
 
                     // Prueba una consulta simple
-                    var count = db.usuario.Count();
+                    var count = db.user.Count();
                     Console.WriteLine($"✓ Consulta EF exitosa: {count} usuarios");
 
                     db.Database.Connection.Close();
@@ -79,7 +79,7 @@ namespace Server.AuthenticationService
         {
             try
             {
-                using (var db = new memoryGameEntities())
+                using (var db = new memoryGameDBEntities())
                 {
                     var connString = db.Database.Connection.ConnectionString;
                     Console.WriteLine($"Connection String:\n{connString}");

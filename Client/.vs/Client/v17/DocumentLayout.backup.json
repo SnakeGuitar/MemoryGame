@@ -1,77 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\",
+  "WorkspaceRootPath": "C:\\Proyecto Tecno\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowuserverification.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowuserverification.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|C:\\Proyecto Tecno\\Client\\client\\properties\\langs\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\properties\\langs\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowlogin.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowlogin.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygame\\client\\client\\view\\session\\windowlogin.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowlogin.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\session\\setupprofile.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\session\\setupprofile.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowuserselection.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowuserselection.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\themes\\maintheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\themes\\maintheme.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\controls\\custommessagebox.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\controls\\custommessagebox.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\game\\windowprofilesetup.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\game\\windowprofilesetup.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\session\\setupprofile.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\session\\setupprofile.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|C:\\Proyecto Tecno\\Client\\client\\views\\settings.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\settings.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowuserselection.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowuserselection.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\helpers\\usersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\helpers\\usersession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowsignin.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowsignin.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\settings.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\settings.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\snake\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\session\\enterusernameguest.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\session\\enterusernameguest.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowuserverification.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowuserverification.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\session\\windowsignin.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\session\\windowsignin.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\game\\windowprofilesetup.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\game\\windowprofilesetup.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\game\\windowmainmenu.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\game\\windowmainmenu.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\view\\game\\windowmainmenu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\view\\game\\windowmainmenu.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{6330E2EE-DA77-4175-A325-B72A2BB135AC}|Client\\Client.csproj|solutionrelative:client\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\singleplayer\\playgamesingleplayer.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\singleplayer\\playgamesingleplayer.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
   ],
   "DocumentGroupContainers": [
@@ -81,228 +58,182 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 15,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "WindowLogIn.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowLogIn.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowLogIn.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowLogIn.xaml.cs",
-              "RelativeToolTip": "Client\\View\\Session\\WindowLogIn.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:56:10.652Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WindowUserVerification.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserVerification.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowUserVerification.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserVerification.xaml.cs",
-              "RelativeToolTip": "Client\\View\\Session\\WindowUserVerification.xaml.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAYwBQAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:51:08.551Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "WindowUserSelection.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserSelection.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowUserSelection.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserSelection.xaml.cs",
-              "RelativeToolTip": "Client\\View\\Session\\WindowUserSelection.xaml.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAnwB0AAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:55:13.377Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "WindowLogIn.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowLogIn.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowLogIn.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowLogIn.xaml",
-              "RelativeToolTip": "Client\\View\\Session\\WindowLogIn.xaml",
+              "Title": "MainTheme.xaml",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Themes\\MainTheme.xaml",
+              "RelativeDocumentMoniker": "Client\\Themes\\MainTheme.xaml",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Themes\\MainTheme.xaml",
+              "RelativeToolTip": "Client\\Themes\\MainTheme.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-14T03:43:06.392Z",
+              "WhenOpened": "2025-11-11T23:19:19.233Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "WindowUserSelection.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserSelection.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowUserSelection.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserSelection.xaml",
-              "RelativeToolTip": "Client\\View\\Session\\WindowUserSelection.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-07T00:19:32.325Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "App.config",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.config",
-              "RelativeDocumentMoniker": "Client\\App.config",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.config",
-              "RelativeToolTip": "Client\\App.config",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAUwAcAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-10-12T21:30:37.486Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\App.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.xaml.cs",
-              "RelativeToolTip": "Client\\App.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T19:43:49.219Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.xaml",
-              "RelativeDocumentMoniker": "Client\\App.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\App.xaml",
-              "RelativeToolTip": "Client\\App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-13T19:38:34.919Z",
+              "Title": "CustomMessageBox.xaml.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
+              "RelativeToolTip": "Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAiwBkAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T23:17:53.327Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "WindowProfileSetup.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowProfileSetup.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Game\\WindowProfileSetup.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowProfileSetup.xaml",
-              "RelativeToolTip": "Client\\View\\Game\\WindowProfileSetup.xaml",
+              "Title": "SetupProfile.xaml.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\Views\\Session\\SetupProfile.xaml.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml.cs",
+              "RelativeToolTip": "Client\\Views\\Session\\SetupProfile.xaml.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T23:17:29.258Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SetupProfile.xaml",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml",
+              "RelativeDocumentMoniker": "Client\\Views\\Session\\SetupProfile.xaml",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml",
+              "RelativeToolTip": "Client\\Views\\Session\\SetupProfile.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-07T00:16:46.702Z"
+              "WhenOpened": "2025-11-11T23:17:25.224Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "WindowProfileSetup.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowProfileSetup.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Game\\WindowProfileSetup.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowProfileSetup.xaml.cs",
-              "RelativeToolTip": "Client\\View\\Game\\WindowProfileSetup.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "UserSession.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\UserSession.cs",
+              "RelativeDocumentMoniker": "Client\\Helpers\\UserSession.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\UserSession.cs",
+              "RelativeToolTip": "Client\\Helpers\\UserSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:57:10.8Z"
+              "WhenOpened": "2025-11-11T23:00:55.003Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "WindowMainMenu.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowMainMenu.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Game\\WindowMainMenu.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowMainMenu.xaml",
-              "RelativeToolTip": "Client\\View\\Game\\WindowMainMenu.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-07T00:15:55.625Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "WindowMainMenu.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowMainMenu.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Game\\WindowMainMenu.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Game\\WindowMainMenu.xaml.cs*",
-              "RelativeToolTip": "Client\\View\\Game\\WindowMainMenu.xaml.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAABAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\App.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\App.xaml.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\App.xaml.cs",
+              "RelativeToolTip": "Client\\App.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:57:47.781Z"
+              "WhenOpened": "2025-11-11T22:43:10.869Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ResourcePart.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs",
-              "ToolTip": "C:\\Users\\snake\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs [Read Only]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\3714f74b82eacc6cf8dcf1e32980b0908d4f8b447d25d4eb08ff1424a7b57c02\\ResourcePart.cs [Read Only]",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACsAAAAEAAAAAQAAAA==",
+              "DocumentIndex": 6,
+              "Title": "ValidationHelper.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\ValidationHelper.cs",
+              "RelativeDocumentMoniker": "Client\\Helpers\\ValidationHelper.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\ValidationHelper.cs",
+              "RelativeToolTip": "Client\\Helpers\\ValidationHelper.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T19:40:39.622Z",
-              "EditorCaption": " [Read Only]"
+              "WhenOpened": "2025-11-11T20:15:57.328Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "WindowSignIn.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowSignIn.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowSignIn.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowSignIn.xaml.cs",
-              "RelativeToolTip": "Client\\View\\Session\\WindowSignIn.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAhAAAAAAAAAA==",
+              "Title": "Settings.xaml",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Settings.xaml",
+              "RelativeDocumentMoniker": "Client\\Views\\Settings.xaml",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Settings.xaml",
+              "RelativeToolTip": "Client\\Views\\Settings.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-11-11T18:30:35.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Settings.xaml.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Settings.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\Views\\Settings.xaml.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Settings.xaml.cs",
+              "RelativeToolTip": "Client\\Views\\Settings.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T04:56:04.411Z"
+              "WhenOpened": "2025-11-11T18:32:40.407Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Lang.resx",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Properties\\Langs\\Lang.resx",
+              "RelativeDocumentMoniker": "Client\\Properties\\Langs\\Lang.resx",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Properties\\Langs\\Lang.resx",
+              "RelativeToolTip": "Client\\Properties\\Langs\\Lang.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-11-11T18:40:45.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "EnterUsernameGuest.xaml.cs",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\EnterUsernameGuest.xaml.cs",
+              "RelativeDocumentMoniker": "Client\\Views\\Session\\EnterUsernameGuest.xaml.cs",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\EnterUsernameGuest.xaml.cs",
+              "RelativeToolTip": "Client\\Views\\Session\\EnterUsernameGuest.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAE8AAABOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-11T20:10:04.339Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "Client\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\MainWindow.xaml",
-              "RelativeToolTip": "Client\\MainWindow.xaml",
+              "Title": "PlayGameSingleplayer.xaml",
+              "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Singleplayer\\PlayGameSingleplayer.xaml",
+              "RelativeDocumentMoniker": "Client\\Views\\Singleplayer\\PlayGameSingleplayer.xaml",
+              "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Singleplayer\\PlayGameSingleplayer.xaml",
+              "RelativeToolTip": "Client\\Views\\Singleplayer\\PlayGameSingleplayer.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-06T23:17:31.972Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "WindowUserVerification.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserVerification.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowUserVerification.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowUserVerification.xaml",
-              "RelativeToolTip": "Client\\View\\Session\\WindowUserVerification.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-07T02:15:59.472Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "WindowSignIn.xaml",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowSignIn.xaml",
-              "RelativeDocumentMoniker": "Client\\View\\Session\\WindowSignIn.xaml",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\View\\Session\\WindowSignIn.xaml",
-              "RelativeToolTip": "Client\\View\\Session\\WindowSignIn.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-10-07T01:42:18.876Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "Client\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGame\\Client\\Client\\MainWindow.xaml.cs",
-              "RelativeToolTip": "Client\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-06T23:17:30.87Z"
+              "WhenOpened": "2025-11-11T19:41:38.774Z",
+              "EditorCaption": ""
             }
           ]
         },
@@ -313,6 +244,10 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             }
           ]
         }

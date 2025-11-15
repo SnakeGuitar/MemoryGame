@@ -1,10 +1,20 @@
 ﻿
-
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\MainWindow.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Game\WindowMainMenu.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Game\WindowProfileSetup.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Session\WindowLogIn.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Session\WindowSignIn.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Session\WindowUserSelection.xaml;;
-FC:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\View\Session\WindowUserVerification.xaml;;
+FC:\Proyecto Tecno\Client\Client\App.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Controls\CustomMessageBox.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Lobby\HostLobby.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Lobby\Lobby.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\MainMenu.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Multiplayer\JoinLobby.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Multiplayer\MultiplayerMenu.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Multiplayer\PlayGameMultiplayer.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Session\EnterUsernameGuest.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Session\Login.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Session\RegisterAccount.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Session\SetupProfile.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Session\VerifyCode.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Settings.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Singleplayer\CustomizeGame.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Singleplayer\PlayGameSingleplayer.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\Singleplayer\SelectDifficulty.xaml;;
+FC:\Proyecto Tecno\Client\Client\Views\TitleScreen.xaml;;
 

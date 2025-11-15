@@ -1,22 +1,50 @@
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.dll.config
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\Server.pdb
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.AssemblyReference.cache
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.dll
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.pdb
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\BCrypt.Net-Next.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.SqlServer.dll
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.xml
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.Up2Date
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\BCrypt.Net-Next.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Buffers.dll
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Memory.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\BCrypt.Net-Next.xml
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.xml
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Buffers.xml
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.pdb
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.xml
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Memory.xml
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Numerics.Vectors.xml
 C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.dll
+C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Server\Server\obj\Debug\Server.pdb
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\Server.dll.config
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\Server.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\Server.pdb
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\BCrypt.Net-Next.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\EntityFramework.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\EntityFramework.SqlServer.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Buffers.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Memory.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Numerics.Vectors.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\BCrypt.Net-Next.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\EntityFramework.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\EntityFramework.SqlServer.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Buffers.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.pdb
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Drawing.Common.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Memory.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Numerics.Vectors.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Proyecto Tecno\MemoryGame\Server\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Proyecto Tecno\MemoryGame\Server\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Proyecto Tecno\MemoryGame\Server\Server\obj\Debug\Server.csproj.Up2Date
+C:\Proyecto Tecno\MemoryGame\Server\Server\obj\Debug\Server.dll
+C:\Proyecto Tecno\MemoryGame\Server\Server\obj\Debug\Server.pdb

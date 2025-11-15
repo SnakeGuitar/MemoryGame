@@ -1,0 +1,468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Global_Button_Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Global_Button_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Global_Button_Guest" xml:space="preserve">
+    <value>Guest</value>
+  </data>
+  <data name="Global_Button_Join" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="Global_Button_LogIn" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="Global_Button_NotReady" xml:space="preserve">
+    <value>Not Ready</value>
+  </data>
+  <data name="Global_Button_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="Global_Button_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Global_Button_SetupProfile" xml:space="preserve">
+    <value>Set up Profile</value>
+  </data>
+  <data name="Global_Button_SignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="Global_Button_Verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="Global_Label_Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="Global_Label_Difficulty" xml:space="preserve">
+    <value>Difficulty;</value>
+  </data>
+  <data name="Global_Label_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Global_Label_EnterCode" xml:space="preserve">
+    <value>Enter 6 digit code:</value>
+  </data>
+  <data name="Global_Label_EnterUsername" xml:space="preserve">
+    <value>Enter an username:</value>
+  </data>
+  <data name="Global_Label_NumberOfCards" xml:space="preserve">
+    <value>Number of cards</value>
+  </data>
+  <data name="Global_Label_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Global_Label_Score" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Global_Label_Timer" xml:space="preserve">
+    <value>Timer:</value>
+  </data>
+  <data name="Global_Title_Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="Global_Title_CustomDifficulty" xml:space="preserve">
+    <value>Custom Settings</value>
+  </data>
+  <data name="Global_Title_Lobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
+  <data name="Global_Title_Multiplayer" xml:space="preserve">
+    <value>Multiplayer</value>
+  </data>
+  <data name="Global_Title_Singleplayer" xml:space="preserve">
+    <value>Singleplayer</value>
+  </data>
+  <data name="HostLobby_Label_Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="HostLobby_Label_TimePerTurn" xml:space="preserve">
+    <value>Time per Turn:</value>
+  </data>
+  <data name="MultiplayerMenu_Button_CreateLobby" xml:space="preserve">
+    <value>Create lobby</value>
+  </data>
+  <data name="SelectDifficulty_Button_Easy" xml:space="preserve">
+    <value>Easy</value>
+  </data>
+  <data name="SelectDifficulty_Button_Hard" xml:space="preserve">
+    <value>Hard</value>
+  </data>
+  <data name="SetupProfile_Label_SelectAvatar" xml:space="preserve">
+    <value>Select an avatar:</value>
+  </data>
+  <data name="TitleScreen_Label_Memorama" xml:space="preserve">
+    <value>Memory Game</value>
+  </data>
+  <data name="Global_Title_Players" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="VerifyCode_Button_SentAgain" xml:space="preserve">
+    <value>Send again?</value>
+  </data>
+  <data name="VerifyCode_Label_SentTo" xml:space="preserve">
+    <value>A verification email was sent to:</value>
+  </data>
+  <data name="Global_Button_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Global_Button_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="MainMenu_Button_ExitGame" xml:space="preserve">
+    <value>Exit game</value>
+  </data>
+  <data name="MainMenu_Button_Gallery" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="Global_Button_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Global_Button_Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Global_Label_Seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="SelectDifficulty_Button_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="HostLobby_Title_InviteFriends" xml:space="preserve">
+    <value>Invite friends</value>
+  </data>
+  <data name="HostLobby_Label_EnterFriendEmail" xml:space="preserve">
+    <value>Enter your friend's email:</value>
+  </data>
+  <data name="HostLobby_Button_SendInvitation" xml:space="preserve">
+    <value>Send invitation</value>
+  </data>
+  <data name="HostLobby_Label_GameCode" xml:space="preserve">
+    <value>Game code:</value>
+  </data>
+  <data name="HostLobby_Title_GameSettings" xml:space="preserve">
+    <value>Game settings</value>
+  </data>
+  <data name="Global_ValidationUsername_Empty" xml:space="preserve">
+    <value>Username cannot be empty</value>
+  </data>
+  <data name="Global_ValidationUsername_TooLong" xml:space="preserve">
+    <value>Username must be 30 characters or less</value>
+  </data>
+  <data name="Global_ValidationUsername_InvalidChars" xml:space="preserve">
+    <value>Username must not contain spaces; use - or _ instead</value>
+  </data>
+  <data name="Global_ValidationPassword_Empty" xml:space="preserve">
+    <value>Password cannot be empty</value>
+  </data>
+  <data name="Global_ValidationPassword_LengthInvalid" xml:space="preserve">
+    <value>Password must be between 8 and 20 characters long</value>
+  </data>
+  <data name="Global_ValidationPassword_MissingUpper" xml:space="preserve">
+    <value>Password must contain at least one uppercase letter</value>
+  </data>
+  <data name="Global_ValidationPassword_MissingLower" xml:space="preserve">
+    <value>Password must contain at least one lowercase letter</value>
+  </data>
+  <data name="Global_ValidationPassword_MissingDigit" xml:space="preserve">
+    <value>Password must contain at least one number</value>
+  </data>
+  <data name="Global_ValidationEmail_Empty" xml:space="preserve">
+    <value>Email cannot be empty</value>
+  </data>
+  <data name="Global_ValidationEmail_InvalidFormat" xml:space="preserve">
+    <value>Email format is invalid. Please enter a valid address</value>
+  </data>
+  <data name="Global_ValidationCode_Empty" xml:space="preserve">
+    <value>Code cannot be empty</value>
+  </data>
+  <data name="Global_ValidationCode_NotNumeric" xml:space="preserve">
+    <value>Code should only contain numbers</value>
+  </data>
+  <data name="Global_ServiceError_Offline" xml:space="preserve">
+    <value>Unable to connect to the server. Please check your connection</value>
+  </data>
+  <data name="Global_ServiceError_NetworkDown" xml:space="preserve">
+    <value>Communication error. The network may be unstable</value>
+  </data>
+  <data name="Global_ServiceError_Unknown" xml:space="preserve">
+    <value>An unknown error has occurred</value>
+  </data>
+  <data name="Global_ValidationCode_LengthInvalid" xml:space="preserve">
+    <value>Code must not exceed 6 characters</value>
+  </data>
+  <data name="Global_Message_Welcome" xml:space="preserve">
+    <value>Welcome, {0}!</value>
+  </data>
+  <data name="Global_Error_InvalidUsername" xml:space="preserve">
+    <value>username is not valid or is already taken. Please try another</value>
+  </data>
+  <data name="Global_Title_Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Global_Title_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Global_Title_ServerOffline" xml:space="preserve">
+    <value>Server Offline</value>
+  </data>
+  <data name="Global_Title_NetworkError" xml:space="preserve">
+    <value>Network Error </value>
+  </data>
+  <data name="Global_Title_AppError" xml:space="preserve">
+    <value>Application Error</value>
+  </data>
+  <data name="Global_Title_NotAvailableFunction" xml:space="preserve">
+    <value>Function not available</value>
+  </data>
+  <data name="Global_Error_GuestsNotAllowed" xml:space="preserve">
+    <value>Guests are not allowed to create lobbies. Please register or log in to access this feature</value>
+  </data>
+  <data name="Global_Player_GuestSuffix" xml:space="preserve">
+    <value>(Guest)</value>
+  </data>
+  <data name="Lobby_Error_GuestChat" xml:space="preserve">
+    <value>Guests are not allowed to send chat messages</value>
+  </data>
+  <data name="Lobby_Error_JoinFailed" xml:space="preserve">
+    <value>Failed to join lobby. Invalid code or lobby is full</value>
+  </data>
+  <data name="Lobby_Error_SendChatFailed" xml:space="preserve">
+    <value>Failed to send chat message</value>
+  </data>
+  <data name="Lobby_Notification_PlayerLeft" xml:space="preserve">
+    <value>{0} has left the lobby</value>
+  </data>
+  <data name="Lobby_Notification_System" xml:space="preserve">
+    <value>[System]</value>
+  </data>
+  <data name="Lobby_Notification_PlayerJoined" xml:space="preserve">
+    <value>{0} has joined the lobby</value>
+  </data>
+  <data name="HostLobby_Error_CreateFailed" xml:space="preserve">
+    <value>Failed to create lobby</value>
+  </data>
+  <data name="HostLobby_Error_EmailInvalid" xml:space="preserve">
+    <value>Please enter a valid email address</value>
+  </data>
+  <data name="HostLobby_Message_InviteSent" xml:space="preserve">
+    <value>Invitation sent successfully to {0}</value>
+  </data>
+  <data name="HostLobby_Error_InviteFailed" xml:space="preserve">
+    <value>Failed to send invitation. Please try again later</value>
+  </data>
+  <data name="Lobby_Message_CreateSuccess" xml:space="preserve">
+    <value>Lobby successfully created!</value>
+  </data>
+  <data name="Global_Title_LoginSuccess" xml:space="preserve">
+    <value>Login Successful</value>
+  </data>
+  <data name="Global_Title_LoginFailed" xml:space="preserve">
+    <value>Login Failed</value>
+  </data>
+  <data name="Global_Error_InvalidCredentials" xml:space="preserve">
+    <value>Invalid email or password</value>
+  </data>
+  <data name="RegisterAccount_Message_Success" xml:space="preserve">
+    <value>Registration successful! A verification code has been sent to your email</value>
+  </data>
+  <data name="RegisterAccount_Message_Failed" xml:space="preserve">
+    <value>Registration failed. The email may already be in use</value>
+  </data>
+  <data name="VerifyCode_Message_Success" xml:space="preserve">
+    <value>Your account has been successfully verified!</value>
+  </data>
+  <data name="Global_Error_CodeInvalid" xml:space="preserve">
+    <value>Verification failed. Please check the code and try again</value>
+  </data>
+  <data name="Global_Error_CodeExpired" xml:space="preserve">
+    <value>Your verification code has expired. Please request a new one</value>
+  </data>
+  <data name="Global_Error_EmailInUse" xml:space="preserve">
+    <value>This email address is already in use</value>
+  </data>
+  <data name="Global_Error_EmailSendFailed" xml:space="preserve">
+    <value>Failed to send verification email</value>
+  </data>
+  <data name="Global_Error_RegistrationNotFound" xml:space="preserve">
+    <value>No registration request was found for this email</value>
+  </data>
+  <data name="Global_Error_InvalidToken" xml:space="preserve">
+    <value>Your session is invalid or has expired. Please log in again</value>
+  </data>
+  <data name="Global_Error_ImageInvalid" xml:space="preserve">
+    <value>The image format is not valid</value>
+  </data>
+  <data name="Global_Error_UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="Global_Error_PasswordInvalid" xml:space="preserve">
+    <value>Password does not have a valid format</value>
+  </data>
+  <data name="SetupProfile_Dialog_Title" xml:space="preserve">
+    <value>Select Profile Image</value>
+  </data>
+  <data name="SetupProfile_Dialog_Filter" xml:space="preserve">
+    <value>Image Files|*.jpg;*.jpeg;*.png;*.bmp</value>
+  </data>
+  <data name="SetupProfile_Error_ImageLoad" xml:space="preserve">
+    <value>Failed to load image: {0}</value>
+  </data>
+  <data name="SetupProfile_Message_Success" xml:space="preserve">
+    <value>Profile setup complete! Welcome</value>
+  </data>
+  <data name="Verify_Message_CodeResent" xml:space="preserve">
+    <value>Code forwarded</value>
+  </data>
+  <data name="Settings_Label_Audio" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="Settings_Label_General" xml:space="preserve">
+    <value>General Settings</value>
+  </data>
+  <data name="Settings_Label_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_Label_Music" xml:space="preserve">
+    <value>Music Volume</value>
+  </data>
+  <data name="Settings_Label_SFX" xml:space="preserve">
+    <value>SFX Volume</value>
+  </data>
+  <data name="Settings_Language_EnUS" xml:space="preserve">
+    <value>English (US)</value>
+  </data>
+  <data name="Settings_Language_EsMX" xml:space="preserve">
+    <value>Spanish (MX)</value>
+  </data>
+  <data name="Global_Title_LoginAsGuestSuccess" xml:space="preserve">
+    <value>Logged in as a successful guest</value>
+  </data>
+  <data name="Global_Error_UsernameInUse" xml:space="preserve">
+    <value>That username is already in use. Please choose another</value>
+  </data>
+  <data name="Global_Title_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Global_Title_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+</root>

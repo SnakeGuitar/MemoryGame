@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\obj\Debug\
+C:\Proyecto Tecno\Client\Client\obj\Debug\
 Client
 none
 false
 DEBUG;TRACE
-C:\Users\snake\Desktop\Cosas\Escuela\Quinto_Semestre\MemoryGame\Client\Client\App.xaml
-71473591795
+C:\Proyecto Tecno\Client\Client\App.xaml
+18811409126
 
-13312387196
+31731866850
 151069376965
-MainWindow.xaml;View\Game\WindowMainMenu.xaml;View\Game\WindowProfileSetup.xaml;View\Session\WindowLogIn.xaml;View\Session\WindowSignIn.xaml;View\Session\WindowUserSelection.xaml;View\Session\WindowUserVerification.xaml;
+Themes\MainTheme.xaml;Views\Controls\CustomMessageBox.xaml;Views\Lobby\HostLobby.xaml;Views\Lobby\Lobby.xaml;Views\MainMenu.xaml;Views\Multiplayer\JoinLobby.xaml;Views\Multiplayer\MultiplayerMenu.xaml;Views\Multiplayer\PlayGameMultiplayer.xaml;Views\Session\EnterUsernameGuest.xaml;Views\Session\Login.xaml;Views\Session\RegisterAccount.xaml;Views\Session\SetupProfile.xaml;Views\Session\VerifyCode.xaml;Views\Settings.xaml;Views\Singleplayer\CustomizeGame.xaml;Views\Singleplayer\PlayGameSingleplayer.xaml;Views\Singleplayer\SelectDifficulty.xaml;Views\TitleScreen.xaml;
 
 False
 

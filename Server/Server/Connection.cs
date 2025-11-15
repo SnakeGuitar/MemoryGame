@@ -1,32 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using Server;
-using Server.AuthenticationService;
+using System.ServiceModel.Description;
+using Server.SessionService;
 
-namespace Server
+namespace ServerHost
 {
-    class Connection
+    class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            using (ServiceHost host = new ServiceHost(typeof(Server.AuthenticationService.UserService)))
+            // Base addresses
+            Uri httpBase = new Uri("http://localhost:52000/mexHttp");
+            Uri tcpBase = new Uri("net.tcp://localhost:52001/Server");
+
+            using (ServiceHost host = new ServiceHost(typeof(UserService), httpBase, tcpBase))
             {
-                try
+                // Endpoint TCP
+                host.AddServiceEndpoint(typeof(IUserService), new NetTcpBinding(), "");
+
+                // Endpoint HTTP MEX
+                host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexHttpBinding(), "mexHttp");
+
+                // Endpoint TCP MEX
+                host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexTcpBinding(), "mexTcp");
+
+                // ServiceMetadataBehavior
+                if (host.Description.Behaviors.Find<ServiceMetadataBehavior>() == null)
                 {
-                    host.Open();
-                    ConnectionTest.TestConnection();
+                    host.Description.Behaviors.Add(new ServiceMetadataBehavior
+                    {
+                        HttpGetEnabled = true,
+                        HttpGetUrl = httpBase
+                    });
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error: " + ex.Message);
-                    Console.ReadLine();
-                }
-                Console.WriteLine("Service is running...");
-                Console.WriteLine("Press Enter to terminate service.");
+
+                host.Open();
+                Console.WriteLine("Service running...");
+                Console.WriteLine("HTTP WSDL: http://localhost:52000/mexHttp?wsdl");
+                Console.WriteLine("Press ENTER to stop.");
                 Console.ReadLine();
             }
         }
