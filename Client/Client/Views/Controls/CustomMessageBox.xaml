@@ -1,0 +1,62 @@
+﻿<Window x:Class="Client.Views.Controls.CustomMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Controls"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="" 
+        SizeToContent="WidthAndHeight" 
+        MinWidth="450" MaxWidth="600"
+        WindowStartupLocation="CenterOwner"
+        
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Border CornerRadius="15" 
+            Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource AccentColor}"
+            BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.3" Color="Black"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid Margin="20,10,20,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="TextBlockTitle" 
+                           Grid.Row="0"
+                           Style="{StaticResource TitleTextStyle}" 
+                           FontSize="32"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="0,10,0,0"/>
+
+                <Border x:Name="MessageBorder"
+                        Grid.Row="1"
+                        Background="{StaticResource AccentColor}" 
+                        CornerRadius="10" 
+                        Margin="0,15,0,15">
+
+                    <TextBlock x:Name="TextBlockMessage" 
+                               Style="{StaticResource MessageBoxTextStyle}"/>
+                </Border>
+
+                <Button Content="{x:Static language:Lang.Global_Button_Accept}" 
+                        Grid.Row="2"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        HorizontalAlignment="Center"
+                        Click="ButtonOK_Click"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

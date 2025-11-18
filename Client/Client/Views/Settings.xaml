@@ -1,0 +1,88 @@
+﻿<Window x:Class="Client.Views.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="Settings" 
+        MinHeight="700" MinWidth="865"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <Grid HorizontalAlignment="Center" 
+              VerticalAlignment="Center"
+              MaxWidth="700" MaxHeight="865"
+              Margin="0,0,0,120"
+              Loaded="Window_Loaded">
+
+            <Viewbox Stretch="Uniform">
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Width="581">
+
+                    <Label Content="{x:Static language:Lang.Global_Button_Settings}" 
+                           Style="{StaticResource TitleLabelStyle}" Width="558" HorizontalContentAlignment="Center"/>
+
+                    <Label Content="{x:Static language:Lang.Settings_Label_Audio}" 
+                           Style="{StaticResource SubTitleStyle}"/>
+
+                    <Border Background="{StaticResource AccentColor}" CornerRadius="15">
+                        <StackPanel Margin="25">
+
+                            <Label Content="{x:Static language:Lang.Settings_Label_Music}" 
+                                   Style="{StaticResource RegisterLabelStyle}"/>
+                            
+                            <Slider x:Name="MusicSlider" 
+                                    Style="{StaticResource FormSliderStyle}"
+                                    Minimum="0" Maximum="100" Value="80"
+                                    IsSnapToTickEnabled="True" TickFrequency="1"/>
+                            
+                            <Label Content="{Binding ElementName=MusicSlider, Path=Value, StringFormat={}{0:F0}}" 
+                                   Style="{StaticResource FormValueLabelStyle}"
+                                   HorizontalAlignment="Center"/>
+
+                            <Label Content="{x:Static language:Lang.Settings_Label_SFX}" 
+                                   Style="{StaticResource RegisterLabelStyle}"
+                                   Margin="0,15,0,5"/>
+                            
+                            <Slider x:Name="SfxSlider" 
+                                    Style="{StaticResource FormSliderStyle}"
+                                    Minimum="0" Maximum="100" Value="100"
+                                    IsSnapToTickEnabled="True" TickFrequency="1"/>
+                            
+                            <Label Content="{Binding ElementName=SfxSlider, Path=Value, StringFormat={}{0:F0}}" 
+                                   Style="{StaticResource FormValueLabelStyle}"
+                                   HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Label Content="{x:Static language:Lang.Settings_Label_General}" 
+                           Style="{StaticResource SubTitleStyle}" Margin="0,20,0,10"/>
+
+                    <Border Background="{StaticResource AccentColor}" CornerRadius="15">
+                        <StackPanel Margin="25">
+                            <Label Content="{x:Static language:Lang.Settings_Label_Language}" Style="{StaticResource RegisterLabelStyle}"/>
+
+                            <ComboBox x:Name="ComboBoxLanguage" 
+                                      Style="{StaticResource FormComboBoxStyle}"
+                                      SelectionChanged="ComboBoxLanguage_SelectionChanged">
+
+                                <ComboBoxItem Name="esMX" Content="{x:Static language:Lang.Settings_Language_EsMX}"/>
+                                <ComboBoxItem Name="enUS" Content="{x:Static language:Lang.Settings_Language_EnUS}"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Content="{x:Static language:Lang.Global_Button_Back}" 
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            HorizontalAlignment="Center" 
+                            Margin="0,15,0,0"
+                            Click="ButtonBack_Click" />
+                </StackPanel>
+            </Viewbox>
+        </Grid>
+    </Grid>
+</Window>

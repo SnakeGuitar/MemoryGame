@@ -1,0 +1,138 @@
+﻿<Window x:Class="Client.Views.Multiplayer.PlayGameMultiplayer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Multiplayer"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="PlayGameMultiplayer" 
+        MinHeight="720" MinWidth="1280"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+
+        <Style x:Key="GameBoardStyle" TargetType="ItemsControl">
+        </Style>
+
+        <Style x:Key="PanelContainerStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource GreenGame}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="10,0,10,10"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="ChatListBoxStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="#99000000"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+            <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Background="{StaticResource PrimaryTextColor}">
+
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Margin="10,0,10,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="{x:Static language:Lang.Global_Title_Players}" 
+                       Style="{StaticResource MainMenuTitleStyle}" Grid.Row="0"/>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="PlayerInfoPanel" HorizontalAlignment="Stretch">
+
+                        <Border Style="{StaticResource PanelContainerStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label x:Name="LabelP1Name" Content="Jugador 1" Style="{StaticResource PlayerNameStyle}"/>
+                                <StackPanel Grid.Row="1">
+                                    <Label x:Name="LabelP1Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                                    <Label x:Name="LabelP1Time" Content="Tiempo: 30s" Style="{StaticResource PlayerStatStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Style="{StaticResource PanelContainerStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label x:Name="LabelP2Name" Content="Jugador 2" Style="{StaticResource PlayerNameStyle}"/>
+                                <StackPanel Grid.Row="1">
+                                    <Label x:Name="LabelP2Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                                    <Label x:Name="LabelP2Time" Content="Tiempo: 30s" Style="{StaticResource PlayerStatStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="10,0,10,10">
+                <Border Style="{StaticResource BoardContainerStyle}">
+                    <ItemsControl x:Name="GameBoard" 
+                                  Style="{StaticResource GameBoardStyle}"/>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Column="2" Margin="10,0,10,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource PanelContainerStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" MinHeight="135.25"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}"/>
+
+                        <ListBox x:Name="ChatListBox" Style="{StaticResource ChatListBoxStyle}" Grid.Row="1" Margin="5,5,5,5" />
+
+                        <Grid Grid.Row="2" VerticalAlignment="Center" Margin="5,0,5,0" Height="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" />
+                            <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" />
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <Button Content="{x:Static language:Lang.Global_Button_Settings}" 
+                            Style="{StaticResource GameButtonStyle}"
+                            Click="ButtonSettings_Click"/>
+                    <Button Content="{x:Static language:Lang.Global_Button_Back}" 
+                            Style="{StaticResource GameButtonStyle}"
+                            Click="ButtonBackToMenu_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

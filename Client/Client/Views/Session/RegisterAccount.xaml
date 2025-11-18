@@ -1,0 +1,71 @@
+﻿<Window x:Class="Client.Views.Session.RegisterAccount"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Session"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="RegisterAccount" 
+        MinHeight="550" MinWidth="450" 
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Background="{StaticResource BackgroundColor}">
+
+        <Grid HorizontalAlignment="Center" 
+              VerticalAlignment="Center"
+              MaxWidth="600" 
+              MaxHeight="740"
+              Margin="0,0,0,120">
+
+            <Viewbox Stretch="Uniform">
+
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+
+                    <Label Content="{x:Static language:Lang.Global_Button_SignIn}" 
+                           Style="{StaticResource TitleLabelStyle}" />
+
+                    <Border Background="{StaticResource AccentColor}" 
+                            CornerRadius="15">
+
+                        <StackPanel Margin="25" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                            <Label Content="{x:Static language:Lang.Global_Label_Email}" 
+                                   Style="{StaticResource RegisterLabelStyle}"/>
+
+                            <TextBox x:Name="TextBoxEmail" 
+                                     Style="{StaticResource RegisterTextBoxStyle}"/>
+
+                            <Label x:Name="LabelEmailError" 
+                                   Style="{StaticResource RegisterErrorLabelStyle}"
+                                   Content=""/>
+
+                            <Label Content="{x:Static language:Lang.Global_Label_Password}" 
+                                   Style="{StaticResource RegisterLabelStyle}"/>
+
+                            <TextBox x:Name="TextBoxPassword" 
+                                     Style="{StaticResource RegisterTextBoxStyle}"/>
+
+                            <Label x:Name="LabelPasswordError" 
+                                   Style="{StaticResource RegisterErrorLabelStyle}"
+                                   Content=""/>
+
+                            <Button Content="{x:Static language:Lang.Global_Button_Accept}" 
+                                    Style="{StaticResource FormPrimaryButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    Name ="ButtonAcceptRegisterAccount"
+                                    Click="ButtonAcceptRegisterAccount_Click" />
+                        </StackPanel>
+                    </Border>
+
+                    <Button Content="{x:Static language:Lang.Global_Button_Back}" Style="{StaticResource SecondaryButtonStyle}"
+                            HorizontalAlignment="Center" 
+                            Margin="0,15,0,0"
+                            Click="ButtonBackToTitleScreen_Click" />
+                </StackPanel>
+            </Viewbox>
+        </Grid>
+    </Grid>
+</Window>

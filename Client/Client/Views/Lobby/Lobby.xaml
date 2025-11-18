@@ -1,0 +1,119 @@
+﻿<Window x:Class="Client.Views.Lobby.Lobby"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Lobby"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="Lobby" 
+        MinHeight="720" MinWidth="1280" 
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+
+    <Grid Background="{StaticResource BackgroundColor}">
+
+        <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="{x:Static language:Lang.Global_Title_Players}" 
+                           Style="{StaticResource LobbyTitleStyle}" Grid.Row="0"/>
+
+                    <ListBox x:Name="PlayersListBox" 
+                         Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1"
+                         Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}">
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Content="{Binding Username}" 
+                                       Grid.Column="0"
+                                       FontFamily="{StaticResource BodyFont}" 
+                                       FontSize="18"
+                                       Padding="5,0,0,0"
+                                       Foreground="{StaticResource AccentForegroundColor}"/>
+
+                                    <Label Grid.Column="1" 
+                                       FontFamily="{StaticResource BodyFont}"
+                                       FontSize="16" FontWeight="Bold">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Content" Value="No Listo"/>
+                                                <Setter Property="Foreground" Value="{StaticResource AccentHoverColor}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsReady}" Value="True">
+                                                        <Setter Property="Content" Value="Listo"/>
+                                                        <Setter Property="Foreground" Value="#86C361"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                    </ListBox>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="{x:Static language:Lang.Global_Button_Back}" 
+                                Style="{StaticResource MenuExitLobbyButtonStyle}" 
+                                Margin="0,10,5,10"
+                                Click="ButtonBackToMainMenu_Click"/>
+                        <Button Content="{x:Static language:Lang.Global_Button_Ready}" 
+                                Style="{StaticResource PrimaryLobbyButtonStyle}" 
+                                Margin="5,10,0,10"
+                                Click="ButtonReady_Click"/>
+
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="1" Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="{x:Static language:Lang.Global_Title_Chat}" 
+                           Style="{StaticResource LobbyTitleStyle}" Grid.Row="0"/>
+
+                    <ListBox x:Name="ChatListBox" 
+                         Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1" 
+                         Margin="10,10,10,28" d:ItemsSource="{d:SampleData ItemCount=5}" />
+
+                    <Grid Grid.Row="2" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="ChatTextBox" 
+                             Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" Margin="0,0,0,10" />
+
+                        <Button Content="{x:Static language:Lang.Global_Button_Send}" 
+                            Style="{StaticResource SendButtonStyle}" Grid.Column="1" 
+                            Click="ButtonSendMessageChat_Click" Margin="10,0,0,10" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

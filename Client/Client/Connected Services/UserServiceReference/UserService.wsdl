@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="UserService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IUserService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://localhost:52000/?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://localhost:52000/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://localhost:52000/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server.SessionService" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IUserService_StartRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_StartRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ResendVerificationCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResendVerificationCode" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ResendVerificationCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ResendVerificationCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_FinalizeRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:FinalizeRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_FinalizeRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FinalizeRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetUserAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetUserAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUserAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUserAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdateUserAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateUserAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_LoginAsGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoginAsGuest" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_LoginAsGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginAsGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_LogoutGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogoutGuest" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_LogoutGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogoutGuestResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IUserService">
+    <wsdl:operation name="StartRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/StartRegistration" message="tns:IUserService_StartRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/StartRegistrationResponse" message="tns:IUserService_StartRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/VerifyRegistration" message="tns:IUserService_VerifyRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/VerifyRegistrationResponse" message="tns:IUserService_VerifyRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResendVerificationCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ResendVerificationCode" message="tns:IUserService_ResendVerificationCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ResendVerificationCodeResponse" message="tns:IUserService_ResendVerificationCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FinalizeRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/FinalizeRegistration" message="tns:IUserService_FinalizeRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/FinalizeRegistrationResponse" message="tns:IUserService_FinalizeRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/Login" message="tns:IUserService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LoginResponse" message="tns:IUserService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUserAvatar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetUserAvatar" message="tns:IUserService_GetUserAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetUserAvatarResponse" message="tns:IUserService_GetUserAvatar_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserAvatar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/UpdateUserAvatar" message="tns:IUserService_UpdateUserAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/UpdateUserAvatarResponse" message="tns:IUserService_UpdateUserAvatar_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoginAsGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LoginAsGuest" message="tns:IUserService_LoginAsGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LoginAsGuestResponse" message="tns:IUserService_LoginAsGuest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogoutGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LogoutGuest" message="tns:IUserService_LogoutGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LogoutGuestResponse" message="tns:IUserService_LogoutGuest_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IUserService" type="tns:IUserService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IUserService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="StartRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/StartRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/VerifyRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ResendVerificationCode">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/ResendVerificationCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FinalizeRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/FinalizeRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUserAvatar">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/GetUserAvatar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateUserAvatar">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/UpdateUserAvatar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoginAsGuest">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/LoginAsGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogoutGuest">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/LogoutGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserService">
+    <wsdl:port name="NetTcpBinding_IUserService" binding="tns:NetTcpBinding_IUserService">
+      <soap12:address location="net.tcp://localhost:52001/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:52001/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>LAPTOP-3NG7T8AU\alexa</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
