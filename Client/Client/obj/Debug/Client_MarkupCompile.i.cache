@@ -1,0 +1,20 @@
+﻿Client
+
+
+winexe
+C#
+.cs
+C:\Proyecto Tecno\Client\Client\obj\Debug\
+Client
+none
+false
+DEBUG;TRACE
+C:\Proyecto Tecno\Client\Client\App.xaml
+18811409126
+
+31731866850
+151069376965
+Themes\MainTheme.xaml;Views\Controls\CustomMessageBox.xaml;Views\Lobby\HostLobby.xaml;Views\Lobby\Lobby.xaml;Views\MainMenu.xaml;Views\Multiplayer\JoinLobby.xaml;Views\Multiplayer\MultiplayerMenu.xaml;Views\Multiplayer\PlayGameMultiplayer.xaml;Views\Session\EnterUsernameGuest.xaml;Views\Session\Login.xaml;Views\Session\RegisterAccount.xaml;Views\Session\SetupProfile.xaml;Views\Session\VerifyCode.xaml;Views\Settings.xaml;Views\Singleplayer\CustomizeGame.xaml;Views\Singleplayer\PlayGameSingleplayer.xaml;Views\Singleplayer\SelectDifficulty.xaml;Views\TitleScreen.xaml;
+
+False
+

@@ -1,0 +1,176 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\server\\sessionservice\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\sessionservice\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygamecurated\\memorygame\\server\\server\\lobbyservice\\gamelobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\lobbyservice\\gamelobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygamecurated\\memorygame\\server\\server\\lobbyservice\\igamelobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\lobbyservice\\igamelobbyservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygamecurated\\memorygame\\server\\server\\lobbyservice\\igamelobbycallback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\lobbyservice\\igamelobbycallback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygamecurated\\memorygame\\server\\server\\lobbyservice\\lobbyplayerinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\lobbyservice\\lobbyplayerinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|c:\\users\\snake\\desktop\\cosas\\escuela\\quinto_semestre\\memorygamecurated\\memorygame\\server\\server\\sessionservice\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\sessionservice\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{6D792EB8-9A1F-4572-85AC-6581DCD198B1}|Server\\Server.csproj|solutionrelative:server\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 387,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IGameLobbyService.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\IGameLobbyService.cs",
+              "RelativeDocumentMoniker": "Server\\LobbyService\\IGameLobbyService.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\IGameLobbyService.cs",
+              "RelativeToolTip": "Server\\LobbyService\\IGameLobbyService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T00:00:38.576Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IGameLobbyCallback.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\IGameLobbyCallback.cs",
+              "RelativeDocumentMoniker": "Server\\LobbyService\\IGameLobbyCallback.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\IGameLobbyCallback.cs",
+              "RelativeToolTip": "Server\\LobbyService\\IGameLobbyCallback.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T00:00:31.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GameLobbyService.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\GameLobbyService.cs",
+              "RelativeDocumentMoniker": "Server\\LobbyService\\GameLobbyService.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\GameLobbyService.cs",
+              "RelativeToolTip": "Server\\LobbyService\\GameLobbyService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T00:00:28.687Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LobbyPlayerInfo.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\LobbyPlayerInfo.cs",
+              "RelativeDocumentMoniker": "Server\\LobbyService\\LobbyPlayerInfo.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\LobbyService\\LobbyPlayerInfo.cs",
+              "RelativeToolTip": "Server\\LobbyService\\LobbyPlayerInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-16T00:00:26.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\SessionService\\UserService.cs",
+              "RelativeDocumentMoniker": "Server\\SessionService\\UserService.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\SessionService\\UserService.cs",
+              "RelativeToolTip": "Server\\SessionService\\UserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-07T05:23:40.474Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\App.config",
+              "RelativeDocumentMoniker": "Server\\App.config",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\App.config",
+              "RelativeToolTip": "Server\\App.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-11-15T23:54:59.522Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\SessionService\\IUserService.cs",
+              "RelativeDocumentMoniker": "Server\\SessionService\\IUserService.cs",
+              "ToolTip": "C:\\Users\\snake\\Desktop\\Cosas\\Escuela\\Quinto_Semestre\\MemoryGameCurated\\MemoryGame\\Server\\Server\\SessionService\\IUserService.cs",
+              "RelativeToolTip": "Server\\SessionService\\IUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-09T05:04:42.523Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 247,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
