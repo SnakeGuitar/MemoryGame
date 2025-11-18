@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Proyecto Tecno\\Client\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|C:\\Proyecto Tecno\\Client\\client\\properties\\langs\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
       "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\properties\\langs\\lang.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
     },
@@ -25,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\views\\session\\setupprofile.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
       "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\views\\session\\setupprofile.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|c:\\proyecto tecno\\client\\client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|solutionrelative:client\\helpers\\validationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{192966E6-7950-49D2-A342-5FCDE9C58AB8}|Client\\Client.csproj|C:\\Proyecto Tecno\\Client\\client\\views\\settings.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
@@ -58,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 15,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
@@ -86,7 +86,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "MainTheme.xaml",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Themes\\MainTheme.xaml",
               "RelativeDocumentMoniker": "Client\\Themes\\MainTheme.xaml",
@@ -98,7 +98,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "CustomMessageBox.xaml.cs",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
               "RelativeDocumentMoniker": "Client\\Views\\Controls\\CustomMessageBox.xaml.cs",
@@ -111,7 +111,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "SetupProfile.xaml.cs",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml.cs",
               "RelativeDocumentMoniker": "Client\\Views\\Session\\SetupProfile.xaml.cs",
@@ -124,7 +124,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "SetupProfile.xaml",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Views\\Session\\SetupProfile.xaml",
               "RelativeDocumentMoniker": "Client\\Views\\Session\\SetupProfile.xaml",
@@ -149,7 +149,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\App.xaml.cs",
               "RelativeDocumentMoniker": "Client\\App.xaml.cs",
@@ -162,13 +162,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "ValidationHelper.cs",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\ValidationHelper.cs",
               "RelativeDocumentMoniker": "Client\\Helpers\\ValidationHelper.cs",
               "ToolTip": "C:\\Proyecto Tecno\\Client\\Client\\Helpers\\ValidationHelper.cs",
               "RelativeToolTip": "Client\\Helpers\\ValidationHelper.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwAIAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-11T20:15:57.328Z",
               "EditorCaption": ""
@@ -200,7 +200,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Lang.resx",
               "DocumentMoniker": "C:\\Proyecto Tecno\\Client\\Client\\Properties\\Langs\\Lang.resx",
               "RelativeDocumentMoniker": "Client\\Properties\\Langs\\Lang.resx",

@@ -84,12 +84,16 @@
     <Compile Include="card.cs">
       <DependentUpon>memoryGameDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="GameService\GameManager.cs" />
     <Compile Include="inventory.cs">
       <DependentUpon>memoryGameDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="LobbyService\CardInfo.cs" />
     <Compile Include="LobbyService\GameLobbyService.cs" />
+    <Compile Include="GameService\GameSettings.cs" />
     <Compile Include="LobbyService\IGameLobbyCallback.cs" />
     <Compile Include="LobbyService\IGameLobbyService.cs" />
+    <Compile Include="LobbyService\LobbyClient.cs" />
     <Compile Include="LobbyService\LobbyPlayerInfo.cs" />
     <Compile Include="match.cs">
       <DependentUpon>memoryGameDB.tt</DependentUpon>
@@ -159,9 +163,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GameService\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

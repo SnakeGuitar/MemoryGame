@@ -18,5 +18,24 @@ namespace Server.LobbyService
         void playerLeft(string playerNmae);
         [OperationContract(IsOneWay = true)]
         void UpdatePlayerList(LobbyPlayerInfo[] players);
+
+        // GAME CALLBACKS
+
+        [OperationContract(IsOneWay = true)]
+        void GameStarted(List<CardInfo> gameBoard);
+        [OperationContract(IsOneWay = true)]
+        void UpdateTurn(string playerName, int turnTimeInSeconds);
+        [OperationContract(IsOneWay = true)]
+        void ShowCard(int cardIndex, string imageIdentifier);
+        [OperationContract(IsOneWay = true)]
+        void HideCards(int cardIndex, int cardIndex2);
+        [OperationContract(IsOneWay = true)]
+        void CardFlipped(int cardIndex, int cardIndex2);
+        [OperationContract(IsOneWay = true)]
+        void SetCardsAsMatched(int cardIndex1, int cardIndex2);
+        [OperationContract(IsOneWay = true)]
+        void UpdateScore(string playerName, int newScore);
+        [OperationContract(IsOneWay = true)]
+        void GameFinished(string winnerName);
     }
 }

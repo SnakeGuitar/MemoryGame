@@ -1,8 +1,9 @@
-﻿using System.ServiceModel;
+﻿using Server.GameService;
+using System.ServiceModel;
 
 namespace Server.LobbyService
 {
-    [ServiceContract(CallbackContract = typeof(LobbyService.IGameLobbyCallback))]
+    [ServiceContract(CallbackContract = typeof(IGameLobbyCallback))]
     public interface IGameLobbyService
     {
         [OperationContract]
@@ -11,5 +12,13 @@ namespace Server.LobbyService
         void LeaveLobby();
         [OperationContract]
         void SendChatMessage(string message);
+
+        // --
+
+        [OperationContract]
+        void StartGame(GameSettings settings);
+        [OperationContract]
+        void FlipCard(int cardIndex);
+
     }
 }

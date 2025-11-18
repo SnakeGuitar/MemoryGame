@@ -1,4 +1,5 @@
-﻿using Server.Utilities;
+﻿using Server.GameService;
+using Server.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,7 +13,9 @@ namespace Server.LobbyService
     public class GameLobbyService : IGameLobbyService
     {
         private readonly ConcurrentDictionary<string, Lobby> _lobbies = new ConcurrentDictionary<string, Lobby>();
+        private readonly ConcurrentDictionary<string, GameManager> _games = new ConcurrentDictionary<string, GameManager>();
         private readonly SessionCreation _sessionValidator = new SessionCreation();
+
         public bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null)
         {
             if (string.IsNullOrEmpty(gameCode) || gameCode.Length > 6 || !gameCode.All(char.IsDigit))
@@ -21,6 +24,11 @@ namespace Server.LobbyService
             }
 
             gameCode = gameCode.ToUpperInvariant();
+
+            if (_games.ContainsKey(gameCode))
+            {
+                return false;
+            }
 
             var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
             string playerName;
@@ -87,11 +95,13 @@ namespace Server.LobbyService
                 {
                     return;
                 }
+
                 lobby.Clients.TryRemove(client.Id, out _);
 
                 if (lobby.Clients.IsEmpty)
                 {
                     _lobbies.TryRemove(gameCode, out _);
+                    _games.TryRemove(gameCode, out _);
                 }
                 BroadcastPlayerList(gameCode);
                 BroadcastMessage(gameCode, $"{client.Name} has left the lobby.", true);
@@ -126,6 +136,48 @@ namespace Server.LobbyService
             }
         }
 
+        public void StartGame(GameSettings settings)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
+
+            if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var hostClient))
+            {
+                throw new FaultException("Host not in a lobby.");
+            }
+
+            if (_games.ContainsKey(gameCode))
+            {
+                throw new FaultException("Game has already started.");
+            }
+
+            var gameManager = new GameManager(lobby.Clients.Values.ToList(), settings);
+
+            if (_games.TryAdd(gameCode, gameManager))
+            {
+                gameManager.StartGame();
+                BroadcastMessage(gameCode, "The game has started!", true);
+            }
+            else
+            {
+                throw new FaultException("Failed to start the game.");
+            }
+        }
+
+        public void FlipCard(int cardIndex)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
+
+            if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var player))
+            {
+                throw new FaultException("Player not in a lobby.");
+            }
+
+            if (_games.TryGetValue(gameCode, out var gameManager))
+            {
+                gameManager.HandleFlipCard(player.Id, cardIndex);
+            }
+        }
+
         private void BroadcastMessage(
             string gameCode,
             string message,
@@ -157,7 +209,6 @@ namespace Server.LobbyService
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine($"Client disconnected during broadcast: {ex.Message}");
-                        lobby.Clients.TryRemove(c.Id, out _);
                     }
                 }));
             }
@@ -223,15 +274,6 @@ namespace Server.LobbyService
                 }
             }
             return false;
-        }
-
-        private class LobbyClient
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public bool IsGuest { get; set; }
-            public IGameLobbyCallback Callback { get; set; }
-            public DateTime JoinedAt { get; set; }
         }
 
         private class Lobby
