@@ -65,7 +65,6 @@ namespace Client.Views.Session
 
                     var profileSetupWindow = new SetupProfile(_email);
                     profileSetupWindow.WindowState = this.WindowState;
-                    profileSetupWindow.Owner = this;
                     profileSetupWindow.Show();
                     this.Close();
                 }
