@@ -64,7 +64,7 @@ namespace Client.Views.Session
                 {
                     UserSession.StartSession(response.SessionToken, response.User.Username);
 
-                    string successMessage = string.Format(Lang.Global_Message_Welcome);
+                    string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new Views.Controls.CustomMessageBox(
                         Lang.Global_Title_LoginSuccess, successMessage, 
                         this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
