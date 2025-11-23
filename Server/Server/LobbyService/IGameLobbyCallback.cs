@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.GameService;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -13,13 +14,12 @@ namespace Server.LobbyService
         [OperationContract(IsOneWay = true)]
         void ReceiveChatMessage(string senderName, string message, bool isNotification);
         [OperationContract(IsOneWay = true)]
-        void PlayerJoined(string playerNmae, bool  isGuest);
+        void PlayerJoined(string playerName, bool isGuest);
         [OperationContract(IsOneWay = true)]
-        void playerLeft(string playerNmae);
+        void PlayerLeft(string playerName);
         [OperationContract(IsOneWay = true)]
         void UpdatePlayerList(LobbyPlayerInfo[] players);
 
-        // GAME CALLBACKS
 
         [OperationContract(IsOneWay = true)]
         void GameStarted(List<CardInfo> gameBoard);

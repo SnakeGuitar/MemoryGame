@@ -1,13 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Server.Utilities
+namespace Server.Shared
 {
-    internal class UserServiceUtilities
+    public interface ISecurityService
     {
-        private static Random random = new Random();
-        public static string GeneratePin()
+        string GeneratePin();
+        string HashPassword(string password);
+        bool RemovePendingRegistration(string email);
+        string GetUsernameById(int userId);
+        string GenerateGuestPassword();
+    }
+
+    public class SecurityService : ISecurityService
+    {
+        private readonly IDbContextFactory _dbFactory;
+
+        public SecurityService(IDbContextFactory dbFactory)
+        {
+            _dbFactory = dbFactory;
+        }
+
+        public SecurityService() : this(new DbContextFactory())
+        {
+        }
+
+        private static readonly Random random = new Random();
+        public string GeneratePin()
         {
             lock (random)
             {
@@ -15,44 +37,16 @@ namespace Server.Utilities
             }
         }
 
-        public static string HashPassword(string password)
+        public string HashPassword(string password)
         {
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public static bool SendVerificationEmail(string email, string pin)
+        public bool RemovePendingRegistration(string email)
         {
             try
             {
-                var smtpClient = new System.Net.Mail.SmtpClient("smtp.gmail.com")
-                {
-                    Port = 587,
-                    Credentials = new System.Net.NetworkCredential("ejemplcrre0@gmail.com", "yyhk mfhg goga lnnt"),
-                    EnableSsl = true
-                };
-                var mailMessage = new System.Net.Mail.MailMessage
-                {
-                    From = new System.Net.Mail.MailAddress("email"),
-                    Subject = "Memory Game - Verify your email",
-                    Body = $"Your verification code is: {pin}",
-                    IsBodyHtml = false,
-                };
-                mailMessage.To.Add(email);
-                smtpClient.Send(mailMessage);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to send verification email. Error: {ex.Message}");
-                return false;
-            }
-        }
-
-        public static bool RemovePendingRegistration(string email)
-        {
-            try
-            {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var pending = db.pendingRegistration
                         .FirstOrDefault(p => p.email == email);
@@ -72,11 +66,11 @@ namespace Server.Utilities
             }
         }
 
-        public static string GetUsernameById(int userId)
+        public string GetUsernameById(int userId)
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var user = db.user.Find(userId);
                     return user?.username;
@@ -90,7 +84,7 @@ namespace Server.Utilities
             }
         }
 
-        public static string GenerateGuestPassword()
+        public string GenerateGuestPassword()
         {
             const string lowerChars = "abcdefghijklmnopqrstuvwxyz";
             const string upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

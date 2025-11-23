@@ -9,5 +9,6 @@ namespace Server.LobbyService
         public bool IsGuest { get; set; }
         public IGameLobbyCallback Callback { get; set; }
         public DateTime JoinedAt { get; set; }
+        public string SessionId { get; set; }
     }
 }

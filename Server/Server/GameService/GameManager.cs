@@ -1,170 +1,77 @@
-﻿using Server.LobbyService;
+﻿using Server.GameService.Core;
+using Server.LobbyService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Timers;
-using Timer = System.Timers.Timer;
 
 namespace Server.GameService
 {
     public class GameManager
     {
-        // GAME STATE
-        private readonly List<LobbyClient> _players;
-        private string _currentPlayerTurnId;
-        private readonly Dictionary<string, int> _scores = new Dictionary<string, int>();
-        private List<GameCard> _gameDeck;
-        private GameCard _firstFlippedCard;
-        private readonly GameSettings _settings;
-        private readonly Random _random = new Random();
-
-        // CONCURRENCY AND TIMING
-        private bool _isCheckingPair = false;
+        // Core Components
+        private readonly GameDeck _deck;
+        private readonly GameNotifier _notifier;
+        private readonly GameTurnTimer _turnTimer;
         private readonly object _gameLock = new object();
-        private Timer _turnTimer;
 
-        public bool IsGameInProgress { get; private set; } = false;
+        // Game State
+        private readonly List<LobbyClient> _players;
+        private readonly Dictionary<string, int> _scores;
+        private readonly GameSettings _settings;
+
+        private int _currentPlayerIndex;
+        private GameDeck.GameCard _firstFlippedCard;
+        private bool _isProcessingMismatch;
+
+        public bool IsGameInProgress { get; private set; }
 
         public GameManager(List<LobbyClient> players, GameSettings settings)
         {
             _players = players;
-            _settings = settings;
-            if (_settings.CardCount < 16 || settings.CardCount > 40 || _settings.CardCount % 2 != 0)
-            {
-                _settings.CardCount = 16; // Default to 16 if invalid
-            }
-            if (_settings.TurnTimeSeconds < 5 || _settings.TurnTimeSeconds > 40)
-            {
-                _settings.TurnTimeSeconds = 20; // Default to 15 seconds if invalid
-            }
+            _settings = SanitizeSettings(settings);
+            _scores = players.ToDictionary(p => p.Id, p => 0);
+
+            _deck = new GameDeck(_settings.CardCount);
+            _notifier = new GameNotifier(_players);
+
+            _turnTimer = new GameTurnTimer(_settings.TurnTimeSeconds, OnTurnTimeout);
         }
 
         public void StartGame()
         {
             lock (_gameLock)
             {
-                if (IsGameInProgress)
-                {
-                    return;
-                }
-
-                var cardInfos = new List<CardInfo>();
-                int pairCount = _settings.CardCount / 2;
-
-                for (int i = 0; i < pairCount; i++)
-                {
-                    var info = new CardInfo
-                    {
-                        CardId = i,
-                        ImageIdentifier = $"card{i}"
-                    };
-                    cardInfos.Add(info);
-                    cardInfos.Add(info); // Add a pair
-                }
-
-                var shuffledDeck = cardInfos.OrderBy(x => _random.Next()).ToList();
-
-                _gameDeck = shuffledDeck.Select((info, index) => new GameCard
-                {
-                    Index = index,
-                    Info = info,
-                    IsMatched = false
-                }).ToList();
-
-                _scores.Clear();
-                foreach (var player in _players)
-                {
-                    _scores[player.Id] = 0;
-                }
+                if (IsGameInProgress) return;
                 IsGameInProgress = true;
-                _firstFlippedCard = null;
-                _isCheckingPair = false;
 
-                _turnTimer = new Timer(_settings.TurnTimeSeconds * 1000);
-                _turnTimer.Elapsed += OnTurnTimerElapsed;
-                _turnTimer.AutoReset = false;
-
-                _currentPlayerTurnId = _players[_random.Next(_players.Count)].Id;
-
-                BroadcastToPlayers(client =>
-                {
-                    client.Callback.GameStarted(shuffledDeck);
-                    foreach (var p in _players)
-                    {
-                        client.Callback.UpdateScore(p.Name, 0);
-                    }
-                });
-
-                StartNewTurn();
+                _currentPlayerIndex = new Random().Next(_players.Count);
             }
-        }
 
-        private void OnTurnTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (_gameLock)
-            {
-                if (!_isCheckingPair && IsGameInProgress)
-                {
-                    if (_firstFlippedCard != null)
-                    {
-                        BroadcastToPlayers(c => c.Callback.HideCards(_firstFlippedCard.Index, _firstFlippedCard.Index));
-                        _firstFlippedCard = null;
-                    }
-
-                    PassTurnToNextPlayer();
-                }
-            }
-        }
-
-        private void StartNewTurn()
-        {
-            var currentPlayer = _players.First(p => p.Id == _currentPlayerTurnId);
-
-            BroadcastToPlayers(client =>
-            {
-                client.Callback.UpdateTurn(currentPlayer.Name, _settings.TurnTimeSeconds);
-            });
-
-            _turnTimer.Stop();
-            _turnTimer.Start();
-        }
-
-        private void PassTurnToNextPlayer()
-        {
-            _turnTimer.Stop();
-            _isCheckingPair = false;
-            _firstFlippedCard = null;
-
-            int currentIndex = _players.FindIndex(p => p.Id == _currentPlayerTurnId);
-
-            int nextIndex = (currentIndex + 1) % _players.Count;
-
-            _currentPlayerTurnId = _players[nextIndex].Id;
-
+            _notifier.NotifyGameStarted(_deck.GetBoardInfo());
             StartNewTurn();
         }
 
         public void HandleFlipCard(string playerId, int cardIndex)
         {
+            string imageToSend = null;
+            bool isMatch = false;
+            bool isSecondCard = false;
+            GameDeck.GameCard card1 = null;
+            GameDeck.GameCard card2 = null;
+
             lock (_gameLock)
             {
-                if (_isCheckingPair || !IsGameInProgress || playerId != _currentPlayerTurnId)
-                {
-                    return;
-                }
+                if (!IsGameInProgress || _isProcessingMismatch) return;
 
-                var card = _gameDeck.FirstOrDefault(c => c.Index == cardIndex);
+                var currentPlayer = _players[_currentPlayerIndex];
+                if (currentPlayer.Id != playerId) return;
 
-                if (card == null || card.IsMatched || _firstFlippedCard != null && card.Index == _firstFlippedCard.Index)
-                {
-                    return;
-                }
+                var card = _deck.GetCard(cardIndex);
+                if (card == null || card.IsMatched) return;
+                if (_firstFlippedCard != null && _firstFlippedCard.Index == cardIndex) return;
 
-                BroadcastToPlayers(client =>
-                {
-                    client.Callback.ShowCard(card.Index, card.Info.ImageIdentifier);
-                });
+                imageToSend = card.Info.ImageIdentifier;
 
                 if (_firstFlippedCard == null)
                 {
@@ -172,82 +79,138 @@ namespace Server.GameService
                 }
                 else
                 {
-                    _isCheckingPair = true;
-                    var secondCard = card;
-                    var firstCard = _firstFlippedCard;
+                    isSecondCard = true;
+                    card1 = _firstFlippedCard;
+                    card2 = card;
                     _firstFlippedCard = null;
-
                     _turnTimer.Stop();
 
-                    if (firstCard.Info.CardId ==secondCard.Info.CardId)
+                    if (card1.Info.CardId == card2.Info.CardId)
                     {
-                        firstCard.IsMatched = true;
-                        secondCard.IsMatched = true;
+                        isMatch = true;
+                        card1.IsMatched = true;
+                        card2.IsMatched = true;
                         _scores[playerId]++;
-
-                        BroadcastToPlayers(client =>
-                        {
-                            client.Callback.SetCardsAsMatched(firstCard.Index, secondCard.Index);
-                            client.Callback.UpdateScore(_players.First(p => p.Id == playerId).Name, _scores[playerId]);
-                        });
-
-                        if (_gameDeck.All(c => c.IsMatched))
-                        {
-                            IsGameInProgress = false;
-                            var winnerScore = _scores.Values.Max();
-                            var winnerId = _scores.First(kv => kv.Value == winnerScore).Key;
-                            var winnerName = _players.First(p => p.Id == winnerId).Name;
-
-                            BroadcastToPlayers(client =>
-                            {
-                                client.Callback.GameFinished(winnerName);
-                            });
-                        }
-                        else
-                        {
-                            _isCheckingPair = false;
-                            StartNewTurn();
-                        }
                     }
                     else
                     {
-                        Task.Delay(1500).ContinueWith(_ =>
-                        {
-                            lock (_gameLock)
-                            {
-                                BroadcastToPlayers(client =>
-                                {
-                                    client.Callback.HideCards(firstCard.Index, secondCard.Index);
-                                });
-                                PassTurnToNextPlayer();
-                            }
-                        });
+                        _isProcessingMismatch = true;
                     }
                 }
             }
 
+            if (imageToSend != null)
+            {
+                _notifier.NotifyShowCard(cardIndex, imageToSend);
+            }
+
+            if (isSecondCard)
+            {
+                if (isMatch)
+                {
+                    HandleMatch(playerId, card1, card2);
+                }
+                else
+                {
+                    HandleMismatch(card1, card2);
+                }
+            }
         }
 
-        private void BroadcastToPlayers(Action<LobbyClient> action)
+        private void HandleMatch(string playerId, GameDeck.GameCard c1, GameDeck.GameCard c2)
         {
-            Parallel.ForEach(_players, client =>
+            int score = 0;
+            string playerName = "";
+            bool isGameOver = false;
+            string winnerName = "";
+
+            lock (_gameLock)
             {
-                try
+                score = _scores[playerId];
+                playerName = _players.First(p => p.Id == playerId).Name;
+                isGameOver = _deck.IsAllMatched();
+
+                if (isGameOver)
                 {
-                    action(client);
+                    var maxScore = _scores.Values.Max();
+                    var winnerId = _scores.First(x => x.Value == maxScore).Key;
+                    winnerName = _players.First(p => p.Id == winnerId).Name;
+                    IsGameInProgress = false;
                 }
-                catch (Exception ex)
+            }
+
+            _notifier.NotifyMatch(c1.Index, c2.Index, playerName, score);
+
+            if (isGameOver)
+            {
+                _notifier.NotifyWinner(winnerName);
+                _turnTimer.Dispose();
+            }
+            else
+            {
+                StartNewTurn(samePlayer: true);
+            }
+        }
+
+        private void HandleMismatch(GameDeck.GameCard c1, GameDeck.GameCard c2)
+        {
+            Task.Delay(1500).ContinueWith(_ =>
+            {
+                _notifier.NotifyHideCards(c1.Index, c2.Index);
+
+                lock (_gameLock)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Sending error to {client.Name}: {ex.Message}");
+                    _isProcessingMismatch = false;
                 }
+
+                AdvanceTurn();
             });
         }
 
-        private class GameCard
+        private void OnTurnTimeout()
         {
-            public int Index { get; set; }
-            public CardInfo Info { get; set; }
-            public bool IsMatched { get; set; }
+            lock (_gameLock)
+            {
+                if (!_isProcessingMismatch && IsGameInProgress)
+                {
+                    if (_firstFlippedCard != null)
+                    {
+                        var c = _firstFlippedCard;
+                        _firstFlippedCard = null;
+                        _notifier.NotifyHideCards(c.Index, c.Index);
+                    }
+                }
+            }
+            AdvanceTurn();
+        }
+
+        private void AdvanceTurn()
+        {
+            lock (_gameLock)
+            {
+                _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
+            }
+            StartNewTurn();
+        }
+
+        private void StartNewTurn(bool samePlayer = false)
+        {
+            string name;
+            lock (_gameLock)
+            {
+                if (!IsGameInProgress) return;
+                name = _players[_currentPlayerIndex].Name;
+            }
+
+            _notifier.NotifyTurnChange(name, _settings.TurnTimeSeconds);
+            _turnTimer.Restart();
+        }
+
+        private GameSettings SanitizeSettings(GameSettings s)
+        {
+            if (s.CardCount < 16 || s.CardCount % 2 != 0) s.CardCount = 16;
+            if (s.TurnTimeSeconds < 5) s.TurnTimeSeconds = 5;
+            return s;
         }
     }
 }

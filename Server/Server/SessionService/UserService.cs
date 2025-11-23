@@ -1,24 +1,48 @@
-﻿using Server.Utilities;
+﻿using Server.Shared;
+using Server.Validator;
 using System;
 using System.Linq;
 
 namespace Server.SessionService
 {
-    internal class UserService : IUserService
+    public class UserService : IUserService
     {
+        private readonly IDbContextFactory _dbFactory;
+        private readonly INotificationService _notificationService;
+        private readonly ISecurityService _securityService;
+        private readonly ISessionManager _sessionManager;
+
+        private readonly IUserServiceValidator _userServiceValidator = new UserServiceValidator();
+
+        public UserService(
+            IDbContextFactory dbContextFactory,
+            INotificationService notificationService,
+            ISecurityService securityService,
+            ISessionManager sessionManager)
+        {
+            _dbFactory = dbContextFactory;
+            _notificationService = notificationService;
+            _securityService = securityService;
+            _sessionManager = sessionManager;
+        }
+
+        public UserService() : this(new DbContextFactory(), new NotificationService(), new SecurityService(), new SessionManager())
+        {
+        }
+
         public ResponseDTO StartRegistration(string email, string password)
         {
 
-            if (!UserServiceValidation.IsValidPassword(password))
+            if (!_userServiceValidator.IsValidPassword(password))
             {
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_PasswordInvalid" };
             }
 
-            string hashedPassword = UserServiceUtilities.HashPassword(password);
+            string hashedPassword = _securityService.HashPassword(password);
 
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
 
                     if (db.user.Any(u => u.email == email))
@@ -33,7 +57,8 @@ namespace Server.SessionService
                         db.pendingRegistration.Remove(existingPending);
                     }
 
-                    string pin = UserServiceUtilities.GeneratePin();
+                    string pin = _securityService.GeneratePin();
+
                     var pendingRegistration = new pendingRegistration
                     {
                         email = email,
@@ -45,7 +70,7 @@ namespace Server.SessionService
 
                     db.pendingRegistration.Add(pendingRegistration);
 
-                    if (!UserServiceUtilities.SendVerificationEmail(email, pin))
+                    if (!_notificationService.SendVerificationEmail(email, pin))
                     {
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailSendFailed" };
                     }
@@ -59,17 +84,16 @@ namespace Server.SessionService
             {
                 System.Diagnostics.Debug.WriteLine($"StartRegistration Error: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
-                throw;
             }
         }
         public ResponseDTO VerifyRegistration(string email, string pin)
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var pending = db.pendingRegistration
-                        .FirstOrDefault(p => p.email == email && 
+                        .FirstOrDefault(p => p.email == email &&
                         p.pin == pin &&
                         p.expirationTime > DateTime.Now);
 
@@ -89,13 +113,14 @@ namespace Server.SessionService
                         password = pending.hashedPassword,
                         username = email.Split('@')[0],
                         isGuest = false,
+                        verifiedEmail = true,
                     };
 
                     db.user.Add(newUser);
                     db.SaveChanges();
-
-                    UserServiceUtilities.RemovePendingRegistration(email);
+                    _securityService.RemovePendingRegistration(email);
                     db.SaveChanges();
+
                     return new ResponseDTO { Success = true };
                 }
             }
@@ -103,7 +128,6 @@ namespace Server.SessionService
             {
                 System.Diagnostics.Debug.WriteLine($"VerifyRegistration Error: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
-                throw;
             }
         }
 
@@ -111,7 +135,7 @@ namespace Server.SessionService
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     if (db.user.Any(u => u.email == email))
                     {
@@ -124,11 +148,11 @@ namespace Server.SessionService
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_RegistrationNotFound" };
                     }
 
-                    string newPin = UserServiceUtilities.GeneratePin();
+                    string newPin = _securityService.GeneratePin();
                     pending.pin = newPin;
                     pending.expirationTime = DateTime.Now.AddMinutes(15);
 
-                    if (!UserServiceUtilities.SendVerificationEmail(email, newPin))
+                    if (!_notificationService.SendVerificationEmail(email, newPin))
                     {
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailSendFailed" };
                     }
@@ -147,7 +171,7 @@ namespace Server.SessionService
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var user = db.user.FirstOrDefault(u => u.email == email);
 
@@ -156,7 +180,7 @@ namespace Server.SessionService
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidUsername" };
                     }
 
-                    if (!UserServiceValidation.IsValidUsername(username))
+                    if (!_userServiceValidator.IsValidUsername(username))
                     {
                         return new LoginResponse { Success = false, MessageKey = "Global_ValidationUsername_InvalidChars" };
                     }
@@ -165,8 +189,7 @@ namespace Server.SessionService
                     user.avatar = avatar;
                     db.SaveChanges();
 
-                    var utilities = new Utilities.SessionCreation();
-                    string token = utilities.CreateSessionToken(user.userId);
+                    string token = _sessionManager.CreateSessionToken(user.userId);
 
                     var userDto = new UserDTO
                     {
@@ -195,9 +218,8 @@ namespace Server.SessionService
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
-                    var utilites = new Utilities.SessionCreation();
                     var user = db.user.FirstOrDefault(u => u.email == email);
                     if (user == null)
                     {
@@ -208,10 +230,10 @@ namespace Server.SessionService
                     if (!BCrypt.Net.BCrypt.Verify(password, user.password))
                     {
                         System.Threading.Thread.Sleep(100);
-                        return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials"};
+                        return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
                     ;
-                    string token = utilites.CreateSessionToken(user.userId);
+                    string token = _sessionManager.CreateSessionToken(user.userId);
 
                     var userDto = new UserDTO
                     {
@@ -240,7 +262,7 @@ namespace Server.SessionService
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var user = db.user.FirstOrDefault(u => u.email == email);
                     return user?.avatar;
@@ -256,18 +278,18 @@ namespace Server.SessionService
 
         public ResponseDTO UpdateUserAvatar(string token, byte[] avatar)
         {
-            var userId = new SessionCreation().GetUserIdFromToken(token);
+            var userId = new SessionManager().GetUserIdFromToken(token);
             if (userId == null)
             {
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
             }
 
-            if (avatar != null && !ImageValidation.IsValidImage(avatar))
+            if (avatar != null && !ImageValidator.IsValidImage(avatar))
             {
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_ImageInvalid" };
             }
 
-            using (var db = new memoryGameDBEntities())
+            using (var db = _dbFactory.Create())
             {
                 var user = db.user.FirstOrDefault(u => u.userId == userId.Value);
                 if (user == null)
@@ -284,10 +306,10 @@ namespace Server.SessionService
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
 
-                    if (!UserServiceValidation.IsValidUsername(guestUsername))
+                    if (!_userServiceValidator.IsValidUsername(guestUsername))
                     {
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidUsername" };
                     }
@@ -297,11 +319,12 @@ namespace Server.SessionService
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_UsernameInUse" };
                     }
 
+                    string guestPasswordRaw = _securityService.GenerateGuestPassword();
+
                     var guestUser = new user
                     {
                         email = $"{Guid.NewGuid()}@guest.local",
-                        password = UserServiceUtilities.HashPassword(
-                            UserServiceUtilities.GenerateGuestPassword()),
+                        password = _securityService.HashPassword(guestPasswordRaw),
                         username = guestUsername,
                         avatar = null,
                         isGuest = true,
@@ -311,21 +334,18 @@ namespace Server.SessionService
                     db.user.Add(guestUser);
                     db.SaveChanges();
 
-                    var sessionCreator = new Utilities.SessionCreation();
-                    string token = sessionCreator.CreateSessionToken(guestUser.userId);
-
-                    var userDto = new UserDTO
-                    {
-                        UserId = guestUser.userId,
-                        Username = guestUser.username,
-                        Email = guestUser.email
-                    };
+                    string token = _sessionManager.CreateSessionToken(guestUser.userId);
 
                     return new LoginResponse
                     {
                         Success = true,
                         SessionToken = token,
-                        User = userDto
+                        User = new UserDTO
+                        {
+                            UserId = guestUser.userId,
+                            Username = guestUser.username,
+                            Email = guestUser.email
+                        }
                     };
                 }
             }
@@ -340,13 +360,13 @@ namespace Server.SessionService
         {
             try
             {
-                var userId = new Utilities.SessionCreation().GetUserIdFromToken(sessionToken);
+                var userId = _sessionManager.GetUserIdFromToken(sessionToken);
                 if (userId == null)
                 {
                     return;
                 }
 
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var guestUser = db.user.FirstOrDefault(u => u.userId == userId.Value && u.isGuest == true);
 
@@ -361,6 +381,16 @@ namespace Server.SessionService
             {
                 System.Diagnostics.Debug.WriteLine($"LogoutGuest Error: {ex.Message}");
             }
+        }
+
+        public ResponseDTO ChangePassword(string email, string currentPassword, string newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResponseDTO ChangeUsername(string email, string newUsername)
+        {
+            throw new NotImplementedException();
         }
     }
 }

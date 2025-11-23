@@ -1,5 +1,8 @@
 ﻿using Server.GameService;
-using Server.Utilities;
+using Server.SessionService;
+using Server.Shared;
+using Server.Validator;
+using Server.LobbyService.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,268 +15,182 @@ namespace Server.LobbyService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class GameLobbyService : IGameLobbyService
     {
-        private readonly ConcurrentDictionary<string, Lobby> _lobbies = new ConcurrentDictionary<string, Lobby>();
-        private readonly ConcurrentDictionary<string, GameManager> _games = new ConcurrentDictionary<string, GameManager>();
-        private readonly SessionCreation _sessionValidator = new SessionCreation();
+        private readonly LobbyStateManager _stateManager;
+        private readonly LobbyNotifier _notifier;
+
+        private readonly ISessionManager _sessionManager;
+        private readonly ISecurityService _securityService;
+        private readonly ILobbyCallbackProvider _callbackProvider;
+        private readonly IGameLobbyServiceValidator _validator;
+        public GameLobbyService(ISecurityService securityService,
+            ISessionManager sessionManager,
+            ILobbyCallbackProvider callbackProvider,
+            IGameLobbyServiceValidator validator)
+        {
+            _sessionManager = sessionManager;
+            _securityService = securityService;
+            _callbackProvider = callbackProvider;
+            _validator = validator;
+
+            _stateManager = new LobbyStateManager();
+            _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId));
+        }
+
+        public GameLobbyService() : this(
+            new SecurityService(),
+            new SessionManager(),
+            new WcfLobbyCallbackProvider(),
+            new GameLobbyServiceValidator())
+        {
+        }
 
         public bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null)
         {
-            if (string.IsNullOrEmpty(gameCode) || gameCode.Length > 6 || !gameCode.All(char.IsDigit))
+            if (!_validator.IsValidGameCode(gameCode))
             {
                 return false;
             }
 
-            gameCode = gameCode.ToUpperInvariant();
-
-            if (_games.ContainsKey(gameCode))
+            if (_stateManager.IsGameStarted(gameCode))
             {
                 return false;
             }
 
-            var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
-            string playerName;
+            var callback = _callbackProvider.GetCallback();
+            string sessionId = OperationContext.Current?.SessionId ?? Guid.NewGuid().ToString();
 
-            if (!isGuest)
-            {
-                int? userId = _sessionValidator.GetUserIdFromToken(token);
-                if (userId == null)
-                {
-                    return false;
-                }
-                playerName = UserServiceUtilities.GetUsernameById(userId.Value);
-                if (string.IsNullOrEmpty(playerName))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                playerName = guestName?.Trim();
-                if (string.IsNullOrEmpty(playerName) || playerName.Length > 30)
-                {
-                    return false;
-                }
-            }
-            var lobby = _lobbies.GetOrAdd(gameCode, code => new Lobby
-            {
-                GameCode = code,
-                CreatedAt = DateTime.UtcNow
-            });
-
-            if (lobby.Clients.Count >= 4)
+            if (_stateManager.IsInLobby(sessionId))
             {
                 return false;
             }
 
-            var clientId = Guid.NewGuid().ToString("N");
+            string playerName = ResolvePlayerName(token, isGuest, guestName);
+            if (string.IsNullOrEmpty(playerName))
+            {
+                return false;
+            }
+
             var newClient = new LobbyClient
             {
-                Id = clientId,
+                Id = Guid.NewGuid().ToString("N"),
                 Name = playerName,
                 IsGuest = isGuest,
                 Callback = callback,
-                JoinedAt = DateTime.UtcNow
+                JoinedAt = DateTime.UtcNow,
+                SessionId = sessionId
             };
 
-            if (!lobby.Clients.TryAdd(clientId, newClient))
+            if (_stateManager.TryJoinLobby(gameCode, newClient, out var lobby))
             {
-                return false;
+                SubscribeToDisconnect(callback, sessionId);
+                _notifier.NotifyJoin(lobby, gameCode);
+                return true;
             }
-
-            BroadcastPlayerList(gameCode);
-            BroadcastMessage(gameCode, $"{playerName} has joined the lobby.", true);
-            return true;
+            return false;
         }
 
         public void LeaveLobby()
         {
-            try
+            var sessionId = OperationContext.Current?.SessionId;
+            if (sessionId != null)
             {
-                var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
-
-                if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var client))
-                {
-                    return;
-                }
-
-                lobby.Clients.TryRemove(client.Id, out _);
-
-                if (lobby.Clients.IsEmpty)
-                {
-                    _lobbies.TryRemove(gameCode, out _);
-                    _games.TryRemove(gameCode, out _);
-                }
-                BroadcastPlayerList(gameCode);
-                BroadcastMessage(gameCode, $"{client.Name} has left the lobby.", true);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"LeaveLobby Error: {ex.Message}");
+                HandleDisconnection(sessionId);
             }
         }
 
         public void SendChatMessage(string message)
         {
-            try
+            if (!_validator.IsValidChatMessage(message))
             {
-                if (string.IsNullOrWhiteSpace(message) || message.Length > 500)
-                {
-                    return;
-                }
-
-                var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
-
-                if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var sender))
-                {
-                    throw new FaultException("You are not in a lobby.");
-                }
-
-                BroadcastMessage(gameCode, message, false, excludeId: sender.Id, senderName: sender.Name);
+                return;
             }
-            catch (Exception ex)
+
+            var sessionId = OperationContext.Current?.SessionId;
+            if (sessionId == null)
             {
-                System.Diagnostics.Debug.WriteLine($"SendChatMessage Error: {ex.Message}");
+                return;
+            }
+
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
+            if (lobby != null)
+            {
+                var client = lobby.Clients.Values.FirstOrDefault(c => c.SessionId == sessionId);
+                if (client != null)
+                {
+                    _notifier.BroadcastMessage(lobby, message, false, client.Name);
+                }
             }
         }
 
         public void StartGame(GameSettings settings)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
-
-            if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var hostClient))
+            var sessionId = OperationContext.Current?.SessionId;
+            if (sessionId == null)
             {
-                throw new FaultException("Host not in a lobby.");
+                return;
             }
 
-            if (_games.ContainsKey(gameCode))
+            if (!_stateManager.TryStartGame(sessionId, settings, out var gameCode))
             {
-                throw new FaultException("Game has already started.");
+                throw new FaultException("Cannot start game. Either not in lobby or game already started.");
             }
 
-            var gameManager = new GameManager(lobby.Clients.Values.ToList(), settings);
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
+            _notifier.BroadcastMessage(lobby, "Game has started!", true);
 
-            if (_games.TryAdd(gameCode, gameManager))
-            {
-                gameManager.StartGame();
-                BroadcastMessage(gameCode, "The game has started!", true);
-            }
-            else
-            {
-                throw new FaultException("Failed to start the game.");
-            }
+            // TODO
+            // NOTIFY WINDOW CHANGE IN CLIENT
         }
 
         public void FlipCard(int cardIndex)
         {
-            var callback = OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
-
-            if (!TryFindClientByCallback(callback, out var lobby, out var gameCode, out var player))
-            {
-                throw new FaultException("Player not in a lobby.");
-            }
-
-            if (_games.TryGetValue(gameCode, out var gameManager))
-            {
-                gameManager.HandleFlipCard(player.Id, cardIndex);
-            }
-        }
-
-        private void BroadcastMessage(
-            string gameCode,
-            string message,
-            bool isNotification,
-            string excludeId = null,
-            string senderName = null)
-        {
-            if (!_lobbies.TryGetValue(gameCode, out var lobby))
+            var sessionId = OperationContext.Current?.SessionId;
+            if (sessionId == null)
             {
                 return;
             }
 
-            var tasks = new List<Task>();
-            foreach (var client in lobby.Clients.Values)
+            var gameManager = _stateManager.GetGameManager(sessionId);
+            var playerId = _stateManager.GetPlayerId(sessionId);
+
+            if (gameManager != null && playerId != null)
             {
-                if (client.Id == excludeId)
+                if (_validator.IsValidCardIndex(cardIndex, 100))
                 {
-                    continue;
+                    gameManager.HandleFlipCard(playerId, cardIndex);
                 }
-                var c = client;
-
-                tasks.Add(Task.Run(() =>
-                {
-                    try
-                    {
-                        c.Callback.ReceiveChatMessage(isNotification ? "System" : c.Name, message, isNotification);
-                        c.Callback.ReceiveChatMessage(senderName, message, isNotification);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Client disconnected during broadcast: {ex.Message}");
-                    }
-                }));
-            }
-
-            _ = Task.WhenAll(tasks);
-        }
-
-        private void BroadcastPlayerList(string gameCode)
-        {
-            if (!_lobbies.TryGetValue(gameCode, out var lobby))
-            {
-                return;
-            }
-
-            var playerList = lobby.Clients.Values
-                .Select(c => new LobbyPlayerInfo
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    IsGuest = c.IsGuest,
-                    JoinedAt = c.JoinedAt
-                })
-                .ToArray();
-
-            var tasks = new List<Task>();
-            foreach (var client in lobby.Clients.Values)
-            {
-                var c = client;
-                tasks.Add(Task.Run(() =>
-                {
-                    try
-                    {
-                        c.Callback.UpdatePlayerList(playerList);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Client disconnected during player list update: {ex.Message}");
-                        lobby.Clients.TryRemove(c.Id, out _);
-                    }
-                }));
             }
         }
 
-        private bool TryFindClientByCallback(
-            IGameLobbyCallback callback,
-            out Lobby lobby,
-            out string gameCode,
-            out LobbyClient client)
+        private void HandleDisconnection(string sessionId)
         {
-            lobby = null;
-            gameCode = null;
-            client = null;
+            var client = _stateManager.RemoveClient(sessionId, out var gameCode);
 
-            foreach (var kvp in _lobbies)
+            if (client != null)
             {
-                var foundClient = kvp.Value.Clients.Values.FirstOrDefault(c => c.Callback == callback);
-                if (foundClient != null)
-                {
-                    lobby = kvp.Value;
-                    gameCode = kvp.Key;
-                    client = foundClient;
-                    return true;
-                }
+                var lobby = _stateManager.GetLobbyBySession(sessionId);
+
+                _notifier.NotifyLeave(lobby, client.Name);
             }
-            return false;
+        }
+
+        private void SubscribeToDisconnect(IGameLobbyCallback callback, string sessionId)
+        {
+            if (callback is ICommunicationObject commObject)
+            {
+                commObject.Faulted += (s, e) => HandleDisconnection(sessionId);
+                commObject.Closed += (s, e) => HandleDisconnection(sessionId);
+            }
+        }
+
+        private string ResolvePlayerName(string token, bool isGuest, string guestName)
+        {
+            if (isGuest)
+            {
+                return _validator.IsValidGuestName(guestName) ? guestName.Trim() : null;
+            }
+            int? userId = _sessionManager.GetUserIdFromToken(token);
+            return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
         }
 
         private class Lobby

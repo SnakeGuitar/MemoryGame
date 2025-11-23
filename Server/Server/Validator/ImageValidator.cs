@@ -7,9 +7,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 
 
-namespace Server.Utilities
+namespace Server.Validator
 {
-    public static class ImageValidation
+    public static class ImageValidator
     {
         public const int MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
         public static bool IsValidImage(byte[] imageData)

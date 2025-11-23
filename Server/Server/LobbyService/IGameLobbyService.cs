@@ -13,8 +13,6 @@ namespace Server.LobbyService
         [OperationContract]
         void SendChatMessage(string message);
 
-        // --
-
         [OperationContract]
         void StartGame(GameSettings settings);
         [OperationContract]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Server.SessionService
 {
     [ServiceContract]
-    internal interface IUserService
+    public interface IUserService
     {
         [OperationContract]
         ResponseDTO StartRegistration(string email, string password);
@@ -32,6 +32,12 @@ namespace Server.SessionService
 
         [OperationContract]
         ResponseDTO UpdateUserAvatar(string email, byte[] avatar);
+
+        [OperationContract]
+        ResponseDTO ChangePassword(string email, string currentPassword, string newPassword);
+
+        [OperationContract]
+        ResponseDTO ChangeUsername(string email, string newUsername);
 
         [OperationContract]
         LoginResponse LoginAsGuest(string guestUsername);
