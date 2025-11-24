@@ -1,4 +1,5 @@
 ﻿using Client.Properties.Langs;
+using Client.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,18 +25,28 @@ namespace Client.Views
         private bool isLoaded = false;
         private bool languageChanged = false;
 
-        public Settings()
+        public Settings(bool refreshWindow = false)
         {
             InitializeComponent();
+            languageChanged = refreshWindow;
+            LoadLanguages();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void LoadLanguages()
         {
-            string activeLanguage = Lang.Culture.Name;
-
-            if (activeLanguage == "en-US")
+            var languages = new List<LanguageOption>
             {
-                ComboBoxLanguage.SelectedIndex = 1;
+                new LanguageOption { DisplayCultureName = "Español", CultureCode = "es-MX" },
+                new LanguageOption { DisplayCultureName = "English", CultureCode = "en-US" },
+            };
+
+            ComboBoxLanguage.ItemsSource = languages;
+            string currentLangCode = Lang.Culture.Name;
+            var selectedLanguage = languages.FirstOrDefault(lang => lang.CultureCode == currentLangCode);
+
+            if (selectedLanguage != null)
+            {
+                ComboBoxLanguage.SelectedItem = selectedLanguage;
             }
             else
             {
@@ -43,13 +54,24 @@ namespace Client.Views
             }
 
             isLoaded = true;
+
         }
 
         private void ComboBoxLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!isLoaded) return;
+            if (!isLoaded)
+            {
+                return;
+            }
 
-            string newLangCode = (ComboBoxLanguage.SelectedIndex == 0) ? "es-MX" : "en-US";
+            var selectedOption = ComboBoxLanguage.SelectedItem as LanguageOption;
+
+            if (selectedOption == null)
+            {
+                return;
+            }
+
+            string newLangCode = selectedOption.CultureCode;
 
             if (Lang.Culture.Name != newLangCode)
             {
@@ -61,44 +83,6 @@ namespace Client.Views
 
                 RefreshWindow();
             }
-
-            Properties.Settings.Default.languageCode = newLangCode;
-            Properties.Settings.Default.Save();
-
-            Properties.Langs.Lang.Culture = new CultureInfo(newLangCode);
-
-            Window owner = this.Owner;
-            this.Close();
-
-            var newSettingsWindow = new Settings();
-            newSettingsWindow.Owner = owner;
-            newSettingsWindow.WindowState = this.WindowState;
-            newSettingsWindow.Show();
-        }
-
-        private void ButtonBack_Click(object sender, RoutedEventArgs e)
-        {
-
-            Window mainMenu = this.Owner;
-
-            if (languageChanged)
-            {
-                mainMenu.Close();
-
-                var newMainMenu = new MainMenu();
-                newMainMenu.WindowState = this.WindowState;
-                newMainMenu.Show();
-            }
-            else
-            {
-                if (mainMenu != null)
-                {
-                    mainMenu.WindowState = this.WindowState;
-                    mainMenu.Show();
-                }
-            }
-
-            this.Close();
         }
 
         private void RefreshWindow()
@@ -106,12 +90,38 @@ namespace Client.Views
             Window owner = this.Owner;
             this.Close();
 
-            var newSettingsWindow = new Settings();
-            newSettingsWindow.Owner = owner;
+            var newSettingsWindow = new Settings(refreshWindow: true);
             newSettingsWindow.WindowState = this.WindowState;
             newSettingsWindow.Show();
         }
+
+        private void ButtonBack_Click(object sender, RoutedEventArgs e)
+        {
+            if (languageChanged)
+            {
+                var oldMainMenu = this.Owner;
+
+                var newMainMenu = new MainMenu();
+                newMainMenu.WindowState = this.WindowState;
+                newMainMenu.Show();
+
+                this.Close();
+
+                if (oldMainMenu != null)
+                {
+                    oldMainMenu.Close();
+                }
+            }
+            else
+            {
+                if (this.Owner != null)
+                {
+                    this.WindowState = this.WindowState;
+                    this.Show();
+                }
+                this.Close();
+            }
+
+        }
     }
-
 }
-

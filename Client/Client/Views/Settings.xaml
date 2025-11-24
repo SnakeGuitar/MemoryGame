@@ -15,8 +15,7 @@
         <Grid HorizontalAlignment="Center" 
               VerticalAlignment="Center"
               MaxWidth="700" MaxHeight="865"
-              Margin="0,0,0,120"
-              Loaded="Window_Loaded">
+              Margin="0,0,0,120">
 
             <Viewbox Stretch="Uniform">
                 <StackPanel HorizontalAlignment="Center" 
@@ -68,10 +67,9 @@
 
                             <ComboBox x:Name="ComboBoxLanguage" 
                                       Style="{StaticResource FormComboBoxStyle}"
-                                      SelectionChanged="ComboBoxLanguage_SelectionChanged">
-
-                                <ComboBoxItem Name="esMX" Content="{x:Static language:Lang.Settings_Language_EsMX}"/>
-                                <ComboBoxItem Name="enUS" Content="{x:Static language:Lang.Settings_Language_EnUS}"/>
+                                      SelectionChanged="ComboBoxLanguage_SelectionChanged"
+                                      DisplayMemberPath="DisplayCultureName"
+                                      SelectedValuePath="CultureCode">
                             </ComboBox>
                         </StackPanel>
                     </Border>

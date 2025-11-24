@@ -73,6 +73,7 @@
     <Compile Include="Helpers\LocalizationManager.cs" />
     <Compile Include="Helpers\UserSession.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
+    <Compile Include="Utilities\LanguageOption.cs" />
     <Compile Include="Views\Controls\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
@@ -289,18 +290,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Error.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Info.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Success.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Icons\Warning.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Connected Services\UserServiceReference\item.disco" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +303,10 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\BackGrounds\mainMenu.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
