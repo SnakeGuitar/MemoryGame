@@ -49,6 +49,8 @@
                                       Style="{StaticResource FormComboBoxStyle}"
                                       SelectionChanged="ComboBoxSelectNumberCards_SelectionChanged">
                                     <ComboBoxItem Content="16"/>
+                                    <ComboBoxItem Content="24"/>
+                                    <ComboBoxItem Content="30"/>
                                     <ComboBoxItem Content="40"/>
                                 </ComboBox>
 

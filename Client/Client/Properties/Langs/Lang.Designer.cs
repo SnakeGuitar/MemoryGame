@@ -1060,6 +1060,33 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Try faster next time.
+        /// </summary>
+        public static string Singleplayer_Label_TimeOver {
+            get {
+                return ResourceManager.GetString("Singleplayer_Label_TimeOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Time&apos;s Up! :(.
+        /// </summary>
+        public static string Singleplayer_Title_TimeOver {
+            get {
+                return ResourceManager.GetString("Singleplayer_Title_TimeOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a All Pairs Found! :D.
+        /// </summary>
+        public static string Singleplayer_Title_Won {
+            get {
+                return ResourceManager.GetString("Singleplayer_Title_Won", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Memory Game.
         /// </summary>
         public static string TitleScreen_Label_Memorama {

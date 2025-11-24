@@ -465,4 +465,13 @@
   <data name="Global_Title_Information" xml:space="preserve">
     <value>Information</value>
   </data>
+  <data name="Singleplayer_Label_TimeOver" xml:space="preserve">
+    <value>Try faster next time</value>
+  </data>
+  <data name="Singleplayer_Title_TimeOver" xml:space="preserve">
+    <value>Time's Up! :(</value>
+  </data>
+  <data name="Singleplayer_Title_Won" xml:space="preserve">
+    <value>All Pairs Found! :D</value>
+  </data>
 </root>

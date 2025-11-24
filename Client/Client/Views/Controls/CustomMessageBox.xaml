@@ -36,7 +36,7 @@
                 <TextBlock x:Name="TextBlockTitle" 
                            Grid.Row="0"
                            Style="{StaticResource TitleTextStyle}" 
-                           FontSize="32"
+                           FontSize="50"
                            TextWrapping="Wrap"
                            TextAlignment="Center"
                            Margin="0,10,0,0"/>

@@ -22,6 +22,7 @@ namespace Client.Views.Singleplayer
         public CustomizeGame()
         {
             InitializeComponent();
+            ComboBoxSelectNumberCards.SelectedIndex = 0;
         } 
 
         private void ComboBoxSelectNumberCards_SelectionChanged(object sender, SelectionChangedEventArgs e)

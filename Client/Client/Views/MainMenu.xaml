@@ -11,18 +11,22 @@
 
     <Grid Background="{StaticResource BackgroundColor}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="450"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="1">
 
-            <Image Name="BackgroundImage" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>
+            <Image Name="BackgroundImage"
+                   Source="/Client;component/Resources/Images/BackGrounds/mainMenu.png"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" 
+                   Stretch="UniformToFill"/>
 
-            <Border Background="#4C36454F" CornerRadius="10" Padding="10" 
-                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="20"
+            <Border Background="#4C36454F" CornerRadius="10" Padding="15" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="30"
                     MaxWidth="200">
-                
+
                 <StackPanel>
                     <Grid HorizontalAlignment="Center" Width="128" Height="128">
                         <Border BorderBrush="{StaticResource AccentForegroundColor}" BorderThickness="2" CornerRadius="5"/>
@@ -40,29 +44,35 @@
 
             <StackPanel VerticalAlignment="Center" Margin="20">
 
-                <Label Content="{x:Static language:Lang.TitleScreen_Label_Memorama}" 
-                       Style="{StaticResource MainMenuTitleStyle}"/>
+                <TextBlock Text="{x:Static language:Lang.TitleScreen_Label_Memorama}" 
+                           FontFamily="{StaticResource TitleFont}"
+                           FontSize="70"
+                           Foreground="{StaticResource AccentForegroundColor}"
+                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap" 
+                           Margin="0,0,0,50"/>
 
                 <Button Content="{x:Static language:Lang.Global_Title_Singleplayer}" 
-                        Style="{StaticResource PrimaryButtonStyle}"
+                        Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonSingleplayer_Click"/>
 
                 <Button Content="{x:Static language:Lang.Global_Title_Multiplayer}" 
-                        Style="{StaticResource PrimaryButtonStyle}"
+                        Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonMultiplayer_Click"/>
 
                 <Button Content="{x:Static language:Lang.Global_Button_Settings}" 
-                        Style="{StaticResource PrimaryButtonStyle}"
+                        Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonSettings_Click"/>
 
                 <Button Content="{x:Static language:Lang.MainMenu_Button_Gallery}" 
-                        Style="{StaticResource PrimaryButtonStyle}"
+                        Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonGallery_Click"/>
                 <Button Content="{x:Static language:Lang.MainMenu_Button_ExitGame}" 
-                        Style="{StaticResource MenuExitButtonStyle}"
-                        Click="ButtonExitGame_Click" Width="250"/>
+                        Style="{StaticResource ExitButtonStyle}"
+                        Click="ButtonExitGame_Click"/>
             </StackPanel>
         </Border>
     </Grid>
-    
+
 </Window>
