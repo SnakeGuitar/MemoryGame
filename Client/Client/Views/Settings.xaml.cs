@@ -25,10 +25,10 @@ namespace Client.Views
         private bool isLoaded = false;
         private bool languageChanged = false;
 
-        public Settings(bool refreshWindow = false)
+        public Settings(bool changeHappened = false)
         {
             InitializeComponent();
-            languageChanged = refreshWindow;
+            languageChanged = changeHappened;
             LoadLanguages();
         }
 
@@ -90,7 +90,8 @@ namespace Client.Views
             Window owner = this.Owner;
             this.Close();
 
-            var newSettingsWindow = new Settings(refreshWindow: true);
+            var newSettingsWindow = new Settings(true);
+            newSettingsWindow.Owner = owner;
             newSettingsWindow.WindowState = this.WindowState;
             newSettingsWindow.Show();
         }
@@ -116,10 +117,16 @@ namespace Client.Views
             {
                 if (this.Owner != null)
                 {
-                    this.WindowState = this.WindowState;
-                    this.Show();
+                    this.Owner.WindowState = this.WindowState;
+                    this.Owner.Show();
                 }
-                this.Close();
+                else
+                {
+                    var mainMenu = new MainMenu();
+                    mainMenu.WindowState = this.WindowState;
+                    mainMenu.Show();
+                }
+                    this.Close();
             }
 
         }
