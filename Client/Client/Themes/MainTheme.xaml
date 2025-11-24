@@ -26,7 +26,7 @@
 
     <Style x:Key="TitleTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource TitleFont}"/>
-        <Setter Property="FontSize" Value="70"/>
+        <Setter Property="FontSize" Value="80"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,0,0"/>
@@ -42,7 +42,7 @@
 
     <Style x:Key="MessageBoxTitleStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource TitleFont}"/>
-        <Setter Property="FontSize" Value="45"/>
+        <Setter Property="FontSize" Value="70"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,0,40"/>
@@ -50,7 +50,7 @@
 
     <Style x:Key="MessageBoxTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="30"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -83,7 +83,7 @@
 
     <Style x:Key="SubTitleStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -111,7 +111,7 @@
 
     <Style x:Key="RegisterLabelStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="26"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="Margin" Value="0,0,0,5"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -119,7 +119,7 @@
 
     <Style x:Key="FormUnitLabelStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
@@ -149,7 +149,7 @@
 
     <Style x:Key="PlayerNameStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontSize" Value="30"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -168,8 +168,8 @@
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
         <Setter Property="Margin" Value="0,10,0,10"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Width" Value="250"/>
-        <Setter Property="Height" Value="50"/>
+        <Setter Property="Width" Value="260"/>
+        <Setter Property="Height" Value="55"/>
     </Style>
 
     <Style x:Key="LobbyButtonStyle" TargetType="Button">
@@ -181,7 +181,7 @@
     </Style>
 
     <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -202,7 +202,7 @@
     </Style>
 
     <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontSize" Value="24"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Width" Value="125"/>
         <Setter Property="Template">
@@ -245,6 +245,20 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="MenuButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+        <Setter Property="Height" Value="70"/>
+        <Setter Property="Width" Value="350"/>
+        <Setter Property="FontSize" Value="38"/>
+        <Setter Property="Margin" Value="0,15,0,15"/>
+    </Style>
+
+    <Style x:Key="ExitButtonStyle" TargetType="Button" BasedOn="{StaticResource MenuExitButtonStyle}">
+        <Setter Property="Height" Value="70"/>
+        <Setter Property="Width" Value="350"/>
+        <Setter Property="FontSize" Value="33"/>
+        <Setter Property="Margin" Value="0,30,0,0"/>
     </Style>
 
     <Style x:Key="PrimaryLobbyButtonStyle" TargetType="Button" BasedOn="{StaticResource LobbyButtonStyle}">
@@ -291,7 +305,7 @@
     </Style>
 
     <Style x:Key="FormPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Width" Value="220"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="Template">
@@ -314,7 +328,7 @@
 
     <Style x:Key="HyperlinkButtonStyle" TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -363,7 +377,7 @@
     <Style x:Key="SendButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="40"/>
-        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
     </Style>
 
@@ -381,7 +395,7 @@
     </Style>
 
     <Style x:Key="CreateLobbyButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -402,7 +416,7 @@
     </Style>
 
     <Style x:Key="EasyButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -421,7 +435,7 @@
     </Style>
 
     <Style x:Key="NormalButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -440,7 +454,7 @@
     </Style>
 
     <Style x:Key="HardButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -461,9 +475,9 @@
 
     <Style x:Key="RegisterTextBoxStyle" TargetType="TextBox">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="16"/>
-        <Setter Property="Width" Value="220"/>
-        <Setter Property="Height" Value="25"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="35"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Margin" Value="0,0,0,5"/>
     </Style>
@@ -480,15 +494,15 @@
     <Style x:Key="RegisterPasswordBoxStyle" TargetType="PasswordBox">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
         <Setter Property="FontSize" Value="16"/>
-        <Setter Property="Width" Value="220"/>
-        <Setter Property="Height" Value="25"/>
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="35"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Margin" Value="0,0,0,5"/>
     </Style>
 
     <Style x:Key="FormComboBoxStyle" TargetType="ComboBox">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="Width" Value="220"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
