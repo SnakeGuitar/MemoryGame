@@ -1,4 +1,5 @@
-﻿using Server.Shared;
+﻿using log4net.Core;
+using Server.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,16 @@ namespace Server.SessionService
         private const int SESSION_DURATION_HOURS = 2;
 
         private readonly IDbContextFactory _dbFactory;
-        public SessionManager(IDbContextFactory dbFactory)
+        private readonly ILoggerManager _logger;
+        public SessionManager(IDbContextFactory dbFactory, ILoggerManager logger)
         {
             _dbFactory = dbFactory;
+            _logger = logger;
         }
 
-        public SessionManager() : this(new DbContextFactory())
+        public SessionManager() : this(
+            new DbContextFactory(),
+            new Logger(typeof(SessionManager)))
         {
         }
 
@@ -31,6 +36,7 @@ namespace Server.SessionService
         {
             if (string.IsNullOrEmpty(token))
             {
+                _logger.LogWarn("GetUserIdFromToken called with null or empty token.");
                 return null;
             }
 
@@ -39,6 +45,9 @@ namespace Server.SessionService
                 var session = db.userSession
                     .FirstOrDefault(s => s.token == token && s.expiresAt > DateTime.Now);
 
+                _logger.LogInfo(session != null
+                    ? $"Valid session found for token: {token}"
+                    : $"No valid session found for token: {token}");
                 return session?.userId;
             }
         }
@@ -63,6 +72,7 @@ namespace Server.SessionService
                 db.userSession.Add(session);
                 db.SaveChanges();
 
+                _logger.LogInfo($"Created new session for userId {userId} with token: {token}");
                 return token;
             }
         }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using log4net.Core;
 
 namespace Server.LobbyService
 {
@@ -22,25 +23,29 @@ namespace Server.LobbyService
         private readonly ISecurityService _securityService;
         private readonly ILobbyCallbackProvider _callbackProvider;
         private readonly IGameLobbyServiceValidator _validator;
+        private readonly ILoggerManager _logger;
         public GameLobbyService(ISecurityService securityService,
             ISessionManager sessionManager,
             ILobbyCallbackProvider callbackProvider,
-            IGameLobbyServiceValidator validator)
+            IGameLobbyServiceValidator validator,
+            ILoggerManager logger)
         {
             _sessionManager = sessionManager;
             _securityService = securityService;
             _callbackProvider = callbackProvider;
             _validator = validator;
 
-            _stateManager = new LobbyStateManager();
+            _stateManager = new LobbyStateManager(_logger);
             _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId));
+            _logger = logger;
         }
 
         public GameLobbyService() : this(
             new SecurityService(),
             new SessionManager(),
             new WcfLobbyCallbackProvider(),
-            new GameLobbyServiceValidator())
+            new GameLobbyServiceValidator(),
+            new Logger(typeof(GameLobbyService)))
         {
         }
 
@@ -48,11 +53,13 @@ namespace Server.LobbyService
         {
             if (!_validator.IsValidGameCode(gameCode))
             {
+                _logger.LogWarn($"Invalid game code attempted: {gameCode}");
                 return false;
             }
 
             if (_stateManager.IsGameStarted(gameCode))
             {
+                _logger.LogWarn($"Attempt to join started game: {gameCode}");
                 return false;
             }
 
@@ -61,12 +68,14 @@ namespace Server.LobbyService
 
             if (_stateManager.IsInLobby(sessionId))
             {
+                _logger.LogWarn($"Session {sessionId} attempted to join multiple lobbies.");
                 return false;
             }
 
             string playerName = ResolvePlayerName(token, isGuest, guestName);
             if (string.IsNullOrEmpty(playerName))
             {
+                _logger.LogWarn($"Failed to resolve player name for session {sessionId}.");
                 return false;
             }
 
@@ -80,12 +89,16 @@ namespace Server.LobbyService
                 SessionId = sessionId
             };
 
+            _logger.LogInfo($"Player {playerName} (Session: {sessionId}) is attempting to join lobby {gameCode}");
+
             if (_stateManager.TryJoinLobby(gameCode, newClient, out var lobby))
             {
                 SubscribeToDisconnect(callback, sessionId);
                 _notifier.NotifyJoin(lobby, gameCode);
+                _logger.LogInfo($"Player {playerName} joined lobby {gameCode} (Session: {sessionId})");
                 return true;
             }
+            _logger.LogWarn($"Failed to add player {playerName} to lobby {gameCode} (Session: {sessionId})");
             return false;
         }
 
@@ -95,6 +108,7 @@ namespace Server.LobbyService
             if (sessionId != null)
             {
                 HandleDisconnection(sessionId);
+                _logger.LogInfo($"Session {sessionId} has left the lobby.");
             }
         }
 
@@ -102,12 +116,14 @@ namespace Server.LobbyService
         {
             if (!_validator.IsValidChatMessage(message))
             {
+                _logger.LogWarn("Invalid chat message attempted.");
                 return;
             }
 
             var sessionId = OperationContext.Current?.SessionId;
             if (sessionId == null)
             {
+                _logger.LogWarn("Chat message attempted with null session ID.");
                 return;
             }
 
@@ -118,6 +134,7 @@ namespace Server.LobbyService
                 if (client != null)
                 {
                     _notifier.BroadcastMessage(lobby, message, false, client.Name);
+                    _logger.LogInfo($"Chat message from {client.Name} in lobby {lobby.GameCode}: {message}");
                 }
             }
         }
@@ -127,11 +144,13 @@ namespace Server.LobbyService
             var sessionId = OperationContext.Current?.SessionId;
             if (sessionId == null)
             {
+                _logger.LogWarn($"{nameof(StartGame)}");
                 return;
             }
 
             if (!_stateManager.TryStartGame(sessionId, settings, out var gameCode))
             {
+                _logger.LogInfo($"Starting game {sessionId}");
                 throw new FaultException("Cannot start game. Either not in lobby or game already started.");
             }
 
@@ -147,6 +166,7 @@ namespace Server.LobbyService
             var sessionId = OperationContext.Current?.SessionId;
             if (sessionId == null)
             {
+                _logger.LogWarn($"{nameof(FlipCard)} called with null session ID.");
                 return;
             }
 
@@ -158,6 +178,7 @@ namespace Server.LobbyService
                 if (_validator.IsValidCardIndex(cardIndex, 100))
                 {
                     gameManager.HandleFlipCard(playerId, cardIndex);
+                    _logger.LogInfo($"Player {playerId} flipped card {cardIndex}.");
                 }
             }
         }
@@ -169,8 +190,8 @@ namespace Server.LobbyService
             if (client != null)
             {
                 var lobby = _stateManager.GetLobbyBySession(sessionId);
-
                 _notifier.NotifyLeave(lobby, client.Name);
+                _logger.LogInfo($"Client {client.Name} disconnected from lobby {gameCode} (Session: {sessionId})");
             }
         }
 
@@ -180,6 +201,7 @@ namespace Server.LobbyService
             {
                 commObject.Faulted += (s, e) => HandleDisconnection(sessionId);
                 commObject.Closed += (s, e) => HandleDisconnection(sessionId);
+                _logger.LogInfo($"Subscribed to disconnect events for session {sessionId}.");
             }
         }
 
@@ -187,9 +209,14 @@ namespace Server.LobbyService
         {
             if (isGuest)
             {
+                _logger.LogInfo("Resolving guest player name.");
                 return _validator.IsValidGuestName(guestName) ? guestName.Trim() : null;
             }
             int? userId = _sessionManager.GetUserIdFromToken(token);
+
+            _logger.LogInfo(userId.HasValue
+                ? $"Resolved player name for user ID {userId.Value}."
+                : "Failed to resolve player name from token.");
             return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
         }
 

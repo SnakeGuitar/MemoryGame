@@ -11,6 +11,7 @@ namespace Server.SessionService
         private readonly INotificationService _notificationService;
         private readonly ISecurityService _securityService;
         private readonly ISessionManager _sessionManager;
+        private readonly ILoggerManager _logger;
 
         private readonly IUserServiceValidator _userServiceValidator = new UserServiceValidator();
 
@@ -18,15 +19,22 @@ namespace Server.SessionService
             IDbContextFactory dbContextFactory,
             INotificationService notificationService,
             ISecurityService securityService,
-            ISessionManager sessionManager)
+            ISessionManager sessionManager,
+            ILoggerManager logger)
         {
             _dbFactory = dbContextFactory;
             _notificationService = notificationService;
             _securityService = securityService;
             _sessionManager = sessionManager;
+            _logger = logger;
         }
 
-        public UserService() : this(new DbContextFactory(), new NotificationService(), new SecurityService(), new SessionManager())
+        public UserService() : this(
+            new DbContextFactory(), 
+            new NotificationService(), 
+            new SecurityService(), 
+            new SessionManager(), 
+            new Logger(typeof(UserService)))
         {
         }
 
@@ -35,6 +43,7 @@ namespace Server.SessionService
 
             if (!_userServiceValidator.IsValidPassword(password))
             {
+                _logger.LogInfo($"Invalid password attempt during registration for email: {email}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_PasswordInvalid" };
             }
 
@@ -47,13 +56,16 @@ namespace Server.SessionService
 
                     if (db.user.Any(u => u.email == email))
                     {
+                        _logger.LogInfo($"Attempt to register with already used email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailInUse" };
                     }
 
                     var existingPending = db.pendingRegistration
                         .FirstOrDefault(p => p.email == email && p.expirationTime > DateTime.Now);
+
                     if (existingPending != null)
                     {
+                        _logger.LogInfo($"Removing existing pending registration for email: {email}");
                         db.pendingRegistration.Remove(existingPending);
                     }
 
@@ -68,21 +80,24 @@ namespace Server.SessionService
                         createdAt = DateTime.Now
                     };
 
+                    _logger.LogInfo($"Creating pending registration for email: {email}");
                     db.pendingRegistration.Add(pendingRegistration);
 
                     if (!_notificationService.SendVerificationEmail(email, pin))
                     {
+                        _logger.LogError($"Failed to send verification email to: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailSendFailed" };
                     }
 
                     db.SaveChanges();
 
+                    _logger.LogInfo($"Registration started successfully for email: {email}");
                     return new ResponseDTO { Success = true };
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"StartRegistration Error: {ex.Message}");
+                _logger.LogError($"StartRegistration Error for email {email}: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
@@ -99,11 +114,13 @@ namespace Server.SessionService
 
                     if (pending == null)
                     {
+                        _logger.LogInfo($"Invalid or expired verification attempt for email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeInvalid" };
                     }
 
                     if (pending.expirationTime <= DateTime.Now)
                     {
+                        _logger.LogInfo($"Expired verification code attempt for email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeExpired" };
                     }
 
@@ -118,15 +135,19 @@ namespace Server.SessionService
 
                     db.user.Add(newUser);
                     db.SaveChanges();
+
+                    _logger.LogInfo($"User registration verified and created for email: {email}");
+
                     _securityService.RemovePendingRegistration(email);
                     db.SaveChanges();
 
+                    _logger.LogInfo($"Pending registration removed for email: {email}");
                     return new ResponseDTO { Success = true };
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"VerifyRegistration Error: {ex.Message}");
+                _logger.LogError($"VerifyRegistration Error for email {email}: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
@@ -139,12 +160,14 @@ namespace Server.SessionService
                 {
                     if (db.user.Any(u => u.email == email))
                     {
+                        _logger.LogInfo($"ResendVerificationCode attempt for already registered email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailInUse" };
                     }
 
                     var pending = db.pendingRegistration.FirstOrDefault(p => p.email == email);
                     if (pending == null)
                     {
+                        _logger.LogInfo($"ResendVerificationCode attempt with no pending registration for email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_RegistrationNotFound" };
                     }
 
@@ -154,19 +177,23 @@ namespace Server.SessionService
 
                     if (!_notificationService.SendVerificationEmail(email, newPin))
                     {
+                        _logger.LogError($"Failed to resend verification email to: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailSendFailed" };
                     }
 
                     db.SaveChanges();
+
+                    _logger.LogInfo($"Resent verification code to email: {email}");
                     return new ResponseDTO { Success = true };
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"ResendVerificationCode Error: {ex.Message}");
+                _logger.LogError($"ResendVerificationCode Error for email {email}: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
+
         public LoginResponse FinalizeRegistration(string email, string username, byte[] avatar)
         {
             try
@@ -177,11 +204,13 @@ namespace Server.SessionService
 
                     if (db.user.Any(u => u.username == username))
                     {
+                        _logger.LogInfo($"Attempt to finalize registration with already used username: {username}");
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidUsername" };
                     }
 
                     if (!_userServiceValidator.IsValidUsername(username))
                     {
+                        _logger.LogInfo($"Attempt to finalize registration with invalid username: {username}");
                         return new LoginResponse { Success = false, MessageKey = "Global_ValidationUsername_InvalidChars" };
                     }
 
@@ -198,6 +227,7 @@ namespace Server.SessionService
                         Email = user.email
                     };
 
+                    _logger.LogInfo($"User registration finalized for email: {email}");
                     return new LoginResponse
                     {
                         Success = true,
@@ -208,9 +238,8 @@ namespace Server.SessionService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"FinalizeRegistration Error {ex.Message}");
+                _logger.LogError($"FinalizeRegistration Error for email {email}: {ex.Message}");
                 return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Unknown" };
-                throw;
             }
         }
 
@@ -223,12 +252,14 @@ namespace Server.SessionService
                     var user = db.user.FirstOrDefault(u => u.email == email);
                     if (user == null)
                     {
+                        _logger.LogInfo($"Invalid login attempt for non-existent email: {email}");
                         System.Threading.Thread.Sleep(100);
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
 
                     if (!BCrypt.Net.BCrypt.Verify(password, user.password))
                     {
+                        _logger.LogInfo($"Invalid password attempt for email: {email}");
                         System.Threading.Thread.Sleep(100);
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
@@ -242,6 +273,7 @@ namespace Server.SessionService
                         Email = user.email
                     };
 
+                    _logger.LogInfo($"User logged in successfully: {email}");
                     return new LoginResponse
                     {
                         Success = true,
@@ -252,9 +284,8 @@ namespace Server.SessionService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Login Error: {ex.Message}");
+                _logger.LogError($"Login Error for email {email}: {ex.Message}");
                 return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Unknown" };
-                throw;
             }
         }
 
@@ -265,39 +296,48 @@ namespace Server.SessionService
                 using (var db = _dbFactory.Create())
                 {
                     var user = db.user.FirstOrDefault(u => u.email == email);
+
+                    _logger.LogInfo($"GetUserAvatar called for email: {email}");
                     return user?.avatar;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"GetUserAvatar Error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
-                throw;
+                _logger.LogError($"GetUserAvatar Error for email {email}: {ex.Message}");
+                return null;
             }
         }
 
         public ResponseDTO UpdateUserAvatar(string token, byte[] avatar)
         {
             var userId = new SessionManager().GetUserIdFromToken(token);
+
             if (userId == null)
             {
+                _logger.LogInfo($"UpdateUserAvatar called with invalid token.");
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
             }
 
             if (avatar != null && !ImageValidator.IsValidImage(avatar))
             {
+                _logger.LogInfo($"UpdateUserAvatar called with invalid image data for userId: {userId.Value}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_ImageInvalid" };
             }
 
             using (var db = _dbFactory.Create())
             {
                 var user = db.user.FirstOrDefault(u => u.userId == userId.Value);
+
                 if (user == null)
                 {
+                    _logger.LogInfo($"UpdateUserAvatar could not find user with userId: {userId.Value}");
                     return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
                 }
+
                 user.avatar = avatar;
                 db.SaveChanges();
+
+                _logger.LogInfo($"User avatar updated successfully for userId: {userId.Value}");
                 return new ResponseDTO { Success = true };
             }
         }
@@ -311,11 +351,13 @@ namespace Server.SessionService
 
                     if (!_userServiceValidator.IsValidUsername(guestUsername))
                     {
+                        _logger.LogInfo($"Invalid guest username attempt: {guestUsername}");
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidUsername" };
                     }
 
                     if (db.user.Any(u => u.username == guestUsername))
                     {
+                        _logger.LogInfo($"Guest username already in use attempt: {guestUsername}");
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_UsernameInUse" };
                     }
 
@@ -334,8 +376,11 @@ namespace Server.SessionService
                     db.user.Add(guestUser);
                     db.SaveChanges();
 
+                    _logger.LogInfo($"Guest user created with username: {guestUsername}");
+
                     string token = _sessionManager.CreateSessionToken(guestUser.userId);
 
+                    _logger.LogInfo($"Guest user logged in with username: {guestUsername}");
                     return new LoginResponse
                     {
                         Success = true,
@@ -351,7 +396,7 @@ namespace Server.SessionService
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"LoginAsGuest Error: {ex.Message}");
+                _logger.LogError($"LoginAsGuest Error for username {guestUsername}: {ex.Message}");
                 return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
@@ -363,6 +408,7 @@ namespace Server.SessionService
                 var userId = _sessionManager.GetUserIdFromToken(sessionToken);
                 if (userId == null)
                 {
+                    _logger.LogInfo($"LogoutGuest called with invalid session token.");
                     return;
                 }
 
@@ -374,12 +420,14 @@ namespace Server.SessionService
                     {
                         db.user.Remove(guestUser);
                         db.SaveChanges();
+
+                        _logger.LogInfo($"Guest user with userId: {userId.Value} logged out and removed.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"LogoutGuest Error: {ex.Message}");
+                _logger.LogError($"LogoutGuest Error: {ex.Message}");
             }
         }
 

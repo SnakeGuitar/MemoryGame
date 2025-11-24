@@ -18,13 +18,17 @@ namespace Server.Shared
     public class SecurityService : ISecurityService
     {
         private readonly IDbContextFactory _dbFactory;
+        private readonly ILoggerManager _logger;
 
-        public SecurityService(IDbContextFactory dbFactory)
+        public SecurityService(IDbContextFactory dbFactory, ILoggerManager logger)
         {
             _dbFactory = dbFactory;
+            _logger = logger;
         }
 
-        public SecurityService() : this(new DbContextFactory())
+        public SecurityService() : this(
+            new DbContextFactory(),
+            new Logger(typeof(SecurityService)))
         {
         }
 
@@ -33,12 +37,14 @@ namespace Server.Shared
         {
             lock (random)
             {
+                _logger.LogInfo("Generated verification PIN.");
                 return random.Next(0, 1000000).ToString("D6");
             }
         }
 
         public string HashPassword(string password)
         {
+            _logger.LogInfo("Hashed password.");
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
@@ -55,14 +61,14 @@ namespace Server.Shared
                         db.pendingRegistration.Remove(pending);
                         db.SaveChanges();
                     }
+                    _logger.LogInfo($"Removed pending registration for email: {email}");
                     return true;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"removePendingRegistration Error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
-                throw;
+                _logger.LogError($"RemovePendingRegistration Error: {ex.Message}");
+                return false;
             }
         }
 
@@ -73,14 +79,15 @@ namespace Server.Shared
                 using (var db = _dbFactory.Create())
                 {
                     var user = db.user.Find(userId);
+
+                    _logger.LogInfo($"Fetched username for userId: {userId}");
                     return user?.username;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"GetUserNameById Error: {ex.Message}");
-                System.Diagnostics.Debug.WriteLine($"InnerException: {ex.InnerException?.Message}");
-                throw;
+                _logger.LogError($"GetUsernameById Error: {ex.Message}");
+                return null;
             }
         }
 
@@ -110,6 +117,7 @@ namespace Server.Shared
 
             var shuffledChars = passwordChars.OrderBy(c => random.Next()).ToArray();
 
+            _logger.LogInfo("Generated guest password.");
             return new string(shuffledChars);
         }
     }

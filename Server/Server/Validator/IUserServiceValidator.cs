@@ -54,7 +54,7 @@ namespace Server.Validator
                 return false;
             }
             
-            if (password.Length < MIN_PASSWORD_LENGTH)
+            if (password.Length < MIN_PASSWORD_LENGTH || password.Length > MAX_PASSWORD_LENGTH)
             {
                 return false;
             }
@@ -89,7 +89,7 @@ namespace Server.Validator
                 return false;
             }
 
-            if (username.Length < MIN_PASSWORD_LENGTH || username.Length > MAX_USERNAME_LENGTH)
+            if (username.Length < MIN_USERNAME_LENGTH || username.Length > MAX_USERNAME_LENGTH)
             {
                 return false;
             }

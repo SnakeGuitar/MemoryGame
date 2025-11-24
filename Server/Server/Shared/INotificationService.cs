@@ -16,13 +16,16 @@ namespace Server.Shared
     public class NotificationService : INotificationService
     {
         private readonly IMailSender _mailWrapper;
-
-        public NotificationService(IMailSender mailWrapper)
+        private readonly ILoggerManager _logger;
+        public NotificationService(IMailSender mailWrapper, ILoggerManager logger)
         {
             _mailWrapper = mailWrapper;
+            _logger = logger;
         }
 
-        public NotificationService() : this(new MailWrapper())
+        public NotificationService() : this(
+            new MailWrapper(),
+            new Logger(typeof(NotificationService)))
         {
         }
 
@@ -52,11 +55,12 @@ namespace Server.Shared
                 mailMessage.To.Add(email);
                 _mailWrapper.Send(mailMessage);
 
+                _logger.LogInfo($"Sent verification email to {email}");
                 return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to send email: {ex.Message}");
+                _logger.LogError($"Failed to send verification email to {email}: {ex.Message}");
                 return false;
             }
         }
@@ -70,15 +74,21 @@ namespace Server.Shared
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
                 {
-                    if (stream == null) return null;
+                    if (stream == null)
+                    {
+                        _logger.LogWarn($"Email template resource '{resourcePath}' not found.");
+                        return null;
+                    }
                     using (StreamReader reader = new StreamReader(stream))
                     {
+                        _logger.LogInfo($"Loaded email template '{resourceName}' successfully.");
                         return reader.ReadToEnd();
                     }
                 }
             }
             catch
             {
+                _logger.LogError($"Error loading email template '{resourceName}'.");
                 return null;
             }
         }
