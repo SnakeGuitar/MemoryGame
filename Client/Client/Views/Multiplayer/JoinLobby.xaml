@@ -36,7 +36,9 @@
                                    Style="{StaticResource RegisterLabelStyle}"/>
 
                             <TextBox x:Name="TextBoxLobbyCode" 
-                                     Style="{StaticResource RegisterTextBoxStyle}"/>
+                                     Style="{StaticResource CodeTextBoxStyle}"
+                                     PreviewTextInput="NumericOnly_PreviewTextInput"
+                                     PreviewKeyDown="TextBox_PreviewKeyDown"/>
 
                             <Label x:Name="LabelCodeError" 
                                    Style="{StaticResource RegisterErrorLabelStyle}"

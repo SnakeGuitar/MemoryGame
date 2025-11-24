@@ -31,6 +31,14 @@ namespace Client.Views.Session
             InitializeComponent();
         }
 
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
+        }
+
         private async void ButtonAcceptUsernameGuest_Click(object sender, RoutedEventArgs e)
         {
             string username = TextBoxUsername.Text.Trim();

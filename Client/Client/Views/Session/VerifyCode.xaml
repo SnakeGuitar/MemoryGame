@@ -42,9 +42,9 @@
                                    Style="{StaticResource RegisterLabelStyle}"/>
 
                             <TextBox x:Name="TextBoxInputVericationCode" 
-                                     Style="{StaticResource RegisterTextBoxStyle}"
+                                     Style="{StaticResource CodeTextBoxStyle}"
                                      PreviewTextInput="NumericOnly_PreviewTextInput"
-                                     MaxLength="6" Width="248"/>
+                                     PreviewKeyDown="TextBox_PreviewKeyDown"/>
 
                             <Label x:Name="LabelCodeError" 
                                    Style="{StaticResource RegisterErrorLabelStyle}"

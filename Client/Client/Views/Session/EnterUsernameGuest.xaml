@@ -36,7 +36,8 @@
                                    Style="{StaticResource RegisterLabelStyle}"/>
 
                             <TextBox x:Name="TextBoxUsername" 
-                                     Style="{StaticResource RegisterTextBoxStyle}"/>
+                                     Style="{StaticResource RegisterTextBoxStyle}"
+                                     PreviewKeyDown="TextBox_PreviewKeyDown"/>
 
                             <Label x:Name="LabelUsernameError" 
                                    Style="{StaticResource RegisterErrorLabelStyle}"
