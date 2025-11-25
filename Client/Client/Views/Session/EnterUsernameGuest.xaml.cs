@@ -48,7 +48,7 @@ namespace Client.Views.Session
 
             if (validationUsername != ValidationCode.Success)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(validationUsername);
+                string errorMessage = Helpers.LocalizationHelper.GetString(validationUsername);
                 LabelUsernameError.Content = errorMessage;
                 return;
             }
@@ -61,7 +61,7 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    UserSession.StartSession(response.SessionToken, response.User.Username);
+                    UserSession.StartGuestSession(response.SessionToken, response.User.UserId, response.User.Username);
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new Views.Controls.CustomMessageBox(
@@ -93,7 +93,7 @@ namespace Client.Views.Session
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_ServerOffline,
@@ -104,7 +104,7 @@ namespace Client.Views.Session
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError,
@@ -115,7 +115,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError,

@@ -10,7 +10,7 @@ namespace Client.Helpers
     public static class ImageHelper
     {
         private const int MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
-        // FOR WPF APPLICATIONS
+        
         public static BitmapImage ByteArrayToImageSource(byte[] imageData)
         {
             if (imageData == null || imageData.Length == 0)
@@ -24,7 +24,7 @@ namespace Client.Helpers
                 image.StreamSource = new System.IO.MemoryStream(imageData);
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.EndInit();
-                image.Freeze(); // Freeze for cross-thread operations
+                image.Freeze();
                 return image;
             }
             catch
@@ -33,7 +33,6 @@ namespace Client.Helpers
             }
         }
 
-        // FOR SERVER
         public static byte[] ImageSourceToByteArray(BitmapImage image)
         {
             if (image == null)
@@ -75,7 +74,7 @@ namespace Client.Helpers
 
                 if (originalImage.PixelWidth > 10000 || originalImage.PixelHeight > 10000)
                 {
-                    return null; // Image too large to process
+                    return null;
                 }
 
                 double ratioX = (double)maxWidth / originalImage.PixelWidth;
@@ -84,7 +83,7 @@ namespace Client.Helpers
 
                 if (ratio >= 1)
                 {
-                    return imageData; // No resizing needed
+                    return imageData;
                 }
 
                 var resized = new TransformedBitmap(originalImage,

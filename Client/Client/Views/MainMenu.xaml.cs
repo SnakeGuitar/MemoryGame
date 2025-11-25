@@ -108,7 +108,7 @@ namespace Client.Views
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
@@ -117,17 +117,17 @@ namespace Client.Views
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError, 
-                    Helpers.LocalizationManager.GetString(ex),
+                    Helpers.LocalizationHelper.GetString(ex),
                     this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,

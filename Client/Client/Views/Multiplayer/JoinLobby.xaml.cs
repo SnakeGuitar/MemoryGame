@@ -54,7 +54,7 @@ namespace Client.Views.Multiplayer
 
             if (validationCode != ValidationCode.Success)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(validationCode);
+                string errorMessage = Helpers.LocalizationHelper.GetString(validationCode);
                 LabelCodeError.Content = errorMessage;
                 return;
             }

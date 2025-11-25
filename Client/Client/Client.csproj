@@ -70,10 +70,10 @@
     <Compile Include="Helpers\ClientHelper.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
-    <Compile Include="Helpers\LocalizationManager.cs" />
-    <Compile Include="Helpers\UserSession.cs" />
+    <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Utilities\UserSession.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
-    <Compile Include="Utilities\LanguageOption.cs" />
+    <Compile Include="Models\LanguageOption.cs" />
     <Compile Include="Views\Controls\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>

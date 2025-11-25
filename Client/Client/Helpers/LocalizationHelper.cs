@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Client.Helpers
 {
-    public static class LocalizationManager
+    public static class LocalizationHelper
     {
         public static string GetString(ValidationHelper.ValidationCode code)
         {

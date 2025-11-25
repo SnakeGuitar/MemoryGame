@@ -61,7 +61,7 @@ namespace Client.Views.Session
             ValidationCode validationCode = Helpers.ValidationHelper.ValidateVerifyCode(code, PIN_LENGTH);
             if (validationCode != ValidationCode.Success)
             {
-                LabelCodeError.Content = Helpers.LocalizationManager.GetString(validationCode);
+                LabelCodeError.Content = Helpers.LocalizationHelper.GetString(validationCode);
                 return;
             }
 
@@ -97,7 +97,7 @@ namespace Client.Views.Session
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
@@ -108,7 +108,7 @@ namespace Client.Views.Session
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
@@ -119,7 +119,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
@@ -176,7 +176,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 
                 Debug.WriteLine($"[Resend Code Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(

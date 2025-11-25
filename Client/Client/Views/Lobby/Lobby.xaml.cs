@@ -67,7 +67,7 @@ namespace Client.Views.Lobby
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_Error, errorMessage,
@@ -78,7 +78,7 @@ namespace Client.Views.Lobby
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
@@ -89,7 +89,7 @@ namespace Client.Views.Lobby
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationManager.GetString(ex);
+                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
@@ -168,7 +168,7 @@ namespace Client.Views.Lobby
                 Debug.WriteLine($"[Chat Send Error]: {ex.Message}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError,
-                    Helpers.LocalizationManager.GetString(ex),
+                    Helpers.LocalizationHelper.GetString(ex),
                     this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
