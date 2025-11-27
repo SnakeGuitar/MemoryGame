@@ -32,6 +32,14 @@ namespace Client.Views.Session
             InitializeComponent();
         }
 
+        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
+        }
+
         private async void ButtonAcceptLogin_Click(object sender, RoutedEventArgs e)
         {
             string email = TextBoxEmailInput.Text?.Trim();

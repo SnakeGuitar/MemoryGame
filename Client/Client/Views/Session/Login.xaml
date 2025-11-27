@@ -36,8 +36,9 @@
                             <Label Content="{x:Static language:Lang.Global_Label_Email}" 
                                Style="{StaticResource RegisterLabelStyle}"/>
 
-                            <TextBox x:Name="TextBoxEmailInput" 
-                                 Style="{StaticResource RegisterTextBoxStyle}"/>
+                            <TextBox x:Name="TextBoxEmailInput"
+                                PreviewKeyDown="TextBox_PreviewKeyDown"
+                                Style="{StaticResource RegisterTextBoxStyle}"/>
 
                             <Label x:Name="LabelEmailError" 
                                Style="{StaticResource RegisterErrorLabelStyle}"

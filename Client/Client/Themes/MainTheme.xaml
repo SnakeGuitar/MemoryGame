@@ -133,7 +133,7 @@
 
     <Style x:Key="GameStatTitleStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource TitleFont}"/>
-        <Setter Property="FontSize" Value="40"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,10,0,5"/>
@@ -141,7 +141,7 @@
 
     <Style x:Key="GameStatValueStyle" TargetType="Label">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="36"/>
+        <Setter Property="FontSize" Value="32"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,0,10"/>
@@ -353,9 +353,9 @@
 
     <Style x:Key="GameButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
-        <Setter Property="Width" Value="350"/>
-        <Setter Property="Height" Value="70"/>
-        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="Width" Value="230"/>
+        <Setter Property="Height" Value="90"/>
+        <Setter Property="FontSize" Value="32"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
