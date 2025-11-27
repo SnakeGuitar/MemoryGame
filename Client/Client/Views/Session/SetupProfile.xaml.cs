@@ -162,7 +162,7 @@ namespace Client.Views.Session
         {
             switch (messageKey)
             {
-                case "Global_Error_UsernameInvalid": // Reutilizamos esta clave
+                case "Global_Error_UsernameInvalid":
                     return Lang.Global_Error_InvalidUsername;
                 case "Global_Error_RegistrationNotFound":
                     return Lang.Global_Error_RegistrationNotFound;

@@ -94,7 +94,7 @@ namespace Client.Views
         {
             try
             {
-                byte[] avatarBytes = await _userServiceClient.GetUserAvatarAsync(UserSession.Username);
+                byte[] avatarBytes = await _userServiceClient.GetUserAvatarAsync(UserSession.Email);
 
                 if (avatarBytes != null && avatarBytes.Length > 0)
                 {
