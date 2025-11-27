@@ -35,9 +35,10 @@ namespace Server.LobbyService
             _callbackProvider = callbackProvider;
             _validator = validator;
 
+            _logger = logger;
             _stateManager = new LobbyStateManager(_logger);
             _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId));
-            _logger = logger;
+            
         }
 
         public GameLobbyService() : this(
