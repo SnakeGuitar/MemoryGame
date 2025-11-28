@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Security.Cryptography;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.SessionService
 {
@@ -44,6 +40,15 @@ namespace Server.SessionService
 
         [OperationContract]
         void LogoutGuest(string sessionToken);
+
+        [OperationContract]
+        ResponseDTO SendFriendRequest(string token, string username);
+
+        [OperationContract]
+        List<FriendRequestDTO> GetPendingRequests(string token);
+
+        [OperationContract]
+        ResponseDTO AnswerFriendRequest(string token, int requestId, bool accept);
     }
 
     [DataContract]
@@ -73,5 +78,27 @@ namespace Server.SessionService
         public string Username { get; set; }
         [DataMember]
         public string Email { get; set; }
+    }
+
+    [DataContract]
+    public class FriendDTO
+    {
+        [DataMember]
+        public string Username { get; set; }
+        [DataMember]
+        public byte[] Avatar { get; set; }
+        [DataMember]
+        public bool IsOnline { get; set; }
+    }
+
+    [DataContract]
+    public class FriendRequestDTO
+    {
+        [DataMember]
+        public int RequestId { get; set; }
+        [DataMember]
+        public string SenderUsername { get; set; }
+        [DataMember]
+        public byte[] SenderAvatar { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Server.SessionService
     {
         string CreateSessionToken(int userId);
         int? GetUserIdFromToken(string token);
+        bool IsUserOnline(string email);
     }
 
     public class SessionManager : ISessionManager
@@ -74,6 +75,16 @@ namespace Server.SessionService
 
                 _logger.LogInfo($"Created new session for userId {userId} with token: {token}");
                 return token;
+            }
+        }
+
+        public bool IsUserOnline(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return false;
+
+            using (var db = _dbFactory.Create())
+            {
+                return db.userSession.Any(s => s.user.email == email && s.expiresAt > DateTime.Now);
             }
         }
     }
