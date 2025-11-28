@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="memoryGameDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="memoryGameDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="card">
           <Key>
             <PropertyRef Name="cardId" />
@@ -21,6 +21,15 @@
           </Key>
           <Property Name="userId1" Type="int" Nullable="false" />
           <Property Name="userId2" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FriendRequest">
+          <Key>
+            <PropertyRef Name="requestId" />
+          </Key>
+          <Property Name="requestId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="senderId" Type="int" Nullable="false" />
+          <Property Name="receiverId" Type="int" Nullable="false" />
+          <Property Name="sentAt" Type="datetime" />
         </EntityType>
         <EntityType Name="inventory">
           <Key>
@@ -142,6 +151,30 @@
             </Principal>
             <Dependent Role="friend">
               <PropertyRef Name="userId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Receiver">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="receiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Sender">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="senderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -270,6 +303,7 @@
         <EntityContainer Name="memoryGameDBModelStoreContainer">
           <EntitySet Name="card" EntityType="Self.card" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="friend" EntityType="Self.friend" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FriendRequest" EntityType="Self.FriendRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="inventory" EntityType="Self.inventory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="match" EntityType="Self.match" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="matchHistory" EntityType="Self.matchHistory" Schema="dbo" store:Type="Tables" />
@@ -290,6 +324,14 @@
           <AssociationSet Name="FK_friend_user1" Association="Self.FK_friend_user1">
             <End Role="user" EntitySet="user" />
             <End Role="friend" EntitySet="friend" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Receiver" Association="Self.FK_FriendRequest_Receiver">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Sender" Association="Self.FK_FriendRequest_Sender">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
           </AssociationSet>
           <AssociationSet Name="FK_inventory_match" Association="Self.FK_inventory_match">
             <End Role="match" EntitySet="match" />
@@ -320,8 +362,7 @@
             <End Role="userSession" EntitySet="userSession" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="memoryGameDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -428,6 +469,8 @@
           <NavigationProperty Name="userSession" Relationship="Self.FK_userSession_user" FromRole="user" ToRole="userSession" />
           <NavigationProperty Name="user1" Relationship="Self.friend" FromRole="user" ToRole="user1" />
           <NavigationProperty Name="user2" Relationship="Self.friend" FromRole="user1" ToRole="user" />
+          <NavigationProperty Name="FriendRequest" Relationship="memoryGameDBModel.FK_FriendRequest_Receiver" FromRole="user" ToRole="FriendRequest" />
+          <NavigationProperty Name="FriendRequest1" Relationship="memoryGameDBModel.FK_FriendRequest_Sender" FromRole="user" ToRole="FriendRequest" />
         </EntityType>
         <EntityType Name="userSession">
           <Key>
@@ -623,6 +666,15 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="FriendRequest" EntityType="memoryGameDBModel.FriendRequest" />
+          <AssociationSet Name="FK_FriendRequest_Receiver" Association="memoryGameDBModel.FK_FriendRequest_Receiver">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Sender" Association="memoryGameDBModel.FK_FriendRequest_Sender">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -635,6 +687,41 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="FriendRequest">
+          <Key>
+            <PropertyRef Name="requestId" />
+          </Key>
+          <Property Name="requestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="senderId" Type="Int32" Nullable="false" />
+          <Property Name="receiverId" Type="Int32" Nullable="false" />
+          <Property Name="sentAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="user" Relationship="memoryGameDBModel.FK_FriendRequest_Receiver" FromRole="FriendRequest" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="memoryGameDBModel.FK_FriendRequest_Sender" FromRole="FriendRequest" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_FriendRequest_Receiver">
+          <End Type="memoryGameDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="memoryGameDBModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="receiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Sender">
+          <End Type="memoryGameDBModel.user" Role="user" Multiplicity="1" />
+          <End Type="memoryGameDBModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="senderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -779,6 +866,16 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="memoryGameDBModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="memoryGameDBModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="FriendRequest">
+            <EntityTypeMapping TypeName="memoryGameDBModel.FriendRequest">
+              <MappingFragment StoreEntitySet="FriendRequest">
+                <ScalarProperty Name="sentAt" ColumnName="sentAt" />
+                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
+                <ScalarProperty Name="senderId" ColumnName="senderId" />
+                <ScalarProperty Name="requestId" ColumnName="requestId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

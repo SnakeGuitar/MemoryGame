@@ -89,6 +89,9 @@
     <Compile Include="card.cs">
       <DependentUpon>memoryGameDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="FriendRequest.cs">
+      <DependentUpon>memoryGameDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="GameService\Core\GameDeck.cs" />
     <Compile Include="GameService\Core\GameNotifier.cs" />
     <Compile Include="GameService\Core\GameTurnTimer.cs" />
@@ -134,6 +137,9 @@
     <Compile Include="pendingRegistration.cs">
       <DependentUpon>memoryGameDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="SessionService\Core\AuthenticationCore.cs" />
+    <Compile Include="SessionService\Core\SocialCore.cs" />
+    <Compile Include="SessionService\Core\UserProfileCore.cs" />
     <Compile Include="SessionService\ISessionManager.cs" />
     <Compile Include="SessionService\IUserService.cs" />
     <Compile Include="SessionService\UserService.cs" />

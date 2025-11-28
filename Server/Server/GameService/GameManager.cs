@@ -9,13 +9,11 @@ namespace Server.GameService
 {
     public class GameManager
     {
-        // Core Components
         private readonly GameDeck _deck;
         private readonly GameNotifier _notifier;
         private readonly GameTurnTimer _turnTimer;
         private readonly object _gameLock = new object();
 
-        // Game State
         private readonly List<LobbyClient> _players;
         private readonly Dictionary<string, int> _scores;
         private readonly GameSettings _settings;

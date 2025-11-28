@@ -22,6 +22,8 @@ namespace Server
             this.userSession = new HashSet<userSession>();
             this.user1 = new HashSet<user>();
             this.user2 = new HashSet<user>();
+            this.FriendRequest = new HashSet<FriendRequest>();
+            this.FriendRequest1 = new HashSet<FriendRequest>();
         }
     
         public int userId { get; set; }
@@ -45,5 +47,9 @@ namespace Server
         public virtual ICollection<user> user1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user> user2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FriendRequest> FriendRequest { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FriendRequest> FriendRequest1 { get; set; }
     }
 }
