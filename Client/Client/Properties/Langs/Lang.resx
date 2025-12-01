@@ -174,7 +174,7 @@
   <data name="Global_Label_Score" xml:space="preserve">
     <value>Score</value>
   </data>
-  <data name="Global_Label_Timer" xml:space="preserve">
+  <data name="Global_Label_Time" xml:space="preserve">
     <value>Timer:</value>
   </data>
   <data name="Global_Title_Chat" xml:space="preserve">
@@ -473,5 +473,8 @@
   </data>
   <data name="Singleplayer_Title_Won" xml:space="preserve">
     <value>All Pairs Found! :D</value>
+  </data>
+  <data name="Global_Label_TimerLimit" xml:space="preserve">
+    <value>Timer Limit:</value>
   </data>
 </root>

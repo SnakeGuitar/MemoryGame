@@ -396,9 +396,18 @@ namespace Client.Properties.Langs {
         /// <summary>
         ///   Busca una cadena traducida similar a Timer:.
         /// </summary>
-        public static string Global_Label_Timer {
+        public static string Global_Label_Time {
             get {
-                return ResourceManager.GetString("Global_Label_Timer", resourceCulture);
+                return ResourceManager.GetString("Global_Label_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Timer Limit:.
+        /// </summary>
+        public static string Global_Label_TimerLimit {
+            get {
+                return ResourceManager.GetString("Global_Label_TimerLimit", resourceCulture);
             }
         }
         
