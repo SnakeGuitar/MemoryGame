@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.SessionService.Core;
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -49,6 +50,12 @@ namespace Server.SessionService
 
         [OperationContract]
         ResponseDTO AnswerFriendRequest(string token, int requestId, bool accept);
+
+        [OperationContract]
+        List<MatchHistoryDTO> GetMatchHistory(string token);
+
+        [OperationContract]
+        ResponseDTO ReportUser(string token, string targetUser, int matchId);
     }
 
     [DataContract]
@@ -100,5 +107,22 @@ namespace Server.SessionService
         public string SenderUsername { get; set; }
         [DataMember]
         public byte[] SenderAvatar { get; set; }
+    }
+
+    [DataContract]
+    public class MatchHistoryDTO
+    {
+        [DataMember] public int MatchId { get; set; }
+        [DataMember] public DateTime Date { get; set; }
+        [DataMember] public int Score { get; set; }
+        [DataMember] public string WinnerName { get; set; }
+    }
+
+    [DataContract]
+    public class PenaltyDTO
+    {
+        [DataMember] public int Type { get; set; }
+        [DataMember] public DateTime EndDate { get; set; }
+        [DataMember] public string Reason { get; set; }
     }
 }

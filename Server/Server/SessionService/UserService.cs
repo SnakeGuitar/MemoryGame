@@ -16,6 +16,8 @@ namespace Server.SessionService
         private readonly AuthenticationCore _authenticationCore;
         private readonly UserProfileCore _userProfileCore;
         private readonly SocialCore _socialCore;
+        private readonly StatisticsCore _statisticsCore;
+        private readonly PenaltyCore _penaltyCore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserService"/> class.
@@ -32,6 +34,8 @@ namespace Server.SessionService
             _authenticationCore = new AuthenticationCore(dbFactory, security, session, notification, new Logger(typeof(AuthenticationCore)));
             _userProfileCore = new UserProfileCore(dbFactory, new Logger(typeof(UserProfileCore)), session, security);
             _socialCore = new SocialCore(dbFactory, session, new Logger(typeof(SocialCore)));
+            _statisticsCore = new StatisticsCore(dbFactory, session, new Logger(typeof(StatisticsCore)));
+            _penaltyCore = new PenaltyCore(dbFactory, session, new Logger(typeof(PenaltyCore)));
         }
 
         // === Authentication ===
@@ -215,6 +219,16 @@ namespace Server.SessionService
         public ResponseDTO RemoveFriend(string token, string username)
         {
             return _socialCore.RemoveFriend(token, username);
+        }
+
+        public List<MatchHistoryDTO> GetMatchHistory(string token)
+        {
+            return _statisticsCore.GetMatchHistory(token);
+        }
+
+        public ResponseDTO ReportUser(string token, string targetUser, int matchId)
+        {
+            return _penaltyCore.ReportUser(token, targetUser, matchId);
         }
     }
 }

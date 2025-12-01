@@ -28,7 +28,7 @@ namespace Server.LobbyService
         [OperationContract(IsOneWay = true)]
         void ShowCard(int cardIndex, string imageIdentifier);
         [OperationContract(IsOneWay = true)]
-        void HideCards(int cardIndex, int cardIndex2);
+        void HideCards(int cardIndex1, int cardIndex2);
         [OperationContract(IsOneWay = true)]
         void CardFlipped(int cardIndex, int cardIndex2);
         [OperationContract(IsOneWay = true)]

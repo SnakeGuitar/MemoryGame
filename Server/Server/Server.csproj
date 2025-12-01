@@ -138,7 +138,9 @@
       <DependentUpon>memoryGameDB.tt</DependentUpon>
     </Compile>
     <Compile Include="SessionService\Core\AuthenticationCore.cs" />
+    <Compile Include="SessionService\Core\PenaltyCore.cs" />
     <Compile Include="SessionService\Core\SocialCore.cs" />
+    <Compile Include="SessionService\Core\StatisticsCore.cs" />
     <Compile Include="SessionService\Core\UserProfileCore.cs" />
     <Compile Include="SessionService\ISessionManager.cs" />
     <Compile Include="SessionService\IUserService.cs" />
