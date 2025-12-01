@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Client.Views.Singleplayer
 
         private void ButtonEasyDifficulty_Click(object sender, RoutedEventArgs e)
         {
-            var playGameSingleplayer = new PlayGameSingleplayer();
+            var playGameSingleplayer = new PlayGameSingleplayer(DifficultyPresets.Easy);
             playGameSingleplayer.WindowState = this.WindowState;
             playGameSingleplayer.Owner = this;
             playGameSingleplayer.Show();
@@ -36,7 +37,7 @@ namespace Client.Views.Singleplayer
 
         private void ButtonNormalDifficulty_Click(object sender, RoutedEventArgs e)
         {
-            var playGameSingleplayer = new PlayGameSingleplayer();
+            var playGameSingleplayer = new PlayGameSingleplayer(DifficultyPresets.Normal);
             playGameSingleplayer.WindowState = this.WindowState;
             playGameSingleplayer.Owner = this;
             playGameSingleplayer.Show();
@@ -45,7 +46,7 @@ namespace Client.Views.Singleplayer
 
         private void ButtonHardDifficulty_Click(object sender, RoutedEventArgs e)
         {
-            var playGameSingleplayer = new PlayGameSingleplayer();
+            var playGameSingleplayer = new PlayGameSingleplayer(DifficultyPresets.Hard);
             playGameSingleplayer.WindowState = this.WindowState;
             playGameSingleplayer.Owner = this;
             playGameSingleplayer.Show();
