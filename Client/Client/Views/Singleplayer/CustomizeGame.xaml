@@ -59,7 +59,7 @@
                                    Style="{StaticResource FormUnitLabelStyle}"/>
                             </Grid>
 
-                            <Label Content="{x:Static language:Lang.Global_Label_Timer}" 
+                            <Label Content="{x:Static language:Lang.Global_Label_TimerLimit}" 
                                Style="{StaticResource RegisterLabelStyle}"/>
 
                             <Slider x:Name="TimerSlider" 

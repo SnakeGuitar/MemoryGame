@@ -39,7 +39,7 @@
 
                             <Button Content="{x:Static language:Lang.Global_Button_Join}" 
                                     Style="{StaticResource FormPrimaryButtonStyle}"
-                                    Click="ButtonJoinLobby_Click" Width="244"/>
+                                    Click="ButtonJoinLobby_Click" Width="257"/>
 
                         </StackPanel>
                     </Border>

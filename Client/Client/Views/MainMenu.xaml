@@ -18,7 +18,7 @@
         <Grid Grid.Column="1">
 
             <Image Name="BackgroundImage"
-                   Source="/Client;component/Resources/Images/BackGrounds/mainMenu.png"
+                   Source="/Client;component/Resources/Images/Backgrounds/mainMenu.png"
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Center" 
                    Stretch="UniformToFill"/>
