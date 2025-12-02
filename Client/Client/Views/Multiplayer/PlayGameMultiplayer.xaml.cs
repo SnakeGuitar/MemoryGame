@@ -19,7 +19,7 @@ namespace Client.Views.Multiplayer
     /// </summary>
     public partial class PlayGameMultiplayer : Window
     {
-        public PlayGameMultiplayer()
+        public PlayGameMultiplayer(List<GameLobbyServiceReference.CardInfo> cards)
         {
             InitializeComponent();
         }

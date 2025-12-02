@@ -1,6 +1,7 @@
 ﻿using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Properties.Langs;
+using Client.Utilities;
 using Client.Views.Multiplayer;
 using System;
 using System.Collections.Generic;
@@ -26,148 +27,164 @@ namespace Client.Views.Lobby
     /// <summary>
     /// Lógica de interacción para HostLobby.xaml
     /// </summary>
-    public partial class HostLobby : Window, IGameLobbyServiceCallback
+    public partial class HostLobby : Window
     {
-        private readonly InstanceContext _callBackContext;
-        private readonly GameLobbyServiceClient _lobbyClient;
-
         private readonly String _lobbyCode;
+        private bool _isConnected = false;
 
-        private bool isConnected = false;
-        private int selectedCardCount = 16;
-        private int secondsPerTurn = 30;
         private readonly Label[] _playerLabels;
 
+        private int _selectedCardCount = 16;
+        private int _secondsPerTurn = 30;
 
         public HostLobby()
         {
-            _lobbyCode = Helpers.ClientHelper.GenerateGameCode();
-
-            _callBackContext = new InstanceContext(this);
-            _lobbyClient = new GameLobbyServiceClient(_callBackContext);
-
             InitializeComponent();
+            
+            _lobbyCode = ClientHelper.GenerateGameCode();
 
-            this.Closed += Window_Closed;
+            if (FindName("LabelGameCode") is Label labelGameCode)
+            {
+                labelGameCode.Content = _lobbyCode; 
+            }
 
             _playerLabels = new Label[]
             {
-                LabelPlayer1,
-                LabelPlayer2,
-                LabelPlayer3,
-                LabelPlayer4
-
+                FindName("LabelPlayer1") as Label,
+                FindName("LabelPlayer2") as Label,
+                FindName("LabelPlayer3") as Label,
+                FindName("LabelPlayer4") as Label
             };
 
-            LabelGameCode.Content = _lobbyCode;
-            SetupComboBox();
-            SliderSecondsPerTurn.Value = secondsPerTurn;
+            ConfigureEvents();
+        }
+
+        private void ConfigureEvents()
+        {
+            GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
+            GameServiceManager.Instance.GameStarted += OnGameStarted;
+            GameServiceManager.Instance.ChatMessageReceived += OnChatMessageReceived;
+            GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
+        }
+
+        private void UnsubscribeEvents()
+        {
+            GameServiceManager.Instance.PlayerListUpdated -= OnPlayerListUpdated;
+            GameServiceManager.Instance.GameStarted -= OnGameStarted;
+            GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
+            GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                bool success = await _lobbyClient.JoinLobbyAsync(
+                bool success = await GameServiceManager.Instance.Client.JoinLobbyAsync(
                     UserSession.SessionToken,
                     _lobbyCode,
                     false,
                     null
                     );
+
                 if (success)
                 {
-                    isConnected = true;
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    _isConnected = true;
+                    var msgBox = new Controls.CustomMessageBox(
                         Lang.Global_Title_Success,
                         Lang.Lobby_Message_CreateSuccess,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
+                        this, Controls.CustomMessageBox.MessageBoxType.Success);
                     msgBox.ShowDialog();
                 }
                 else
                 {
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    var msgBox = new Controls.CustomMessageBox(
                         Lang.Global_Title_Error,
                         Lang.HostLobby_Error_CreateFailed,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, Controls.CustomMessageBox.MessageBoxType.Error);
                     msgBox.ShowDialog();
-
                     this.Close();
                 }
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
             }
         }
 
-        private void SetupComboBox()
-        {
-            var cardOptions = new List<string> { "16", "24", "30" };
-            ComboBoxNumberOfCards.ItemsSource = cardOptions;
-            ComboBoxNumberOfCards.SelectedIndex = 0;
-        }
-
         private void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
         {
-            var multiplayerGame = new PlayGameMultiplayer();
-            multiplayerGame.WindowState = this.WindowState;
-            multiplayerGame.Owner = this;
-            multiplayerGame.Show();
-            this.Hide();
-        }
-
-        private async void ButtonSendMessageToChat_Click(object sender, RoutedEventArgs e)
-        {
-            var messageBox = this.FindName("TextBoxChat") as TextBox;
-            if (messageBox == null || string.IsNullOrWhiteSpace(messageBox.Text))
+            if (!_isConnected)
             {
                 return;
             }
 
             try
             {
-                await _lobbyClient.SendChatMessageAsync(messageBox.Text);
-                messageBox.Clear();
+                var settings = new GameSettings
+                {
+                    CardCount = _selectedCardCount,
+                    TurnTimeSeconds = _secondsPerTurn
+                };
+                GameServiceManager.Instance.Client.StartGame(settings);
             }
-            catch (CommunicationException ex)
+            catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Chat Error]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                string errorMessage = LocalizationHelper.GetString(ex);
+                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
+                var msgBox = new Controls.CustomMessageBox(
+                    Lang.Global_Title_AppError, errorMessage,
+                    this, Controls.CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
-            }
 
+                this.Close();
+            }
+        }
+
+        private async void ButtonSendMessageToChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ChatTextBox") is TextBox txtMsg && !string.IsNullOrWhiteSpace(txtMsg.Text))
+            {
+                string msgToSend = txtMsg.Text;
+                txtMsg.Text = string.Empty;
+
+                try
+                {
+                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error enviando mensaje: " + ex.Message);
+                }
+            }
         }
 
         private void ButtonSendInvitationToFriend_Click(object sender, RoutedEventArgs e)
@@ -178,9 +195,9 @@ namespace Client.Views.Lobby
 
             if (validationCode != ValidationCode.Success)
             {
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_Error, Helpers.LocalizationHelper.GetString(validationCode),
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Warning);
+                    this, Controls.CustomMessageBox.MessageBoxType.Warning);
                 msgBox.ShowDialog();
 
                 return;
@@ -188,15 +205,15 @@ namespace Client.Views.Lobby
 
             if (Helpers.EmailHelper.SendInvitationEmail(friendEmail, _lobbyCode))
             {
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_Success,
                     string.Format(Lang.HostLobby_Message_InviteSent, friendEmail),
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
+                    this, Controls.CustomMessageBox.MessageBoxType.Success);
                 msgBox.ShowDialog();
             }
             else
             {
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new Controls.CustomMessageBox(
                     Lang.Global_Title_Error,
                     string.Format(Lang.HostLobby_Error_InviteFailed, friendEmail),
                     this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
@@ -204,16 +221,94 @@ namespace Client.Views.Lobby
             }
         }
 
-        private void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
+        private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            Window multiplayerMenu = this.Owner;
-
-            if (multiplayerMenu != null)
+            if (_isConnected)
             {
-                multiplayerMenu.WindowState = this.WindowState;
-                multiplayerMenu.Show();
+                try
+                {
+                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    _isConnected = false;
+                }
+                catch { }
             }
             this.Close();
+        }
+
+        private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var label in _playerLabels)
+                {
+                    if (label != null) label.Content = string.Empty;
+                }
+
+                for (int i = 0; i < players.Length && i < _playerLabels.Length; i++)
+                {
+                    if (_playerLabels[i] != null)
+                    {
+                        _playerLabels[i].Content = players[i].Name;
+                    }
+                }
+            });
+        }
+
+        private void OnChatMessageReceived(string sender, string message, bool isNotification)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (FindName("ChatListBox") is ListBox chatBox)
+                {
+                    string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
+                    chatBox.Items.Add(formattedMessage);
+
+                    if (chatBox.Items.Count > 0)
+                    {
+                        chatBox.ScrollIntoView(chatBox.Items[chatBox.Items.Count - 1]);
+                    }
+                }
+            });
+        }
+
+        private void OnPlayerLeft(string playerName)
+        {
+            
+        }
+
+        private void OnGameStarted(List<CardInfo> cards)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                UnsubscribeEvents();
+
+                var multiplayerGame = new PlayGameMultiplayer(cards);
+                multiplayerGame.WindowState = this.WindowState;
+                multiplayerGame.Owner = this;
+                multiplayerGame.Show();
+                this.Close();
+            });
+        }
+
+        protected override async void OnClosed(EventArgs e)
+        {
+            UnsubscribeEvents();
+
+            if (this.Owner != null)
+            {
+                this.Owner.Show();
+            }
+
+            if (_isConnected)
+            {
+                try
+                {
+                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                }
+                catch { }
+            }
+
+            base.OnClosed(e);
         }
 
         private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -221,7 +316,7 @@ namespace Client.Views.Lobby
             if (ComboBoxNumberOfCards.SelectedIndex >= 0)
             {
                 var selectedText = ComboBoxNumberOfCards.SelectedItem.ToString();
-                selectedCardCount = int.Parse(selectedText);
+                _selectedCardCount = int.Parse(selectedText);
             }
 
         }
@@ -233,119 +328,16 @@ namespace Client.Views.Lobby
                 LabelTimerValue.Content = e.NewValue.ToString("F0");
             }
 
-            secondsPerTurn = (int)SliderSecondsPerTurn.Value;
+            _secondsPerTurn = (int)SliderSecondsPerTurn.Value;
+        }
+
+        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
         }
 
         private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-        }
-
-        // LOBBYCALLBACKS
-
-        public void ReceiveChatMessage(string senderName, string message, bool isNotification)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                // 5. I18N
-                string displayMessage = isNotification ?
-                    $"{Lang.Lobby_Notification_System} {message}" :
-                    $"{senderName}: {message}";
-                ChatListBox.Items.Add(displayMessage);
-                ChatListBox.ScrollIntoView(ChatListBox.Items[ChatListBox.Items.Count - 1]);
-            });
-        }
-
-        public void UpdatePlayerList(LobbyPlayerInfo[] players)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                foreach (var label in _playerLabels)
-                {
-                    label.Content = "";
-                    label.Visibility = Visibility.Collapsed;
-                }
-
-                for (int i = 0; i < Math.Min(players.Length, _playerLabels.Length); i++)
-                {
-                    var player = players[i];
-                    _playerLabels[i].Content = $"{player.Name} {(player.IsGuest ? Lang.Global_Player_GuestSuffix : "")}";
-                    _playerLabels[i].Visibility = Visibility.Visible;
-                }
-            });
-        }
-
-        // END LOBBYCALLBACKS
-
-        public void PlayerJoined(string playerNmae, bool isGuest)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void playerLeft(string playerNmae)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            if (isConnected)
-            {
-                _ = Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (_lobbyClient.State == CommunicationState.Opened)
-                        {
-                            await _lobbyClient.LeaveLobbyAsync();
-                            _lobbyClient.Close();
-                        }
-                    }
-                    catch
-                    {
-                        _lobbyClient?.Abort();
-                    }
-                });
-            }
-            else
-            {
-                _lobbyClient?.Abort();
-            }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            Window owner = this.Owner;
-            if (owner != null)
-            {
-                owner.Show();
-            }
-            if (isConnected)
-            {
-                _ = System.Threading.Tasks.Task.Run(async () =>
-                {
-                    try
-                    {
-                        if (_lobbyClient.State == CommunicationState.Opened)
-                        {
-                            await _lobbyClient.LeaveLobbyAsync();
-                            _lobbyClient.Close();
-                        }
-                    }
-                    catch
-                    {
-                        _lobbyClient?.Abort();
-                    }
-                });
-            }
-            else
-            {
-                _lobbyClient?.Abort();
-            }
-
-            base.OnClosed(e);
         }
     }
-
 }
 
