@@ -24,11 +24,13 @@ namespace Server.LobbyService
         private readonly ILobbyCallbackProvider _callbackProvider;
         private readonly IGameLobbyServiceValidator _validator;
         private readonly ILoggerManager _logger;
+        private readonly IDbContextFactory _dbFactory;
         public GameLobbyService(ISecurityService securityService,
             ISessionManager sessionManager,
             ILobbyCallbackProvider callbackProvider,
             IGameLobbyServiceValidator validator,
-            ILoggerManager logger)
+            ILoggerManager logger,
+            IDbContextFactory dbFactory)
         {
             _sessionManager = sessionManager;
             _securityService = securityService;
@@ -38,7 +40,7 @@ namespace Server.LobbyService
             _logger = logger;
             _stateManager = new LobbyStateManager(_logger);
             _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId));
-            
+            _dbFactory = dbFactory;
         }
 
         public GameLobbyService() : this(
@@ -46,7 +48,8 @@ namespace Server.LobbyService
             new SessionManager(),
             new WcfLobbyCallbackProvider(),
             new GameLobbyServiceValidator(),
-            new Logger(typeof(GameLobbyService)))
+            new Logger(typeof(GameLobbyService)),
+            new DbContextFactory())
         {
         }
 

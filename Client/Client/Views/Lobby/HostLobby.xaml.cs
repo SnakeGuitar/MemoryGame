@@ -5,21 +5,11 @@ using Client.Utilities;
 using Client.Views.Multiplayer;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Client.Helpers.ValidationHelper;
 
 namespace Client.Views.Lobby
@@ -34,18 +24,21 @@ namespace Client.Views.Lobby
 
         private readonly Label[] _playerLabels;
 
+        private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
+        private bool _isGameStarting = false;
+
         private int _selectedCardCount = 16;
         private int _secondsPerTurn = 30;
 
         public HostLobby()
         {
             InitializeComponent();
-            
+
             _lobbyCode = ClientHelper.GenerateGameCode();
 
             if (FindName("LabelGameCode") is Label labelGameCode)
             {
-                labelGameCode.Content = _lobbyCode; 
+                labelGameCode.Content = _lobbyCode;
             }
 
             _playerLabels = new Label[]
@@ -149,6 +142,16 @@ namespace Client.Views.Lobby
 
             try
             {
+                if (_selectedCardCount < 4 || _selectedCardCount > 36 || _selectedCardCount % 2 != 0)
+                {
+                    _selectedCardCount = 16;
+                }
+
+                if (_secondsPerTurn < 5)
+                { 
+                    _secondsPerTurn = 10;
+                }
+
                 var settings = new GameSettings
                 {
                     CardCount = _selectedCardCount,
@@ -156,7 +159,7 @@ namespace Client.Views.Lobby
                 };
                 GameServiceManager.Instance.Client.StartGame(settings);
             }
-            catch (Exception ex)
+            catch (FaultException ex)
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
@@ -239,6 +242,8 @@ namespace Client.Views.Lobby
         {
             Dispatcher.Invoke(() =>
             {
+                _currentPlayers = players.ToList();
+
                 foreach (var label in _playerLabels)
                 {
                     if (label != null) label.Content = string.Empty;
@@ -273,7 +278,7 @@ namespace Client.Views.Lobby
 
         private void OnPlayerLeft(string playerName)
         {
-            
+
         }
 
         private void OnGameStarted(List<CardInfo> cards)
@@ -281,12 +286,12 @@ namespace Client.Views.Lobby
             Dispatcher.Invoke(() =>
             {
                 UnsubscribeEvents();
+                _isGameStarting = true;
 
-                var multiplayerGame = new PlayGameMultiplayer(cards);
-                multiplayerGame.WindowState = this.WindowState;
+                var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
                 multiplayerGame.Owner = this;
                 multiplayerGame.Show();
-                this.Close();
+                this.Hide();
             });
         }
 
@@ -299,7 +304,7 @@ namespace Client.Views.Lobby
                 this.Owner.Show();
             }
 
-            if (_isConnected)
+            if (_isConnected && !_isGameStarting)
             {
                 try
                 {

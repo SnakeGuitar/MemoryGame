@@ -22,6 +22,9 @@ namespace Client.Views.Lobby
         private bool _isConnected = false;
         private readonly Label[] _playerLabels;
 
+        private bool _isGameStarting = false;
+        private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
+
         public Lobby(string lobbyCode)
         {
             InitializeComponent();
@@ -158,7 +161,6 @@ namespace Client.Views.Lobby
             }
         }
 
-
         private void ButtonReady_Click(object sender, RoutedEventArgs e)
         {
 
@@ -173,6 +175,8 @@ namespace Client.Views.Lobby
         {
             Dispatcher.Invoke(() =>
             {
+                _currentPlayers = players.ToList();
+
                 foreach (var label in _playerLabels)
                 {
                     if (label != null) label.Content = string.Empty;
@@ -197,7 +201,6 @@ namespace Client.Views.Lobby
                     string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
                     chatBox.Items.Add(formattedMessage);
 
-                    // Auto-scroll
                     if (chatBox.Items.Count > 0)
                     {
                         chatBox.ScrollIntoView(chatBox.Items[chatBox.Items.Count - 1]);
@@ -208,16 +211,22 @@ namespace Client.Views.Lobby
 
         private void OnPlayerLeft(string name)
         {
-            // Opcional: Mostrar mensaje temporal
         }
 
         private void OnGameStarted(List<CardInfo> cards)
         {
             Dispatcher.Invoke(() =>
             {
+                _isGameStarting = true;
                 UnsubscribeEvents();
 
-                PlayGameMultiplayer gameWindow = new PlayGameMultiplayer(cards);
+                PlayGameMultiplayer gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
+
+                if (this.Owner != null)
+                {
+                    gameWindow.Owner = this.Owner;
+                }
+
                 gameWindow.Show();
                 this.Close();
             });
@@ -227,20 +236,22 @@ namespace Client.Views.Lobby
         {
             UnsubscribeEvents();
 
-
-            if (this.Owner != null)
+            if (!_isGameStarting)
             {
-                this.Owner.Show();
-            }
-
-            if (_isConnected)
-            {
-                try
+                if (this.Owner != null)
                 {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
-                    _isConnected = false;
+                    this.Owner.Show(); // Mostrar ventana anterior
                 }
-                catch { }
+
+                if (_isConnected)
+                {
+                    try
+                    {
+                        await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                        _isConnected = false;
+                    }
+                    catch { }
+                }
             }
 
             base.OnClosed(e);

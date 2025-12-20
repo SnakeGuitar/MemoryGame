@@ -1,5 +1,4 @@
-﻿using log4net.Repository;
-using Server.Shared;
+﻿using Server.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +9,23 @@ namespace Server.GameService.Core
     {
         private readonly List<GameCard> _cards;
         private readonly Random _random;
-        private readonly Shared.ILoggerManager _logger;
+        private readonly ILoggerManager _logger;
+
+        private readonly List<String> _availableImages = new List<String>()
+        {
+            "africa", "ana", "ari", "blanca", "emily", "fer",
+            "katya", "lala", "linda", "paul", "saddy", "sara"
+        };
 
         public GameDeck(int cardCount, ILoggerManager logger)
         {
-            _cards = GenerateDeck(cardCount);
-            _random = new Random();
             _logger = logger;
+            _random = new Random();
+            _cards = GenerateDeck(cardCount);
         }
 
         public GameDeck(int cardCount) : this(
-            cardCount, 
+            cardCount,
             new Logger(typeof(GameDeck)))
         {
         }
@@ -50,10 +55,12 @@ namespace Server.GameService.Core
 
             for (int i = 0; i < pairCount; i++)
             {
+                string imageName = _availableImages[i % _availableImages.Count];
+
                 var info = new CardInfo
                 {
                     CardId = i,
-                    ImageIdentifier = $"card_{i}"
+                    ImageIdentifier = imageName
                 };
                 cardInfos.Add(info);
                 cardInfos.Add(info);

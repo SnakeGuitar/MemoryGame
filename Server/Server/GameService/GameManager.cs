@@ -24,6 +24,8 @@ namespace Server.GameService
 
         public bool IsGameInProgress { get; private set; }
 
+        public event Action<string, Dictionary<string, int>> GameEnded;
+
         public GameManager(List<LobbyClient> players, GameSettings settings)
         {
             _players = players;
@@ -121,6 +123,7 @@ namespace Server.GameService
             string playerName = "";
             bool isGameOver = false;
             string winnerName = "";
+            string winnerId = "";
 
             lock (_gameLock)
             {
@@ -131,7 +134,7 @@ namespace Server.GameService
                 if (isGameOver)
                 {
                     var maxScore = _scores.Values.Max();
-                    var winnerId = _scores.First(x => x.Value == maxScore).Key;
+                    winnerId = _scores.First(x => x.Value == maxScore).Key;
                     winnerName = _players.First(p => p.Id == winnerId).Name;
                     IsGameInProgress = false;
                 }
@@ -143,6 +146,7 @@ namespace Server.GameService
             {
                 _notifier.NotifyWinner(winnerName);
                 _turnTimer.Dispose();
+                GameEnded?.Invoke(winnerId, new Dictionary<string, int>(_scores));
             }
             else
             {

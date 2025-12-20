@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -73,10 +72,34 @@ namespace Client.Utilities
             gameTimer.Start();
         }
 
-        private  List<Card> GenerateDeck(int numberOfCards)
+        private List<Card> GenerateDeck(int numberOfCards)
         {
             List<string> imagePaths = new List<string>
-            { //Path of images to be used on cards
+            {
+                "/Client;component/Resources/Images/Cards/Fronts/Color/africa.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/ana.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/ari.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/blanca.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/emily.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/fer.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/katya.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/lala.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/linda.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/paul.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/saddy.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Color/sara.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/africa.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/ana.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/ari.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/blanca.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/emily.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/fer.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/katya.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/lala.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/linda.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/paul.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/saddy.png",
+                "/Client;component/Resources/Images/Cards/Fronts/Normal/sara.png"
             };
 
             List<Card> deck = new List<Card>();

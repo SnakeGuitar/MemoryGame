@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:52000/" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:52000" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="965ee139-827d-47e5-b306-0bb8bb7b718a" SourceId="1" SourceUrl="http://localhost:52000/?disco" />
-    <MetadataFile FileName="UserService.wsdl" MetadataType="Wsdl" ID="6d5a47f4-9ebf-4bfc-84cb-cc0512950d47" SourceId="1" SourceUrl="http://localhost:52000/?wsdl" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="97d5d225-3725-4015-b0e9-4a49ce642ca7" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd1" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="64a30474-757b-42bc-88ad-bb36601845ec" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd0" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="c634dcdb-b3d3-4062-96a2-f99c656adc06" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd2" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="b5782814-ee02-47fc-8043-a10664e332c7" SourceId="1" SourceUrl="http://localhost:52000/?disco" />
+    <MetadataFile FileName="UserService.wsdl" MetadataType="Wsdl" ID="6e461525-30f1-4994-8042-dcd27b674ead" SourceId="1" SourceUrl="http://localhost:52000/?wsdl" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="2e4a4308-4ca9-4116-bd23-8e55271b5150" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd1" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="3c1f40ae-a874-40a0-8413-6b64198348d6" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd0" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="9e691cdf-e43b-4841-b98c-4f4759526925" SourceId="1" SourceUrl="http://localhost:52000/?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

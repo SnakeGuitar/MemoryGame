@@ -12,7 +12,8 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server.LobbyService" />
+      <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Server.GameService" />
+      <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Server.LobbyService" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IGameLobbyService_JoinLobby_InputMessage">
@@ -33,17 +34,53 @@
   <wsdl:message name="IGameLobbyService_SendChatMessage_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendChatMessageResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameLobbyService_StartGame_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartGame" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_StartGame_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartGameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_FlipCard_InputMessage">
+    <wsdl:part name="parameters" element="tns:FlipCard" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_FlipCard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FlipCardResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameLobbyService_ReceiveChatMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveChatMessage" />
   </wsdl:message>
   <wsdl:message name="IGameLobbyService_PlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:PlayerJoined" />
   </wsdl:message>
-  <wsdl:message name="IGameLobbyService_playerLeft_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:playerLeft" />
+  <wsdl:message name="IGameLobbyService_PlayerLeft_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:PlayerLeft" />
   </wsdl:message>
   <wsdl:message name="IGameLobbyService_UpdatePlayerList_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:UpdatePlayerList" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_GameStarted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GameStarted" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_UpdateTurn_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTurn" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_ShowCard_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ShowCard" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_HideCards_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:HideCards" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_CardFlipped_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:CardFlipped" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_SetCardsAsMatched_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:SetCardsAsMatched" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_UpdateScore_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:UpdateScore" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_GameFinished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:GameFinished" />
   </wsdl:message>
   <wsdl:portType name="IGameLobbyService">
     <wsdl:operation name="JoinLobby">
@@ -58,17 +95,49 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/SendChatMessage" message="tns:IGameLobbyService_SendChatMessage_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/SendChatMessageResponse" message="tns:IGameLobbyService_SendChatMessage_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/StartGame" message="tns:IGameLobbyService_StartGame_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/StartGameResponse" message="tns:IGameLobbyService_StartGame_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FlipCard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/FlipCard" message="tns:IGameLobbyService_FlipCard_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/FlipCardResponse" message="tns:IGameLobbyService_FlipCard_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="ReceiveChatMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/ReceiveChatMessage" message="tns:IGameLobbyService_ReceiveChatMessage_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="PlayerJoined">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/PlayerJoined" message="tns:IGameLobbyService_PlayerJoined_OutputCallbackMessage" />
     </wsdl:operation>
-    <wsdl:operation name="playerLeft">
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/playerLeft" message="tns:IGameLobbyService_playerLeft_OutputCallbackMessage" />
+    <wsdl:operation name="PlayerLeft">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/PlayerLeft" message="tns:IGameLobbyService_PlayerLeft_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdatePlayerList">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/UpdatePlayerList" message="tns:IGameLobbyService_UpdatePlayerList_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameStarted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/GameStarted" message="tns:IGameLobbyService_GameStarted_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTurn">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/UpdateTurn" message="tns:IGameLobbyService_UpdateTurn_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ShowCard">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/ShowCard" message="tns:IGameLobbyService_ShowCard_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="HideCards">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/HideCards" message="tns:IGameLobbyService_HideCards_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CardFlipped">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/CardFlipped" message="tns:IGameLobbyService_CardFlipped_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetCardsAsMatched">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/SetCardsAsMatched" message="tns:IGameLobbyService_SetCardsAsMatched_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateScore">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/UpdateScore" message="tns:IGameLobbyService_UpdateScore_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GameFinished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/GameFinished" message="tns:IGameLobbyService_GameFinished_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IGameLobbyService" type="tns:IGameLobbyService">
@@ -101,6 +170,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="StartGame">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/StartGame" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlipCard">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/FlipCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="ReceiveChatMessage">
       <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/ReceiveChatMessage" style="document" />
       <wsdl:output>
@@ -113,8 +200,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="playerLeft">
-      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/playerLeft" style="document" />
+    <wsdl:operation name="PlayerLeft">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/PlayerLeft" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -125,12 +212,60 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GameStarted">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/GameStarted" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTurn">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/UpdateTurn" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShowCard">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/ShowCard" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="HideCards">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/HideCards" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CardFlipped">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/CardFlipped" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetCardsAsMatched">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/SetCardsAsMatched" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateScore">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/UpdateScore" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GameFinished">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/GameFinished" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GameLobbyService">
     <wsdl:port name="NetTcpBinding_IGameLobbyService" binding="tns:NetTcpBinding_IGameLobbyService">
-      <soap12:address location="net.tcp://localhost:53001/" />
+      <soap12:address location="net.tcp://0.0.0.0:53001/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:53001/</wsa10:Address>
+        <wsa10:Address>net.tcp://0.0.0.0:53001/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

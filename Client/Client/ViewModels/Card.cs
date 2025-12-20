@@ -12,8 +12,8 @@ namespace Client.ViewModels
     {
         public int Id { get; set; }
         public int PairId { get; set; }
-        private readonly string _frontimagePath;
-        private readonly string _backimagePath;
+        private string _frontimagePath;
+        private readonly string _backimagePath = "/Client;component/Resources/Images/Cards/Backs/default.png";
         private bool isFlipped;
         private bool isMatched;
 
@@ -22,8 +22,14 @@ namespace Client.ViewModels
             Id = id;
             PairId = pairId;
             _frontimagePath = frontImage;
-            isFlipped = false;
-            isMatched = false;
+            IsFlipped = false;
+            IsMatched = false;
+        }
+
+        public void SetFrontImage(string imagePath)
+        {
+            _frontimagePath = imagePath;
+            OnPropertyChanged(nameof(DisplayImage));
         }
 
         public bool IsFlipped
@@ -50,6 +56,7 @@ namespace Client.ViewModels
                     isMatched = value;
                     OnPropertyChanged();
                     OnPropertyChanged(nameof(IsMatched));
+                    OnPropertyChanged(nameof(DisplayImage));
                 }
             }
         }

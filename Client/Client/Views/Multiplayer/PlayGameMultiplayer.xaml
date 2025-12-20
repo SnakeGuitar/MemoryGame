@@ -4,18 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Views.Multiplayer"
-        mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
-        
-        Title="PlayGameMultiplayer" 
+        mc:Ignorable="d"
+        Title="Memory Game - Multiplayer" 
         MinHeight="720" MinWidth="1280"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource PrimaryTextColor}">
 
     <Window.Resources>
-
-        <Style x:Key="GameBoardStyle" TargetType="ItemsControl">
-        </Style>
-
         <Style x:Key="PanelContainerStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource GreenGame}"/>
             <Setter Property="CornerRadius" Value="10"/>
@@ -28,111 +24,146 @@
             <Setter Property="Background" Value="#99000000"/>
             <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="14"/>
         </Style>
 
+        <Style x:Key="GameBoardStyle" TargetType="ItemsControl">
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
-    <Grid Background="{StaticResource PrimaryTextColor}">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0" Margin="10,0,10,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+            <Label Content="{x:Static language:Lang.Global_Title_Players}" 
+                   Style="{StaticResource MainMenuTitleStyle}" Grid.Row="0" HorizontalAlignment="Center"/>
 
-                <Label Content="{x:Static language:Lang.Global_Title_Players}" 
-                       Style="{StaticResource MainMenuTitleStyle}" Grid.Row="0"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                <StackPanel>
+                    <Border x:Name="BorderP1" Style="{StaticResource PanelContainerStyle}">
+                        <StackPanel>
+                            <Label x:Name="LabelP1Name" Content="Jugador 1" Style="{StaticResource PlayerNameStyle}" FontWeight="Bold" FontSize="18"/>
+                            <Label x:Name="LabelP1Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                            <Label x:Name="LabelP1Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                        </StackPanel>
+                    </Border>
 
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="PlayerInfoPanel" HorizontalAlignment="Stretch">
+                    <Border x:Name="BorderP2" Style="{StaticResource PanelContainerStyle}">
+                        <StackPanel>
+                            <Label x:Name="LabelP2Name" Content="Jugador 2" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
+                            <Label x:Name="LabelP2Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                            <Label x:Name="LabelP2Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                        </StackPanel>
+                    </Border>
 
-                        <Border Style="{StaticResource PanelContainerStyle}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Label x:Name="LabelP1Name" Content="Jugador 1" Style="{StaticResource PlayerNameStyle}"/>
-                                <StackPanel Grid.Row="1">
-                                    <Label x:Name="LabelP1Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                                    <Label x:Name="LabelP1Time" Content="Tiempo: 30s" Style="{StaticResource PlayerStatStyle}"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                    <Border x:Name="BorderP3" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
+                        <StackPanel>
+                            <Label x:Name="LabelP3Name" Content="Jugador 3" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
+                            <Label x:Name="LabelP3Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                            <Label x:Name="LabelP3Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                        </StackPanel>
+                    </Border>
 
-                        <Border Style="{StaticResource PanelContainerStyle}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Label x:Name="LabelP2Name" Content="Jugador 2" Style="{StaticResource PlayerNameStyle}"/>
-                                <StackPanel Grid.Row="1">
-                                    <Label x:Name="LabelP2Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                                    <Label x:Name="LabelP2Time" Content="Tiempo: 30s" Style="{StaticResource PlayerStatStyle}"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
-
-            <Grid Grid.Column="1" Margin="10,0,10,10">
-                <Border Style="{StaticResource BoardContainerStyle}">
-                    <ItemsControl x:Name="GameBoard" 
-                                  Style="{StaticResource GameBoardStyle}"/>
-                </Border>
-            </Grid>
-
-            <Grid Grid.Column="2" Margin="10,0,10,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <Border Grid.Row="0" Style="{StaticResource PanelContainerStyle}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" MinHeight="135.25"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}"/>
-
-                        <ListBox x:Name="ChatListBox" Style="{StaticResource ChatListBoxStyle}" Grid.Row="1" Margin="5,5,5,5" />
-
-                        <Grid Grid.Row="2" VerticalAlignment="Center" Margin="5,0,5,0" Height="40">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" />
-                            <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" />
-                        </Grid>
-                    </Grid>
-                </Border>
-
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-                    <Button Content="{x:Static language:Lang.Global_Button_Settings}" 
-                            Style="{StaticResource GameButtonStyle}"
-                            Click="ButtonSettings_Click"/>
-                    <Button Content="{x:Static language:Lang.Global_Button_Back}" 
-                            Style="{StaticResource GameButtonStyle}"
-                            Click="ButtonBackToMenu_Click"/>
+                    <Border x:Name="BorderP4" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
+                        <StackPanel>
+                            <Label x:Name="LabelP4Name" Content="Jugador 4" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
+                            <Label x:Name="LabelP4Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                            <Label x:Name="LabelP4Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
-            </Grid>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="10">
+            <Border Style="{StaticResource BoardContainerStyle}" CornerRadius="10" Background="#33000000">
+                <ItemsControl x:Name="GameBoard" Style="{StaticResource GameBoardStyle}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Width="80" Height="110" Margin="5" Click="Card_Click" Tag="{Binding Id}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Grid>
+                                                        <Border x:Name="CardBorder" CornerRadius="5" BorderBrush="White" BorderThickness="2" Background="Transparent">
+                                                            <Image Source="{Binding DisplayImage}" Stretch="UniformToFill"/>
+                                                        </Border>
+                                                        <Border x:Name="MatchedOverlay" Background="#6600FF00" CornerRadius="5" Visibility="Collapsed"/>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="CardBorder" Property="BorderBrush" Value="Yellow"/>
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsMatched}" Value="True">
+                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                            <Setter TargetName="MatchedOverlay" Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsFlipped}" Value="True">
+                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                        </DataTrigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Column="2" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Style="{StaticResource PanelContainerStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}" HorizontalAlignment="Center"/>
+                    <ListBox x:Name="ChatListBox" Grid.Row="1" Style="{StaticResource ChatListBoxStyle}" Margin="0,10,0,10"/>
+                    <Grid Grid.Row="2" Height="40">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" VerticalContentAlignment="Center"/>
+                        <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" Width="60" Margin="5,0,0,0"/>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button Content="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource GameButtonStyle}" Click="ButtonSettings_Click" Margin="0,0,0,10"/>
+                <Button Content="{x:Static language:Lang.Global_Button_Back}" Style="{StaticResource GameButtonStyle}" Click="ButtonBackToMenu_Click"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

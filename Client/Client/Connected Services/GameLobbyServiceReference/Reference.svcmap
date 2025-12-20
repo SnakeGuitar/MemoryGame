@@ -22,11 +22,12 @@
     <MetadataSource Address="http://localhost:53000" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="126b8019-f2c4-4873-a079-891ffdf8ed58" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd2" />
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="a327ae39-2006-43d3-a455-438210f2320f" SourceId="1" SourceUrl="http://localhost:53000/?disco" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="75b19c78-c02e-4ab0-bf8a-4959265c8b59" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd0" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="7bd5c01c-e3b8-454a-a3e1-40a7fd541362" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd1" />
-    <MetadataFile FileName="GameLobbyService.wsdl" MetadataType="Wsdl" ID="17532a0c-479a-48e3-9ed8-02d534367875" SourceId="1" SourceUrl="http://localhost:53000/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="82bf0fe3-5a74-4b20-b213-0636003443a4" SourceId="1" SourceUrl="http://localhost:53000/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="ffde8b70-19d5-4f47-b7f6-16e708bea4e5" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd0" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="57f71c4a-a9f8-4d76-8c83-1bcaccd0b1cb" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd3" />
+    <MetadataFile FileName="GameLobbyService.wsdl" MetadataType="Wsdl" ID="4add4301-5366-4c53-bffe-822395992c7a" SourceId="1" SourceUrl="http://localhost:53000/?wsdl" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="1fa37d90-7d1d-4d08-8f66-e79ec2796080" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd1" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="552f11c0-d5a7-4b64-9f3a-631d54f3e3e7" SourceId="1" SourceUrl="http://localhost:53000/?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
