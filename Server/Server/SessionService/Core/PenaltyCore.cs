@@ -1,9 +1,7 @@
 ﻿using Server.Shared;
 using System;
-using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.SessionService.Core
 {
@@ -25,26 +23,39 @@ namespace Server.SessionService.Core
             var reporterId = _sessionManager.GetUserIdFromToken(token);
             if (reporterId == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
 
-            using (var db = _dbFactory.Create())
+            try
             {
-                var target = db.user.FirstOrDefault(u => u.username == targetUsername);
-                if (target == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
-
-                var penalty = new penalty
+                using (var db = _dbFactory.Create())
                 {
-                    type = 1,
-                    duration = DateTime.UtcNow.AddHours(24),
-                    matchId = matchId
-                };
+                    var target = db.user.FirstOrDefault(u => u.username == targetUsername);
+                    if (target == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
 
-                db.penalty.Add(penalty);
-                db.SaveChanges();
+                    var penalty = new penalty
+                    {
+                        type = 1,
+                        duration = DateTime.UtcNow.AddHours(24),
+                        matchId = matchId
+                    };
 
-                target.penaltyId = penalty.penaltyId;
-                db.SaveChanges();
+                    db.penalty.Add(penalty);
+                    db.SaveChanges();
 
-                _logger.LogInfo($"User {targetUsername} was penalized by {reporterId} in match {matchId}");
-                return new ResponseDTO { Success = true };
+                    target.penaltyId = penalty.penaltyId;
+                    db.SaveChanges();
+
+                    _logger.LogInfo($"User {targetUsername} was penalized by {reporterId} in match {matchId}");
+                    return new ResponseDTO { Success = true };
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"ReportUser Database Error by reporterId {reporterId.Value} on target {targetUsername}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_Database" };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"ReportUser Error by reporterId {reporterId.Value} on target {targetUsername}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_Unknown" };
             }
         }
     }

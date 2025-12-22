@@ -1,10 +1,8 @@
 ﻿using Server.Shared;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.SessionService.Core
 {
@@ -26,23 +24,36 @@ namespace Server.SessionService.Core
             var userId = _sessionManager.GetUserIdFromToken(token);
             if (userId == null) return null;
 
-            using (var db = _dbFactory.Create())
+            try
             {
-                var history = db.matchHistory
-                    .Include("match")
-                    .Include("user")
-                    .Where(m => m.userId == userId.Value)
-                    .OrderByDescending(m => m.match.endDateTime)
-                    .ToList();
-
-                return history.Select(h => new MatchHistoryDTO
+                using (var db = _dbFactory.Create())
                 {
-                    MatchId = h.matchId,
-                    Date = h.match.endDateTime,
-                    Score = h.score,
+                    var history = db.matchHistory
+                        .Include("match")
+                        .Include("user")
+                        .Where(m => m.userId == userId.Value)
+                        .OrderByDescending(m => m.match.endDateTime)
+                        .ToList();
 
-                    WinnerName = db.user.Find(h.winnerId)?.username ?? "Unknown"
-                }).ToList();
+                    return history.Select(h => new MatchHistoryDTO
+                    {
+                        MatchId = h.matchId,
+                        Date = h.match.endDateTime,
+                        Score = h.score,
+
+                        WinnerName = db.user.Find(h.winnerId)?.username ?? "Unknown"
+                    }).ToList();
+                }
+            }
+            catch (EntityException ex)
+            {
+                _loggerManager.LogError($"GetMatchHistory Database Error for userId {userId.Value}: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"GetMatchHistory Error for userId {userId.Value}: {ex.Message}");
+                return null;
             }
         }
     }

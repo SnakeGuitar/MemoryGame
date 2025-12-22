@@ -2,6 +2,7 @@
 using Server.Validator;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,6 +90,11 @@ namespace Server.SessionService.Core
                     return new ResponseDTO { Success = true };
                 }
             }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"StartRegistration Database Error for email {email}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"StartRegistration Error for email {email}: {ex.Message}");
@@ -130,6 +136,11 @@ namespace Server.SessionService.Core
                     _logger.LogInfo($"Resent verification code to email: {email}");
                     return new ResponseDTO { Success = true };
                 }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"ResendVerificationCode Database Error for email {email}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Database" };
             }
             catch (Exception ex)
             {
@@ -182,6 +193,11 @@ namespace Server.SessionService.Core
                     return new ResponseDTO { Success = true };
                 }
             }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"VerifyRegistration Database Error for email {email}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"VerifyRegistration Error for email {email}: {ex.Message}");
@@ -231,6 +247,11 @@ namespace Server.SessionService.Core
                     };
                 }
             }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"FinalizeRegistration Database Error for email {email}: {ex.Message}");
+                return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"FinalizeRegistration Error for email {email}: {ex.Message}");
@@ -276,6 +297,11 @@ namespace Server.SessionService.Core
                         User = userDto
                     };
                 }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"Login Database Error for email {email}: {ex.Message}");
+                return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Database" };
             }
             catch (Exception ex)
             {
@@ -336,6 +362,11 @@ namespace Server.SessionService.Core
                     };
                 }
             }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"LoginAsGuest Database Error for username {guestUsername}: {ex.Message}");
+                return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
             catch (Exception ex)
             {
                 _logger.LogError($"LoginAsGuest Error for username {guestUsername}: {ex.Message}");
@@ -366,6 +397,10 @@ namespace Server.SessionService.Core
                         _logger.LogInfo($"Guest user with userId: {userId.Value} logged out and removed.");
                     }
                 }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"LogoutGuest Database Error: {ex.Message}");
             }
             catch (Exception ex)
             {
