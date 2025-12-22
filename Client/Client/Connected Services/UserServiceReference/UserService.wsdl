@@ -4,27 +4,6 @@
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
-        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
-          <wsp:Policy>
-            <sp:TransportToken>
-              <wsp:Policy>
-                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
-                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
-                </msf:WindowsTransportSecurity>
-              </wsp:Policy>
-            </sp:TransportToken>
-            <sp:AlgorithmSuite>
-              <wsp:Policy>
-                <sp:Basic256 />
-              </wsp:Policy>
-            </sp:AlgorithmSuite>
-            <sp:Layout>
-              <wsp:Policy>
-                <sp:Strict />
-              </wsp:Policy>
-            </sp:Layout>
-          </wsp:Policy>
-        </sp:TransportBinding>
         <wsaw:UsingAddressing />
       </wsp:All>
     </wsp:ExactlyOne>
@@ -78,6 +57,18 @@
   <wsdl:message name="IUserService_UpdateUserAvatar_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateUserAvatarResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserService_ChangePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePassword" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ChangePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ChangeUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsername" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ChangeUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsernameResponse" />
+  </wsdl:message>
   <wsdl:message name="IUserService_LoginAsGuest_InputMessage">
     <wsdl:part name="parameters" element="tns:LoginAsGuest" />
   </wsdl:message>
@@ -89,6 +80,36 @@
   </wsdl:message>
   <wsdl:message name="IUserService_LogoutGuest_OutputMessage">
     <wsdl:part name="parameters" element="tns:LogoutGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetPendingRequests_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPendingRequests" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetPendingRequests_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPendingRequestsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AnswerFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:AnswerFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AnswerFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AnswerFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetMatchHistory_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMatchHistory" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetMatchHistory_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMatchHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ReportUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReportUser" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_ReportUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReportUserResponse" />
   </wsdl:message>
   <wsdl:portType name="IUserService">
     <wsdl:operation name="StartRegistration">
@@ -119,6 +140,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/UpdateUserAvatar" message="tns:IUserService_UpdateUserAvatar_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/UpdateUserAvatarResponse" message="tns:IUserService_UpdateUserAvatar_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ChangePassword" message="tns:IUserService_ChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ChangePasswordResponse" message="tns:IUserService_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ChangeUsername" message="tns:IUserService_ChangeUsername_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ChangeUsernameResponse" message="tns:IUserService_ChangeUsername_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LoginAsGuest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LoginAsGuest" message="tns:IUserService_LoginAsGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LoginAsGuestResponse" message="tns:IUserService_LoginAsGuest_OutputMessage" />
@@ -126,6 +155,26 @@
     <wsdl:operation name="LogoutGuest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LogoutGuest" message="tns:IUserService_LogoutGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LogoutGuestResponse" message="tns:IUserService_LogoutGuest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/SendFriendRequest" message="tns:IUserService_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/SendFriendRequestResponse" message="tns:IUserService_SendFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPendingRequests">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetPendingRequests" message="tns:IUserService_GetPendingRequests_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetPendingRequestsResponse" message="tns:IUserService_GetPendingRequests_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AnswerFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/AnswerFriendRequest" message="tns:IUserService_AnswerFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/AnswerFriendRequestResponse" message="tns:IUserService_AnswerFriendRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMatchHistory">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetMatchHistory" message="tns:IUserService_GetMatchHistory_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetMatchHistoryResponse" message="tns:IUserService_GetMatchHistory_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReportUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ReportUser" message="tns:IUserService_ReportUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ReportUserResponse" message="tns:IUserService_ReportUser_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IUserService" type="tns:IUserService">
@@ -194,6 +243,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/ChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/ChangeUsername" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LoginAsGuest">
       <soap12:operation soapAction="http://tempuri.org/IUserService/LoginAsGuest" style="document" />
       <wsdl:input>
@@ -212,15 +279,57 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/SendFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPendingRequests">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/GetPendingRequests" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AnswerFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/AnswerFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMatchHistory">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/GetMatchHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReportUser">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/ReportUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="UserService">
     <wsdl:port name="NetTcpBinding_IUserService" binding="tns:NetTcpBinding_IUserService">
-      <soap12:address location="net.tcp://localhost:52001/" />
+      <soap12:address location="net.tcp://0.0.0.0:52001/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://localhost:52001/</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>LAPTOP-3NG7T8AU\alexa</Upn>
-        </Identity>
+        <wsa10:Address>net.tcp://0.0.0.0:52001/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>
