@@ -1,0 +1,29 @@
+﻿<Window x:Class="Client.Views.Controls.ReportUserDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Report Player" Height="250" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Background="#1E1E1E" WindowStyle="None">
+
+    <Border BorderBrush="#FF5555" BorderThickness="2" CornerRadius="5" Margin="5">
+        <Grid>
+            <StackPanel VerticalAlignment="Center" Margin="20">
+                <Label Content="REPORT PLAYER" FontSize="20" FontWeight="Bold" Foreground="#FF5555" HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Are you sure you want to report this player for bad behavior?" 
+                           Foreground="White" TextWrapping="Wrap" TextAlignment="Center" Margin="0,10,0,20" FontSize="14"/>
+
+                <TextBlock x:Name="TextTargetUser" Text="Target: PlayerName" 
+                           Foreground="LightGray" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Yes, Report" Click="ButtonReport_Click" 
+                            Width="120" Height="35" Margin="10" Background="#FF5555" Foreground="White"/>
+
+                    <Button Content="Cancel" Click="ButtonCancel_Click" 
+                            Width="120" Height="35" Margin="10"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

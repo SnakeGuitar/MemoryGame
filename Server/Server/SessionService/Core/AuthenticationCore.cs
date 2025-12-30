@@ -279,7 +279,27 @@ namespace Server.SessionService.Core
                         System.Threading.Thread.Sleep(100);
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
-                    ;
+
+                    if (user.penaltyId != null && user.penalty != null)
+                    {
+                        if (user.penalty.duration > DateTime.UtcNow)
+                        {
+                            _logger.LogInfo($"Login attempt blocked due to active penalty for email: {email}");
+                            return new LoginResponse
+                            {
+                                Success = false,
+                                MessageKey = "Global_Error_AccountPenalized"
+                            };
+                        }
+                        else
+                        {
+                            user.penaltyId = null;
+                            user.penalty = null;
+                            db.SaveChanges();
+                            _logger.LogInfo($"Expired penalty cleared for email: {email}");
+                        }
+                    }
+
                     string token = _sessionManager.CreateSessionToken(user.userId);
 
                     var userDto = new UserDTO
