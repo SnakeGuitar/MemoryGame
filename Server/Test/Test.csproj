@@ -101,10 +101,10 @@
     <Compile Include="Helpers\WcfConnectivityTestHelper.cs" />
     <Compile Include="InfraestructureTest\WcfConnectivityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionServiceTest\CoreTest\AuthenticationCoreTest.cs" />
     <Compile Include="SessionServiceTest\SessionManagerTest.cs" />
     <Compile Include="SharedTest\LoggerTest.cs" />
     <Compile Include="´ValidatorTest\ImageValidatorTest.cs" />
-    <Compile Include="SessionServiceTest\UserServiceTest.cs" />
     <Compile Include="SharedTest\SecurityServiceTest.cs" />
     <Compile Include="SharedTest\NotificationServiceTest.cs" />
     <Compile Include="´ValidatorTest\GameLobbyServiceValidatorTest.cs" />

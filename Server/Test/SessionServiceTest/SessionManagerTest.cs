@@ -26,7 +26,7 @@ namespace Test.SessionServiceTest
             _mockDbFactory = new Mock<IDbContextFactory>();
             _mockContext = new Mock<memoryGameDBEntities>();
             _mockDbFactory.Setup(f => f.Create()).Returns(_mockContext.Object);
-            _sessionManager = new SessionManager(_mockDbFactory.Object, _loggerManager);
+            _sessionManager = new SessionManager(_mockDbFactory.Object, (ILoggerManager)_mockLogger);
         }
 
         [TestMethod]
@@ -71,7 +71,6 @@ namespace Test.SessionServiceTest
         [TestMethod]
         public void GetUserIdFromToken_ExpiredToken_ReturnsNull()
         {
-            // ARRANGE
             string token = "expiredtoken";
             var sessions = new List<userSession>
             {
@@ -79,16 +78,11 @@ namespace Test.SessionServiceTest
                 {
                     token = token,
                     userId = 5,
-                    expiresAt = DateTime.Now.AddMinutes(-10) // Pasado: Expirado
+                    expiresAt = DateTime.Now.AddMinutes(-10)
                 }
             }.AsQueryable();
-
             _mockContext.Setup(c => c.userSession).Returns(DbContextMockFactory.CreateMockDbSet(sessions).Object);
-
-            // ACT
             int? result = _sessionManager.GetUserIdFromToken(token);
-
-            // ASSERT
             Assert.IsNull(result, "Debe devolver null si la sesión expiró");
         }
     }
