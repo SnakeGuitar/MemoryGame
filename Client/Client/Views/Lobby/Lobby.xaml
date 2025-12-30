@@ -6,14 +6,12 @@
         xmlns:local="clr-namespace:Client.Views.Lobby"
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
-        
         Title="Lobby" 
         MinHeight="720" MinWidth="1280" 
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
 
     <Grid Background="{StaticResource BackgroundColor}">
-
         <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -32,9 +30,8 @@
                            Style="{StaticResource LobbyTitleStyle}" Grid.Row="0"/>
 
                     <ListBox x:Name="PlayersListBox" 
-                         Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1"
-                         Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}">
-
+                             Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1"
+                             Margin="10" d:ItemsSource="{d:SampleData ItemCount=5}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="5">
@@ -44,15 +41,15 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label Content="{Binding Username}" 
-                                       Grid.Column="0"
-                                       FontFamily="{StaticResource BodyFont}" 
-                                       FontSize="18"
-                                       Padding="5,0,0,0"
-                                       Foreground="{StaticResource AccentForegroundColor}"/>
+                                           Grid.Column="0"
+                                           FontFamily="{StaticResource BodyFont}" 
+                                           FontSize="18"
+                                           Padding="5,0,0,0"
+                                           Foreground="{StaticResource AccentForegroundColor}"/>
 
                                     <Label Grid.Column="1" 
-                                       FontFamily="{StaticResource BodyFont}"
-                                       FontSize="16" FontWeight="Bold">
+                                           FontFamily="{StaticResource BodyFont}"
+                                           FontSize="16" FontWeight="Bold">
                                         <Label.Style>
                                             <Style TargetType="Label">
                                                 <Setter Property="Content" Value="No Listo"/>
@@ -69,7 +66,6 @@
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-
                     </ListBox>
 
                     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -77,11 +73,17 @@
                                 Style="{StaticResource MenuExitLobbyButtonStyle}" 
                                 Margin="0,10,5,10"
                                 Click="ButtonBackToMainMenu_Click"/>
+
+                        <Button Content="Invite Friend" 
+                                Style="{StaticResource PrimaryLobbyButtonStyle}" 
+                                Background="#2196F3"
+                                Margin="5,10,5,10"
+                                Click="ButtonInvite_Click"/>
+
                         <Button Content="{x:Static language:Lang.Global_Button_Ready}" 
                                 Style="{StaticResource PrimaryLobbyButtonStyle}" 
                                 Margin="5,10,0,10"
                                 Click="ButtonReady_Click"/>
-
                     </StackPanel>
                 </Grid>
 
@@ -96,8 +98,8 @@
                            Style="{StaticResource LobbyTitleStyle}" Grid.Row="0"/>
 
                     <ListBox x:Name="ChatListBox" 
-                         Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1" 
-                         Margin="10,10,10,28" d:ItemsSource="{d:SampleData ItemCount=5}" />
+                             Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1" 
+                             Margin="10,10,10,28" d:ItemsSource="{d:SampleData ItemCount=5}" />
 
                     <Grid Grid.Row="2" VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
@@ -106,11 +108,11 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox x:Name="ChatTextBox" 
-                             Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" Margin="0,0,0,10" />
+                                 Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" Margin="0,0,0,10" />
 
                         <Button Content="{x:Static language:Lang.Global_Button_Send}" 
-                            Style="{StaticResource SendButtonStyle}" Grid.Column="1" 
-                            Click="ButtonSendMessageChat_Click" Margin="10,0,0,10" />
+                                Style="{StaticResource SendButtonStyle}" Grid.Column="1" 
+                                Click="ButtonSendMessageChat_Click" Margin="10,0,0,10" />
                     </Grid>
                 </Grid>
             </Grid>
