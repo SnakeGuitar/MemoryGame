@@ -43,10 +43,16 @@ namespace Server.SessionService
         void LogoutGuest(string sessionToken);
 
         [OperationContract]
+        List<FriendDTO> GetFriendsList(string token);
+
+        [OperationContract]
         ResponseDTO SendFriendRequest(string token, string username);
 
         [OperationContract]
         List<FriendRequestDTO> GetPendingRequests(string token);
+
+        [OperationContract]
+        ResponseDTO RemoveFriend(string token, string username);
 
         [OperationContract]
         ResponseDTO AnswerFriendRequest(string token, int requestId, bool accept);

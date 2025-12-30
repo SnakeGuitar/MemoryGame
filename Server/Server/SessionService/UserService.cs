@@ -205,7 +205,7 @@ namespace Server.SessionService
         /// </summary>
         /// <param name="token">Authentication token of the user.</param>
         /// <returns>A list of <see cref="FriendDTO"/> objects representing the user's friends.</returns>
-        public List<FriendDTO> GetFriendList(string token)
+        public List<FriendDTO> GetFriendsList(string token)
         {
             return _socialCore.GetFriendsList(token);
         }
