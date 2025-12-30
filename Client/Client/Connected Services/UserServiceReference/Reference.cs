@@ -193,6 +193,83 @@ namespace Client.UserServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FriendDTO", Namespace="http://schemas.datacontract.org/2004/07/Server.SessionService")]
+    [System.SerializableAttribute()]
+    public partial class FriendDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] AvatarField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsOnlineField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] Avatar {
+            get {
+                return this.AvatarField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AvatarField, value) != true)) {
+                    this.AvatarField = value;
+                    this.RaisePropertyChanged("Avatar");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsOnline {
+            get {
+                return this.IsOnlineField;
+            }
+            set {
+                if ((this.IsOnlineField.Equals(value) != true)) {
+                    this.IsOnlineField = value;
+                    this.RaisePropertyChanged("IsOnline");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FriendRequestDTO", Namespace="http://schemas.datacontract.org/2004/07/Server.SessionService")]
     [System.SerializableAttribute()]
     public partial class FriendRequestDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -431,6 +508,12 @@ namespace Client.UserServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogoutGuest", ReplyAction="http://tempuri.org/IUserService/LogoutGuestResponse")]
         System.Threading.Tasks.Task LogoutGuestAsync(string sessionToken);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetFriendsList", ReplyAction="http://tempuri.org/IUserService/GetFriendsListResponse")]
+        Client.UserServiceReference.FriendDTO[] GetFriendsList(string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetFriendsList", ReplyAction="http://tempuri.org/IUserService/GetFriendsListResponse")]
+        System.Threading.Tasks.Task<Client.UserServiceReference.FriendDTO[]> GetFriendsListAsync(string token);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/SendFriendRequest", ReplyAction="http://tempuri.org/IUserService/SendFriendRequestResponse")]
         Client.UserServiceReference.ResponseDTO SendFriendRequest(string token, string username);
         
@@ -442,6 +525,12 @@ namespace Client.UserServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetPendingRequests", ReplyAction="http://tempuri.org/IUserService/GetPendingRequestsResponse")]
         System.Threading.Tasks.Task<Client.UserServiceReference.FriendRequestDTO[]> GetPendingRequestsAsync(string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RemoveFriend", ReplyAction="http://tempuri.org/IUserService/RemoveFriendResponse")]
+        Client.UserServiceReference.ResponseDTO RemoveFriend(string token, string username);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RemoveFriend", ReplyAction="http://tempuri.org/IUserService/RemoveFriendResponse")]
+        System.Threading.Tasks.Task<Client.UserServiceReference.ResponseDTO> RemoveFriendAsync(string token, string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/AnswerFriendRequest", ReplyAction="http://tempuri.org/IUserService/AnswerFriendRequestResponse")]
         Client.UserServiceReference.ResponseDTO AnswerFriendRequest(string token, int requestId, bool accept);
@@ -577,6 +666,14 @@ namespace Client.UserServiceReference {
             return base.Channel.LogoutGuestAsync(sessionToken);
         }
         
+        public Client.UserServiceReference.FriendDTO[] GetFriendsList(string token) {
+            return base.Channel.GetFriendsList(token);
+        }
+        
+        public System.Threading.Tasks.Task<Client.UserServiceReference.FriendDTO[]> GetFriendsListAsync(string token) {
+            return base.Channel.GetFriendsListAsync(token);
+        }
+        
         public Client.UserServiceReference.ResponseDTO SendFriendRequest(string token, string username) {
             return base.Channel.SendFriendRequest(token, username);
         }
@@ -591,6 +688,14 @@ namespace Client.UserServiceReference {
         
         public System.Threading.Tasks.Task<Client.UserServiceReference.FriendRequestDTO[]> GetPendingRequestsAsync(string token) {
             return base.Channel.GetPendingRequestsAsync(token);
+        }
+        
+        public Client.UserServiceReference.ResponseDTO RemoveFriend(string token, string username) {
+            return base.Channel.RemoveFriend(token, username);
+        }
+        
+        public System.Threading.Tasks.Task<Client.UserServiceReference.ResponseDTO> RemoveFriendAsync(string token, string username) {
+            return base.Channel.RemoveFriendAsync(token, username);
         }
         
         public Client.UserServiceReference.ResponseDTO AnswerFriendRequest(string token, int requestId, bool accept) {

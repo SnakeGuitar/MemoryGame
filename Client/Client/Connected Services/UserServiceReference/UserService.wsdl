@@ -81,6 +81,12 @@
   <wsdl:message name="IUserService_LogoutGuest_OutputMessage">
     <wsdl:part name="parameters" element="tns:LogoutGuestResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserService_GetFriendsList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendsList" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetFriendsList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendsListResponse" />
+  </wsdl:message>
   <wsdl:message name="IUserService_SendFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SendFriendRequest" />
   </wsdl:message>
@@ -92,6 +98,12 @@
   </wsdl:message>
   <wsdl:message name="IUserService_GetPendingRequests_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPendingRequestsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
   </wsdl:message>
   <wsdl:message name="IUserService_AnswerFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:AnswerFriendRequest" />
@@ -156,6 +168,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LogoutGuest" message="tns:IUserService_LogoutGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LogoutGuestResponse" message="tns:IUserService_LogoutGuest_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetFriendsList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetFriendsList" message="tns:IUserService_GetFriendsList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetFriendsListResponse" message="tns:IUserService_GetFriendsList_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SendFriendRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/SendFriendRequest" message="tns:IUserService_SendFriendRequest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/SendFriendRequestResponse" message="tns:IUserService_SendFriendRequest_OutputMessage" />
@@ -163,6 +179,10 @@
     <wsdl:operation name="GetPendingRequests">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetPendingRequests" message="tns:IUserService_GetPendingRequests_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetPendingRequestsResponse" message="tns:IUserService_GetPendingRequests_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/RemoveFriend" message="tns:IUserService_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/RemoveFriendResponse" message="tns:IUserService_RemoveFriend_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AnswerFriendRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/AnswerFriendRequest" message="tns:IUserService_AnswerFriendRequest_InputMessage" />
@@ -279,6 +299,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetFriendsList">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/GetFriendsList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SendFriendRequest">
       <soap12:operation soapAction="http://tempuri.org/IUserService/SendFriendRequest" style="document" />
       <wsdl:input>
@@ -290,6 +319,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetPendingRequests">
       <soap12:operation soapAction="http://tempuri.org/IUserService/GetPendingRequests" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/RemoveFriend" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

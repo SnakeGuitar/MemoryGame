@@ -26,6 +26,20 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="UserDTO" nillable="true" type="tns:UserDTO" />
+  <xs:complexType name="ArrayOfFriendDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendDTO" nillable="true" type="tns:FriendDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFriendDTO" nillable="true" type="tns:ArrayOfFriendDTO" />
+  <xs:complexType name="FriendDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Avatar" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="IsOnline" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendDTO" nillable="true" type="tns:FriendDTO" />
   <xs:complexType name="ArrayOfFriendRequestDTO">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendRequestDTO" nillable="true" type="tns:FriendRequestDTO" />
