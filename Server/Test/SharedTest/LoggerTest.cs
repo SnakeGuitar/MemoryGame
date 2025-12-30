@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Server.Shared;
 
 namespace Test.SharedTest
 {
@@ -7,8 +7,17 @@ namespace Test.SharedTest
     public class LoggerTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Constructor_WhenCalled_DoesNotThrowException()
         {
+            try
+            {
+                var logger = new Logger(typeof(LoggerTest));
+            }
+            catch
+            {
+                Assert.Fail("Logger constructor threw an exception.");
+            }
+            Assert.IsTrue(true);
         }
     }
 }

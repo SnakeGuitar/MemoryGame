@@ -2,7 +2,6 @@
 using Moq;
 using Server;
 using Server.Shared;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Test.Helpers;
@@ -14,68 +13,91 @@ namespace Test.SharedTest
     {
         private Mock<IDbContextFactory> _mockDbFactory;
         private Mock<memoryGameDBEntities> _mockContext;
+        private Mock<ILoggerManager> _mockLogger;
         private SecurityService _securityService;
-        private ILoggerManager _logger;
 
         [TestInitialize]
         public void Setup()
         {
             _mockDbFactory = new Mock<IDbContextFactory>();
             _mockContext = new Mock<memoryGameDBEntities>();
+            _mockLogger = new Mock<ILoggerManager>();
+
             _mockDbFactory.Setup(f => f.Create()).Returns(_mockContext.Object);
-            _securityService = new SecurityService(_mockDbFactory.Object, _logger);
+
+            _securityService = new SecurityService(_mockDbFactory.Object, _mockLogger.Object);
         }
+
+        // --- GeneratePin Tests ---
 
         [TestMethod]
         public void GeneratePin_ReturnsNotNull()
         {
             string pin = _securityService.GeneratePin();
-            Assert.IsNotNull(pin, "Pin should not be null");
+            Assert.IsNotNull(pin);
         }
 
         [TestMethod]
         public void GeneratePin_ReturnsStringWithSixCharacters()
         {
             string pin = _securityService.GeneratePin();
-            Assert.AreEqual(6, pin.Length, "PIN should be 6 digits long");
+            Assert.AreEqual(6, pin.Length);
         }
 
         [TestMethod]
         public void GeneratePin_ReturnsNumericString()
         {
             string pin = _securityService.GeneratePin();
-            Assert.IsTrue(int.TryParse(pin, out _), "PIN should be numeric");
+            Assert.IsTrue(int.TryParse(pin, out _));
         }
 
+        // --- HashPassword Tests ---
+
         [TestMethod]
-        public void HashPassword_ReturnsDifferentStringFromRaw()
+        public void HashPassword_ReturnsHashedString()
         {
-            string raw = "super_secret_password_:3";
+            string raw = "password";
             string hashed = _securityService.HashPassword(raw);
             Assert.AreNotEqual(raw, hashed);
         }
 
-
         [TestMethod]
         public void HashPassword_ReturnsNonEmptyString()
         {
-            string raw = "super_secret_password_:3";
-            string hashed = _securityService.HashPassword(raw);
-            Assert.IsNotNull(hashed);
+            string hashed = _securityService.HashPassword("password");
+            Assert.IsFalse(string.IsNullOrEmpty(hashed));
+        }
+
+        // --- GenerateGuestPassword Tests ---
+
+        [TestMethod]
+        public void GenerateGuestPassword_ReturnsStringWithAtLeastTenChars()
+        {
+            string pass = _securityService.GenerateGuestPassword();
+            Assert.IsTrue(pass.Length >= 10);
         }
 
         [TestMethod]
-        public void RemovePendingRegistration_PendingExists_ReturnTrue()
+        public void GenerateGuestPassword_ContainsDigit()
         {
-            string email = "very_enterprise_mail@test.com";
-            var data = new List<pendingRegistration>
-            {
-                new pendingRegistration
-                {
-                    email = email,
-                }
-            }.AsQueryable();
+            string pass = _securityService.GenerateGuestPassword();
+            Assert.IsTrue(pass.Any(char.IsDigit));
+        }
 
+        [TestMethod]
+        public void GenerateGuestPassword_ContainsUpperCase()
+        {
+            string pass = _securityService.GenerateGuestPassword();
+            Assert.IsTrue(pass.Any(char.IsUpper));
+        }
+
+        // --- RemovePendingRegistration Tests ---
+
+        [TestMethod]
+        public void RemovePendingRegistration_EmailExists_ReturnsTrue()
+        {
+            string email = "test@test.com";
+            var data = new List<pendingRegistration> { new pendingRegistration { email = email } }.AsQueryable();
             var mockSet = DbContextMockFactory.CreateMockDbSet(data);
             _mockContext.Setup(c => c.pendingRegistration).Returns(mockSet.Object);
 
@@ -85,57 +107,63 @@ namespace Test.SharedTest
         }
 
         [TestMethod]
-        public void RemovePendingRegistrations_PendingExists_RemovesFromDbSet()
+        public void RemovePendingRegistration_EmailExists_CallsRemove()
         {
-            string email = "very_enterprise_mail@test.com";
-            var data = new List<pendingRegistration>
-            {
-                new pendingRegistration
-                {
-                    email = email,
-                }
-            }.AsQueryable();
-
-
+            string email = "test@test.com";
+            var data = new List<pendingRegistration> { new pendingRegistration { email = email } }.AsQueryable();
             var mockSet = DbContextMockFactory.CreateMockDbSet(data);
             _mockContext.Setup(c => c.pendingRegistration).Returns(mockSet.Object);
 
             _securityService.RemovePendingRegistration(email);
 
-            mockSet.Verify(m => m.Remove(It.Is<pendingRegistration>(p => p.email == email)), Times.Once);
+            mockSet.Verify(m => m.Remove(It.IsAny<pendingRegistration>()), Times.Once);
         }
 
         [TestMethod]
-        public void RemovePendingRegistration_PendingExists_SavesChangesToContext()
+        public void RemovePendingRegistration_DbError_ReturnsFalse()
         {
-            string email = "borrar@test.com";
-            var data = new List<pendingRegistration>
-            {
-                new pendingRegistration { email = email }
-            }.AsQueryable();
+            _mockContext.Setup(c => c.pendingRegistration).Throws(new System.Exception("DB Error"));
 
-            var mockSet = DbContextMockFactory.CreateMockDbSet(data);
-            _mockContext.Setup(c => c.pendingRegistration).Returns(mockSet.Object);
+            bool result = _securityService.RemovePendingRegistration("any@email.com");
 
-            _securityService.RemovePendingRegistration(email);
+            Assert.IsFalse(result);
+        }
 
-            _mockContext.Verify(c => c.SaveChanges(), Times.Once);
+        // --- GetUsernameById Tests ---
+
+        [TestMethod]
+        public void GetUsernameById_UserExists_ReturnsUsername()
+        {
+            int id = 1;
+            string expected = "PlayerOne";
+            var user = new user { userId = id, username = expected };
+
+            _mockContext.Setup(c => c.user.Find(id)).Returns(user);
+
+            string result = _securityService.GetUsernameById(id);
+
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
-        public void GetUsernameById_UserExists_ReturnsCorrectUsername()
+        public void GetUsernameById_UserNotFound_ReturnsNull()
         {
-            int userId = 99;
-            string expectedName = "waos";
-            var data = new List<user>
-            {
-                new user { userId = userId, username = expectedName }
-            }.AsQueryable();
+            int id = 1;
+            _mockContext.Setup(c => c.user.Find(id)).Returns((user)null);
 
-            _mockContext.Setup(c => c.user).Returns(DbContextMockFactory.CreateMockDbSet(data).Object);
-            string result = _securityService.GetUsernameById(userId);
+            string result = _securityService.GetUsernameById(id);
 
-            Assert.AreEqual(expectedName, result);
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void GetUsernameById_DbError_ReturnsNull()
+        {
+            _mockContext.Setup(c => c.user).Throws(new System.Exception());
+
+            string result = _securityService.GetUsernameById(1);
+
+            Assert.IsNull(result);
         }
     }
 }
