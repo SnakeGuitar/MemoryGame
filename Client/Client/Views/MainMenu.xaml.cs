@@ -144,5 +144,32 @@ namespace Client.Views
             }
             base.OnClosed(e);
         }
+
+        private void ButtonFriends_Click(object sender, RoutedEventArgs e)
+        {
+            var friendsWindow = new Social.FriendsMenu();
+            friendsWindow.Owner = this;
+            friendsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            friendsWindow.Show();
+            this.Hide();
+        }
+
+        private void ButtonStats_Click(object sender, RoutedEventArgs e)
+        {
+            var statsWindow = new Profile.StatsHistory();
+            statsWindow.Owner = this;
+            statsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            statsWindow.Show();
+            this.Hide();
+        }
+
+        private void ButtonProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var profileWindow = new Profile.EditProfile();
+            profileWindow.Owner = this;
+            profileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            profileWindow.Show();
+            this.Hide();
+        }
     }
 }
