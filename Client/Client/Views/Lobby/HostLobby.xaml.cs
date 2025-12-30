@@ -194,33 +194,26 @@ namespace Client.Views.Lobby
         {
             string friendEmail = TextBoxFriendEmail.Text.Trim();
 
-            ValidationCode validationCode = Helpers.ValidationHelper.ValidateEmail(friendEmail);
-
-            if (validationCode != ValidationCode.Success)
+            if (string.IsNullOrEmpty(friendEmail))
             {
-                var msgBox = new Controls.CustomMessageBox(
-                    Lang.Global_Title_Error, Helpers.LocalizationHelper.GetString(validationCode),
-                    this, Controls.CustomMessageBox.MessageBoxType.Warning);
-                msgBox.ShowDialog();
-
+                MessageBox.Show("Please enter an email address.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (Helpers.EmailHelper.SendInvitationEmail(friendEmail, _lobbyCode))
+            try
             {
-                var msgBox = new Controls.CustomMessageBox(
-                    Lang.Global_Title_Success,
-                    string.Format(Lang.HostLobby_Message_InviteSent, friendEmail),
-                    this, Controls.CustomMessageBox.MessageBoxType.Success);
-                msgBox.ShowDialog();
+                string subject = "Join my Memory Game Lobby!";
+                string body = $"Join me! The lobby code is: {_lobbyCode}";
+                string mailtoUri = $"mailto:{friendEmail}?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}";
+
+                Process.Start(new ProcessStartInfo(mailtoUri) { UseShellExecute = true });
+
+                MessageBox.Show($"Invitation opened for {friendEmail}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                TextBoxFriendEmail.Text = string.Empty;
             }
-            else
+            catch (Exception ex)
             {
-                var msgBox = new Controls.CustomMessageBox(
-                    Lang.Global_Title_Error,
-                    string.Format(Lang.HostLobby_Error_InviteFailed, friendEmail),
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
-                msgBox.ShowDialog();
+                MessageBox.Show("Could not open mail client: " + ex.Message);
             }
         }
 

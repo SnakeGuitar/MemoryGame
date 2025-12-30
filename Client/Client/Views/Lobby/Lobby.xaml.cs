@@ -2,6 +2,7 @@
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
+using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using System;
 using System.Collections.Generic;
@@ -159,6 +160,13 @@ namespace Client.Views.Lobby
                     MessageBox.Show("Error enviando mensaje: " + ex.Message);
                 }
             }
+        }
+
+        private void ButtonInvite_Click(object sender, RoutedEventArgs e)
+        {
+            var inviteDialog = new InviteFriendDialog(_lobbyCode);
+            inviteDialog.Owner = this;
+            inviteDialog.ShowDialog();
         }
 
         private void ButtonReady_Click(object sender, RoutedEventArgs e)
