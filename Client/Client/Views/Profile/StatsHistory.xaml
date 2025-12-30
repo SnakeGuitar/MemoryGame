@@ -1,0 +1,27 @@
+﻿<Window x:Class="Client.Views.Profile.StatsHistory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Match History" Height="450" Width="700"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundColor}">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="My Match History" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <DataGrid x:Name="DataGridHistory" Grid.Row="1" Margin="0,10" AutoGenerateColumns="False" IsReadOnly="True" Background="White">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*"/>
+                <DataGridTextColumn Header="Winner" Binding="{Binding WinnerName}" Width="*"/>
+                <DataGridTextColumn Header="Score" Binding="{Binding Score}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button x:Name="ButtonBack" Grid.Row="2" Content="Back" Click="ButtonBack_Click" Height="35" Width="100"/>
+    </Grid>
+</Window>

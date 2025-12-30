@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -137,6 +138,11 @@ namespace Client.Views.Multiplayer
                     {
                         await GameServiceManager.Instance.Client.FlipCardAsync(cardId);
                     }
+                    catch (CommunicationException)
+                    {
+                        MessageBox.Show("Connection lost to the server.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        CloseGameAndLeave();
+                    }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message); // CHANGE WHEN POSSIBLE
@@ -156,8 +162,14 @@ namespace Client.Views.Multiplayer
                 {
                     await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
                 }
-                catch (Exception)
+                catch (CommunicationException)
                 {
+                    MessageBox.Show("Connection lost to the server.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CloseGameAndLeave();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message); // CHANGE WHEN POSSIBLE
                 }
             }
         }
@@ -267,7 +279,7 @@ namespace Client.Views.Multiplayer
                 UpdatePlayerActiveState(LabelP2Name, LabelP2Time, currentPlayerName, timeLeft);
                 UpdatePlayerActiveState(LabelP3Name, LabelP3Time, currentPlayerName, timeLeft);
                 UpdatePlayerActiveState(LabelP4Name, LabelP4Time, currentPlayerName, timeLeft);
-                
+
                 _currentActivePlayerName = currentPlayerName;
                 _remainingTimeSeconds = timeLeft;
                 _uiTurnTimer.Stop();
@@ -340,10 +352,10 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                MessageBox.Show($"Winner is: {winnerName}",
-                                "Winner",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Information);
+                string scoreInfo = "Match results";
+                var summaryWindow = new Controls.MatchSummary(winnerName, scoreInfo);
+                summaryWindow.Owner = this;
+                summaryWindow.ShowDialog();
                 CloseGameAndLeave();
             });
         }

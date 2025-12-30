@@ -1,4 +1,5 @@
-﻿using Client.Models;
+﻿using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
 using Client.Utilities;
 using Client.ViewModels;
@@ -64,27 +65,24 @@ namespace Client.Views.Singleplayer
 
         private void OnGameWon()
         {
-            string scoreText = $"{Lang.Global_Label_Score} {LabelScore.Content}";
-            var msgBox = new CustomMessageBox(
-                Lang.Singleplayer_Title_Won,
-                scoreText,
-                this,
-                MessageBoxType.Success);
+            string winnerName = UserSession.Username ?? "Player";
+            string statsInfo = $"{Lang.Global_Label_Score}: {LabelScore.Content} | Time: {LabelTimer.Content}";
 
-            msgBox.ShowDialog();
+            var summaryWindow = new MatchSummary(winnerName, statsInfo);
+            summaryWindow.Owner = this;
+            summaryWindow.ShowDialog();
 
             ButtonBackToSelectDifficulty_Click(null, null);
         }
 
         private void OnGameLost()
         {
-            var msgBox = new CustomMessageBox(
-                Lang.Singleplayer_Title_TimeOver,
-                Lang.Singleplayer_Label_TimeOver,
-                this,
-                MessageBoxType.Error);
+            string title = Lang.Singleplayer_Title_TimeOver;
+            string statsInfo = $"{Lang.Global_Label_Score}: {LabelScore.Content}";
 
-            msgBox.ShowDialog();
+            var summaryWindow = new MatchSummary(title, statsInfo);
+            summaryWindow.Owner = this;
+            summaryWindow.ShowDialog();
 
             ButtonBackToSelectDifficulty_Click(null, null);
         }
@@ -111,6 +109,7 @@ namespace Client.Views.Singleplayer
 
         public void ButtonBackToSelectDifficulty_Click(object sender, RoutedEventArgs e)
         {
+            _gameManager.StopGame();
             Window menuDifficulty = this.Owner;
 
             if (menuDifficulty != null)
