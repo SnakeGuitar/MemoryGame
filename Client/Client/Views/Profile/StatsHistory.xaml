@@ -14,12 +14,19 @@
 
         <Label Content="My Match History" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
-        <DataGrid x:Name="DataGridHistory" Grid.Row="1" Margin="0,10" AutoGenerateColumns="False" IsReadOnly="True" Background="White">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*"/>
-                <DataGridTextColumn Header="Winner" Binding="{Binding WinnerName}" Width="*"/>
-                <DataGridTextColumn Header="Score" Binding="{Binding Score}" Width="100"/>
-            </DataGrid.Columns>
+        <DataGrid x:Name="DataGridHistory" Grid.Row="1" Margin="0,10" AutoGenerateColumns="False" IsReadOnly="True" Background="White" SelectionChanged="DataGridHistory_SelectionChanged">
+            <DataGridTextColumn Header="Date" Binding="{Binding Date, StringFormat=d}" Width="*"/>
+            <DataGridTextColumn Header="Winner" Binding="{Binding WinnerName}" Width="*"/>
+            <DataGridTextColumn Header="Score" Binding="{Binding Score}" Width="Auto"/>
+
+            <DataGridTemplateColumn Width="100">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Content="Report Winner" Click="ButtonReport_Click" 
+                            Tag="{Binding}" Background="#FF5555" Foreground="White" FontSize="10"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
         </DataGrid>
 
         <Button x:Name="ButtonBack" Grid.Row="2" Content="Back" Click="ButtonBack_Click" Height="35" Width="100"/>
