@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Server.Shared;
+using Server.Validator;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,7 +8,7 @@ using System.IO;
 namespace Test
 {
     [TestClass]
-    public class ImageValidationTest
+    public class ImageValidatorTest
     {
         /// <summary>
         /// Creates a valid image in memory and returns its byte array.
@@ -32,7 +33,7 @@ namespace Test
         [TestMethod]
         public void IsValidImage_NullData_ReturnsFalse()
         {
-            bool result = ImageValidation.IsValidImage(null);
+            bool result = ImageValidator.IsValidImage(null);
 
             Assert.IsFalse(result, "Should return false for null input.");
         }
@@ -40,7 +41,7 @@ namespace Test
         [TestMethod]
         public void IsValidImage_EmptyData_ReturnsFalse()
         {
-            bool result = ImageValidation.IsValidImage(new byte[0]);
+            bool result = ImageValidator.IsValidImage(new byte[0]);
 
             Assert.IsFalse(result, "Should return false for empty byte array.");
         }
@@ -51,7 +52,7 @@ namespace Test
             int tooBigSize = (5 * 1024 * 1024) + 1;
             byte[] bigData = new byte[tooBigSize];
 
-            bool result = ImageValidation.IsValidImage(bigData);
+            bool result = ImageValidator.IsValidImage(bigData);
 
             Assert.IsFalse(result, "Should return false if file size is larger than 5MB.");
         }
@@ -61,7 +62,7 @@ namespace Test
         {
             byte[] garbageData = new byte[] { 0xFF, 0x00, 0xAA, 0xBB, 0x12, 0x34 };
 
-            bool result = ImageValidation.IsValidImage(garbageData);
+            bool result = ImageValidator.IsValidImage(garbageData);
 
             Assert.IsFalse(result, "Should return false (and handle exception internally) for corrupted/invalid image data.");
         }
@@ -71,7 +72,7 @@ namespace Test
         {
             byte[] jpegBytes = GenerateMockImageBytes(100, 100, ImageFormat.Jpeg);
 
-            bool result = ImageValidation.IsValidImage(jpegBytes);
+            bool result = ImageValidator.IsValidImage(jpegBytes);
 
             Assert.IsTrue(result, "Should accept valid JPEG images.");
         }
@@ -81,7 +82,7 @@ namespace Test
         {
             byte[] pngBytes = GenerateMockImageBytes(100, 100, ImageFormat.Png);
 
-            bool result = ImageValidation.IsValidImage(pngBytes);
+            bool result = ImageValidator.IsValidImage(pngBytes);
 
             Assert.IsTrue(result, "Should accept valid PNG images.");
         }
@@ -91,7 +92,7 @@ namespace Test
         {
             byte[] bmpBytes = GenerateMockImageBytes(50, 50, ImageFormat.Bmp);
 
-            bool result = ImageValidation.IsValidImage(bmpBytes);
+            bool result = ImageValidator.IsValidImage(bmpBytes);
 
             Assert.IsTrue(result, "Should accept valid BMP images.");
         }
@@ -101,7 +102,7 @@ namespace Test
         {
             byte[] gifBytes = GenerateMockImageBytes(50, 50, ImageFormat.Gif);
 
-            bool result = ImageValidation.IsValidImage(gifBytes);
+            bool result = ImageValidator.IsValidImage(gifBytes);
 
             Assert.IsFalse(result, "Should reject GIF images (only Jpeg, Png, Bmp allowed).");
         }
@@ -111,7 +112,7 @@ namespace Test
         {
             byte[] tiffBytes = GenerateMockImageBytes(50, 50, ImageFormat.Tiff);
 
-            bool result = ImageValidation.IsValidImage(tiffBytes);
+            bool result = ImageValidator.IsValidImage(tiffBytes);
 
             Assert.IsFalse(result, "Should reject TIFF images.");
         }
@@ -121,7 +122,7 @@ namespace Test
         {
             byte[] wideImage = GenerateMockImageBytes(4097, 10, ImageFormat.Png);
 
-            bool result = ImageValidation.IsValidImage(wideImage);
+            bool result = ImageValidator.IsValidImage(wideImage);
 
             Assert.IsFalse(result, "Should return false if Width > 4096.");
         }
@@ -131,7 +132,7 @@ namespace Test
         {
             byte[] tallImage = GenerateMockImageBytes(10, 4097, ImageFormat.Jpeg);
 
-            bool result = ImageValidation.IsValidImage(tallImage);
+            bool result = ImageValidator.IsValidImage(tallImage);
 
             Assert.IsFalse(result, "Should return false if Height > 4096.");
         }
@@ -141,7 +142,7 @@ namespace Test
         {
             byte[] boundaryImage = GenerateMockImageBytes(4096, 100, ImageFormat.Png);
 
-            bool result = ImageValidation.IsValidImage(boundaryImage);
+            bool result = ImageValidator.IsValidImage(boundaryImage);
 
             Assert.IsTrue(result, "Should return true for width exactly 4096.");
         }
