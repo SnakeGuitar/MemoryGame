@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Server.SessionService.Core
 {
-    internal class StatisticsCore
+    public class StatisticsCore
     {
         private readonly IDbContextFactory _dbFactory;
         private readonly ISessionManager _sessionManager;

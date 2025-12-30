@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.SessionService.Core
 {
-    internal class AuthenticationCore
+    public class AuthenticationCore
     {
         private readonly IDbContextFactory _dbFactory;
         private readonly ISecurityService _securityService;

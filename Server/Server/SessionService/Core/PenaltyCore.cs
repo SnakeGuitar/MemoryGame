@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Server.SessionService.Core
 {
-    internal class PenaltyCore
+    public class PenaltyCore
     {
         private readonly IDbContextFactory _dbFactory;
         private readonly ISessionManager _sessionManager;
