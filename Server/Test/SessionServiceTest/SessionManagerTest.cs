@@ -5,10 +5,8 @@ using Server.SessionService;
 using Server.Shared;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
-using Test.Helpers;
-
 using System.Linq;
+using Test.Helpers;
 
 namespace Test.SessionServiceTest
 {
@@ -25,8 +23,12 @@ namespace Test.SessionServiceTest
         {
             _mockDbFactory = new Mock<IDbContextFactory>();
             _mockContext = new Mock<memoryGameDBEntities>();
+
+            _mockLogger = new Mock<ILoggerManager>();
+
             _mockDbFactory.Setup(f => f.Create()).Returns(_mockContext.Object);
-            _sessionManager = new SessionManager(_mockDbFactory.Object, (ILoggerManager)_mockLogger);
+
+            _sessionManager = new SessionManager(_mockDbFactory.Object, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -81,8 +83,11 @@ namespace Test.SessionServiceTest
                     expiresAt = DateTime.Now.AddMinutes(-10)
                 }
             }.AsQueryable();
+
             _mockContext.Setup(c => c.userSession).Returns(DbContextMockFactory.CreateMockDbSet(sessions).Object);
+
             int? result = _sessionManager.GetUserIdFromToken(token);
+
             Assert.IsNull(result, "Debe devolver null si la sesión expiró");
         }
     }

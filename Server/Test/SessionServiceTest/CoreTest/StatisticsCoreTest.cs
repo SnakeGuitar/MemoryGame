@@ -57,7 +57,7 @@ namespace Test.SessionServiceTest.CoreTest
 
             _mockSession.Setup(s => s.GetUserIdFromToken(token)).Returns(myId);
 
-            var matchData = new match { endDateTime = DateTime.UtcNow };
+            var matchData = new match { endDateTime = DateTime.Now };
             var history = new matchHistory
             {
                 userId = myId,
@@ -69,7 +69,10 @@ namespace Test.SessionServiceTest.CoreTest
             var winnerUser = new user { userId = myId, username = "Winner" };
 
             _mockContext.Setup(c => c.matchHistory).Returns(DbContextMockFactory.CreateMockDbSet(new List<matchHistory> { history }.AsQueryable()).Object);
-            _mockContext.Setup(c => c.user.Find(It.IsAny<object[]>())).Returns(winnerUser);
+
+            var mockUserSet = DbContextMockFactory.CreateMockDbSet(new List<user> { winnerUser }.AsQueryable());
+            mockUserSet.Setup(m => m.Find(It.IsAny<object[]>())).Returns(winnerUser);
+            _mockContext.Setup(c => c.user).Returns(mockUserSet.Object);
 
             var result = _statsCore.GetMatchHistory(token);
 
@@ -89,10 +92,15 @@ namespace Test.SessionServiceTest.CoreTest
             {
                 userId = myId,
                 score = expectedScore,
-                match = new match { endDateTime = DateTime.UtcNow }
+                match = new match { endDateTime = DateTime.Now },
+                winnerId = 0
             };
 
             _mockContext.Setup(c => c.matchHistory).Returns(DbContextMockFactory.CreateMockDbSet(new List<matchHistory> { history }.AsQueryable()).Object);
+
+            var mockUserSet = DbContextMockFactory.CreateMockDbSet(new List<user>().AsQueryable());
+            mockUserSet.Setup(m => m.Find(It.IsAny<object[]>())).Returns((user)null);
+            _mockContext.Setup(c => c.user).Returns(mockUserSet.Object);
 
             var result = _statsCore.GetMatchHistory(token);
 
@@ -105,7 +113,7 @@ namespace Test.SessionServiceTest.CoreTest
             string token = "valid";
             _mockSession.Setup(s => s.GetUserIdFromToken(token)).Returns(1);
 
-            _mockContext.Setup(c => c.matchHistory).Throws(new System.Exception("DB Down"));
+            _mockContext.Setup(c => c.matchHistory).Throws(new System.Data.Entity.Core.EntityException("DB Down"));
 
             var result = _statsCore.GetMatchHistory(token);
 
