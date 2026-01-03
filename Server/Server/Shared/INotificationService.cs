@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,15 +46,24 @@ namespace Server.Shared
                     body = body.Replace("{{PIN}}", pin);
                 }
 
-                var mailMessage = new System.Net.Mail.MailMessage
+                string senderEmail = ConfigurationManager.AppSettings["EmailSender"];
+
+                if (string.IsNullOrEmpty(senderEmail))
                 {
-                    From = new System.Net.Mail.MailAddress("very enterprise mail :3", "Memory Game Support"),
+                    _logger.LogError("EmailSender not configured in App.config");
+                    return false;
+                }
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(senderEmail, "Memory Game Support"),
                     Subject = "Memory Game - Verify your email",
                     Body = body,
                     IsBodyHtml = true
                 };
 
                 mailMessage.To.Add(email);
+
                 _mailWrapper.Send(mailMessage);
 
                 _logger.LogInfo($"Sent verification email to {email}");
@@ -64,6 +75,7 @@ namespace Server.Shared
                 return false;
             }
         }
+
         private string LoadEmailTemplate(string resourceName)
         {
             try

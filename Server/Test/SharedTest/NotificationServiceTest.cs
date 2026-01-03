@@ -10,51 +10,39 @@ namespace Test.SharedTest
     public class NotificationServiceTest
     {
         private Mock<IMailSender> _mockMailSender;
-        private Mock<ILoggerManager> _mockLogger;
         private NotificationService _service;
 
         [TestInitialize]
         public void Setup()
         {
             _mockMailSender = new Mock<IMailSender>();
-            _mockLogger = new Mock<ILoggerManager>();
+
             _service = new NotificationService(_mockMailSender.Object, _mockLogger.Object);
         }
 
         [TestMethod]
         public void SendVerificationEmail_ValidData_ReturnsTrue()
         {
-            bool result = _service.SendVerificationEmail("test@example.com", "123456");
+            string email = "test@example.com";
+            string pin = "123456";
+            _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()));
 
-            Assert.IsTrue(result);
+            bool result = _service.SendVerificationEmail(email, pin);
+
+            Assert.IsTrue(result, "It should return true if mail delivering was successful.");
         }
 
         [TestMethod]
         public void SendVerificationEmail_ValidData_CallsMailSender()
         {
-            _service.SendVerificationEmail("test@example.com", "123456");
+            string email = "test@example.com";
+            string pin = "123456";
+            _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()));
 
-            _mockMailSender.Verify(m => m.Send(It.IsAny<MailMessage>()), Times.Once);
-        }
-
-        [TestMethod]
-        public void SendVerificationEmail_ValidData_ConstructsCorrectEmailAddress()
-        {
-            _service.SendVerificationEmail("target@test.com", "123456");
+            _service.SendVerificationEmail(email, pin);
 
             _mockMailSender.Verify(m => m.Send(It.Is<MailMessage>(msg =>
-                msg.To.Contains(new MailAddress("target@test.com"))
-            )), Times.Once);
-        }
-
-        [TestMethod]
-        public void SendVerificationEmail_ValidData_BodyContainsPin()
-        {
-            string pin = "999888";
-
-            _service.SendVerificationEmail("target@test.com", pin);
-
-            _mockMailSender.Verify(m => m.Send(It.Is<MailMessage>(msg =>
+                msg.To.Contains(new MailAddress(email)) &&
                 msg.Body.Contains(pin)
             )), Times.Once);
         }
@@ -63,18 +51,18 @@ namespace Test.SharedTest
         public void SendVerificationEmail_SmtpException_ReturnsFalse()
         {
             _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()))
-                           .Throws(new SmtpException("Server down"));
+                           .Throws(new SmtpException("Connection error with Gmail."));
 
             bool result = _service.SendVerificationEmail("test@example.com", "123456");
 
-            Assert.IsFalse(result);
+            Assert.IsFalse(result, "It should return false if there is an SMTP exception.");
         }
 
         [TestMethod]
         public void SendVerificationEmail_SmtpException_LogsError()
         {
             _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()))
-                           .Throws(new SmtpException("Server down"));
+                           .Throws(new SmtpException("Connection error"));
 
             _service.SendVerificationEmail("test@example.com", "123456");
 

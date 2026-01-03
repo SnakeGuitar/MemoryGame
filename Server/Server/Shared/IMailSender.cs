@@ -1,4 +1,5 @@
 ﻿using System.Net.Mail;
+using System.Configuration;
 
 namespace Server.Shared
 {
@@ -11,10 +12,15 @@ namespace Server.Shared
     {
         public void Send(MailMessage message)
         {
-            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
+            string host = ConfigurationManager.AppSettings["EmailHost"];
+            int port = int.Parse(ConfigurationManager.AppSettings["EmailPort"]);
+            string email = ConfigurationManager.AppSettings["EmailSender"];
+            string password = ConfigurationManager.AppSettings["EmailPassword"];
+
+            using (var smtpClient = new SmtpClient(host))
             {
-                smtpClient.Port = 587;
-                smtpClient.Credentials = new System.Net.NetworkCredential("very enterprise mail :3", "password app");
+                smtpClient.Port = port;
+                smtpClient.Credentials = new System.Net.NetworkCredential(email, password);
                 smtpClient.EnableSsl = true;
 
                 smtpClient.Send(message);
