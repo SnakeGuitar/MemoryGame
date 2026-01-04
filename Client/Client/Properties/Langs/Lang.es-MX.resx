@@ -228,7 +228,7 @@
   <data name="Global_Button_Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
-  <data name="MainMenu_Button_ExitGame" xml:space="preserve">
+  <data name="Global_Button_ExitGame" xml:space="preserve">
     <value>Salir del juego</value>
   </data>
   <data name="MainMenu_Button_Gallery" xml:space="preserve">
@@ -476,5 +476,137 @@
   </data>
   <data name="Global_Label_TimerLimit" xml:space="preserve">
     <value>Límite de tiempo:</value>
+  </data>
+  <data name="Global_Title_ExitGame" xml:space="preserve">
+    <value>Salir del Juego</value>
+  </data>
+  <data name="Global_Message_ExitGame" xml:space="preserve">
+    <value>¿Deseas salir del juego?</value>
+  </data>
+  <data name="EditProfile_Label_EditProfile" xml:space="preserve">
+    <value>Editar Perfil</value>
+  </data>
+  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
+    <value>Cambiar Avatar</value>
+  </data>
+  <data name="EditProfile_Button_UpdatePassword" xml:space="preserve">
+    <value>Actualizar Contraseña</value>
+  </data>
+  <data name="EditProfile_Button_UpdateUsername" xml:space="preserve">
+    <value>Actualizar nombre de usuario</value>
+  </data>
+  <data name="Friends_Label_Friends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="Friends_Label_MyFriends" xml:space="preserve">
+    <value>Mis Amigos</value>
+  </data>
+  <data name="Friends_Label_Requests" xml:space="preserve">
+    <value>Solicitudes de Amistad</value>
+  </data>
+  <data name="Global_Label_Avatar" xml:space="preserve">
+    <value>Avatar</value>
+  </data>
+  <data name="Global_Label_Username" xml:space="preserve">
+    <value>Nombre de Usuario</value>
+  </data>
+  <data name="Global_Label_Status" xml:space="preserve">
+    <value>Estado</value>
+  </data>
+  <data name="Friends_Label_AddFriend" xml:space="preserve">
+    <value>Añadir Amigo</value>
+  </data>
+  <data name="Friends_Label_EnterUsername" xml:space="preserve">
+    <value>Ingresa el Nombre de usuario de tu amigo:</value>
+  </data>
+  <data name="Friends_Label_PendingRequests" xml:space="preserve">
+    <value>Solicitudes Pendientes</value>
+  </data>
+  <data name="Friends_Button_SendRequest" xml:space="preserve">
+    <value>Enviar Solicitud</value>
+  </data>
+  <data name="Global_Button_Reject" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="Global_Button_CloseSession" xml:space="preserve">
+    <value>Cerrar Sesión</value>
+  </data>
+  <data name="Global_Message_CloseSession" xml:space="preserve">
+    <value>¿Deseas terminar la sesión de la cuenta?</value>
+  </data>
+  <data name="PlayerProfile_Label_Name" xml:space="preserve">
+    <value>Nombre:</value>
+  </data>
+  <data name="PlayerProfile_Label_Date" xml:space="preserve">
+    <value>Fecha de Emisión:</value>
+  </data>
+  <data name="PlayerProfile_Label_Email" xml:space="preserve">
+    <value>Correo Electrónico:</value>
+  </data>
+  <data name="PlayerProfile_Label_Social" xml:space="preserve">
+    <value>Redes Sociales:</value>
+  </data>
+  <data name="PlayerProfile_Button_Friends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="PlayerProfile_Button_Statistics" xml:space="preserve">
+    <value>Estadísticas</value>
+  </data>
+  <data name="Global_Button_Update" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="Global_Button_Remove" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="StatsHistory_Title_StatsHistory" xml:space="preserve">
+    <value>Historial de Partidas</value>
+  </data>
+  <data name="StatsHistory_Label_Date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="StatsHistory_Label_Winner" xml:space="preserve">
+    <value>Ganador</value>
+  </data>
+  <data name="StatsHistory_Label_Score" xml:space="preserve">
+    <value>Puntuación</value>
+  </data>
+  <data name="Global_Button_Report" xml:space="preserve">
+    <value>Reportar</value>
+  </data>
+  <data name="EditProfile_Label_NewUsername" xml:space="preserve">
+    <value>Nuevo Nombre de Usuario:</value>
+  </data>
+  <data name="EditProfile_Label_NewPassword" xml:space="preserve">
+    <value>Nueva Contraseña:</value>
+  </data>
+  <data name="EditProfile_Label_ActualPassword" xml:space="preserve">
+    <value>Contraseña Actual:</value>
+  </data>
+  <data name="Global_Button_Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="Global_Title_MatchOver" xml:space="preserve">
+    <value>Partida Finalizada</value>
+  </data>
+  <data name="MatchSummary_Label_Player" xml:space="preserve">
+    <value>Jugador: </value>
+  </data>
+  <data name="RegisterAccount_Title_LinkAccount" xml:space="preserve">
+    <value>Vincular Cuenta</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EnterEmail" xml:space="preserve">
+    <value>Por favor ingresa un correo</value>
+  </data>
+  <data name="InviteFriendDialog_Title_InviteFriend" xml:space="preserve">
+    <value>Invitar Amigo</value>
+  </data>
+  <data name="InviteFriendDialog_Label_EnterEmail" xml:space="preserve">
+    <value>Ingresa el correo de tu amigo:</value>
+  </data>
+  <data name="ReportUserDialog_Title_Report" xml:space="preserve">
+    <value>Denunciar Jugador</value>
+  </data>
+  <data name="ReportUserDialog_Message_Report" xml:space="preserve">
+    <value>¿Estás seguro de denunciar a este jugador por mal comportamiento?</value>
   </data>
 </root>
