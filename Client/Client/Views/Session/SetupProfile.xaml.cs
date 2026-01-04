@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Views.Controls;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Session
 {
@@ -59,9 +62,9 @@ namespace Client.Views.Session
                 catch (Exception ex)
                 {
                     string errorMessage = string.Format(Lang.SetupProfile_Error_ImageLoad, ex.Message);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     profileImage = null;
@@ -76,10 +79,10 @@ namespace Client.Views.Session
             string username = TextBoxUsername.Text.Trim();
             LabelUsernameError.Content = "";
 
-            ValidationCode validationCode = Helpers.ValidationHelper.ValidateUsername(username);
+            ValidationCode validationCode = ValidateUsername(username);
             if (validationCode != ValidationCode.Success)
             {
-                LabelUsernameError.Content = Helpers.LocalizationHelper.GetString(validationCode);
+                LabelUsernameError.Content = GetString(validationCode);
                 return;
             }
 
@@ -96,10 +99,9 @@ namespace Client.Views.Session
                 {
                     UserSession.StartSession(response.SessionToken, response.User.UserId, response.User.Username, response.User.Email);
 
-                    var msgBox = new Views.Controls.CustomMessageBox(
-                        Lang.Global_Title_Success,
-                        Lang.SetupProfile_Message_Success,
-                        this, Controls.CustomMessageBox.MessageBoxType.Information);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
+                        this, MessageBoxType.Information);
                     msgBox.ShowDialog();
 
                     var mainMenu = new MainMenu();
@@ -114,10 +116,10 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    string errorMessage = GetString(response.MessageKey);
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonAcceptSetupProfile.IsEnabled = true;
@@ -127,9 +129,9 @@ namespace Client.Views.Session
             {
                 string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptSetupProfile.IsEnabled = true;
@@ -138,9 +140,9 @@ namespace Client.Views.Session
             {
                 string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptSetupProfile.IsEnabled = true;
@@ -149,25 +151,12 @@ namespace Client.Views.Session
             {
                 string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptSetupProfile.IsEnabled = true;
-            }
-        }
-
-        private string GetServerErrorMessage(string messageKey)
-        {
-            switch (messageKey)
-            {
-                case "Global_Error_UsernameInvalid":
-                    return Lang.Global_Error_InvalidUsername;
-                case "Global_Error_RegistrationNotFound":
-                    return Lang.Global_Error_RegistrationNotFound;
-                default:
-                    return Lang.Global_ServiceError_Unknown;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
+using Client.Views.Controls;
 using Client.Views.Lobby;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Multiplayer
 {
@@ -33,9 +35,9 @@ namespace Client.Views.Multiplayer
             {
                 string message = Lang.Global_Error_GuestsNotAllowed;
                 string title = Lang.Global_Title_NotAvailableFunction;
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     title, message, 
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Warning);
+                    this, MessageBoxType.Warning);
                 msgBox.ShowDialog();
                 return;
             }

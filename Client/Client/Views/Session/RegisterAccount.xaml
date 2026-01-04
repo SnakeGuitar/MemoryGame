@@ -8,23 +8,23 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="RegisterAccount" 
-        MinHeight="550" MinWidth="450" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="600" 
-              MaxHeight="740"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Width="550" Margin="0,0,0,50">
 
-                    <Label Content="{x:Static language:Lang.Global_Button_SignIn}" 
+                    <Label Content="{x:Static language:Lang.Global_Button_SignIn}"
+                           x:Name="TitleRegister"
                            Style="{StaticResource TitleLabelStyle}" />
 
                     <Border Background="{StaticResource AccentColor}" 

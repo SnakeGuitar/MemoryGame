@@ -8,24 +8,23 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="SetupProfile" 
-        MinHeight="550" MinWidth="450" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="800" 
-              MaxHeight="990"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Width="750" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Button_SetupProfile}" 
-                           Style="{StaticResource TitleLabelStyle}" />
+                           Style="{StaticResource TitleLabelStyle}"/>
 
                     <Border Background="{StaticResource AccentColor}" 
                             CornerRadius="15">
@@ -51,7 +50,8 @@
                                         Style="{StaticResource AvatarButtonStyle}"/>
                             </Grid>
 
-                            <Label Content="{x:Static language:Lang.Global_Label_EnterUsername}" 
+                            <Label Content="{x:Static language:Lang.Global_Label_EnterUsername}"
+                                   x:Name="LabelEnterUsername"
                                    Style="{StaticResource RegisterLabelStyle}"/>
 
                             <TextBox x:Name="TextBoxUsername" 

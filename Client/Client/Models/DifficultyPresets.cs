@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Properties.Langs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Client.Models
 {
-    internal class DifficultyPresets
+    internal static class DifficultyPresets
     {
         public static GameConfiguration Easy => new GameConfiguration
         {
@@ -14,7 +15,7 @@ namespace Client.Models
             TimeLimitSeconds = 60,
             NumberRows = 4,
             NumberColumns = 4,
-            DifficultyLevel = "Easy"
+            DifficultyLevel = Lang.SelectDifficulty_Button_Easy
         };
 
         public static GameConfiguration Normal => new GameConfiguration
@@ -23,7 +24,7 @@ namespace Client.Models
             TimeLimitSeconds = 90,
             NumberRows = 4,
             NumberColumns = 6,
-            DifficultyLevel = "Normal"
+            DifficultyLevel = Lang.SelectDifficulty_Button_Normal
         };
 
         public static GameConfiguration Hard => new GameConfiguration
@@ -32,7 +33,7 @@ namespace Client.Models
             TimeLimitSeconds = 120,
             NumberRows = 5,
             NumberColumns = 6,
-            DifficultyLevel = "Hard"
+            DifficultyLevel = Lang.SelectDifficulty_Button_Hard
         };
 
         public static (int Rows, int Columns) CalculateLayout(int numberOfCards)

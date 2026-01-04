@@ -14,15 +14,14 @@
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="800" 
-              MaxHeight="990"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Width="600" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Title_Multiplayer}" 
                            Style="{StaticResource TitleLabelStyle}" />
@@ -34,7 +33,6 @@
 
                             <Button Content="{x:Static language:Lang.MultiplayerMenu_Button_CreateLobby}" 
                                     Style="{StaticResource CreateLobbyButtonStyle}"
-                                    Name="ButtonCreateLobby"
                                     Click="ButtonCreateLobby_Click"/>
 
                             <Button Content="{x:Static language:Lang.Global_Button_Join}" 

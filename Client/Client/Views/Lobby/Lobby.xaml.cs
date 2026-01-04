@@ -11,6 +11,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Lobby
 {
@@ -91,18 +92,16 @@ namespace Client.Views.Lobby
                 if (success)
                 {
                     _isConnected = true;
-                    var msgBox = new Controls.CustomMessageBox(
-                        Lang.Global_Title_Success,
-                        Lang.Lobby_Notification_PlayerJoined,
-                        this, Controls.CustomMessageBox.MessageBoxType.Information);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Success, Lang.Lobby_Notification_PlayerJoined,
+                        this, MessageBoxType.Information);
                     msgBox.ShowDialog();
                 }
                 else
                 {
-                    var msgBox = new Controls.CustomMessageBox(
-                        Lang.Global_Title_Error,
-                        Lang.Lobby_Error_JoinFailed,
-                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Error, Lang.Lobby_Error_JoinFailed,
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     this.Close();
@@ -113,9 +112,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_Error, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
@@ -124,9 +123,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
@@ -135,9 +134,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonBackToMainMenu_Click(this, new RoutedEventArgs());

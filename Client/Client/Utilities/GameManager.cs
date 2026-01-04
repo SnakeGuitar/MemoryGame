@@ -22,15 +22,15 @@ namespace Client.Utilities
         private bool isProcessingTurn;
         private Card firstCardFlipped;
 
-        private ObservableCollection<Card> cardsOnBoard;
+        private readonly ObservableCollection<Card> cardsOnBoard;
 
         public GameManager(ObservableCollection<Card> cardsCollection)
         {
             cardsOnBoard = cardsCollection;
-            InitilializeTimer();
+            InitializeTimer();
         }
 
-        private void InitilializeTimer()
+        private void InitializeTimer()
         {
             gameTimer = new DispatcherTimer();
             gameTimer.Interval = TimeSpan.FromSeconds(1);
@@ -72,7 +72,7 @@ namespace Client.Utilities
             gameTimer.Start();
         }
 
-        private List<Card> GenerateDeck(int numberOfCards)
+        private static List<Card> GenerateDeck(int numberOfCards)
         {
             List<string> imagePaths = new List<string>
             {

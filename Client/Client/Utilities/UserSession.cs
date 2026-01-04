@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace Client.Helpers
 {
-    internal class UserSession
+    internal static class UserSession
     {
         public static string SessionToken { get; set; }
         public static int UserId { get; private set; }
         public static string Username { get; set; }
         public static string Email { get; private set; }
         public static bool IsGuest { get; set; }
+        public static string RegistrationDate { get; set; }
 
         public static void StartSession(string token, int id, string username, string email)
         {

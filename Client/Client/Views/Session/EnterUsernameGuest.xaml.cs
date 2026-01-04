@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +17,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Session
 {
@@ -44,11 +47,11 @@ namespace Client.Views.Session
             string username = TextBoxUsername.Text.Trim();
             LabelUsernameError.Content = "";
 
-            ValidationCode validationUsername = Helpers.ValidationHelper.ValidateUsername(username);
+            ValidationCode validationUsername = ValidateUsername(username);
 
             if (validationUsername != ValidationCode.Success)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(validationUsername);
+                string errorMessage = GetString(validationUsername);
                 LabelUsernameError.Content = errorMessage;
                 return;
             }
@@ -64,9 +67,9 @@ namespace Client.Views.Session
                     UserSession.StartGuestSession(response.SessionToken, response.User.UserId, response.User.Username);
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_LoginAsGuestSuccess, successMessage, 
-                        this, Controls.CustomMessageBox.MessageBoxType.Success);
+                        this, MessageBoxType.Success);
                     msgBox.ShowDialog();
 
                     var mainMenu = new MainMenu();
@@ -82,10 +85,10 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
+                    string errorMessage = GetString(response.MessageKey);
                     var msgBox = new Views.Controls.CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage, 
-                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonAcceptUsernameGuest.IsEnabled = true;
@@ -93,49 +96,36 @@ namespace Client.Views.Session
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline,
-                    errorMessage, this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    errorMessage, this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptUsernameGuest.IsEnabled = true;
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError,
-                    errorMessage, this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    errorMessage, this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptUsernameGuest.IsEnabled = true;
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new Views.Controls.CustomMessageBox(
                     Lang.Global_Title_NetworkError,
-                    errorMessage, this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    errorMessage, this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptUsernameGuest.IsEnabled = true;
-            }
-        }
-
-        private string GetServerErrorMessage(string messageKey)
-        {
-            switch (messageKey)
-            {
-                case "Global_Error_GuestUsernameInvalid":
-                    return Lang.Global_Error_InvalidUsername;
-                case "Global_Error_UsernameInUse":
-                    return Lang.Global_Error_UsernameInUse;
-                default:
-                    return Lang.Global_ServiceError_Unknown;
             }
         }
 

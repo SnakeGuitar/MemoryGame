@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static Client.Helpers.ValidationHelper;
+using static Client.Helpers.LocalizationHelper;
 
 namespace Client.Views.Multiplayer
 {
@@ -50,11 +51,11 @@ namespace Client.Views.Multiplayer
             string lobbyCode = TextBoxLobbyCode.Text?.Trim();
             LabelCodeError.Content = "";
 
-            ValidationCode validationCode = Helpers.ValidationHelper.ValidateVerifyCode(lobbyCode, GAME_CODE_LENGTH);
+            ValidationCode validationCode = ValidateVerifyCode(lobbyCode, GAME_CODE_LENGTH);
 
             if (validationCode != ValidationCode.Success)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(validationCode);
+                string errorMessage = GetString(validationCode);
                 LabelCodeError.Content = errorMessage;
                 return;
             }

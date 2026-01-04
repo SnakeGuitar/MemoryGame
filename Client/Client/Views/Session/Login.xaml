@@ -8,65 +8,63 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="Login" 
-        MinHeight="550" MinWidth="450" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-          VerticalAlignment="Center"
-          MaxWidth="700" 
-          MaxHeight="865"
-          Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                        VerticalAlignment="Center"
-                        >
+                            VerticalAlignment="Center"
+                            Width="600" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Button_LogIn}" 
-                       Style="{StaticResource TitleLabelStyle}" />
+                           Style="{StaticResource TitleLabelStyle}" />
 
                     <Border Background="{StaticResource AccentColor}" 
-                        CornerRadius="15">
+                            CornerRadius="15">
 
                         <StackPanel Margin="25" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                             <Label Content="{x:Static language:Lang.Global_Label_Email}" 
-                               Style="{StaticResource RegisterLabelStyle}"/>
+                                   Style="{StaticResource RegisterLabelStyle}"/>
 
                             <TextBox x:Name="TextBoxEmailInput"
-                                PreviewKeyDown="TextBox_PreviewKeyDown"
-                                Style="{StaticResource RegisterTextBoxStyle}"/>
+                                     PreviewKeyDown="TextBox_PreviewKeyDown"
+                                     Style="{StaticResource RegisterTextBoxStyle}"/>
 
                             <Label x:Name="LabelEmailError" 
-                               Style="{StaticResource RegisterErrorLabelStyle}"
-                               Content=""/>
+                                   Style="{StaticResource RegisterErrorLabelStyle}"
+                                   Content=""/>
 
                             <Label Content="{x:Static language:Lang.Global_Label_Password}" 
                                Style="{StaticResource RegisterLabelStyle}"/>
 
                             <PasswordBox x:Name="PasswordBoxPasswordInput" 
-                                 Style="{StaticResource RegisterPasswordBoxStyle}"/>
+                                         Style="{StaticResource RegisterPasswordBoxStyle}"/>
 
                             <Label x:Name="LabelPasswordError" 
-                               Style="{StaticResource RegisterErrorLabelStyle}"
-                               Content=""/>
+                                   Style="{StaticResource RegisterErrorLabelStyle}"
+                                   Content=""/>
 
                             <Button Content="{x:Static language:Lang.Global_Button_Accept}" 
-                                Style="{StaticResource FormPrimaryButtonStyle}"
-                                HorizontalAlignment="Center"
-                                Name="ButtonAcceptLogin"
-                                Click="ButtonAcceptLogin_Click" />
+                                    Style="{StaticResource FormPrimaryButtonStyle}"
+                                    HorizontalAlignment="Center"
+                                    Name="ButtonAcceptLogin"
+                                    Click="ButtonAcceptLogin_Click" />
                         </StackPanel>
                     </Border>
 
                     <Button Content="{x:Static language:Lang.Global_Button_Back}" 
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        HorizontalAlignment="Center" 
-                        Margin="0,15,0,0"
-                        Click="ButtonBackToTitleScreen_Click" />
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            HorizontalAlignment="Center" 
+                            Margin="0,15,0,0"
+                            Click="ButtonBackToTitleScreen_Click" />
                 </StackPanel>
             </Viewbox>
         </Grid>

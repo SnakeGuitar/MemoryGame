@@ -63,5 +63,43 @@ namespace Client.Helpers
 
             return Lang.Global_ServiceError_Unknown;
         }
+
+        public static string GetString(string serverMessageKey)
+        {
+            if (string.IsNullOrEmpty(serverMessageKey))
+                return Lang.Global_ServiceError_Unknown;
+
+            switch (serverMessageKey)
+            {
+                case "Global_Error_CodeInvalid":
+                    return Lang.Global_Error_CodeInvalid;
+                case "Global_Error_CodeExpired":
+                    return Lang.Global_Error_CodeExpired;
+
+                case "Global_Error_RegistrationNotFound":
+                    return Lang.Global_Error_RegistrationNotFound;
+                case "Global_Error_EmailInUse":
+                    return Lang.Global_Error_EmailInUse;
+                case "Global_Error_PasswordInvalid":
+                    return Lang.Global_Error_PasswordInvalid;
+                case "Global_Error_EmailSendFailed":
+                    return Lang.Global_Error_EmailSendFailed;
+
+                case "Global_Error_InvalidCredentials":
+                    return Lang.Global_Error_InvalidCredentials;
+                case "Global_Error_InvalidUsername":
+                case "Glocal_Error_GuestUsernameInvalid":
+                    return Lang.Global_Error_InvalidUsername;
+
+                case "Global_Error_UsernameInUse":
+                    return Lang.Global_Error_UsernameInUse;
+
+                case "Global_ValidationUsername_InvalidChars":
+                    return Lang.Global_ValidationUsername_InvalidChars;
+
+                default:
+                    return Lang.Global_ServiceError_Unknown;
+            }
+        }
     }
 }
