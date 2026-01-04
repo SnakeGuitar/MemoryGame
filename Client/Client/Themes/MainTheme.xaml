@@ -16,6 +16,9 @@
     <SolidColorBrush x:Key="NormalHoverColor" Color="#D4C473"/>
     <SolidColorBrush x:Key="HardColor" Color="#E57373"/>
     <SolidColorBrush x:Key="HardHoverColor" Color="#CB6464"/>
+    <SolidColorBrush x:Key="ReportColor" Color="#BF4040"/>
+    <SolidColorBrush x:Key="InformationColor" Color="#4E96DF"/>
+    <SolidColorBrush x:Key="informationHoverColor" Color="#2880D7"/>
 
     <SolidColorBrush x:Key="GreenGame" Color="#3A6351"/>
 
@@ -26,7 +29,7 @@
 
     <Style x:Key="TitleTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource TitleFont}"/>
-        <Setter Property="FontSize" Value="80"/>
+        <Setter Property="FontSize" Value="70"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,0,0,0"/>
@@ -50,7 +53,7 @@
 
     <Style x:Key="MessageBoxTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontSize" Value="40"/>
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -202,7 +205,7 @@
     </Style>
 
     <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontSize" Value="28"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
         <Setter Property="Width" Value="125"/>
         <Setter Property="Template">
@@ -219,6 +222,56 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="buttonBorder" Property="Background" Value="{StaticResource PrimaryTextColor}"/>
                             <Setter Property="Foreground" Value="{StaticResource BackgroundColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="Foreground" Value="{StaticResource InformationColor}"/>
+        <Setter Property="Width" Value="125"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="buttonBorder"
+                        CornerRadius="18"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource InformationColor}"
+                        BorderThickness="1">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="{StaticResource InformationColor}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ReportButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="Foreground" Value="{StaticResource HardColor}"/>
+        <Setter Property="Width" Value="125"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="buttonBorder"
+                    CornerRadius="18"
+                    Background="Transparent"
+                    BorderBrush="{StaticResource ReportColor}"
+                    BorderThickness="1">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="buttonBorder" Property="Background" Value="{StaticResource ReportColor}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -248,17 +301,16 @@
     </Style>
 
     <Style x:Key="MenuButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-        <Setter Property="Height" Value="70"/>
+        <Setter Property="Height" Value="60"/>
         <Setter Property="Width" Value="350"/>
-        <Setter Property="FontSize" Value="38"/>
+        <Setter Property="FontSize" Value="33"/>
         <Setter Property="Margin" Value="0,15,0,15"/>
     </Style>
 
     <Style x:Key="ExitButtonStyle" TargetType="Button" BasedOn="{StaticResource MenuExitButtonStyle}">
-        <Setter Property="Height" Value="70"/>
+        <Setter Property="Height" Value="60"/>
         <Setter Property="Width" Value="350"/>
-        <Setter Property="FontSize" Value="33"/>
-        <Setter Property="Margin" Value="0,30,0,0"/>
+        <Setter Property="FontSize" Value="28"/>
     </Style>
 
     <Style x:Key="PrimaryLobbyButtonStyle" TargetType="Button" BasedOn="{StaticResource LobbyButtonStyle}">
@@ -382,8 +434,8 @@
     </Style>
 
     <Style x:Key="AvatarButtonStyle" TargetType="Button">
-        <Setter Property="Width" Value="132"/>
-        <Setter Property="Height" Value="120"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="150"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -556,6 +608,95 @@
         <Setter Property="Stretch" Value="UniformToFill"/>
         <Setter Property="Width" Value="128"/>
         <Setter Property="Height" Value="116"/>
+    </Style>
+    
+
+    <Style x:Key="QuadrantBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="#11FFFFFF"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Margin" Value="10,0,10,10"/>
+        <Setter Property="Padding" Value="15"/>
+    </Style>
+
+    <Style x:Key="TabItemStyle" TargetType="TabItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+        <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Padding" Value="15,5,15,5"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Border" 
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0"
+                        Margin="0,0,2,0">
+                        <ContentPresenter x:Name="ContentSite"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center" 
+                                      ContentSource="Header"
+                                      Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentColor}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="#99FFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentColor}"/>
+                            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TabControlStyle" TargetType="TabControl">
+        <Setter Property="Background" Value="#22FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="1"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="{StaticResource PrimaryTextColor}" Padding="5,5,0,0">
+                            <ItemsPresenter x:Name="HeaderPanel" 
+                                  Margin="0"/>
+                        </Border>
+
+                        <Border Grid.Row="1" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource AccentColor}" 
+                            BorderThickness="0,1,0,0">
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                          ContentSource="SelectedContent"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>

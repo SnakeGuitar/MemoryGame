@@ -15,18 +15,17 @@ using System.Windows.Shapes;
 namespace Client.Views.Controls
 {
     /// <summary>
-    /// Lógica de interacción para CustomMessageBox.xaml
+    /// Lógica de interacción para ConfirmationMessageBox.xaml
     /// </summary>
-    public partial class CustomMessageBox : Window
+    public partial class ConfirmationMessageBox : Window
     {
-        public enum MessageBoxType
+        public enum ConfirmationBoxType
         {
             Information,
-            Success,
             Warning,
-            Error
+            Critic
         }
-        public CustomMessageBox(String title, string message, Window owner, MessageBoxType type)
+        public ConfirmationMessageBox(string title, string message, Window owner, ConfirmationBoxType type)
         {
             InitializeComponent();
             this.Owner = owner;
@@ -36,29 +35,24 @@ namespace Client.Views.Controls
             SetStyle(type);
         }
 
-        private void SetStyle(MessageBoxType type)
+        private void SetStyle(ConfirmationBoxType type)
         {
             SolidColorBrush borderBrush;
             SolidColorBrush textMessageBrush;
             string lightTextColor = "AccentForegroundColor";
-            string darkTextColor = "PrimaryTextColor";
 
             switch (type)
             {
-                case MessageBoxType.Success:
-                    borderBrush = (SolidColorBrush)Application.Current.FindResource("EasyColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(darkTextColor);
-                    break;
-                case MessageBoxType.Warning:
+                case ConfirmationBoxType.Warning:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentHoverColor");
                     textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
-                case MessageBoxType.Error:
-                    borderBrush = (SolidColorBrush)Application.Current.FindResource("HardColor");
+                case ConfirmationBoxType.Information:
+                    borderBrush = (SolidColorBrush)Application.Current.FindResource("InformationColor");
                     textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
-                case MessageBoxType.Information:
-                    borderBrush = (SolidColorBrush)Application.Current.FindResource("InformationColor");
+                case ConfirmationBoxType.Critic:
+                    borderBrush = (SolidColorBrush)Application.Current.FindResource("HardColor");
                     textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 default:
@@ -66,14 +60,18 @@ namespace Client.Views.Controls
                     textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
             }
-
             MessageBorder.Background = borderBrush;
             TextBlockMessage.Foreground = textMessageBrush;
         }
 
         private void ButtonAccept_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.DialogResult = true;
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
