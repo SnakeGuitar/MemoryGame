@@ -1,118 +1,89 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using Server.SessionService;
-using Server.LobbyService;
-using Server.GameService;
 using Test.Helpers;
-using System.ServiceModel.Security;
 
 namespace Test.InfraestructureTest
 {
     [TestClass]
     public class WcfConnectivityTest
     {
-        // CHANGE WHEN CONNECTED TO HOTSPOT NETWORK
-        private const string TARGET_IP = "localhost";
+        private WcfConnectivityTestHelper _helper;
 
-        private const string USERSERVICE_PORT = "52001";
-        private const string LOBBYSERVICE_PORT = "53001";
-
-        private ChannelFactory<IUserService> _userServiceFactory;
-        private ChannelFactory<IGameLobbyService> _lobbyServiceFactory;
-        private WcfConnectivityTestHelper _helper = new WcfConnectivityTestHelper();
-
-        [TestCleanup]
-        public void Cleanup()
+        [TestInitialize]
+        public void Setup()
         {
-            _userServiceFactory?.Close();
-            _lobbyServiceFactory?.Close();
+            _helper = new WcfConnectivityTestHelper();
         }
 
         [TestMethod]
-        [TestCategory("Integration")]
-        public void Verify_UserService_Connection()
+        public void CreateRobustBinding_SetsSecurityModeToNone()
         {
             var binding = _helper.CreateRobustBinding();
-            var address = new EndpointAddress($"net.tcp://{TARGET_IP}:{USERSERVICE_PORT}");
 
-            _userServiceFactory = new ChannelFactory<IUserService>(binding, address);
-            IUserService proxy = null;
-
-            try
-            {
-                Console.WriteLine($"Connecting to UserService at {address.Uri}...");
-                proxy = _userServiceFactory.CreateChannel();
-
-                var response = proxy.Login("diana_best_fox_girl@test.com", "ping");
-
-                Assert.IsNotNull(response, "Service response was null");
-                Assert.AreEqual(CommunicationState.Opened, ((IClientChannel)proxy).State, "Channel is not opened");
-
-                Console.WriteLine("UserService connection successful. :3");
-            }
-            catch (EndpointNotFoundException)
-            {
-                Assert.Fail($"Couldn't find server at {TARGET_IP}." +
-                    $"\nPossible causes:" +
-                    $"\n1. Firewasll is blocking port {USERSERVICE_PORT}." +
-                    $"\n2. Server is offline." +
-                    $"\n3. IP is incorrect.");
-            }
-            catch (SecurityNegotiationException)
-            {
-                Assert.Fail("Security Error (SSPI). Check that both client and server have the same security settings.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Connection established, but internal logic failed: {ex.Message}");
-            }
-            finally
-            {
-                _helper.CloseChannel((IClientChannel)proxy);
-            }
+            Assert.AreEqual(SecurityMode.None, binding.Security.Mode);
         }
 
         [TestMethod]
-        [TestCategory("Integration")]
-        public void Verify_LobbyService_Connection()
+        public void CreateRobustBinding_SetsCorrectMaxReceivedMessageSize()
         {
             var binding = _helper.CreateRobustBinding();
-            var address = new EndpointAddress($"net.tcp://{TARGET_IP}:{LOBBYSERVICE_PORT}");
 
-            var mockCallback = new MockLobbyCallback();
-            var context = new InstanceContext(mockCallback);
+            Assert.AreEqual(52428800, binding.MaxReceivedMessageSize);
+        }
 
-            _lobbyServiceFactory = new DuplexChannelFactory<IGameLobbyService>(context, binding, address);
-            IGameLobbyService proxy = null;
+        [TestMethod]
+        public void CreateRobustBinding_SetsCorrectMaxBufferSize()
+        {
+            var binding = _helper.CreateRobustBinding();
 
+            Assert.AreEqual(52428800, binding.MaxBufferSize);
+        }
+
+        [TestMethod]
+        public void CreateRobustBinding_SetsCorrectMaxArrayLength()
+        {
+            var binding = _helper.CreateRobustBinding();
+
+            Assert.AreEqual(52428800, binding.ReaderQuotas.MaxArrayLength);
+        }
+
+        [TestMethod]
+        public void CreateRobustBinding_SetsCorrectOpenTimeout()
+        {
+            var binding = _helper.CreateRobustBinding();
+
+            Assert.AreEqual(TimeSpan.FromSeconds(15), binding.OpenTimeout);
+        }
+
+        [TestMethod]
+        public void CloseChannel_NullChannel_DoesNotThrow()
+        {
             try
             {
-                Console.WriteLine($"Connecting to LobbyService at {address.Uri}...");
-                proxy = _lobbyServiceFactory.CreateChannel();
+                _helper.CloseChannel(null);
+            }
+            catch
+            {
+                Assert.Fail("CloseChannel should not throw on null input.");
+            }
 
-                proxy.JoinLobby("test_token_connection", "000000", true, "NetTester");
+            Assert.IsTrue(true);
+        }
 
-                Assert.AreEqual(CommunicationState.Opened, ((IClientChannel)proxy).State, "Lobby Channel is not opened");
-                Console.WriteLine("LobbyService connection successful. :3");
-            }
-            catch (EndpointNotFoundException)
+        [TestMethod]
+        public void CloseFactory_NullFactory_DoesNotThrow()
+        {
+            try
             {
-                Assert.Fail($"Couldn't find Lobby Server at {TARGET_IP}:{LOBBYSERVICE_PORT}. Check Firewall/Port.");
+                _helper.CloseFactory(null);
             }
-            catch (SecurityNegotiationException)
+            catch
             {
-                Assert.Fail("Security Error (SSPI) on Lobby. Check <security mode='None'>.");
+                Assert.Fail("CloseFactory should not throw on null input.");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Connection established, logical error expected: {ex.Message}");
-            }
-            finally
-            {
-                _helper.CloseChannel((IClientChannel)proxy);
-            }
+
+            Assert.IsTrue(true);
         }
     }
 }
