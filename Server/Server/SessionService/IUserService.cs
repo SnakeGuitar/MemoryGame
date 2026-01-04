@@ -41,6 +41,11 @@ namespace Server.SessionService
 
         [OperationContract]
         void LogoutGuest(string sessionToken);
+        [OperationContract]
+        ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword);
+
+        [OperationContract]
+        ResponseDTO VerifyGuestRegistration(int guestUserId, string email, string pin);
 
         [OperationContract]
         List<FriendDTO> GetFriendsList(string token);
@@ -91,6 +96,23 @@ namespace Server.SessionService
         public string Username { get; set; }
         [DataMember]
         public string Email { get; set; }
+        [DataMember]
+        public string Name { get; set; }
+        [DataMember]
+        public string LastName { get; set; }
+        [DataMember]
+        public DateTime RegistrationDate { get; set; }
+        [DataMember]
+        public List<SocialNetworkDTO> SocialNetworks { get; set; } = new List<SocialNetworkDTO>();
+    }
+
+    [DataContract]
+    public class SocialNetworkDTO
+    {
+        [DataMember]
+        public int SocialNetworkId { get; set; }
+        [DataMember]
+        public string Account { get; set; }
     }
 
     [DataContract]

@@ -179,6 +179,7 @@ namespace Server.SessionService.Core
                         username = email.Split('@')[0],
                         isGuest = false,
                         verifiedEmail = true,
+                        registrationDate = DateTime.Now
                     };
 
                     db.user.Add(newUser);
@@ -235,7 +236,13 @@ namespace Server.SessionService.Core
                     {
                         UserId = user.userId,
                         Username = user.username,
-                        Email = user.email
+                        Email = user.email,
+                        RegistrationDate = user.registrationDate,
+                        SocialNetworks = user.socialNetwork.Select(sn => new SocialNetworkDTO
+                        {
+                            SocialNetworkId = sn.socialNetworkId,
+                            Account = sn.account
+                        }).ToList()
                     };
 
                     _logger.LogInfo($"User registration finalized for email: {email}");
@@ -306,7 +313,13 @@ namespace Server.SessionService.Core
                     {
                         UserId = user.userId,
                         Username = user.username,
-                        Email = user.email
+                        Email = user.email,
+                        RegistrationDate = user.registrationDate,
+                        SocialNetworks = user.socialNetwork.Select(sn => new SocialNetworkDTO
+                        {
+                            SocialNetworkId = sn.socialNetworkId,
+                            Account = sn.account
+                        }).ToList()
                     };
 
                     _logger.LogInfo($"User logged in successfully: {email}");
@@ -358,7 +371,8 @@ namespace Server.SessionService.Core
                         username = guestUsername,
                         avatar = null,
                         isGuest = true,
-                        verifiedEmail = false
+                        verifiedEmail = false,
+                        registrationDate = DateTime.Now
                     };
 
                     db.user.Add(guestUser);
@@ -425,6 +439,116 @@ namespace Server.SessionService.Core
             catch (Exception ex)
             {
                 _logger.LogError($"LogoutGuest Error: {ex.Message}");
+            }
+        }
+
+        public ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword)
+        {
+            if (!_validator.IsValidPassword(newPassword))
+            {
+                _logger.LogInfo($"Invalid password attempt during guest to user update for userId: {guestUserId}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_PasswordInvalid" };
+            }
+            string hashedPassword = _securityService.HashPassword(newPassword);
+
+            try
+            {
+                using (var db = new memoryGameDBEntities())
+                {
+                    var guestUser = db.user.Find(guestUserId);
+                    if (guestUser == null)
+                    {
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
+                    }
+                        
+
+                    if (guestUser.isGuest != true)
+                    {
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_AlreadyRegistered" };
+                    }
+                        
+
+                    if (db.user.Any(u => u.email == newEmail && u.userId != guestUserId))
+                    {
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailInUse" };
+                    }
+                        
+
+                    var oldPending = db.pendingRegistration.FirstOrDefault(p => p.email == newEmail);
+                    if (oldPending != null) db.pendingRegistration.Remove(oldPending);
+
+                    string pin = _securityService.GeneratePin();
+
+                    var pending = new pendingRegistration
+                    {
+                        email = newEmail,
+                        hashedPassword = hashedPassword,
+                        pin = pin,
+                        expirationTime = DateTime.Now.AddMinutes(15),
+                        createdAt = DateTime.Now
+                    };
+                    db.pendingRegistration.Add(pending);
+                    db.SaveChanges();
+
+                    if (!_notificationService.SendVerificationEmail(newEmail, pin))
+                    {
+                        _logger.LogError($"Failed to send verification email to: {newEmail}");
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_EmailSendFailed" };
+                    }
+                    else
+                    {
+                        return new ResponseDTO { Success = true };
+                    }
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"StartRegistration Database Error for email {newEmail}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"StartRegistration Error for email {newEmail}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
+            }
+        }
+
+        public ResponseDTO VerifyGuestRegistration(int guestUserId, string email, string pin)
+        {
+            try
+            {
+                using (var db = new memoryGameDBEntities())
+                {
+                    var pending = db.pendingRegistration
+                        .FirstOrDefault(p => p.email == email && p.pin == pin && p.expirationTime > DateTime.Now);
+
+                    if (pending == null)
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeInvalid" };
+
+                    var userToUpdate = db.user.Find(guestUserId);
+                    if (userToUpdate == null || userToUpdate.isGuest != true)
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
+
+                    userToUpdate.email = pending.email;
+                    userToUpdate.password = pending.hashedPassword;
+                    userToUpdate.isGuest = false;
+                    userToUpdate.verifiedEmail = true;
+
+                    db.pendingRegistration.Remove(pending);
+                    db.SaveChanges();
+
+                    return new ResponseDTO { Success = true };
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"VerifyRegistration Database Error for email {email}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Database" };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"VerifyRegistration Error for email {email}: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
     }

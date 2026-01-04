@@ -115,6 +115,31 @@ namespace Server.SessionService
             _authenticationCore.LogoutGuest(sessionToken);
         }
 
+        /// <summary>
+        /// Initiates the user registration process using an email address and password.
+        /// A verification code is generated and sent to the provided email.
+        /// </summary>
+        /// <param name="guestUserId">The guest user ID from the current session.param>
+        /// <param name="newEmail">The user's new email address that will replace the temporary registration.param>
+        /// <param name="newPassword">The new user password that will replace the temporary registration.</param>
+        /// <returns>A <see cref="ResponseDTO"/> indicating the result of the operation.</returns>
+        public ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword)
+        {
+            return _authenticationCore.InitiateGuestRegistration(guestUserId, newEmail, newPassword);
+        }
+
+        /// <summary>
+        /// Complete the registration of a guest user after email verification.
+        /// </summary>
+        /// 
+        /// <param name="guestUserId">The guest user ID from the current session.param>
+        /// <param name="email">The email address you entered earlier will be verified.</param>
+        /// <param name="pin">The one-time verification code.</param>
+        /// <returns>A <see cref="ResponseDTO"/> indicating whether verification succeeded</returns>
+        public ResponseDTO VerifyGuestRegistration(int guestUserId, string email, string pin)
+        {
+            return _authenticationCore.VerifyGuestRegistration(guestUserId, email, pin);
+        }
 
         // === User Profile ===
 
