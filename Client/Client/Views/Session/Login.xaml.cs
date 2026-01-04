@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Session
 {
@@ -26,7 +29,7 @@ namespace Client.Views.Session
     /// </summary>
     public partial class Login : Window
     {
-        private readonly UserServiceReference.UserServiceClient _userServiceClient = new UserServiceReference.UserServiceClient();
+        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         public Login()
         {
             InitializeComponent();
@@ -48,17 +51,17 @@ namespace Client.Views.Session
             LabelEmailError.Content = "";
             LabelPasswordError.Content = "";
 
-            ValidationCode validationEmail = Helpers.ValidationHelper.ValidateEmail(email);
+            ValidationCode validationEmail = ValidateEmail(email);
             if (validationEmail != ValidationCode.Success)
             {
-                LabelEmailError.Content = Helpers.LocalizationHelper.GetString(validationEmail);
+                LabelEmailError.Content = GetString(validationEmail);
                 return;
             }
 
-            ValidationCode validationPassword = Helpers.ValidationHelper.ValidatePassword(password);
+            ValidationCode validationPassword = ValidatePassword(password);
             if (validationPassword != ValidationCode.Success)
             {
-                LabelPasswordError.Content = Helpers.LocalizationHelper.GetString(validationPassword);
+                LabelPasswordError.Content = GetString(validationPassword);
                 return;
             }
 
@@ -73,9 +76,9 @@ namespace Client.Views.Session
                     UserSession.StartSession(response.SessionToken, response.User.UserId, response.User.Username, response.User.Email);
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_LoginSuccess, successMessage, 
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
+                        this, MessageBoxType.Success);
                     msgBox.ShowDialog();
 
                     var mainMenu = new MainMenu();
@@ -90,10 +93,10 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    string errorMessage = GetString(response.MessageKey);
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_LoginFailed, errorMessage,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonAcceptLogin.IsEnabled = true;
@@ -101,47 +104,36 @@ namespace Client.Views.Session
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptLogin.IsEnabled = true;
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptLogin.IsEnabled = true;
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptLogin.IsEnabled = true;
-            }
-        }
-
-        private string GetServerErrorMessage(string messageKey)
-        {
-            switch (messageKey)
-            {
-                case "Global_Error_InvalidCredentials":
-                    return Lang.Global_Error_InvalidCredentials;
-                default:
-                    return Lang.Global_ServiceError_Unknown;
             }
         }
 

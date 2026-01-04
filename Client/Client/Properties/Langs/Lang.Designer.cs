@@ -1528,6 +1528,16 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Account successfully verified! 
+        ///You need to log in with your new account :).
+        /// </summary>
+        public static string VerifyCode_Message_GuestSuccess {
+            get {
+                return ResourceManager.GetString("VerifyCode_Message_GuestSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Your account has been successfully verified!.
         /// </summary>
         public static string VerifyCode_Message_Success {

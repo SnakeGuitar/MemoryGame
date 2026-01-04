@@ -609,4 +609,7 @@
   <data name="ReportUserDialog_Message_Report" xml:space="preserve">
     <value>¿Estás seguro de denunciar a este jugador por mal comportamiento?</value>
   </data>
+  <data name="VerifyCode_Message_GuestSuccess" xml:space="preserve">
+    <value>¡Cuenta verificada con éxito! Debes iniciar sesión con tu nueva cuenta :)</value>
+  </data>
 </root>

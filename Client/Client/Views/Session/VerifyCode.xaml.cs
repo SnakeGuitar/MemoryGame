@@ -1,4 +1,5 @@
-﻿using Client.Properties.Langs;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
@@ -17,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
 using static Client.Views.Controls.CustomMessageBox;
 
@@ -30,12 +32,13 @@ namespace Client.Views.Session
         private readonly string _email;
         private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         private const int PIN_LENGTH = 6;
-        
+        private readonly bool _isGuestRegister;
 
-        public VerifyCode(string email)
+        public VerifyCode(string email, bool isGuestRegister = false)
         {
             InitializeComponent();
             _email = email ?? throw new ArgumentNullException(nameof(email));
+            _isGuestRegister = isGuestRegister;
             LabelRegisterEmail.Content = _email;
         }
 
@@ -58,10 +61,10 @@ namespace Client.Views.Session
             string code = TextBoxInputVericationCode.Text?.Trim();
             LabelCodeError.Content = "";
 
-            ValidationCode validationCode = Helpers.ValidationHelper.ValidateVerifyCode(code, PIN_LENGTH);
+            ValidationCode validationCode = ValidateVerifyCode(code, PIN_LENGTH);
             if (validationCode != ValidationCode.Success)
             {
-                LabelCodeError.Content = Helpers.LocalizationHelper.GetString(validationCode);
+                LabelCodeError.Content = GetString(validationCode);
                 return;
             }
 
@@ -69,84 +72,68 @@ namespace Client.Views.Session
 
             try
             {
-                ResponseDTO response = await _userServiceClient.VerifyRegistrationAsync(_email, code);
+                ResponseDTO response;
+                string messageSuccess = Lang.VerifyCode_Message_Success;
 
-                if (response.Success)
+                if (_isGuestRegister)
                 {
-                    var msgBox = new Views.Controls.CustomMessageBox(
-                        Lang.Global_Title_Success,
-                        Lang.VerifyCode_Message_Success,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
-                    msgBox.ShowDialog();
-
-                    var profileSetupWindow = new SetupProfile(_email);
-                    profileSetupWindow.WindowState = this.WindowState;
-                    profileSetupWindow.Show();
-                    this.Close();
+                    response = await _userServiceClient.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
+                    messageSuccess = Lang.VerifyCode_Message_GuestSuccess;
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    response = await _userServiceClient.VerifyRegistrationAsync(_email, code);
+                }
+
+                if (response.Success)
+                {
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Success, messageSuccess,
+                        this, MessageBoxType.Success);
+                    msgBox.ShowDialog();
+
+                    if (_isGuestRegister)
+                    {
+                        UserSession.EndSession();
+
+                        Login loginWindow = new Login();
+                        Application.Current.MainWindow = loginWindow;
+                        loginWindow.Show();
+
+                        Window ownerWindow = this.Owner;
+                        this.Close();
+                        ownerWindow?.Close();
+                    }
+                    else
+                    {
+                        var profileSetupWindow = new SetupProfile(_email);
+                        profileSetupWindow.WindowState = this.WindowState;
+                        profileSetupWindow.Show();
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    string errorMessage = LocalizationHelper.GetString(response.MessageKey);
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonVerifyCode.IsEnabled = true;
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_ServerOffline, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonVerifyCode.IsEnabled = true;
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonVerifyCode.IsEnabled = true;
-            }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                string errorMessage = LocalizationHelper.GetString(ex);
+                Debug.WriteLine($"[Error]: {ex.Message}");
+
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_Error, errorMessage,
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonVerifyCode.IsEnabled = true;
-            }
-
-        }
-
-        private string GetServerErrorMessage(string messageKey)
-        {
-            switch (messageKey)
-            {
-                case "Global_Error_CodeInvalid":
-                    return Lang.Global_Error_CodeInvalid;
-                case "Global_Error_CodeExpired":
-                    return Lang.Global_Error_CodeExpired;
-                case "Global_Error_RegistrationNotFound":
-                    return Lang.Global_Error_RegistrationNotFound;
-                case "Global_Error_EmailInUse":
-                    return Lang.Global_Error_EmailInUse;
-                case "Global_Error_EmailSendFailed":
-                    return Lang.Global_Error_EmailSendFailed;
-                default:
-                    return Lang.Global_ServiceError_Unknown;
             }
         }
 
@@ -167,7 +154,7 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
+                    string errorMessage = GetString(response.MessageKey);
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
                         this, MessageBoxType.Error);
@@ -179,9 +166,9 @@ namespace Client.Views.Session
                 string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 
                 Debug.WriteLine($"[Resend Code Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, CustomMessageBox.MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
             finally
@@ -206,7 +193,7 @@ namespace Client.Views.Session
         {
             try
             {
-                if (_userServiceClient?.State == System.ServiceModel.CommunicationState.Opened)
+                if (_userServiceClient?.State == CommunicationState.Opened)
                 {
                     _userServiceClient.Close();
                 }

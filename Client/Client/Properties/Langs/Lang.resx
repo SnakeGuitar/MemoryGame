@@ -609,4 +609,8 @@
   <data name="ReportUserDialog_Message_Report" xml:space="preserve">
     <value>Are you sure you want to report this player for bad behavior?</value>
   </data>
+  <data name="VerifyCode_Message_GuestSuccess" xml:space="preserve">
+    <value>Account successfully verified! 
+You need to log in with your new account :)</value>
+  </data>
 </root>

@@ -1,5 +1,7 @@
-﻿using Client.Properties.Langs;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +17,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Session
 {
@@ -24,10 +28,17 @@ namespace Client.Views.Session
     /// </summary>
     public partial class RegisterAccount : Window
     {
-        private readonly UserServiceReference.UserServiceClient _userServiceClient = new UserServiceReference.UserServiceClient();
-        public RegisterAccount()
+        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
+        private readonly bool _isGuestRegister;
+        public RegisterAccount(bool isGuestRegister = false)
         {
             InitializeComponent();
+            _isGuestRegister = isGuestRegister;
+
+            if (_isGuestRegister)
+            {
+                TitleRegister.Content = Lang.RegisterAccount_Title_LinkAccount;
+            }
         }
 
         private async void ButtonAcceptRegisterAccount_Click(object sender, RoutedEventArgs e)
@@ -38,17 +49,17 @@ namespace Client.Views.Session
             LabelEmailError.Content = "";
             LabelPasswordError.Content = "";
 
-            ValidationCode validationEmail = Helpers.ValidationHelper.ValidateEmail(email);
+            ValidationCode validationEmail = ValidateEmail(email);
             if (validationEmail != ValidationCode.Success)
             {
-                LabelEmailError.Content = Helpers.LocalizationHelper.GetString(validationEmail);
+                LabelEmailError.Content = GetString(validationEmail);
                 return;
             }
 
-            ValidationCode validationPassword = Helpers.ValidationHelper.ValidatePassword(password);
+            ValidationCode validationPassword = ValidatePassword(password);
             if (validationPassword != ValidationCode.Success)
             {
-                LabelPasswordError.Content = Helpers.LocalizationHelper.GetString(validationPassword);
+                LabelPasswordError.Content = GetString(validationPassword);
                 return;
             }
 
@@ -56,17 +67,26 @@ namespace Client.Views.Session
 
             try
             {
-                ResponseDTO response = await _userServiceClient.StartRegistrationAsync(email, password);
+                ResponseDTO response;
+
+                if (_isGuestRegister)
+                {
+                    response = await _userServiceClient.InitiateGuestRegistrationAsync(
+                        UserSession.UserId, email, password);
+                }
+                else
+                {
+                    response = await _userServiceClient.StartRegistrationAsync(email, password);
+                }
 
                 if (response.Success)
                 {
-                    var msgBox = new Views.Controls.CustomMessageBox(
-                        Lang.Global_Title_Success, 
-                        Lang.RegisterAccount_Message_Success, 
-                        this, Views.Controls.CustomMessageBox.MessageBoxType.Success);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
+                        this, MessageBoxType.Success);
                     msgBox.ShowDialog();
 
-                    var verifyCodeWindow = new VerifyCode(email);
+                    var verifyCodeWindow = new VerifyCode(email, _isGuestRegister);
                     verifyCodeWindow.WindowState = this.WindowState;
                     verifyCodeWindow.Owner = this;
                     verifyCodeWindow.Show();
@@ -74,33 +94,34 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetServerErrorMessage(response.MessageKey);
-                    var msgBox = new Views.Controls.CustomMessageBox(
+                    string errorMessage = GetString(response.MessageKey);
+                    var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonAcceptRegisterAccount.IsEnabled = true;
                 }
+
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage, 
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptRegisterAccount.IsEnabled = true;
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage, 
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptRegisterAccount.IsEnabled = true;
@@ -109,27 +130,12 @@ namespace Client.Views.Session
             {
                 string errorMessage = Helpers.LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage, 
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 ButtonAcceptRegisterAccount.IsEnabled = true;
-            }
-        }
-
-        private string GetServerErrorMessage(string messageKey)
-        {
-            switch (messageKey)
-            {
-                case "Global_Error_PasswordInvalid":
-                    return Lang.Global_Error_PasswordInvalid;
-                case "Global_Error_EmailInUse":
-                    return Lang.Global_Error_EmailInUse;
-                case "Global_Error_EmailSendFailed":
-                    return Lang.Global_Error_EmailSendFailed;
-                default:
-                    return Lang.Global_ServiceError_Unknown;
             }
         }
 
