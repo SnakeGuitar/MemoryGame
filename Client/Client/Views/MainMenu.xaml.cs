@@ -1,7 +1,9 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Views.Controls;
 using Client.Views.Multiplayer;
+using Client.Views.Session;
 using Client.Views.Singleplayer;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Client.Helpers.LocalizationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views
 {
@@ -26,21 +30,22 @@ namespace Client.Views
     /// </summary>
     public partial class MainMenu : Window
     {
-        private readonly UserServiceReference.UserServiceClient _userServiceClient = new UserServiceReference.UserServiceClient();
+        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         public MainMenu()
         {
             InitializeComponent();
-
             UsernameDisplay.Content = UserSession.Username;
-            
+            ButtonSignIn.Visibility = Visibility.Visible;
+
             if (!UserSession.IsGuest)
             {
-                LoadAvatarAsync();
+                _ = LoadAvatarAsync();
+                ButtonSignIn.Visibility = Visibility.Collapsed;
             }
 
         }
 
-        private void ButtonSingleplayer_Click(object sender, RoutedEventArgs e)
+        private void ButtonSinglePlayer_Click(object sender, RoutedEventArgs e)
         {
             var singlePlayerMenu = new SelectDifficulty();
             singlePlayerMenu.WindowState = this.WindowState;
@@ -67,30 +72,60 @@ namespace Client.Views
             this.Hide();
 
         }
-
-        private void ButtonGallery_Click(object sender, RoutedEventArgs e)
+        private void ButtonProfile_Click(object sender, RoutedEventArgs e)
         {
+            if (UserSession.IsGuest)
+            {
+                string message = Lang.Global_Error_GuestsNotAllowed;
+                string title = Lang.Global_Title_NotAvailableFunction;
+                var msgBox = new CustomMessageBox(title, message,
+                    this, MessageBoxType.Warning);
+                msgBox.ShowDialog();
+                return;
+            }
 
+            var profileWindow = new Profile.PlayerProfile();
+            profileWindow.WindowState = this.WindowState;
+            profileWindow.Owner = this;
+            profileWindow.Show();
+            this.Hide();
+        }
+
+        private void ButtonSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            var signInWindow = new RegisterAccount(true);
+            signInWindow.WindowState = this.WindowState;
+            signInWindow.Owner = this;
+            signInWindow.Show();
+            this.Hide();
         }
 
         private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
         {
-            if (UserSession.IsGuest)
+            var confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
+
+            bool? result = confirmationBox.ShowDialog();
+            if (result == true)
             {
-                try
+                if (UserSession.IsGuest)
                 {
-                    _userServiceClient.LogoutGuestAsync(UserSession.SessionToken);
+                    try
+                    {
+                        _userServiceClient.LogoutGuestAsync(UserSession.SessionToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error on LogoutGuest: {ex.Message}");
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error on LogoutGuest: {ex.Message}");
-                }
+                UserSession.EndSession();
+                Application.Current.Shutdown();
             }
-            UserSession.EndSession();
-            Application.Current.Shutdown();
         }
 
-        private async void LoadAvatarAsync()
+        private async Task LoadAvatarAsync()
         {
             try
             {
@@ -98,40 +133,39 @@ namespace Client.Views
 
                 if (avatarBytes != null && avatarBytes.Length > 0)
                 {
-                    ProfilePicture.Source = Client.Helpers.ImageHelper.ByteArrayToImageSource(avatarBytes);
+                    ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(avatarBytes);
                 }
                 else
                 {
                     Debug.WriteLine($"Avatar not found for user: {UserSession.Username}");
                 }
-                
+
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_NetworkError, 
-                    Helpers.LocalizationHelper.GetString(ex),
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_NetworkError, errorMessage,
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Views.Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
             }
         }
@@ -143,33 +177,6 @@ namespace Client.Views
                 owner.Show();
             }
             base.OnClosed(e);
-        }
-
-        private void ButtonFriends_Click(object sender, RoutedEventArgs e)
-        {
-            var friendsWindow = new Social.FriendsMenu();
-            friendsWindow.Owner = this;
-            friendsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            friendsWindow.Show();
-            this.Hide();
-        }
-
-        private void ButtonStats_Click(object sender, RoutedEventArgs e)
-        {
-            var statsWindow = new Profile.StatsHistory();
-            statsWindow.Owner = this;
-            statsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            statsWindow.Show();
-            this.Hide();
-        }
-
-        private void ButtonProfile_Click(object sender, RoutedEventArgs e)
-        {
-            var profileWindow = new Profile.EditProfile();
-            profileWindow.Owner = this;
-            profileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            profileWindow.Show();
-            this.Hide();
         }
     }
 }

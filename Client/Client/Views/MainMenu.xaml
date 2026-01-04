@@ -3,10 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:language="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
         Title="MainMenu" 
-        MinHeight="700" MinWidth="1280" 
+        MinHeight="720" MinWidth="1280" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
@@ -25,17 +26,24 @@
 
             <Border Background="#4C36454F" CornerRadius="10" Padding="15" 
                     HorizontalAlignment="Right" VerticalAlignment="Top" Margin="30"
-                    MaxWidth="200">
+                    MaxWidth="400">
 
                 <StackPanel>
-                    <Grid HorizontalAlignment="Center" Width="128" Height="128">
+                    <Grid HorizontalAlignment="Center" Width="150" Height="150">
                         <Border BorderBrush="{StaticResource AccentForegroundColor}" BorderThickness="2" CornerRadius="5"/>
                         <Image Name="ProfilePicture" Stretch="UniformToFill" Margin="2"/>
-                        <Button Style="{StaticResource AvatarButtonStyle}"/>
+                        <Button Style="{StaticResource AvatarButtonStyle}"
+                                Click="ButtonProfile_Click"/>
                     </Grid>
 
                     <Label x:Name="UsernameDisplay" Content="Username" 
                            Style="{StaticResource RegisterLabelStyle}"/>
+
+                    <Button Content="{x:Static language:Lang.Global_Button_SignIn}"
+                            x:Name="ButtonSignIn"
+                            Style="{StaticResource CreateLobbyButtonStyle}" 
+                            Width="130" Height="40"  FontSize="20" Foreground="{StaticResource AccentForegroundColor}"
+                            Click="ButtonSignIn_Click"/>
                 </StackPanel>
             </Border>
         </Grid>
@@ -44,9 +52,8 @@
 
             <StackPanel VerticalAlignment="Center" Margin="20">
 
-                <TextBlock Text="{x:Static language:Lang.TitleScreen_Label_Memorama}" 
-                           FontFamily="{StaticResource TitleFont}"
-                           FontSize="70"
+                <TextBlock Style="{StaticResource TitleTextStyle}"
+                           Text="{x:Static language:Lang.TitleScreen_Label_Memorama}"
                            Foreground="{StaticResource AccentForegroundColor}"
                            HorizontalAlignment="Center"
                            TextAlignment="Center"
@@ -55,7 +62,7 @@
 
                 <Button Content="{x:Static language:Lang.Global_Title_Singleplayer}" 
                         Style="{StaticResource MenuButtonStyle}"
-                        Click="ButtonSingleplayer_Click"/>
+                        Click="ButtonSinglePlayer_Click"/>
 
                 <Button Content="{x:Static language:Lang.Global_Title_Multiplayer}" 
                         Style="{StaticResource MenuButtonStyle}"
@@ -65,44 +72,7 @@
                         Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonSettings_Click"/>
 
-                <Button Content="{x:Static language:Lang.MainMenu_Button_Gallery}" 
-                        Style="{StaticResource MenuButtonStyle}"
-                        Click="ButtonGallery_Click"/>
-                <Button Content="Friends" 
-        Click="ButtonFriends_Click" 
-        Height="50" 
-        Width="250" 
-        Margin="0,10,0,0" 
-        FontSize="18" 
-        FontWeight="Bold"
-        Background="#4CAF50" 
-        Foreground="White"
-        BorderThickness="0"/>
-
-                <Button Content="Statistics" 
-        Click="ButtonStats_Click" 
-        Height="50" 
-        Width="250" 
-        Margin="0,10,0,0" 
-        FontSize="18" 
-        FontWeight="Bold"
-        Background="#2196F3" 
-        Foreground="White"
-        BorderThickness="0"/>
-
-                <Button Content="My Profile" 
-        Click="ButtonProfile_Click" 
-        Height="50" 
-        Width="250" 
-        Margin="0,10,0,0" 
-        FontSize="18" 
-        FontWeight="Bold"
-        Background="#9C27B0" 
-        Foreground="White"
-        BorderThickness="0"/>
-
-
-                <Button Content="{x:Static language:Lang.MainMenu_Button_ExitGame}" 
+                <Button Content="{x:Static language:Lang.Global_Button_ExitGame}" 
                         Style="{StaticResource ExitButtonStyle}"
                         Click="ButtonExitGame_Click"/>
             </StackPanel>

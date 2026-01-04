@@ -14,15 +14,14 @@
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="520" 
-              MaxHeight="640"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Width="500" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Button_Join}" 
                            Style="{StaticResource TitleLabelStyle}" />

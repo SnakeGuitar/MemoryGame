@@ -8,19 +8,20 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="TitleScreen" 
-        MinHeight="450" MinWidth="800" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="750" 
-              MaxHeight="600"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
+
+                <StackPanel HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Width="500" Margin="0,0,0,50">
 
                     <TextBlock Style="{StaticResource TitleTextStyle}"
                                Text="{x:Static language:Lang.TitleScreen_Label_Memorama}"/>
@@ -36,13 +37,17 @@
                                 Click="ButtonLogIn_Click"/>
 
                         <Button Content="{x:Static language:Lang.Global_Button_SignIn}"
-                                Style="{StaticResource SecondaryButtonStyle}"
-                                Click="ButtonSignIn_Click" Width="245"/>
-                    </StackPanel>
+                                Style="{StaticResource SecondaryButtonStyle}" Width="260"
+                                Click="ButtonSignIn_Click" />
 
+                        <Button Content="{x:Static language:Lang.Global_Button_ExitGame}"
+                                Margin="0,30,0,0"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Click="ButtonExitGame_Click" Width="200" Height="50"
+                                FontSize="20"/>
+                    </StackPanel>
                 </StackPanel>
             </Viewbox>
         </Grid>
-
     </Grid>
 </Window>

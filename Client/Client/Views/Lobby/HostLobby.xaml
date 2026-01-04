@@ -12,98 +12,6 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
 
-    <Window.Resources>
-
-        <Style x:Key="QuadrantBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="#11FFFFFF"/>
-            <Setter Property="CornerRadius" Value="10"/>
-            <Setter Property="Margin" Value="10,0,10,10"/>
-            <Setter Property="Padding" Value="15"/>
-        </Style>
-
-        <Style x:Key="LobbyTabItemStyle" TargetType="TabItem">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
-            <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="Padding" Value="15,5,15,5"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabItem">
-                        <Border x:Name="Border" 
-                                Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0"
-                                Margin="0,0,2,0">
-                            <ContentPresenter x:Name="ContentSite"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Center" 
-                                              ContentSource="Header"
-                                              Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentColor}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#99FFFFFF"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="{StaticResource AccentColor}"/>
-                                <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="LobbyTabControlStyle" TargetType="TabControl">
-            <Setter Property="Background" Value="#22FFFFFF"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1"/>
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TabControl">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <Border Grid.Row="0" Background="{StaticResource PrimaryTextColor}" Padding="5,5,0,0">
-                                <ItemsPresenter x:Name="HeaderPanel" 
-                                          Margin="0"/>
-                            </Border>
-
-                            <Border Grid.Row="1" 
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{StaticResource AccentColor}" 
-                                    BorderThickness="0,1,0,0">
-                                <ContentPresenter x:Name="PART_SelectedContentHost"
-                                                  ContentSource="SelectedContent"
-                                                  Margin="{TemplateBinding Padding}"/>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </Window.Resources>
-
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20" ClipToBounds="True">
@@ -128,16 +36,18 @@
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <Label Content="{x:Static language:Lang.HostLobby_Label_GameCode}" 
                                Style="{StaticResource RegisterLabelStyle}" Margin="0"/>
+                        
                         <Label Name="LabelGameCode" Content="XXXXXX" 
                                Foreground="White" FontWeight="Bold" 
                                FontFamily="{StaticResource BodyFont}" FontSize="24" 
                                VerticalAlignment="Center"/>
+                        
                     </StackPanel>
                 </Grid>
 
-                <TabControl Grid.Row="1" Style="{StaticResource LobbyTabControlStyle}" Margin="0,10,0,10">
+                <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}" Margin="0,10,0,10">
 
-                    <TabItem Header="{x:Static language:Lang.Global_Title_Lobby}" Style="{StaticResource LobbyTabItemStyle}" Margin="-5,0,0,0">
+                    <TabItem Header="{x:Static language:Lang.Global_Title_Lobby}" Style="{StaticResource TabItemStyle}" Margin="-5,0,0,0">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
@@ -207,7 +117,7 @@
                         </Grid>
                     </TabItem>
 
-                    <TabItem Header="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource LobbyTabItemStyle}">
+                    <TabItem Header="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource TabItemStyle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>

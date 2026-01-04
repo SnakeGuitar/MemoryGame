@@ -1,4 +1,5 @@
 ﻿using Client.Models;
+using Client.Properties.Langs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,6 @@ namespace Client.Views.Singleplayer
         {
             InitializeComponent();
             ComboBoxSelectNumberCards.SelectedIndex = 0;
-        } 
-
-        private void ComboBoxSelectNumberCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private void TimerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -43,24 +39,22 @@ namespace Client.Views.Singleplayer
         {
             int selectedCards = 16;
 
-            if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem)
+            if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem && 
+                int.TryParse(selectedItem.Content.ToString(), out int result))
             {
-                if (int.TryParse(selectedItem.Content.ToString(), out int result))
-                {
-                    selectedCards = result;
-                }
+                selectedCards = result;
             }
 
             int selectedTime = (int)TimerSlider.Value;
-            var layout = DifficultyPresets.CalculateLayout(selectedCards);
+            var (Rows, Columns) = DifficultyPresets.CalculateLayout(selectedCards);
 
             var customConfig = new GameConfiguration
             {
                 NumberOfCards = selectedCards,
                 TimeLimitSeconds = selectedTime,
-                DifficultyLevel = "Personalizado",
-                NumberRows = layout.Rows,
-                NumberColumns = layout.Columns
+                DifficultyLevel = Lang.Global_Button_Custom,
+                NumberRows = Rows,
+                NumberColumns = Columns
             };
 
             var gameWindow = new PlayGameSingleplayer(customConfig);

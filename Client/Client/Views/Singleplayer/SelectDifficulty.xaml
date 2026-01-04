@@ -8,21 +8,20 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="SelectDifficulty" 
-        MinHeight="550" MinWidth="450" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
 
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="900" 
-              MaxHeight="1115"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
 
                 <StackPanel HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            Width="700" Margin="0,0,0,50">
                     
                     <Label Content="{x:Static language:Lang.Global_Title_Singleplayer}" 
                            Style="{StaticResource TitleLabelStyle}" />

@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
+using Client.UserServiceReference;
+using Client.Views.Controls;
+using Client.Views.Session;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +17,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Client.Views.Session;
 
 namespace Client.Views
 {
@@ -49,6 +54,20 @@ namespace Client.Views
             registerAccountWindow.Owner = this;
             registerAccountWindow.Show();
             this.Hide();
+        }
+
+        private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
+        {
+            var confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
+
+            bool? result = confirmationBox.ShowDialog();
+            if (result == true)
+            {
+                UserSession.EndSession();
+                Application.Current.Shutdown();
+            }
         }
     }
 }

@@ -8,22 +8,24 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="Settings" 
-        MinHeight="700" MinWidth="865"
+        MinHeight="550" MinWidth="450"
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
+        
         <Grid HorizontalAlignment="Center" 
-              VerticalAlignment="Center"
-              MaxWidth="700" MaxHeight="865"
-              Margin="0,0,0,120">
+              VerticalAlignment="Center">
 
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform"
+                     MaxWidth="1200" MaxHeight="1400">
+                
                 <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center"
-                            Width="581">
+                            Width="600" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Button_Settings}" 
-                           Style="{StaticResource TitleLabelStyle}" Width="558" HorizontalContentAlignment="Center"/>
+                           Style="{StaticResource TitleLabelStyle}"
+                           HorizontalContentAlignment="Center"/>
 
                     <Label Content="{x:Static language:Lang.Settings_Label_Audio}" 
                            Style="{StaticResource SubTitleStyle}"/>
@@ -62,8 +64,10 @@
                            Style="{StaticResource SubTitleStyle}" Margin="0,20,0,10"/>
 
                     <Border Background="{StaticResource AccentColor}" CornerRadius="15">
+                        
                         <StackPanel Margin="25">
-                            <Label Content="{x:Static language:Lang.Settings_Label_Language}" Style="{StaticResource RegisterLabelStyle}"/>
+                            <Label Content="{x:Static language:Lang.Settings_Label_Language}" 
+                                   Style="{StaticResource RegisterLabelStyle}"/>
 
                             <ComboBox x:Name="ComboBoxLanguage" 
                                       Style="{StaticResource FormComboBoxStyle}"

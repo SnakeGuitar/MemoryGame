@@ -1,5 +1,6 @@
 ﻿using Client.Properties.Langs;
 using Client.Utilities;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -64,7 +65,7 @@ namespace Client.Views
                 return;
             }
 
-            var selectedOption = ComboBoxLanguage.SelectedItem as LanguageOption;
+            LanguageOption selectedOption = ComboBoxLanguage.SelectedItem as LanguageOption;
 
             if (selectedOption == null)
             {

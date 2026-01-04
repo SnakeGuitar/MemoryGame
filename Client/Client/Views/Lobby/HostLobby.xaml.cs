@@ -3,6 +3,7 @@ using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
 using Client.Views.Multiplayer;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
-using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Lobby
 {
@@ -82,18 +83,16 @@ namespace Client.Views.Lobby
                 if (success)
                 {
                     _isConnected = true;
-                    var msgBox = new Controls.CustomMessageBox(
-                        Lang.Global_Title_Success,
-                        Lang.Lobby_Message_CreateSuccess,
-                        this, Controls.CustomMessageBox.MessageBoxType.Success);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess,
+                        this, MessageBoxType.Success);
                     msgBox.ShowDialog();
                 }
                 else
                 {
-                    var msgBox = new Controls.CustomMessageBox(
-                        Lang.Global_Title_Error,
-                        Lang.HostLobby_Error_CreateFailed,
-                        this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed,
+                        this, MessageBoxType.Error);
                     msgBox.ShowDialog();
                     this.Close();
                 }
@@ -102,9 +101,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
@@ -113,9 +112,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
@@ -124,9 +123,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
@@ -163,9 +162,9 @@ namespace Client.Views.Lobby
             {
                 string errorMessage = LocalizationHelper.GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Controls.CustomMessageBox(
+                var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
-                    this, Controls.CustomMessageBox.MessageBoxType.Error);
+                    this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
                 this.Close();
