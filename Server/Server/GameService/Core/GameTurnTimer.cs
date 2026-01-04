@@ -7,13 +7,14 @@ using System.Timers;
 
 namespace Server.GameService.Core
 {
-    internal class GameTurnTimer : IDisposable
+    public class GameTurnTimer : IDisposable
     {
         private readonly Timer _timer;
         private readonly Action _onElapsed;
 
         public GameTurnTimer(int seconds, Action onElapsed)
         {
+            _onElapsed = onElapsed;
             _onElapsed = onElapsed;
             _timer = new Timer(seconds * 1000)
             {

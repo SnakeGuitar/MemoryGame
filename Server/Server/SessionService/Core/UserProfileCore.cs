@@ -12,9 +12,8 @@ namespace Server.SessionService.Core
         private readonly ISessionManager _sessionManager;
         private readonly ISecurityService _securityService;
         private readonly ILoggerManager _logger;
-
         public UserProfileCore(
-            DbContextFactory dbFactory,
+            IDbContextFactory dbFactory,
             ILoggerManager logger,
             ISessionManager sessionManager,
             ISecurityService securityService)

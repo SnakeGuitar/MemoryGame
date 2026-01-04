@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.LobbyService.Core
 {
-    internal class LobbyNotifier
+    public class LobbyNotifier
     {
         private readonly Action<string> _onDisconnectDetected;
         private readonly Shared.ILoggerManager _logger;
@@ -23,6 +23,7 @@ namespace Server.LobbyService.Core
         {
         }
 
+        // viola estándar
         public void BroadcastMessage(Lobby lobby, string message, bool isNotification, string senderName = null)
         {
             if (lobby == null)
