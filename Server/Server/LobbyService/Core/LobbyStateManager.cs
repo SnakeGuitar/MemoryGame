@@ -23,6 +23,11 @@ namespace Server.LobbyService.Core
         {
         }
 
+        public bool LobbyExists(string gameCode)
+        {
+            return _lobbies.ContainsKey(gameCode);
+        }
+
         public bool IsInLobby(string sessionId)
         {
             _logger.LogInfo($"Checking if session {sessionId} is in a lobby.");
@@ -37,33 +42,53 @@ namespace Server.LobbyService.Core
 
         public bool TryJoinLobby(string gameCode, LobbyClient client, out Lobby lobby)
         {
-            lobby = _lobbies.GetOrAdd(gameCode, code =>
+            if (!_lobbies.TryGetValue(gameCode, out lobby))
             {
-                _logger.LogInfo($"Creating new lobby with game code {code}.");
-                return new Lobby
-                {
-                    GameCode = code,
-                    CreatedAt = DateTime.UtcNow
-                };
-            });
+                _logger.LogWarn($"Client {client.Id} tried to join non-existent lobby {gameCode}.");
+                return false;
+            }
 
             lock (lobby.LockObject)
             {
                 if (lobby.Clients.Count >= 4)
                 {
-                    _logger.LogWarn($"Lobby {gameCode} is full. Client {client.Id} cannot join.");
+                    _logger.LogWarn($"Lobby {gameCode} is full.");
                     return false;
                 }
 
                 if (lobby.Clients.TryAdd(client.Id, client))
                 {
                     _sessionToLobbyCode.TryAdd(client.SessionId, gameCode);
-                    _logger.LogInfo($"Client {client.Id} joined lobby {gameCode}.");
                     return true;
                 }
             }
-            _logger.LogError($"Failed to add client {client.Id} to lobby {gameCode}.");
             return false;
+        }
+
+        public bool TryCreateLobby(string gameCode, LobbyClient client, out Lobby lobby)
+        {
+            lobby = new Lobby
+            {
+                GameCode = gameCode,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (_lobbies.TryAdd(gameCode, lobby))
+            {
+                if (lobby.Clients.TryAdd(client.Id, client))
+                {
+                    _sessionToLobbyCode.TryAdd(client.SessionId, gameCode);
+                    _logger.LogInfo($"Lobby {gameCode} created and client {client.Id} added.");
+                    return true;
+                }
+                else
+                {
+                    _lobbies.TryRemove(gameCode, out _);
+                    _logger.LogError($"Failed to add client {client.Id} to newly created lobby {gameCode}. Lobby removed.");
+                }
+            }
+                _logger.LogWarn($"Lobby {gameCode} already exists. Cannot create new lobby.");
+                return false;
         }
 
         public LobbyClient RemoveClient(string sessionId, out string gameCode)

@@ -22,6 +22,12 @@
   <wsdl:message name="IGameLobbyService_JoinLobby_OutputMessage">
     <wsdl:part name="parameters" element="tns:JoinLobbyResponse" />
   </wsdl:message>
+  <wsdl:message name="IGameLobbyService_CreateLobby_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLobby" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_CreateLobby_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateLobbyResponse" />
+  </wsdl:message>
   <wsdl:message name="IGameLobbyService_LeaveLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:LeaveLobby" />
   </wsdl:message>
@@ -87,6 +93,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/JoinLobby" message="tns:IGameLobbyService_JoinLobby_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/JoinLobbyResponse" message="tns:IGameLobbyService_JoinLobby_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="CreateLobby">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/CreateLobby" message="tns:IGameLobbyService_CreateLobby_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/CreateLobbyResponse" message="tns:IGameLobbyService_CreateLobby_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LeaveLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/LeaveLobby" message="tns:IGameLobbyService_LeaveLobby_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/LeaveLobbyResponse" message="tns:IGameLobbyService_LeaveLobby_OutputMessage" />
@@ -145,6 +155,15 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="JoinLobby">
       <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/JoinLobby" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateLobby">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/CreateLobby" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -9,6 +9,8 @@ namespace Server.LobbyService
         [OperationContract]
         bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null);
         [OperationContract]
+        bool CreateLobby(string token, string gameCode);
+        [OperationContract]
         void LeaveLobby();
         [OperationContract]
         void SendChatMessage(string message);

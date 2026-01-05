@@ -74,11 +74,9 @@ namespace Client.Views.Lobby
         {
             try
             {
-                bool success = await GameServiceManager.Instance.Client.JoinLobbyAsync(
+                bool success = await GameServiceManager.Instance.Client.CreateLobbyAsync(
                     UserSession.SessionToken,
-                    _lobbyCode,
-                    false,
-                    null
+                    _lobbyCode
                     );
 
                 if (success)

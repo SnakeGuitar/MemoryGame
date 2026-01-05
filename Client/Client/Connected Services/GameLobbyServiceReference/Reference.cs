@@ -238,6 +238,12 @@ namespace Client.GameLobbyServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/JoinLobby", ReplyAction="http://tempuri.org/IGameLobbyService/JoinLobbyResponse")]
         System.Threading.Tasks.Task<bool> JoinLobbyAsync(string token, string gameCode, bool isGuest, string guestName);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/CreateLobby", ReplyAction="http://tempuri.org/IGameLobbyService/CreateLobbyResponse")]
+        bool CreateLobby(string token, string gameCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/CreateLobby", ReplyAction="http://tempuri.org/IGameLobbyService/CreateLobbyResponse")]
+        System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/LeaveLobby", ReplyAction="http://tempuri.org/IGameLobbyService/LeaveLobbyResponse")]
         void LeaveLobby();
         
@@ -337,6 +343,14 @@ namespace Client.GameLobbyServiceReference {
         
         public System.Threading.Tasks.Task<bool> JoinLobbyAsync(string token, string gameCode, bool isGuest, string guestName) {
             return base.Channel.JoinLobbyAsync(token, gameCode, isGuest, guestName);
+        }
+        
+        public bool CreateLobby(string token, string gameCode) {
+            return base.Channel.CreateLobby(token, gameCode);
+        }
+        
+        public System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode) {
+            return base.Channel.CreateLobbyAsync(token, gameCode);
         }
         
         public void LeaveLobby() {

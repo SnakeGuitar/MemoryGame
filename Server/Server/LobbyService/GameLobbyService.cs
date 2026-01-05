@@ -1,15 +1,12 @@
 ﻿using Server.GameService;
+using Server.LobbyService.Core;
 using Server.SessionService;
 using Server.Shared;
 using Server.Validator;
-using Server.LobbyService.Core;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Threading.Tasks;
-using log4net.Core;
 
 namespace Server.LobbyService
 {
@@ -67,45 +64,46 @@ namespace Server.LobbyService
                 return false;
             }
 
-            var callback = _callbackProvider.GetCallback();
-            string sessionId = OperationContext.Current?.SessionId ?? Guid.NewGuid().ToString();
-
-            if (_stateManager.IsInLobby(sessionId))
+            var client = PrepareClient(token, isGuest, guestName);
+            if (client == null)
             {
-                _logger.LogWarn($"Session {sessionId} attempted to join multiple lobbies.");
                 return false;
             }
 
-            string playerName = ResolvePlayerName(token, isGuest, guestName);
-            if (string.IsNullOrEmpty(playerName))
+            if (_stateManager.TryJoinLobby(gameCode, client, out var lobby))
             {
-                _logger.LogWarn($"Failed to resolve player name for session {sessionId}.");
-                return false;
-            }
-
-            var newClient = new LobbyClient
-            {
-                Id = Guid.NewGuid().ToString("N"),
-                Name = playerName,
-                IsGuest = isGuest,
-                Callback = callback,
-                JoinedAt = DateTime.UtcNow,
-                SessionId = sessionId
-            };
-
-            _logger.LogInfo($"Player {playerName} (Session: {sessionId}) is attempting to join lobby {gameCode}");
-
-            if (_stateManager.TryJoinLobby(gameCode, newClient, out var lobby))
-            {
-                SubscribeToDisconnect(callback, sessionId);
-                _notifier.NotifyJoin(lobby, gameCode);
-                _logger.LogInfo($"Player {playerName} joined lobby {gameCode} (Session: {sessionId})");
+                _logger.LogInfo($"Client {client.Name} joined lobby {gameCode}.");
+                _notifier.NotifyJoin(lobby, client.Name);
+                SubscribeToDisconnect(client.Callback, client.SessionId);
                 return true;
             }
-            _logger.LogWarn($"Failed to add player {playerName} to lobby {gameCode} (Session: {sessionId})");
             return false;
         }
 
+        public bool CreateLobby(string token, string gameCode)
+        {
+            {
+                if (!_validator.IsValidGameCode(gameCode))
+                { 
+                    return false;
+                }
+
+                var client = PrepareClient(token, false, null);
+                if (client == null) 
+                { 
+                    return false; 
+                }
+
+                if (_stateManager.TryCreateLobby(gameCode, client, out var lobby))
+                {
+                    _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
+                    SubscribeToDisconnect(client.Callback, client.SessionId);
+                    return true;
+                }
+
+                return false;
+            }
+        }
         public void LeaveLobby()
         {
             var sessionId = OperationContext.Current?.SessionId;
@@ -160,9 +158,6 @@ namespace Server.LobbyService
 
             var lobby = _stateManager.GetLobbyBySession(sessionId);
             _notifier.BroadcastMessage(lobby, "Game has started!", true);
-
-            // TODO
-            // NOTIFY WINDOW CHANGE IN CLIENT
         }
 
         public void FlipCard(int cardIndex)
@@ -194,8 +189,11 @@ namespace Server.LobbyService
             if (client != null)
             {
                 var lobby = _stateManager.GetLobbyBySession(sessionId);
-                _notifier.NotifyLeave(lobby, client.Name);
-                _logger.LogInfo($"Client {client.Name} disconnected from lobby {gameCode} (Session: {sessionId})");
+                if (lobby != null)
+                {
+                    _notifier.NotifyLeave(lobby, client.Name);
+                    _logger.LogInfo($"Client {client.Name} disconnected from lobby {gameCode} (Session: {sessionId})");
+                }
             }
         }
 
@@ -207,6 +205,36 @@ namespace Server.LobbyService
                 commObject.Closed += (s, e) => HandleDisconnection(sessionId);
                 _logger.LogInfo($"Subscribed to disconnect events for session {sessionId}.");
             }
+        }
+
+        private LobbyClient PrepareClient(string token, bool isGuest, string guestName)
+        {
+            var callback = _callbackProvider.GetCallback();
+            string sessionId = OperationContext.Current?.SessionId ?? Guid.NewGuid().ToString();
+
+            if (_stateManager.IsInLobby(sessionId))
+            {
+                _logger.LogWarn($"Session {sessionId} attempted to join multiple lobbies.");
+                return null;
+            }
+
+            string playerName = ResolvePlayerName(token, isGuest, guestName);
+            if (string.IsNullOrEmpty(playerName))
+            {
+                _logger.LogWarn($"Failed to resolve player name for session {sessionId}.");
+                return null;
+            }
+
+            _logger.LogInfo($"Preparing LobbyClient for player {playerName} (Session: {sessionId})");
+            return new LobbyClient
+            {
+                Id = Guid.NewGuid().ToString("N"),
+                Name = playerName,
+                IsGuest = isGuest,
+                Callback = callback,
+                JoinedAt = DateTime.UtcNow,
+                SessionId = sessionId
+            };
         }
 
         private string ResolvePlayerName(string token, bool isGuest, string guestName)
@@ -222,13 +250,6 @@ namespace Server.LobbyService
                 ? $"Resolved player name for user ID {userId.Value}."
                 : "Failed to resolve player name from token.");
             return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
-        }
-
-        private class Lobby
-        {
-            public string GameCode { get; set; }
-            public ConcurrentDictionary<string, LobbyClient> Clients { get; set; } = new ConcurrentDictionary<string, LobbyClient>();
-            public DateTime CreatedAt { get; set; }
         }
     }
 }
