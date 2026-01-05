@@ -4,102 +4,244 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Friends" Height="500" Width="850"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="#1E1E1E">
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="43*"/>
-            <ColumnDefinition Width="92*"/>
-        </Grid.ColumnDefinitions>
-        <TabControl Background="Transparent" BorderThickness="0" Grid.ColumnSpan="2">
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="Friends" 
+        MinHeight="720" MinWidth="1280"
+        WindowStartupLocation="CenterScreen">
 
-            <TabItem Header="My Friends" FontSize="16" Foreground="Black">
-                <Grid Margin="0,10,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+    <Grid Background="{StaticResource BackgroundColor}">
 
-                    <DataGrid x:Name="DataGridFriends" Grid.Row="0" AutoGenerateColumns="False" IsReadOnly="True" 
-                              Background="White" Margin="0,0,0,10">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Avatar" Width="60">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding AvatarImage}" Width="40" Height="40" Stretch="UniformToFill"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+        <Viewbox Stretch="Uniform">
 
-                            <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
+            <Grid Width="1450" Height="900">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                            <DataGridTemplateColumn Header="Status" Width="80">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" FontWeight="Bold" VerticalAlignment="Center"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                <Label Grid.Row="0"
+                       Content="{x:Static language:Lang.Friends_Label_Friends}" 
+                       Style="{StaticResource TitleLabelStyle}"
+                       Margin="0,20,0,10"/>
 
-                            <DataGridTemplateColumn Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Remove" Click="ButtonRemoveFriend_Click" Tag="{Binding Username}" Background="#FF5555" Foreground="White"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <Border Grid.Row="1" 
+                        Background="{StaticResource PrimaryTextColor}" 
+                        CornerRadius="20"
+                        BorderThickness="5"
+                        Margin="50,10,50,20">
 
-                    <Button x:Name="ButtonBackFriends" Grid.Row="1" Content="Back" Click="ButtonBack_Click" Width="100" HorizontalAlignment="Left" Height="30"/>
-                </Grid>
-            </TabItem>
+                    <Grid Margin="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-            <TabItem Header="Requests &amp; Search" FontSize="16" Foreground="Black">
-                <Grid Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <TabControl Grid.Row="1" 
+                                    Style="{StaticResource TabControlStyle}" 
+                                    Background="Transparent" 
+                                    BorderThickness="0">
 
-                    <GroupBox Header="Add Friend" Grid.Column="0" Margin="0,0,10,0" Foreground="White" BorderBrush="Gray">
-                        <StackPanel VerticalAlignment="Center" Margin="20">
-                            <Label Content="Enter Username:" Foreground="White"/>
-                            <TextBox x:Name="TextBoxSearchUser" Height="30" Margin="0,5"/>
-                            <Button x:Name="ButtonSendRequest" Content="Send Request" Click="ButtonSendRequest_Click" Height="35" Margin="0,15"/>
-                        </StackPanel>
-                    </GroupBox>
+                            <TabItem Header="{x:Static language:Lang.Friends_Label_MyFriends}"
+                                     FontSize="30" Style="{StaticResource TabItemStyle}">
 
-                    <GroupBox Header="Pending Requests" Grid.Column="1" Margin="10,0,0,0" Foreground="White" BorderBrush="Gray">
-                        <ListView x:Name="ListViewRequests" Background="White" Foreground="Black">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
+                                <Grid Margin="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                        <TextBlock Grid.Column="1" Text="{Binding SenderUsername}" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0"/>
+                                    <Border Grid.Row="0" 
+                                            Background="#10000000" 
+                                            CornerRadius="10" 
+                                            BorderBrush="{StaticResource AccentForegroundColor}" 
+                                            BorderThickness="1"
+                                            Margin="0,0,0,20">
 
-                                        <Button Grid.Column="2" Content="Accept" Click="ButtonAcceptRequest_Click" Tag="{Binding RequestId}" 
-                                                Margin="5,0" Background="#55FF55" Width="60"/>
+                                        <DataGrid x:Name="DataGridFriends" 
+                                                  AutoGenerateColumns="False" 
+                                                  IsReadOnly="True" 
+                                                  Background="Transparent" 
+                                                  BorderThickness="0"
+                                                  HeadersVisibility="Column"
+                                                  GridLinesVisibility="Horizontal"
+                                                  RowBackground="Transparent"
+                                                  AlternatingRowBackground="#05000000">
 
-                                        <Button Grid.Column="3" Content="Decline" Click="ButtonDeclineRequest_Click" Tag="{Binding RequestId}" 
-                                                Background="#FF5555" Width="60" Foreground="White"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </GroupBox>
+                                            <DataGrid.Resources>
+                                                <Style TargetType="DataGridColumnHeader">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
+                                                    <Setter Property="FontSize" Value="30"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+                                                    <Setter Property="Padding" Value="10"/>
+                                                </Style>
 
-                    <Button x:Name="ButtonBackRequests" Content="Back" Click="ButtonBack_Click" 
-                            Grid.Column="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100" Height="30" Margin="0,10,0,-40"/>
-                </Grid>
-            </TabItem>
-        </TabControl>
+                                                <Style TargetType="DataGridCell">
+                                                    <Setter Property="Padding" Value="10"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="DataGridCell">
+                                                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                                                    <ContentPresenter VerticalAlignment="Center" />
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </DataGrid.Resources>
+
+                                            <DataGrid.Columns>
+                                                <DataGridTemplateColumn Header="{x:Static language:Lang.Global_Label_Avatar}" Width="180">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Border Width="120" Height="120" CornerRadius="15">
+                                                                <Border.Background>
+                                                                    <ImageBrush ImageSource="{Binding AvatarImage}" Stretch="UniformToFill"/>
+                                                                </Border.Background>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <DataGridTextColumn Header="{x:Static language:Lang.Global_Label_Username}" 
+                                                                    Binding="{Binding Username}" Foreground="{StaticResource BackgroundColor}"
+                                                                    FontSize="50" Width="*"/>
+
+                                                <DataGridTemplateColumn Header="{x:Static language:Lang.Global_Label_Status}" Width="150">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding StatusText}" 
+                                                                       Foreground="{Binding StatusColor}" 
+                                                                       FontFamily="{StaticResource BodyFont}" 
+                                                                       FontSize="25" FontWeight="Bold" Width="150"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <DataGridTemplateColumn Width="150">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Content="{x:Static language:Lang.Global_Button_Remove}" 
+                                                                    Style="{StaticResource HardButtonStyle}"
+                                                                    FontSize="30" Height="45" Width="115" 
+                                                                    Foreground="{StaticResource AccentForegroundColor}"
+                                                                    Click="ButtonRemoveFriend_Click" Tag="{Binding Username}"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Border>
+                                </Grid>
+                            </TabItem>
+
+                            <TabItem Header="{x:Static language:Lang.Friends_Label_Requests}"
+                                     FontSize="30" Style="{StaticResource TabItemStyle}">
+
+                                <Grid Margin="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                        <GroupBox Header="{x:Static language:Lang.Friends_Label_AddFriend}" 
+                                                  FontFamily="{StaticResource BodyFont}" FontSize="30" FontWeight="Bold"
+                                                  Foreground="{StaticResource AccentForegroundColor}"
+                                                  BorderBrush="{StaticResource AccentForegroundColor}"
+                                                  Padding="20">
+                                            <StackPanel>
+                                                <Label Content="{x:Static language:Lang.Friends_Label_EnterUsername}" 
+                                                       Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left"
+                                                       FontSize="28"
+                                                       Foreground="{StaticResource AccentForegroundColor}"/>
+                                                
+                                                <TextBox x:Name="TextBoxSearchUser" HorizontalAlignment="Stretch"
+                                                         Width="500" Height="45" FontSize="28"
+                                                         Style="{StaticResource RegisterTextBoxStyle}" Margin="0,5,0,15"/>
+
+                                                <Button x:Name="ButtonSendRequest" 
+                                                        Content="{x:Static language:Lang.Friends_Button_SendRequest}" 
+                                                        Style="{StaticResource SendButtonStyle}"
+                                                        HorizontalAlignment="Right" Width="160"
+                                                        Click="ButtonSendRequest_Click"/>
+                                            </StackPanel>
+                                        </GroupBox>
+                                    </StackPanel>
+
+                                    <GroupBox Grid.Column="1" Header="{x:Static language:Lang.Friends_Label_PendingRequests}" 
+                                              FontFamily="{StaticResource BodyFont}" FontSize="30" FontWeight="Bold"
+                                              Foreground="{StaticResource AccentForegroundColor}"
+                                              BorderBrush="{StaticResource AccentForegroundColor}"
+                                              Padding="10">
+
+                                        <ListView x:Name="ListViewRequests" 
+                                                  Background="Transparent" 
+                                                  BorderThickness="0" 
+                                                  d:ItemsSource="{d:SampleData ItemCount=5}">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="#10000000" CornerRadius="10" Margin="0,5" Padding="10">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Border Grid.Column="0" Width="70" Height="70" CornerRadius="15" Margin="0,0,15,0" 
+                                                                    BorderBrush="{StaticResource AccentColor}" BorderThickness="1">
+                                                                <Border.Background>
+                                                                    <ImageBrush ImageSource="{Binding AvatarImage}" Stretch="UniformToFill"/>
+                                                                </Border.Background>
+                                                            </Border>
+
+                                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding SenderUsername}" 
+                                                                           FontFamily="{StaticResource BodyFont}" 
+                                                                           FontSize="30" FontWeight="Bold" 
+                                                                           VerticalAlignment="Center" 
+                                                                           Foreground="{StaticResource AccentForegroundColor}"/>
+                                                            </StackPanel>
+
+                                                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                                <Button Content="{x:Static language:Lang.Global_Button_Accept}" 
+                                                                        Click="ButtonAcceptRequest_Click" 
+                                                                        Tag="{Binding RequestId}"
+                                                                        Style="{StaticResource EasyButtonStyle}" 
+                                                                        Margin="25,0"
+                                                                        Width="110" Height="50" FontSize="18"/>
+
+                                                                <Button Content="{x:Static language:Lang.Global_Button_Reject}" 
+                                                                        Click="ButtonDeclineRequest_Click" 
+                                                                        Tag="{Binding RequestId}"
+                                                                        Style="{StaticResource HardButtonStyle}" 
+                                                                        Margin="5,0"
+                                                                        Width="110" Height="50" FontSize="18"/>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </GroupBox>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Row="2"
+                        Content="{x:Static language:Lang.Global_Button_Back}" 
+                        Style="{StaticResource SecondaryButtonStyle}" 
+                        VerticalAlignment="Top" HorizontalAlignment="Center"
+                        Margin="0,0,0,30"
+                        Click="ButtonBack_Click"/>
+            </Grid>
+        </Viewbox>
     </Grid>
 </Window>

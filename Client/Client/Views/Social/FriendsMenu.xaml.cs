@@ -1,14 +1,20 @@
-﻿using System;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
+using Client.UserServiceReference;
+using Client.Views.Controls;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Client.UserServiceReference;
-using Client.Helpers;
-using Client.Views.Controls;
+using static Client.Views.Controls.CustomMessageBox;
+using static Client.Views.Controls.ConfirmationMessageBox;
+using static Client.Helpers.LocalizationHelper;
 
 namespace Client.Views.Social
 {
@@ -20,15 +26,23 @@ namespace Client.Views.Social
         {
             InitializeComponent();
             _proxy = new UserServiceClient();
-            LoadSocialData();
+            _ = LoadSocialData();
         }
 
-        private async void LoadSocialData()
+        private async Task LoadSocialData()
         {
             try
             {
                 var requests = await _proxy.GetPendingRequestsAsync(UserSession.SessionToken);
-                ListViewRequests.ItemsSource = requests;
+
+                var requestsDisplay = requests.Select(r => new RequestDisplay
+                {
+                    RequestId = r.RequestId,
+                    SenderUsername = r.SenderUsername,
+                    AvatarImage = ImageHelper.ByteArrayToImageSource(r.SenderAvatar)
+                }).ToList();
+
+                ListViewRequests.ItemsSource = requestsDisplay;
 
                 var friendsDto = await _proxy.GetFriendsListAsync(UserSession.SessionToken);
 
@@ -41,14 +55,32 @@ namespace Client.Views.Social
 
                 DataGridFriends.ItemsSource = friendDisplayList;
             }
-            catch (CommunicationException)
+            catch (EndpointNotFoundException ex)
             {
-                ShowError("Network Error", "Could not connect to the server.");
+                HandleException(ex, Lang.Global_Title_ServerOffline);
+            }
+            catch (TimeoutException ex)
+            {
+                HandleException(ex, Lang.Global_Title_NetworkError);
+            }
+            catch (CommunicationException ex)
+            {
+                HandleException(ex, Lang.Global_Title_NetworkError);
             }
             catch (Exception ex)
             {
-                ShowError("Error", "An unexpected error occurred: " + ex.Message);
+                HandleException(ex, Lang.Global_Title_AppError);
             }
+        }
+
+        private void HandleException(Exception ex, string titleKey)
+        {
+            string errorMessage = GetString(ex) ?? ex.Message;
+            Debug.WriteLine($"[{ex.GetType().Name}]: {ex.ToString()}");
+            var msgBox = new CustomMessageBox(
+                titleKey, errorMessage,
+                this, MessageBoxType.Error);
+            msgBox.ShowDialog();
         }
 
         private async void ButtonSendRequest_Click(object sender, RoutedEventArgs e)
@@ -58,7 +90,7 @@ namespace Client.Views.Social
 
             if (username == UserSession.Username)
             {
-                ShowError("Error", "You cannot add yourself.");
+                ShowError(Lang.Social_Error_SelfAdd);
                 return;
             }
 
@@ -70,18 +102,27 @@ namespace Client.Views.Social
 
                 if (response.Success)
                 {
-                    ShowSuccess("Success", $"Friend request sent to {username}!");
+                    string message = string.Format(Lang.Friends_Label_SuccessRequest, username);
+                    ShowSuccess(message);
                     TextBoxSearchUser.Text = string.Empty;
                 }
                 else
                 {
-                    string msg = GetFriendlyErrorMessage(response.MessageKey);
-                    ShowError("Error", msg);
+                    string msg = GetString(response.MessageKey);
+                    ShowError(msg);
                 }
+            }
+            catch (EndpointNotFoundException)
+            {
+                ShowError(Lang.Global_Title_ServerOffline);
+            }
+            catch (TimeoutException)
+            {
+                ShowError(Lang.Global_Title_NetworkError);
             }
             catch (Exception)
             {
-                ShowError("Error", "Failed to send request due to network issues.");
+                ShowError(Lang.Friends_Error_SendRequest);
             }
             finally
             {
@@ -105,7 +146,7 @@ namespace Client.Views.Social
             }
         }
 
-        private async System.Threading.Tasks.Task ProcessRequest(int requestId, bool accept)
+        private async Task ProcessRequest(int requestId, bool accept)
         {
             try
             {
@@ -113,26 +154,35 @@ namespace Client.Views.Social
 
                 if (response.Success)
                 {
-                    LoadSocialData();
+                    _ = LoadSocialData();
                 }
                 else
                 {
-                    ShowError("Error", GetFriendlyErrorMessage(response.MessageKey));
+                    ShowError(GetString(response.MessageKey));
                 }
+            }
+            catch (EndpointNotFoundException)
+            {
+                ShowError(Lang.Global_Title_ServerOffline);
             }
             catch (Exception)
             {
-                ShowError("Error", "Connection failed.");
+                ShowError(Lang.Global_Label_ConnectionFailed);
             }
         }
 
         private async void ButtonRemoveFriend_Click(object sender, RoutedEventArgs e)
         {
+            
             if (sender is Button btn && btn.Tag is string username)
             {
-                var result = MessageBox.Show($"Are you sure you want to remove {username}?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                string message = string.Format(Lang.Friends_Message_RemoveFriend, username);
 
-                if (result == MessageBoxResult.Yes)
+                ConfirmationMessageBox confirmationBox = new ConfirmationMessageBox(
+                message, Lang.Global_Label_Confirm, this, ConfirmationBoxType.Warning);
+
+                bool? result = confirmationBox.ShowDialog();
+                if (result == true)
                 {
                     try
                     {
@@ -140,30 +190,22 @@ namespace Client.Views.Social
 
                         if (response.Success)
                         {
-                            LoadSocialData();
+                            _ = LoadSocialData();
                         }
                         else
                         {
-                            ShowError("Error", "Could not remove friend.");
+                            ShowError(Lang.Friends_Error_RemoveFriend);
                         }
+                    }
+                    catch (EndpointNotFoundException)
+                    {
+                        ShowError(Lang.Global_Title_ServerOffline);
                     }
                     catch (Exception)
                     {
-                        ShowError("Error", "Connection failed.");
+                        ShowError(Lang.Global_Label_ConnectionFailed);
                     }
                 }
-            }
-        }
-
-        private string GetFriendlyErrorMessage(string key)
-        {
-            switch (key)
-            {
-                case "Global_Error_UserNotFound": return "User not found.";
-                case "Social_Error_SelfAdd": return "You cannot add yourself.";
-                case "Social_Error_AlreadyFriends": return "You are already friends.";
-                case "Social_Error_RequestExists": return "Friend request already pending.";
-                default: return "An error occurred.";
             }
         }
 
@@ -176,15 +218,17 @@ namespace Client.Views.Social
             this.Close();
         }
 
-        private void ShowError(string title, string message)
+        private void ShowError(string message)
         {
-            var msgBox = new CustomMessageBox(title, message, this, CustomMessageBox.MessageBoxType.Error);
+            var msgBox = new CustomMessageBox(Lang.Global_Title_Error, message,
+                this, MessageBoxType.Error);
             msgBox.ShowDialog();
         }
 
-        private void ShowSuccess(string title, string message)
+        private void ShowSuccess(string message)
         {
-            var msgBox = new CustomMessageBox(title, message, this, CustomMessageBox.MessageBoxType.Success);
+            var msgBox = new CustomMessageBox(Lang.Global_Title_Success, message,
+                this, MessageBoxType.Success);
             msgBox.ShowDialog();
         }
 
@@ -194,8 +238,14 @@ namespace Client.Views.Social
             public bool IsOnline { get; set; }
             public ImageSource AvatarImage { get; set; }
 
-            public string StatusText => IsOnline ? "Online" : "Offline";
+            public string StatusText => IsOnline ? Lang.Global_Label_Online : Lang.Global_Label_Offline;
             public Brush StatusColor => IsOnline ? Brushes.Green : Brushes.Gray;
+        }
+        public class RequestDisplay
+        {
+            public int RequestId { get; set; }
+            public string SenderUsername { get; set; }
+            public ImageSource AvatarImage { get; set; }
         }
     }
 }
