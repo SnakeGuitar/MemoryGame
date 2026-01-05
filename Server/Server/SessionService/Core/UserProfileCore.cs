@@ -200,5 +200,111 @@ namespace Server.SessionService.Core
                 return new ResponseDTO { Success = false, MessageKey = "Global_Error_UnknownError" };
             }
         }
+
+        public ResponseDTO UpdatePersonalInfo(string token, string name, string lastName)
+        {
+            var userId = _sessionManager.GetUserIdFromToken(token);
+
+            if (userId == null)
+            {
+                _logger.LogInfo($"UpdatePersonalInfo called with invalid token");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
+            }
+
+            try
+            {
+                using (var db = _dbFactory.Create())
+                {
+                    var user = db.user.FirstOrDefault(u => u.userId == userId.Value);
+
+                    if (user == null)
+                    {
+                        return new ResponseDTO { Success = false, MessageKey = "Global_Error_UserNotFound" };
+                    }
+
+                    user.name = name;
+                    user.lastName = lastName;
+
+                    db.SaveChanges();
+
+                    _logger.LogInfo($"Personal info updated for userId: {userId.Value}");
+                    return new ResponseDTO { Success = true };
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"UpdatePersonalInfo Database Error: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_DatabaseError" };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"UpdatePersonalInfo Error: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_UnknownError" };
+            }
+        }
+
+        public ResponseDTO AddSocialNetwork(string token, string accountName)
+        {
+            var userId = _sessionManager.GetUserIdFromToken(token);
+            if (userId == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
+
+            try
+            {
+                using (var db = _dbFactory.Create())
+                {
+                    bool exists = db.socialNetwork.Any(sn => sn.userId == userId.Value && sn.account == accountName);
+
+                    if (exists)
+                    {
+                        return new ResponseDTO { Success = false, MessageKey = "Profile_Error_SocialDuplicate" };
+                    }
+
+                    var social = new socialNetwork
+                    {
+                        userId = userId.Value,
+                        account = accountName
+                    };
+
+                    db.socialNetwork.Add(social);
+                    db.SaveChanges();
+
+                    _logger.LogInfo($"Added social network for userId {userId.Value}");
+                    return new ResponseDTO { Success = true };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"AddSocialNetwork Error: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_Database" };
+            }
+        }
+
+        public ResponseDTO RemoveSocialNetwork(string token, int socialNetworkId)
+        {
+            var userId = _sessionManager.GetUserIdFromToken(token);
+            if (userId == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
+
+            try
+            {
+                using (var db = _dbFactory.Create())
+                {
+                    var social = db.socialNetwork.FirstOrDefault(sn => sn.socialNetworkId == socialNetworkId);
+
+                    if (social == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_NotFound" };
+
+                    if (social.userId != userId.Value) return new ResponseDTO { Success = false, MessageKey = "Global_Error_Unauthorized" };
+
+                    db.socialNetwork.Remove(social);
+                    db.SaveChanges();
+
+                    return new ResponseDTO { Success = true };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"RemoveSocialNetwork Error: {ex.Message}");
+                return new ResponseDTO { Success = false, MessageKey = "Global_Error_Database" };
+            }
+        }
     }
 }
