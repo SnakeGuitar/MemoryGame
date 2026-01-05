@@ -66,7 +66,7 @@ namespace Client.Views.Singleplayer
         private void OnGameWon()
         {
             string winnerName = UserSession.Username ?? "Player";
-            string statsInfo = $"{Lang.Global_Label_Score}: {LabelScore.Content} | Time: {LabelTimer.Content}";
+            string statsInfo = $"{Lang.Global_Label_Score}: {LabelScore.Content} | {Lang.MatchSummary_Label_TimeRemaining} {LabelTimer.Content}";
 
             var summaryWindow = new MatchSummary(winnerName, statsInfo);
             summaryWindow.Owner = this;

@@ -97,7 +97,8 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    UserSession.StartSession(response.SessionToken, response.User.UserId, response.User.Username, response.User.Email);
+                    UserSession.StartSession(response.SessionToken, response.User.UserId, response.User.Username, response.User.Email,
+                        response.User.Name, response.User.LastName, response.User.RegistrationDate, response.User.SocialNetworks.ToList());
 
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
@@ -127,7 +128,7 @@ namespace Client.Views.Session
             }
             catch (EndpointNotFoundException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
                 var msgBox = new CustomMessageBox(
                     Lang.Global_Title_ServerOffline, errorMessage,
@@ -138,7 +139,7 @@ namespace Client.Views.Session
             }
             catch (CommunicationException ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[CommunicationException]: {ex.Message}");
                 var msgBox = new CustomMessageBox(
                     Lang.Global_Title_NetworkError, errorMessage,
@@ -149,7 +150,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
                 var msgBox = new CustomMessageBox(
                     Lang.Global_Title_AppError, errorMessage,
