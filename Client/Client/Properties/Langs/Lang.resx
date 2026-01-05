@@ -730,4 +730,7 @@ You need to log in with your new account :)</value>
   <data name="PlayerProfile_Message_NotAvaible" xml:space="preserve">
     <value>Hellooo {0}! To access your friends, statistics, and profile, you need to register your account with an email address</value>
   </data>
+  <data name="Global_Label_RegisteredEmail" xml:space="preserve">
+    <value>Registered email</value>
+  </data>
 </root>

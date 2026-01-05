@@ -732,4 +732,7 @@ Por favor inténtalo de nuevo</value>
   <data name="PlayerProfile_Message_NotAvaible" xml:space="preserve">
     <value>¡Holaaa {0}! Para acceder a tus amigos, estadísticas y perfil, debes registrar tu cuenta con una dirección de correo electrónico</value>
   </data>
+  <data name="Global_Label_RegisteredEmail" xml:space="preserve">
+    <value>Correo registrado:</value>
+  </data>
 </root>
