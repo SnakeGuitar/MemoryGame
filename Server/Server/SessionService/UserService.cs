@@ -188,6 +188,19 @@ namespace Server.SessionService
             return _userProfileCore.ChangeUsername(token, newUsername);
         }
 
+        public ResponseDTO UpdatePersonalInfo(string email, string name, string lastName)
+        {
+            return _userProfileCore.UpdatePersonalInfo(email, name, lastName);
+        }
+        public ResponseDTO AddSocialNetwork(string token, string accountName)
+        {
+            return _userProfileCore.AddSocialNetwork(token, accountName);
+        }
+        public ResponseDTO RemoveSocialNetwork(string token, int socialNetworkId)
+        {
+            return _userProfileCore.RemoveSocialNetwork(token, socialNetworkId);
+        }
+
 
         // === Social Features ===
 

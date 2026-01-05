@@ -35,6 +35,12 @@ namespace Server.SessionService
 
         [OperationContract]
         ResponseDTO ChangeUsername(string email, string newUsername);
+        [OperationContract]
+        ResponseDTO UpdatePersonalInfo(string email, string name, string lastName);
+        [OperationContract]
+        ResponseDTO AddSocialNetwork(string token, string accountName);
+        [OperationContract]
+        ResponseDTO RemoveSocialNetwork(string token, int socialNetworkId);
 
         [OperationContract]
         LoginResponse LoginAsGuest(string guestUsername);

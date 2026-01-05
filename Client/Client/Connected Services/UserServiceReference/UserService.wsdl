@@ -69,6 +69,24 @@
   <wsdl:message name="IUserService_ChangeUsername_OutputMessage">
     <wsdl:part name="parameters" element="tns:ChangeUsernameResponse" />
   </wsdl:message>
+  <wsdl:message name="IUserService_UpdatePersonalInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePersonalInfo" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_UpdatePersonalInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdatePersonalInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AddSocialNetwork_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddSocialNetwork" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_AddSocialNetwork_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddSocialNetworkResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveSocialNetwork_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSocialNetwork" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_RemoveSocialNetwork_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveSocialNetworkResponse" />
+  </wsdl:message>
   <wsdl:message name="IUserService_LoginAsGuest_InputMessage">
     <wsdl:part name="parameters" element="tns:LoginAsGuest" />
   </wsdl:message>
@@ -80,6 +98,18 @@
   </wsdl:message>
   <wsdl:message name="IUserService_LogoutGuest_OutputMessage">
     <wsdl:part name="parameters" element="tns:LogoutGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_InitiateGuestRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:InitiateGuestRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_InitiateGuestRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:InitiateGuestRegistrationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyGuestRegistration_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyGuestRegistration" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_VerifyGuestRegistration_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyGuestRegistrationResponse" />
   </wsdl:message>
   <wsdl:message name="IUserService_GetFriendsList_InputMessage">
     <wsdl:part name="parameters" element="tns:GetFriendsList" />
@@ -160,6 +190,18 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/ChangeUsername" message="tns:IUserService_ChangeUsername_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/ChangeUsernameResponse" message="tns:IUserService_ChangeUsername_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UpdatePersonalInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/UpdatePersonalInfo" message="tns:IUserService_UpdatePersonalInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/UpdatePersonalInfoResponse" message="tns:IUserService_UpdatePersonalInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddSocialNetwork">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/AddSocialNetwork" message="tns:IUserService_AddSocialNetwork_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/AddSocialNetworkResponse" message="tns:IUserService_AddSocialNetwork_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSocialNetwork">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/RemoveSocialNetwork" message="tns:IUserService_RemoveSocialNetwork_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/RemoveSocialNetworkResponse" message="tns:IUserService_RemoveSocialNetwork_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="LoginAsGuest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LoginAsGuest" message="tns:IUserService_LoginAsGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LoginAsGuestResponse" message="tns:IUserService_LoginAsGuest_OutputMessage" />
@@ -167,6 +209,14 @@
     <wsdl:operation name="LogoutGuest">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/LogoutGuest" message="tns:IUserService_LogoutGuest_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/LogoutGuestResponse" message="tns:IUserService_LogoutGuest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="InitiateGuestRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/InitiateGuestRegistration" message="tns:IUserService_InitiateGuestRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/InitiateGuestRegistrationResponse" message="tns:IUserService_InitiateGuestRegistration_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyGuestRegistration">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/VerifyGuestRegistration" message="tns:IUserService_VerifyGuestRegistration_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/VerifyGuestRegistrationResponse" message="tns:IUserService_VerifyGuestRegistration_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetFriendsList">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetFriendsList" message="tns:IUserService_GetFriendsList_InputMessage" />
@@ -281,6 +331,33 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UpdatePersonalInfo">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/UpdatePersonalInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddSocialNetwork">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/AddSocialNetwork" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveSocialNetwork">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/RemoveSocialNetwork" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="LoginAsGuest">
       <soap12:operation soapAction="http://tempuri.org/IUserService/LoginAsGuest" style="document" />
       <wsdl:input>
@@ -292,6 +369,24 @@
     </wsdl:operation>
     <wsdl:operation name="LogoutGuest">
       <soap12:operation soapAction="http://tempuri.org/IUserService/LogoutGuest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InitiateGuestRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/InitiateGuestRegistration" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyGuestRegistration">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/VerifyGuestRegistration" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
