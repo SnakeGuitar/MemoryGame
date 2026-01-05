@@ -87,19 +87,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="card.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="FriendRequest.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="GameService\Core\GameDeck.cs" />
     <Compile Include="GameService\Core\GameNotifier.cs" />
     <Compile Include="GameService\Core\GameTurnTimer.cs" />
     <Compile Include="GameService\GameManager.cs" />
-    <Compile Include="inventory.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="GameService\CardInfo.cs" />
+    <Compile Include="inventory.cs">
+      <DependentUpon>MemoryGame.tt</DependentUpon>
+    </Compile>
     <Compile Include="LobbyService\Lobby.cs" />
     <Compile Include="LobbyService\Core\LobbyNotifier.cs" />
     <Compile Include="LobbyService\Core\LobbyStateManager.cs" />
@@ -111,31 +111,31 @@
     <Compile Include="LobbyService\LobbyClient.cs" />
     <Compile Include="LobbyService\LobbyPlayerInfo.cs" />
     <Compile Include="match.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="matchHistory.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
-    <Compile Include="memoryGameDB.Context.cs">
+    <Compile Include="MemoryGame.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>memoryGameDB.Context.tt</DependentUpon>
+      <DependentUpon>MemoryGame.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="memoryGameDB.cs">
+    <Compile Include="MemoryGame.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
-    <Compile Include="memoryGameDB.Designer.cs">
+    <Compile Include="MemoryGame.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>memoryGameDB.edmx</DependentUpon>
+      <DependentUpon>MemoryGame.edmx</DependentUpon>
     </Compile>
     <Compile Include="penalty.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="pendingRegistration.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="SessionService\Core\AuthenticationCore.cs" />
     <Compile Include="SessionService\Core\PenaltyCore.cs" />
@@ -152,22 +152,22 @@
     <Compile Include="Shared\INotificationService.cs" />
     <Compile Include="Shared\ISecurityService.cs" />
     <Compile Include="socialNetwork.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="sysdiagrams.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="user.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="userSession.cs">
-      <DependentUpon>memoryGameDB.tt</DependentUpon>
+      <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>
     <Compile Include="Validator\IGameLobbyServiceValidator.cs" />
     <Compile Include="Validator\ImageValidator.cs" />
@@ -175,30 +175,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="memoryGameDB.edmx">
+    <EntityDeploy Include="MemoryGame.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>memoryGameDB.Designer.cs</LastGenOutput>
+      <LastGenOutput>MemoryGame.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="memoryGameDB.edmx.diagram">
-      <DependentUpon>memoryGameDB.edmx</DependentUpon>
+    <None Include="MemoryGame.edmx.diagram">
+      <DependentUpon>MemoryGame.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="MemoryGame.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MemoryGame.edmx</DependentUpon>
+      <LastGenOutput>MemoryGame.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MemoryGame.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MemoryGame.edmx</DependentUpon>
+      <LastGenOutput>MemoryGame.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="memoryGameDB.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>memoryGameDB.edmx</DependentUpon>
-      <LastGenOutput>memoryGameDB.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="memoryGameDB.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>memoryGameDB.edmx</DependentUpon>
-      <LastGenOutput>memoryGameDB.cs</LastGenOutput>
-    </Content>
     <EmbeddedResource Include="Shared\VerificationEmail.html" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

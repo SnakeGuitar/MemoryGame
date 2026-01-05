@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="memoryGameDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="memoryGameModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="card">
           <Key>
             <PropertyRef Name="cardId" />
@@ -101,6 +101,8 @@
           </Key>
           <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="lastName" Type="varchar" MaxLength="50" />
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar(max)" Nullable="false" />
           <Property Name="avatar" Type="varbinary(max)" />
@@ -300,7 +302,7 @@
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="memoryGameDBModelStoreContainer">
+        <EntityContainer Name="memoryGameModelStoreContainer">
           <EntitySet Name="card" EntityType="Self.card" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="friend" EntityType="Self.friend" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FriendRequest" EntityType="Self.FriendRequest" Schema="dbo" store:Type="Tables" />
@@ -362,10 +364,11 @@
             <End Role="userSession" EntitySet="userSession" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="memoryGameDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="memoryGameModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="card">
           <Key>
             <PropertyRef Name="cardId" />
@@ -375,6 +378,17 @@
           <Property Name="description" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
           <Property Name="inventoryId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="inventory" Relationship="Self.FK_card_inventory" FromRole="card" ToRole="inventory" />
+        </EntityType>
+        <EntityType Name="FriendRequest">
+          <Key>
+            <PropertyRef Name="requestId" />
+          </Key>
+          <Property Name="requestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="senderId" Type="Int32" Nullable="false" />
+          <Property Name="receiverId" Type="Int32" Nullable="false" />
+          <Property Name="sentAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="user" Relationship="Self.FK_FriendRequest_Receiver" FromRole="FriendRequest" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_FriendRequest_Sender" FromRole="FriendRequest" ToRole="user" />
         </EntityType>
         <EntityType Name="inventory">
           <Key>
@@ -456,6 +470,8 @@
           </Key>
           <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
@@ -463,14 +479,14 @@
           <Property Name="isGuest" Type="Boolean" Nullable="false" />
           <Property Name="verifiedEmail" Type="Boolean" Nullable="false" />
           <Property Name="registrationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="FriendRequest" Relationship="Self.FK_FriendRequest_Receiver" FromRole="user" ToRole="FriendRequest" />
+          <NavigationProperty Name="FriendRequest1" Relationship="Self.FK_FriendRequest_Sender" FromRole="user" ToRole="FriendRequest" />
           <NavigationProperty Name="matchHistory" Relationship="Self.FK_matchHistory_user" FromRole="user" ToRole="matchHistory" />
           <NavigationProperty Name="penalty" Relationship="Self.FK_user_penalty" FromRole="user" ToRole="penalty" />
           <NavigationProperty Name="socialNetwork" Relationship="Self.FK_socialNetwork_user" FromRole="user" ToRole="socialNetwork" />
           <NavigationProperty Name="userSession" Relationship="Self.FK_userSession_user" FromRole="user" ToRole="userSession" />
           <NavigationProperty Name="user1" Relationship="Self.friend" FromRole="user" ToRole="user1" />
           <NavigationProperty Name="user2" Relationship="Self.friend" FromRole="user1" ToRole="user" />
-          <NavigationProperty Name="FriendRequest" Relationship="memoryGameDBModel.FK_FriendRequest_Receiver" FromRole="user" ToRole="FriendRequest" />
-          <NavigationProperty Name="FriendRequest1" Relationship="memoryGameDBModel.FK_FriendRequest_Sender" FromRole="user" ToRole="FriendRequest" />
         </EntityType>
         <EntityType Name="userSession">
           <Key>
@@ -491,6 +507,30 @@
             </Principal>
             <Dependent Role="card">
               <PropertyRef Name="inventoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Receiver">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="receiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Sender">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="senderId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -590,6 +630,7 @@
         </Association>
         <EntityContainer Name="memoryGameDBEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="card" EntityType="Self.card" />
+          <EntitySet Name="FriendRequest" EntityType="Self.FriendRequest" />
           <EntitySet Name="inventory" EntityType="Self.inventory" />
           <EntitySet Name="match" EntityType="Self.match" />
           <EntitySet Name="matchHistory" EntityType="Self.matchHistory" />
@@ -602,6 +643,14 @@
           <AssociationSet Name="FK_card_inventory" Association="Self.FK_card_inventory">
             <End Role="inventory" EntitySet="inventory" />
             <End Role="card" EntitySet="card" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Receiver" Association="Self.FK_FriendRequest_Receiver">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Sender" Association="Self.FK_FriendRequest_Sender">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
           </AssociationSet>
           <AssociationSet Name="FK_inventory_match" Association="Self.FK_inventory_match">
             <End Role="match" EntitySet="match" />
@@ -652,11 +701,11 @@
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(memoryGameDBModel.sp_helpdiagramdefinition_Result)">
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(memoryGameModel.sp_helpdiagramdefinition_Result)">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(memoryGameDBModel.sp_helpdiagrams_Result)">
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(memoryGameModel.sp_helpdiagrams_Result)">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -666,15 +715,6 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="FriendRequest" EntityType="memoryGameDBModel.FriendRequest" />
-          <AssociationSet Name="FK_FriendRequest_Receiver" Association="memoryGameDBModel.FK_FriendRequest_Receiver">
-            <End Role="user" EntitySet="user" />
-            <End Role="FriendRequest" EntitySet="FriendRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FriendRequest_Sender" Association="memoryGameDBModel.FK_FriendRequest_Sender">
-            <End Role="user" EntitySet="user" />
-            <End Role="FriendRequest" EntitySet="FriendRequest" />
-          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -687,49 +727,14 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="FriendRequest">
-          <Key>
-            <PropertyRef Name="requestId" />
-          </Key>
-          <Property Name="requestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="senderId" Type="Int32" Nullable="false" />
-          <Property Name="receiverId" Type="Int32" Nullable="false" />
-          <Property Name="sentAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="user" Relationship="memoryGameDBModel.FK_FriendRequest_Receiver" FromRole="FriendRequest" ToRole="user" />
-          <NavigationProperty Name="user1" Relationship="memoryGameDBModel.FK_FriendRequest_Sender" FromRole="FriendRequest" ToRole="user" />
-        </EntityType>
-        <Association Name="FK_FriendRequest_Receiver">
-          <End Type="memoryGameDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="memoryGameDBModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="FriendRequest">
-              <PropertyRef Name="receiverId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FriendRequest_Sender">
-          <End Type="memoryGameDBModel.user" Role="user" Multiplicity="1" />
-          <End Type="memoryGameDBModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="FriendRequest">
-              <PropertyRef Name="senderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="memoryGameDBModelStoreContainer" CdmEntityContainer="memoryGameDBEntities">
+        <EntityContainerMapping StorageEntityContainer="memoryGameModelStoreContainer" CdmEntityContainer="memoryGameDBEntities">
           <EntitySetMapping Name="card">
-            <EntityTypeMapping TypeName="memoryGameDBModel.card">
+            <EntityTypeMapping TypeName="memoryGameModel.card">
               <MappingFragment StoreEntitySet="card">
                 <ScalarProperty Name="cardId" ColumnName="cardId" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -738,8 +743,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="FriendRequest">
+            <EntityTypeMapping TypeName="memoryGameModel.FriendRequest">
+              <MappingFragment StoreEntitySet="FriendRequest">
+                <ScalarProperty Name="requestId" ColumnName="requestId" />
+                <ScalarProperty Name="senderId" ColumnName="senderId" />
+                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
+                <ScalarProperty Name="sentAt" ColumnName="sentAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="inventory">
-            <EntityTypeMapping TypeName="memoryGameDBModel.inventory">
+            <EntityTypeMapping TypeName="memoryGameModel.inventory">
               <MappingFragment StoreEntitySet="inventory">
                 <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -748,7 +763,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="match">
-            <EntityTypeMapping TypeName="memoryGameDBModel.match">
+            <EntityTypeMapping TypeName="memoryGameModel.match">
               <MappingFragment StoreEntitySet="match">
                 <ScalarProperty Name="matchId" ColumnName="matchId" />
                 <ScalarProperty Name="startDateTime" ColumnName="startDateTime" />
@@ -757,7 +772,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="matchHistory">
-            <EntityTypeMapping TypeName="memoryGameDBModel.matchHistory">
+            <EntityTypeMapping TypeName="memoryGameModel.matchHistory">
               <MappingFragment StoreEntitySet="matchHistory">
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="matchId" ColumnName="matchId" />
@@ -767,7 +782,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="penalty">
-            <EntityTypeMapping TypeName="memoryGameDBModel.penalty">
+            <EntityTypeMapping TypeName="memoryGameModel.penalty">
               <MappingFragment StoreEntitySet="penalty">
                 <ScalarProperty Name="penaltyId" ColumnName="penaltyId" />
                 <ScalarProperty Name="type" ColumnName="type" />
@@ -777,7 +792,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="pendingRegistration">
-            <EntityTypeMapping TypeName="memoryGameDBModel.pendingRegistration">
+            <EntityTypeMapping TypeName="memoryGameModel.pendingRegistration">
               <MappingFragment StoreEntitySet="pendingRegistration">
                 <ScalarProperty Name="pendingRegistrationId" ColumnName="pendingRegistrationId" />
                 <ScalarProperty Name="email" ColumnName="email" />
@@ -789,7 +804,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="socialNetwork">
-            <EntityTypeMapping TypeName="memoryGameDBModel.socialNetwork">
+            <EntityTypeMapping TypeName="memoryGameModel.socialNetwork">
               <MappingFragment StoreEntitySet="socialNetwork">
                 <ScalarProperty Name="socialNetworkId" ColumnName="socialNetworkId" />
                 <ScalarProperty Name="account" ColumnName="account" />
@@ -798,7 +813,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="memoryGameDBModel.sysdiagrams">
+            <EntityTypeMapping TypeName="memoryGameModel.sysdiagrams">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -809,10 +824,12 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="user">
-            <EntityTypeMapping TypeName="memoryGameDBModel.user">
+            <EntityTypeMapping TypeName="memoryGameModel.user">
               <MappingFragment StoreEntitySet="user">
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="avatar" ColumnName="avatar" />
@@ -824,7 +841,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="userSession">
-            <EntityTypeMapping TypeName="memoryGameDBModel.userSession">
+            <EntityTypeMapping TypeName="memoryGameModel.userSession">
               <MappingFragment StoreEntitySet="userSession">
                 <ScalarProperty Name="token" ColumnName="token" />
                 <ScalarProperty Name="createdAt" ColumnName="createdAt" />
@@ -833,7 +850,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="friend" TypeName="memoryGameDBModel.friend" StoreEntitySet="friend">
+          <AssociationSetMapping Name="friend" TypeName="memoryGameModel.friend" StoreEntitySet="friend">
             <EndProperty Name="user">
               <ScalarProperty Name="userId" ColumnName="userId1" />
             </EndProperty>
@@ -841,21 +858,21 @@
               <ScalarProperty Name="userId" ColumnName="userId2" />
             </EndProperty>
           </AssociationSetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="memoryGameDBModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_CleanupGuestAccounts" FunctionName="memoryGameDBModel.Store.sp_CleanupGuestAccounts" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="memoryGameDBModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="memoryGameDBModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="memoryGameDBModel.Store.sp_helpdiagramdefinition">
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="memoryGameModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_CleanupGuestAccounts" FunctionName="memoryGameModel.Store.sp_CleanupGuestAccounts" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="memoryGameModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="memoryGameModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="memoryGameModel.Store.sp_helpdiagramdefinition">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="memoryGameDBModel.sp_helpdiagramdefinition_Result">
+              <ComplexTypeMapping TypeName="memoryGameModel.sp_helpdiagramdefinition_Result">
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="memoryGameDBModel.Store.sp_helpdiagrams">
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="memoryGameModel.Store.sp_helpdiagrams">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="memoryGameDBModel.sp_helpdiagrams_Result">
+              <ComplexTypeMapping TypeName="memoryGameModel.sp_helpdiagrams_Result">
                 <ScalarProperty Name="Database" ColumnName="Database" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -864,18 +881,8 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="memoryGameDBModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="memoryGameDBModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="FriendRequest">
-            <EntityTypeMapping TypeName="memoryGameDBModel.FriendRequest">
-              <MappingFragment StoreEntitySet="FriendRequest">
-                <ScalarProperty Name="sentAt" ColumnName="sentAt" />
-                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
-                <ScalarProperty Name="senderId" ColumnName="senderId" />
-                <ScalarProperty Name="requestId" ColumnName="requestId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="memoryGameModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="memoryGameModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
