@@ -1,4 +1,5 @@
-﻿using Client.Models;
+﻿using Client.GameLobbyServiceReference;
+using Client.Models;
 using Client.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,6 @@ namespace Client.Utilities
         private int score;
         private bool isProcessingTurn;
         private Card firstCardFlipped;
-
         private readonly ObservableCollection<Card> cardsOnBoard;
 
         public GameManager(ObservableCollection<Card> cardsCollection)
@@ -52,7 +52,7 @@ namespace Client.Utilities
             }
         }
 
-        public void StartNewGame(GameConfiguration configuration)
+        public void StartNewGame(GameConfiguration configuration, CardInfo[] serverCards)
         {
             timeLeft = TimeSpan.FromSeconds(configuration.TimeLimitSeconds);
             score = 0;
@@ -61,68 +61,34 @@ namespace Client.Utilities
 
             TimerUpdated?.Invoke(timeLeft.ToString(@"mm\:ss"));
             ScoreUpdated?.Invoke(0);
+
             cardsOnBoard.Clear();
 
-            var deck = GenerateDeck(configuration.NumberOfCards);
+            CreateDeckFromUserInfo(serverCards);
 
-            foreach (var card in deck)
-            {
-                cardsOnBoard.Add(card);
-            }
             gameTimer.Start();
         }
 
-        private static List<Card> GenerateDeck(int numberOfCards)
+        private void CreateDeckFromUserInfo(CardInfo[] serverCards)
         {
-            List<string> imagePaths = new List<string>
+            int index = 0;
+            foreach (var info in serverCards)
             {
-                "/Client;component/Resources/Images/Cards/Fronts/Color/africa.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/ana.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/ari.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/blanca.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/emily.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/fer.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/katya.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/lala.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/linda.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/paul.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/saddy.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Color/sara.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/africa.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/ana.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/ari.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/blanca.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/emily.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/fer.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/katya.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/lala.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/linda.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/paul.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/saddy.png",
-                "/Client;component/Resources/Images/Cards/Fronts/Normal/sara.png"
-            };
+                string imagePath = GetImagePath(info.ImageIdentifier);
+                var newCard = new Card(index, info.CardId, imagePath);
 
-            List<Card> deck = new List<Card>();
-            int pairsNeeded = numberOfCards / 2;
-
-            for (int i = 0; i < pairsNeeded; i++)
-            {
-                string image = imagePaths[i % imagePaths.Count];
-                deck.Add(new Card(i * 2, i, image));
-                deck.Add(new Card(i * 2 + 1, i, image));
-
+                cardsOnBoard.Add(newCard);
+                index++;
             }
-
-            Random rng = new Random();
-            return deck.OrderBy(x => rng.Next()).ToList();
         }
 
+        private string GetImagePath(string imageName)
+        {
+            return $"/Client;component/Resources/Images/Cards/Fronts/Color/{imageName}.png";
+        }
         public async Task HandleCardClick(Card clickedCard)
         {
-            if (isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched)
-            {
-                return;
-            }
+            if (isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched) return;
 
             clickedCard.IsFlipped = true;
 
@@ -133,28 +99,21 @@ namespace Client.Utilities
             else
             {
                 isProcessingTurn = true;
-
                 if (firstCardFlipped.PairId == clickedCard.PairId)
                 {
-
                     await Task.Delay(500);
-
                     firstCardFlipped.IsMatched = true;
                     clickedCard.IsMatched = true;
-
                     score += 10;
                     ScoreUpdated?.Invoke(score);
-
                     CheckWinCondition();
                 }
                 else
                 {
                     await Task.Delay(1000);
-
                     firstCardFlipped.IsFlipped = false;
                     clickedCard.IsFlipped = false;
                 }
-
                 firstCardFlipped = null;
                 isProcessingTurn = false;
             }
