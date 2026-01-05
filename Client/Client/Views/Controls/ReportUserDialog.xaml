@@ -1,28 +1,70 @@
 ﻿<Window x:Class="Client.Views.Controls.ReportUserDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Report Player" Height="250" Width="400"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="#1E1E1E" WindowStyle="None">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Controls"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        SizeToContent="WidthAndHeight"
+        MinWidth="500" MaxWidth="750"
+        WindowStartupLocation="CenterOwner" 
+        
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border BorderBrush="#FF5555" BorderThickness="2" CornerRadius="5" Margin="5">
-        <Grid>
-            <StackPanel VerticalAlignment="Center" Margin="20">
-                <Label Content="REPORT PLAYER" FontSize="20" FontWeight="Bold" Foreground="#FF5555" HorizontalAlignment="Center"/>
+    <Border CornerRadius="15" 
+            Background="{StaticResource PrimaryTextColor}"
+            BorderBrush="{StaticResource ReportColor}"
+            BorderThickness="2"
+            Margin="10">
 
-                <TextBlock Text="Are you sure you want to report this player for bad behavior?" 
-                           Foreground="White" TextWrapping="Wrap" TextAlignment="Center" Margin="0,10,0,20" FontSize="14"/>
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.4"/>
+        </Border.Effect>
 
-                <TextBlock x:Name="TextTargetUser" Text="Target: PlayerName" 
-                           Foreground="LightGray" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,20"/>
+        <Grid Margin="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Yes, Report" Click="ButtonReport_Click" 
-                            Width="120" Height="35" Margin="10" Background="#FF5555" Foreground="White"/>
+            <TextBlock Text="{x:Static language:Lang.ReportUserDialog_Title_Report}" 
+                   Style="{StaticResource TitleTextStyle}" FontSize="60"
+                   Foreground="{StaticResource HardColor}"
+                   HorizontalAlignment="Center"
+                   Grid.Row="0" Margin="0,0,0,10"/>
 
-                    <Button Content="Cancel" Click="ButtonCancel_Click" 
-                            Width="120" Height="35" Margin="10"/>
-                </StackPanel>
+            <StackPanel Grid.Row="1" VerticalAlignment="Center">
+
+                <TextBlock Text="{x:Static language:Lang.ReportUserDialog_Message_Report}" 
+                           Style="{StaticResource MessageBoxTextStyle}"/>
+
+                <TextBlock x:Name="TextTargetUser" 
+                           Text="Target: PlayerName" 
+                           Style="{StaticResource MessageBoxTextStyle}"
+                           FontWeight="Bold" Foreground="{StaticResource HardColor}"
+                           Margin="0,0,0,20"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="2" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+
+                <Button Content="{x:Static language:Lang.Global_Button_Report}" 
+                        Style="{StaticResource ReportButtonStyle}"
+                        Width="140" Margin="0,0,85,0"
+                        Click="ButtonReport_Click"/>
+
+                <Button x:Name="ButtonReport"
+                        Content="{x:Static language:Lang.Global_Button_Cancel}" 
+                        Style="{StaticResource ExitButtonStyle}"
+                        Width="120" Height="55"
+                        Click="ButtonCancel_Click"/>
             </StackPanel>
         </Grid>
     </Border>

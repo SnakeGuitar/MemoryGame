@@ -36,6 +36,7 @@ namespace Client.Views
             InitializeComponent();
             UsernameDisplay.Content = UserSession.Username;
             ButtonSignIn.Visibility = Visibility.Visible;
+            UserSession.ProfileUpdated += OnProfileUpdated;
 
             if (!UserSession.IsGuest)
             {
@@ -76,9 +77,9 @@ namespace Client.Views
         {
             if (UserSession.IsGuest)
             {
-                string message = Lang.Global_Error_GuestsNotAllowed;
-                string title = Lang.Global_Title_NotAvailableFunction;
-                var msgBox = new CustomMessageBox(title, message,
+                string message = string.Format(Lang.PlayerProfile_Message_NotAvaible, UserSession.Username);
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_NotAvailableFunction, message,
                     this, MessageBoxType.Warning);
                 msgBox.ShowDialog();
                 return;
@@ -169,8 +170,15 @@ namespace Client.Views
                 msgBox.ShowDialog();
             }
         }
+
+        private void OnProfileUpdated()
+        {
+            UsernameDisplay.Content = UserSession.Username;
+            _ = LoadAvatarAsync();
+        }
         protected override void OnClosed(EventArgs e)
         {
+            UserSession.ProfileUpdated -= OnProfileUpdated;
             Window owner = this.Owner;
             if (owner != null)
             {

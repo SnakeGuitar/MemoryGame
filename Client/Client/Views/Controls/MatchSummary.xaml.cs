@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,14 +24,37 @@ namespace Client.Views.Controls
         public MatchSummary(string winnerName, string scoreText)
         {
             InitializeComponent();
-            TextBlockWinner.Tag = $"Winner: {winnerName}";
-            TextBlockScore.Tag = $"Score: {scoreText}";
+            SolidColorBrush textMessageBrush;
+            string lightTextColor = "AccentForegroundColor";
+            textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
+
+            if (winnerName == UserSession.Username)
+            {
+                TextBlockWinner.Text = Lang.MatchSummary_Label_Win;
+            }
+            else if(winnerName == Lang.Singleplayer_Title_TimeOver)
+            {
+                TextBlockWinner.Text = winnerName;
+                TextBlockWinner.Foreground = textMessageBrush;
+            }
+            else
+            {
+                TextBlockWinner.Text = $"{winnerName}  {Lang.MatchSummary_Label_Lost}";
+                TextBlockWinner.Foreground = textMessageBrush;
+            }
+                
+            TextBlockScore.Text =scoreText;
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        private void ButtonAccept_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
             this.Close();
+        }
+
+         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

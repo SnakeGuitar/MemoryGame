@@ -1,7 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Helpers;
+using System;
+using System.Windows;
+using System.Windows.Input;
+using static Client.Views.Controls.CustomMessageBox;
+using static Client.Helpers.LocalizationHelper;
 
 namespace Client.Views.Controls
 {
@@ -22,40 +26,64 @@ namespace Client.Views.Controls
         {
             if (_targetUsername == UserSession.Username)
             {
-                MessageBox.Show("You cannot report yourself.");
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_Error, Lang.ReportUserDialog_Error_AutoReport,
+                    this, MessageBoxType.Error);
+                msgBox.ShowDialog();
                 this.Close();
                 return;
             }
 
+            ButtonReport.IsEnabled = false;
+            var client = new UserServiceClient();
+
             try
             {
-                using (var client = new UserServiceClient())
-                {
-                    var response = await client.ReportUserAsync(UserSession.SessionToken, _targetUsername, _matchId);
+                var response = await client.ReportUserAsync(UserSession.SessionToken, _targetUsername, _matchId);
 
-                    if (response.Success)
-                    {
-                        MessageBox.Show("User reported successfully. Admins will review the case.", "Report Sent", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Could not report user: {response.MessageKey}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                if (response.Success)
+                {
+                    var msgBox = new CustomMessageBox(
+                        Lang.ReportUserDialog_Title_ReportSuccess, Lang.ReportUserDialog_Message_Report,
+                        this, MessageBoxType.Success);
+                    msgBox.ShowDialog();
+                    this.Close();
                 }
+                else
+                {
+                    string errorMessage = GetString(response.MessageKey);
+                    var msgBox = new CustomMessageBox(
+                        Lang.Global_Title_Error, errorMessage,
+                        this, MessageBoxType.Error);
+                    msgBox.ShowDialog();
+
+                    ButtonReport.IsEnabled = true;
+                }
+
+                client.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Connection error while trying to report.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                this.Close();
+                client.Abort();
+                string errorMessage = GetString(ex);
+
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_Error, errorMessage,
+                    this, MessageBoxType.Error);
+                msgBox.ShowDialog();
+
+                ButtonReport.IsEnabled = true;
             }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }

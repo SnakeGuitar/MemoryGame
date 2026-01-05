@@ -1,23 +1,67 @@
 ﻿<Window x:Class="Client.Views.Controls.InviteFriendDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Invitar Amigo" Height="218" Width="350"
-        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        Background="#1E1E1E" WindowStyle="None">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Views.Controls"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        SizeToContent="WidthAndHeight"
+        MinWidth="550" MaxWidth="700" 
+        WindowStartupLocation="CenterOwner"
+        
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    
+    <Border CornerRadius="15" 
+            Background="{StaticResource PrimaryTextColor}"
+            BorderBrush="{StaticResource AccentColor}"
+            BorderThickness="1">
 
-    <Border BorderBrush="#2196F3" BorderThickness="2" CornerRadius="5" Margin="5">
-        <StackPanel VerticalAlignment="Center" Margin="20">
-            <Label Content="INVITAR AMIGO" FontSize="18" FontWeight="Bold" Foreground="#2196F3" HorizontalAlignment="Center"/>
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="15" ShadowDepth="5" Opacity="0.4"/>
+        </Border.Effect>
 
-            <Label Content="Ingresa el correo:" Foreground="White" Margin="0,10,0,0"/>
-            <TextBox x:Name="TextBoxEmail" Height="30" Margin="0,5"/>
+        <Grid>
+            <Grid Margin="20,10,20,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <Button Content="Enviar Correo" Click="ButtonSend_Click" 
-                        Width="120" Height="35" Margin="5" Background="#2196F3" Foreground="White"/>
-                <Button Content="Cancelar" Click="ButtonCancel_Click" 
-                        Width="80" Height="35" Margin="5"/>
-            </StackPanel>
-        </StackPanel>
+                <TextBlock x:Name="TextBlockTitle"
+                           Grid.Row="0" Text="{x:Static language:Lang.InviteFriendDialog_Title_InviteFriend}"
+                           Style="{StaticResource TitleTextStyle}" Margin="0,10,0,0" Foreground="{StaticResource AccentForegroundColor}"
+                           TextWrapping="Wrap" TextAlignment="Center"/>
+
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                    <Label Content="{x:Static language:Lang.InviteFriendDialog_Label_EnterEmail}" 
+                       Style="{StaticResource RegisterLabelStyle}"/>
+
+                    <TextBox x:Name="TextBoxEmail" 
+                         Style="{StaticResource ChatTextBoxStyle}"
+                         Margin="0,5,0,10"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="2" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center">
+
+                    <Button Content="{x:Static language:Lang.Friends_Button_SendRequest}" 
+                            Grid.Row="2" Style="{StaticResource PrimaryButtonStyle}"
+                            Margin="0,20,0,0" Width="200"
+                            Click="ButtonSend_Click"/>
+
+                    <Button Content="{x:Static language:Lang.Global_Button_Cancel}"
+                            Grid.Row="2" Style="{StaticResource ExitButtonStyle}"
+                            Margin="50,20,0,0" Width="200" Height="55"
+                            Click="ButtonCancel_Click"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Border>
 </Window>

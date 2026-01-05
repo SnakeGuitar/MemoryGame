@@ -1,26 +1,73 @@
 ﻿<Window x:Class="Client.Views.Controls.MatchSummary"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Resultados de Partida" Height="300" Width="400"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="{StaticResource BackgroundColor}" WindowStyle="None">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        SizeToContent="WidthAndHeight"
+        MinWidth="500" MaxWidth="700"
+        WindowStartupLocation="CenterScreen"
+        
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border BorderBrush="White" BorderThickness="2" CornerRadius="10" Margin="10">
-        <Grid>
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Label x:Name="LabelTitle" Content="PARTIDA FINALIZADA" 
-                       FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+    <Border CornerRadius="15" 
+            Background="{StaticResource BackgroundColor}"
+            BorderBrush="{StaticResource AccentColor}"
+            BorderThickness="1">
 
-                <TextBlock x:Name="TextBlockWinner" Text="Ganador: Player1" 
-                           FontSize="18" Foreground="#FFD700" HorizontalAlignment="Center" Margin="0,10"/>
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.3" Color="Black"/>
+        </Border.Effect>
 
-                <TextBlock x:Name="TextBlockScore" Text="Puntaje: 100" 
-                           FontSize="16" Foreground="White" HorizontalAlignment="Center" Margin="0,5" Width="151"/>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <Button Content="Cerrar y Salir" Click="ButtonClose_Click" 
-                        Width="150" Height="40" Margin="0,30,0,0"
-                        Background="#FF5555" Foreground="White" FontWeight="Bold"/>
-            </StackPanel>
+            <TextBlock Text="{x:Static language:Lang.Global_Title_MatchOver}"
+                       Grid.Row="0" FontSize="50"
+                       Style="{StaticResource TitleTextStyle}"
+                       Margin="0,10,0,15"
+                       Foreground="{StaticResource PrimaryTextColor}"
+                       TextWrapping="Wrap" 
+                       TextAlignment="Center"/>
+
+            <Border Grid.Row="1"
+                    Background="{StaticResource GreenGame}" 
+                    CornerRadius="10" 
+                    Margin="0,0,0,20"
+                    Padding="20">
+
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock x:Name="TextBlockWinner" 
+                               Text="Winner" 
+                               Style="{StaticResource MessageBoxTextStyle}"
+                               FontSize="40" FontWeight="Bold" Foreground="{StaticResource NormalColor}"
+                               Margin="0,0,0,10"/>
+
+                    <Label Content="{x:Static language:Lang.MatchSummary_Label_Summary}"
+                           Style="{StaticResource RegisterLabelStyle}" Foreground="{StaticResource BackgroundColor}"/>
+
+                    <TextBlock x:Name="TextBlockScore" 
+                               Text="Puntaje: 100" 
+                               Style="{StaticResource MessageBoxTextStyle}"
+                               FontSize="28"/>
+                </StackPanel>
+            </Border>
+
+            <Button Content="{x:Static language:Lang.Global_Button_Accept}" 
+                    Grid.Row="2" 
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    HorizontalAlignment="Center"
+                    Width="150"
+                    Click="ButtonAccept_Click"/>
         </Grid>
     </Border>
 </Window>
