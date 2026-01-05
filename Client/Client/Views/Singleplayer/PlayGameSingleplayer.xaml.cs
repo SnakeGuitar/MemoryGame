@@ -50,7 +50,7 @@ namespace Client.Views.Singleplayer
             _gameManager.GameWon += OnGameWon;
             _gameManager.GameLost += OnGameLost;
 
-            _gameManager.StartNewGame(config);
+            _gameManager.StartSingleplayerGame(config);
         }
 
         private void OnTimerUpdated(string timeString)

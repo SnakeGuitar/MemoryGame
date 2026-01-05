@@ -12,6 +12,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Controls;
 using static Client.Views.Controls.CustomMessageBox;
+using System.Threading.Tasks;
 
 namespace Client.Views.Lobby
 {
@@ -138,6 +139,15 @@ namespace Client.Views.Lobby
             {
                 return;
             }
+            
+            if (_currentPlayers.Count < 1)
+            {
+                MessageBox.Show(
+                    "Waiting for more players...", 
+                    "Notice", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Information);
+            }
 
             try
             {
@@ -167,6 +177,16 @@ namespace Client.Views.Lobby
                     this, MessageBoxType.Error);
                 msgBox.ShowDialog();
 
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = LocalizationHelper.GetString(ex);
+                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
+                var msgBox = new CustomMessageBox(
+                    Lang.Global_Title_AppError, errorMessage,
+                    this, MessageBoxType.Error);
+                msgBox.ShowDialog();
                 this.Close();
             }
         }
@@ -270,7 +290,20 @@ namespace Client.Views.Lobby
 
         private void OnPlayerLeft(string playerName)
         {
+            Dispatcher.Invoke(() =>
+            {
+                MessageBox.Show(
+                    $"{playerName} has left the lobby.", "Player Left", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Information);
 
+                var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
+                if (playerToRemove != null)
+                {
+                    _currentPlayers.Remove(playerToRemove);
+                    UpdatePlayerLabels();
+                }
+            });
         }
 
         private void OnGameStarted(List<CardInfo> cards)
@@ -281,7 +314,14 @@ namespace Client.Views.Lobby
                 _isGameStarting = true;
 
                 var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
-                multiplayerGame.Owner = this;
+                if (this.Owner != null)
+                {
+                    multiplayerGame.Owner = this.Owner;
+                }
+                else
+                {
+                    multiplayerGame.Owner = this;
+                }
                 multiplayerGame.Show();
                 this.Hide();
             });
@@ -291,18 +331,19 @@ namespace Client.Views.Lobby
         {
             UnsubscribeEvents();
 
-            if (this.Owner != null)
-            {
-                this.Owner.Show();
-            }
-
-            if (_isConnected && !_isGameStarting)
+            if (!_isGameStarting)
             {
                 try
                 {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    await LeaveLobbySafe();
+                    _isConnected = false;
                 }
                 catch { }
+            }
+
+            if (this.Owner != null)
+            {
+                this.Owner.Show();
             }
 
             base.OnClosed(e);
@@ -334,6 +375,29 @@ namespace Client.Views.Lobby
 
         private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+        }
+
+        private void UpdatePlayerLabels()
+        {
+            foreach (var label in _playerLabels) if (label != null) label.Content = string.Empty;
+
+            for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
+            {
+                if (_playerLabels[i] != null) _playerLabels[i].Content = _currentPlayers[i].Name;
+            }
+        }
+
+        private async Task LeaveLobbySafe()
+        {
+            if (_isConnected)
+            {
+                try
+                {
+                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    _isConnected = false;
+                }
+                catch { }
+            }
         }
     }
 }

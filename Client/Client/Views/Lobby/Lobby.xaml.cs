@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static Client.Views.Controls.CustomMessageBox;
@@ -218,14 +219,32 @@ namespace Client.Views.Lobby
 
         private void OnPlayerLeft(string name)
         {
+            Dispatcher.Invoke(() =>
+            {
+                var p = _currentPlayers.FirstOrDefault(x => x.Name == name);
+                if (p != null)
+                {
+                    _currentPlayers.Remove(p);
+                    UpdatePlayerLabels();
+                }
+            });
+        }
+
+        private void UpdatePlayerLabels()
+        {
+            foreach (var label in _playerLabels) if (label != null) label.Content = "";
+            for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
+            {
+                if (_playerLabels[i] != null) _playerLabels[i].Content = _currentPlayers[i].Name;
+            }
         }
 
         private void OnGameStarted(List<CardInfo> cards)
         {
             Dispatcher.Invoke(() =>
             {
-                _isGameStarting = true;
                 UnsubscribeEvents();
+                _isGameStarting = true;
 
                 PlayGameMultiplayer gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
 
@@ -242,25 +261,14 @@ namespace Client.Views.Lobby
         protected override async void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
-
             if (!_isGameStarting)
             {
+                await LeaveLobbySafe();
                 if (this.Owner != null)
                 {
                     this.Owner.Show();
                 }
-
-                if (_isConnected)
-                {
-                    try
-                    {
-                        await GameServiceManager.Instance.Client.LeaveLobbyAsync();
-                        _isConnected = false;
-                    }
-                    catch { }
-                }
             }
-
             base.OnClosed(e);
         }
 
@@ -271,6 +279,19 @@ namespace Client.Views.Lobby
         private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private async Task LeaveLobbySafe()
+        {
+            if (_isConnected)
+            {
+                try
+                {
+                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    _isConnected = false;
+                }
+                catch { }
+            }
         }
     }
 }
