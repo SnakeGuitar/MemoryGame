@@ -237,6 +237,8 @@ namespace Server.SessionService.Core
                         UserId = user.userId,
                         Username = user.username,
                         Email = user.email,
+                        Name = user.name,
+                        LastName = user.lastName,
                         RegistrationDate = user.registrationDate,
                         SocialNetworks = user.socialNetwork.Select(sn => new SocialNetworkDTO
                         {
@@ -314,6 +316,8 @@ namespace Server.SessionService.Core
                         UserId = user.userId,
                         Username = user.username,
                         Email = user.email,
+                        Name = user.name,
+                        LastName = user.lastName,
                         RegistrationDate = user.registrationDate,
                         SocialNetworks = user.socialNetwork.Select(sn => new SocialNetworkDTO
                         {

@@ -81,15 +81,15 @@ namespace Server.SessionService.Core
                 using (var db = _dbFactory.Create())
                 {
                     var requests = db.FriendRequest
-                        .Include("user")
+                        .Include("user1")
                         .Where(r => r.receiverId == userId.Value)
                         .ToList();
 
                     return requests.Select(r => new FriendRequestDTO
                     {
                         RequestId = r.requestId,
-                        SenderUsername = r.user.username,
-                        SenderAvatar = r.user.avatar
+                        SenderUsername = r.user1.username,
+                        SenderAvatar = r.user1.avatar
                     }).ToList();
                 }
             }
