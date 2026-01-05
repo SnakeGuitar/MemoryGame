@@ -613,4 +613,121 @@
     <value>Account successfully verified! 
 You need to log in with your new account :)</value>
   </data>
+  <data name="InviteFriendDialog_Title_SubjectEmail" xml:space="preserve">
+    <value>Join my Memory Game Match!</value>
+  </data>
+  <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
+    <value>Heeey budy, join my game so we can play :D The Lobby code is:</value>
+  </data>
+  <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
+    <value>No default mail application was found installed on the system :(</value>
+  </data>
+  <data name="ReportUserDialog_Error_AutoReport" xml:space="preserve">
+    <value>You cannot report yourself</value>
+  </data>
+  <data name="ReportUserDialog_Title_ReportSuccess" xml:space="preserve">
+    <value>Report Sent</value>
+  </data>
+  <data name="ReportUserDialog_Message_ReportSuccess" xml:space="preserve">
+    <value>User reported successfully. Admins will review the case :)</value>
+  </data>
+  <data name="MatchSummary_Label_Win" xml:space="preserve">
+    <value>You Win! :D</value>
+  </data>
+  <data name="MatchSummary_Label_Summary" xml:space="preserve">
+    <value>Summary: </value>
+  </data>
+  <data name="MatchSummary_Label_Lost" xml:space="preserve">
+    <value>Won</value>
+  </data>
+  <data name="MatchSummary_Label_TimeRemaining" xml:space="preserve">
+    <value>Time Remaining:</value>
+  </data>
+  <data name="Social_Error_SelfAdd" xml:space="preserve">
+    <value>You cannot add yourself</value>
+  </data>
+  <data name="Social_Error_AlreadyFriends" xml:space="preserve">
+    <value>You are already friends :&gt;</value>
+  </data>
+  <data name="Social_Error_RequestExists" xml:space="preserve">
+    <value>Friend request already pending</value>
+  </data>
+  <data name="FriendsMenu_Label_PendingRequests" xml:space="preserve">
+    <value>Wants to be your friend</value>
+  </data>
+  <data name="Global_Label_ConnectionFailed" xml:space="preserve">
+    <value>Connection Failed</value>
+  </data>
+  <data name="Friends_Error_RemoveFriend" xml:space="preserve">
+    <value>Could not Remove Friend :( Please try Again</value>
+  </data>
+  <data name="Global_Label_Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Global_Label_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Friends_Error_SendRequest" xml:space="preserve">
+    <value>The request could not be sent. Please try again</value>
+  </data>
+  <data name="Friends_Label_SuccessRequest" xml:space="preserve">
+    <value>Friend Request Sent to {0}</value>
+  </data>
+  <data name="Global_Title_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Friends_Message_RemoveFriend" xml:space="preserve">
+    <value>Are you sure to want to remove {0}?</value>
+  </data>
+  <data name="Global_Label_Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Global_Label_Name" xml:space="preserve">
+    <value>My Name:</value>
+  </data>
+  <data name="Global_Label_LastName" xml:space="preserve">
+    <value>My Last Name:</value>
+  </data>
+  <data name="EditProfile_Label_UpdatePersonalnfo" xml:space="preserve">
+    <value>Update Personal Information</value>
+  </data>
+  <data name="EditProfile_Label_AvatarUpdated" xml:space="preserve">
+    <value>Your Avatar has been Updated</value>
+  </data>
+  <data name="EditProfile_Label_ErrorPasswordFields" xml:space="preserve">
+    <value>Please Fill All Password Fields to Update</value>
+  </data>
+  <data name="EditProfile_Label_ErrorPasswordUpdate" xml:space="preserve">
+    <value>Failed to update password. Check your current password</value>
+  </data>
+  <data name="EditProfile_Label_ErrorUsernameEmpty" xml:space="preserve">
+    <value>Username cannot be empty</value>
+  </data>
+  <data name="EditProfile_Label_ErrorSameUsername" xml:space="preserve">
+    <value>New username is the same as the current one</value>
+  </data>
+  <data name="EditProfile_Label_SuccesUpdateUsername" xml:space="preserve">
+    <value>Username updated successfully. For security reasons, you must log in again</value>
+  </data>
+  <data name="EditProfile_Label_SuccesUpdateInfo" xml:space="preserve">
+    <value>Updated information :D</value>
+  </data>
+  <data name="EditProfile_Label_PasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+  </data>
+  <data name="Global_Label_NoRegister" xml:space="preserve">
+    <value>No Registration</value>
+  </data>
+  <data name="MatchHistory_Label_ErrorHistory" xml:space="preserve">
+    <value>Could not load match history</value>
+  </data>
+  <data name="Global_Error_ImageEmpty" xml:space="preserve">
+    <value>Image Data is Empty</value>
+  </data>
+  <data name="Global_Error_ImageTooLarge" xml:space="preserve">
+    <value>Image Too Large :/</value>
+  </data>
+  <data name="PlayerProfile_Message_NotAvaible" xml:space="preserve">
+    <value>Hellooo {0}! To access your friends, statistics, and profile, you need to register your account with an email address</value>
+  </data>
 </root>

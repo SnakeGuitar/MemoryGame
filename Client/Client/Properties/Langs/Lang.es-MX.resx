@@ -612,4 +612,124 @@
   <data name="VerifyCode_Message_GuestSuccess" xml:space="preserve">
     <value>¡Cuenta verificada con éxito! Debes iniciar sesión con tu nueva cuenta :)</value>
   </data>
+  <data name="InviteFriendDialog_Title_SubjectEmail" xml:space="preserve">
+    <value>¡Únete a mi partida de Memory Game!</value>
+  </data>
+  <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
+    <value>Holaaa amiguito, entra a mi partida para que juguemos :D.
+El código de la sala es:
+</value>
+  </data>
+  <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
+    <value>No se encontró una aplicación de correo predeterminada instalada en el sistema :(</value>
+  </data>
+  <data name="ReportUserDialog_Error_AutoReport" xml:space="preserve">
+    <value>No puedes denunciarte a ti mismo</value>
+  </data>
+  <data name="ReportUserDialog_Title_ReportSuccess" xml:space="preserve">
+    <value>Reporte enviando</value>
+  </data>
+  <data name="ReportUserDialog_Message_ReportSuccess" xml:space="preserve">
+    <value>El usuario ha sido denunciado correctamente. Los administradores revisarán el caso :)</value>
+  </data>
+  <data name="MatchSummary_Label_Win" xml:space="preserve">
+    <value>¡Has ganado! :D</value>
+  </data>
+  <data name="MatchSummary_Label_Summary" xml:space="preserve">
+    <value>Resumen: </value>
+  </data>
+  <data name="MatchSummary_Label_Lost" xml:space="preserve">
+    <value>Ha Ganado</value>
+  </data>
+  <data name="MatchSummary_Label_TimeRemaining" xml:space="preserve">
+    <value>Tiempo Restante: </value>
+  </data>
+  <data name="Social_Error_SelfAdd" xml:space="preserve">
+    <value>No puede agregarse a sí mismo</value>
+  </data>
+  <data name="Social_Error_AlreadyFriends" xml:space="preserve">
+    <value>Ya son amigos :&gt;</value>
+  </data>
+  <data name="Social_Error_RequestExists" xml:space="preserve">
+    <value>Solicitud de amistad pendiente</value>
+  </data>
+  <data name="FriendsMenu_Label_PendingRequests" xml:space="preserve">
+    <value>Quiere ser tu amigo</value>
+  </data>
+  <data name="Global_Label_ConnectionFailed" xml:space="preserve">
+    <value>Error de Conexión</value>
+  </data>
+  <data name="Friends_Error_RemoveFriend" xml:space="preserve">
+    <value>No se pudo eliminar al amigo :( 
+Por favor inténtalo de nuevo</value>
+  </data>
+  <data name="Global_Label_Online" xml:space="preserve">
+    <value>Conectado</value>
+  </data>
+  <data name="Global_Label_Offline" xml:space="preserve">
+    <value>Desconectado</value>
+  </data>
+  <data name="Friends_Error_SendRequest" xml:space="preserve">
+    <value>No se pudo enviar la solicitud.  Por favor inténtalo de nuevo</value>
+  </data>
+  <data name="Friends_Label_SuccessRequest" xml:space="preserve">
+    <value>Solicitud de amistad enviada a {0}</value>
+  </data>
+  <data name="Global_Title_Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Friends_Message_RemoveFriend" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar a {0}?</value>
+  </data>
+  <data name="Global_Label_Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Global_Label_Name" xml:space="preserve">
+    <value>Mi Nombre:</value>
+  </data>
+  <data name="Global_Label_LastName" xml:space="preserve">
+    <value>Mis Apellidos:</value>
+  </data>
+  <data name="EditProfile_Label_UpdatePersonalnfo" xml:space="preserve">
+    <value>Actualizar información personal</value>
+  </data>
+  <data name="EditProfile_Label_AvatarUpdated" xml:space="preserve">
+    <value>Tu Avatar ha sido Actualizado</value>
+  </data>
+  <data name="EditProfile_Label_ErrorPasswordFields" xml:space="preserve">
+    <value>Por favor rellene los campos de contraseña para actualizarla</value>
+  </data>
+  <data name="EditProfile_Label_ErrorPasswordUpdate" xml:space="preserve">
+    <value>No se pudo actualizar la contraseña. Por favor verifique su contraseña actual</value>
+  </data>
+  <data name="EditProfile_Label_ErrorUsernameEmpty" xml:space="preserve">
+    <value>El nombre de usuario no puede estar vacío</value>
+  </data>
+  <data name="EditProfile_Label_ErrorSameUsername" xml:space="preserve">
+    <value>El nuevo nombre de usuario ingresado es el mismo que el actual</value>
+  </data>
+  <data name="EditProfile_Label_SuccesUpdateUsername" xml:space="preserve">
+    <value>Nombre de usuario actualizado correctamente. Por motivos de seguridad, debe volver a iniciar sesión</value>
+  </data>
+  <data name="EditProfile_Label_SuccesUpdateInfo" xml:space="preserve">
+    <value>Información actualizada :D</value>
+  </data>
+  <data name="EditProfile_Label_PasswordUpdated" xml:space="preserve">
+    <value>Contraseña Actualizada</value>
+  </data>
+  <data name="Global_Label_NoRegister" xml:space="preserve">
+    <value>Sin Registro</value>
+  </data>
+  <data name="MatchHistory_Label_ErrorHistory" xml:space="preserve">
+    <value>No se pudo cargar el historial de partidas</value>
+  </data>
+  <data name="Global_Error_ImageEmpty" xml:space="preserve">
+    <value>Los datos de la imagen están vacíos</value>
+  </data>
+  <data name="Global_Error_ImageTooLarge" xml:space="preserve">
+    <value>Imagen demasiado grande :/</value>
+  </data>
+  <data name="PlayerProfile_Message_NotAvaible" xml:space="preserve">
+    <value>¡Holaaa {0}! Para acceder a tus amigos, estadísticas y perfil, debes registrar tu cuenta con una dirección de correo electrónico</value>
+  </data>
 </root>

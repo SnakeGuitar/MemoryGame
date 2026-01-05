@@ -97,11 +97,56 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Your Avatar has been Updated.
+        /// </summary>
+        public static string EditProfile_Label_AvatarUpdated {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_AvatarUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Edit Profile.
         /// </summary>
         public static string EditProfile_Label_EditProfile {
             get {
                 return ResourceManager.GetString("EditProfile_Label_EditProfile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Please Fill All Password Fields to Update.
+        /// </summary>
+        public static string EditProfile_Label_ErrorPasswordFields {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_ErrorPasswordFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Failed to update password. Check your current password.
+        /// </summary>
+        public static string EditProfile_Label_ErrorPasswordUpdate {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_ErrorPasswordUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a New username is the same as the current one.
+        /// </summary>
+        public static string EditProfile_Label_ErrorSameUsername {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_ErrorSameUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Username cannot be empty.
+        /// </summary>
+        public static string EditProfile_Label_ErrorUsernameEmpty {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_ErrorUsernameEmpty", resourceCulture);
             }
         }
         
@@ -124,11 +169,65 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Password Updated.
+        /// </summary>
+        public static string EditProfile_Label_PasswordUpdated {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_PasswordUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Updated information :D.
+        /// </summary>
+        public static string EditProfile_Label_SuccesUpdateInfo {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_SuccesUpdateInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Username updated successfully. For security reasons, you must log in again.
+        /// </summary>
+        public static string EditProfile_Label_SuccesUpdateUsername {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_SuccesUpdateUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Update Personal Information.
+        /// </summary>
+        public static string EditProfile_Label_UpdatePersonalnfo {
+            get {
+                return ResourceManager.GetString("EditProfile_Label_UpdatePersonalnfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Send Request.
         /// </summary>
         public static string Friends_Button_SendRequest {
             get {
                 return ResourceManager.GetString("Friends_Button_SendRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Could not Remove Friend :( Please try Again.
+        /// </summary>
+        public static string Friends_Error_RemoveFriend {
+            get {
+                return ResourceManager.GetString("Friends_Error_RemoveFriend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The request could not be sent. Please try again.
+        /// </summary>
+        public static string Friends_Error_SendRequest {
+            get {
+                return ResourceManager.GetString("Friends_Error_SendRequest", resourceCulture);
             }
         }
         
@@ -183,6 +282,33 @@ namespace Client.Properties.Langs {
         public static string Friends_Label_Requests {
             get {
                 return ResourceManager.GetString("Friends_Label_Requests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Friend Request Sent to {0}.
+        /// </summary>
+        public static string Friends_Label_SuccessRequest {
+            get {
+                return ResourceManager.GetString("Friends_Label_SuccessRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure to want to remove {0}?.
+        /// </summary>
+        public static string Friends_Message_RemoveFriend {
+            get {
+                return ResourceManager.GetString("Friends_Message_RemoveFriend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Wants to be your friend.
+        /// </summary>
+        public static string FriendsMenu_Label_PendingRequests {
+            get {
+                return ResourceManager.GetString("FriendsMenu_Label_PendingRequests", resourceCulture);
             }
         }
         
@@ -430,11 +556,29 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Image Data is Empty.
+        /// </summary>
+        public static string Global_Error_ImageEmpty {
+            get {
+                return ResourceManager.GetString("Global_Error_ImageEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The image format is not valid.
         /// </summary>
         public static string Global_Error_ImageInvalid {
             get {
                 return ResourceManager.GetString("Global_Error_ImageInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Image Too Large :/.
+        /// </summary>
+        public static string Global_Error_ImageTooLarge {
+            get {
+                return ResourceManager.GetString("Global_Error_ImageTooLarge", resourceCulture);
             }
         }
         
@@ -520,6 +664,24 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Confirm.
+        /// </summary>
+        public static string Global_Label_Confirm {
+            get {
+                return ResourceManager.GetString("Global_Label_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Connection Failed.
+        /// </summary>
+        public static string Global_Label_ConnectionFailed {
+            get {
+                return ResourceManager.GetString("Global_Label_ConnectionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Difficulty;.
         /// </summary>
         public static string Global_Label_Difficulty {
@@ -556,11 +718,56 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a My Last Name:.
+        /// </summary>
+        public static string Global_Label_LastName {
+            get {
+                return ResourceManager.GetString("Global_Label_LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a My Name:.
+        /// </summary>
+        public static string Global_Label_Name {
+            get {
+                return ResourceManager.GetString("Global_Label_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No Registration.
+        /// </summary>
+        public static string Global_Label_NoRegister {
+            get {
+                return ResourceManager.GetString("Global_Label_NoRegister", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Number of cards.
         /// </summary>
         public static string Global_Label_NumberOfCards {
             get {
                 return ResourceManager.GetString("Global_Label_NumberOfCards", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Offline.
+        /// </summary>
+        public static string Global_Label_Offline {
+            get {
+                return ResourceManager.GetString("Global_Label_Offline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Online.
+        /// </summary>
+        public static string Global_Label_Online {
+            get {
+                return ResourceManager.GetString("Global_Label_Online", resourceCulture);
             }
         }
         
@@ -705,6 +912,15 @@ namespace Client.Properties.Langs {
         public static string Global_Title_Chat {
             get {
                 return ResourceManager.GetString("Global_Title_Chat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirm.
+        /// </summary>
+        public static string Global_Title_Confirm {
+            get {
+                return ResourceManager.GetString("Global_Title_Confirm", resourceCulture);
             }
         }
         
@@ -1087,6 +1303,24 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a No default mail application was found installed on the system :(.
+        /// </summary>
+        public static string InviteFriendDialog_Label_ErrorAppEmail {
+            get {
+                return ResourceManager.GetString("InviteFriendDialog_Label_ErrorAppEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Heeey budy, join my game so we can play :D The Lobby code is:.
+        /// </summary>
+        public static string InviteFriendDialog_Message_BodyEmail {
+            get {
+                return ResourceManager.GetString("InviteFriendDialog_Message_BodyEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Please enter an email .
         /// </summary>
         public static string InviteFriendDialog_Message_EnterEmail {
@@ -1101,6 +1335,15 @@ namespace Client.Properties.Langs {
         public static string InviteFriendDialog_Title_InviteFriend {
             get {
                 return ResourceManager.GetString("InviteFriendDialog_Title_InviteFriend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Join my Memory Game Match!.
+        /// </summary>
+        public static string InviteFriendDialog_Title_SubjectEmail {
+            get {
+                return ResourceManager.GetString("InviteFriendDialog_Title_SubjectEmail", resourceCulture);
             }
         }
         
@@ -1177,11 +1420,56 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Could not load match history.
+        /// </summary>
+        public static string MatchHistory_Label_ErrorHistory {
+            get {
+                return ResourceManager.GetString("MatchHistory_Label_ErrorHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Won.
+        /// </summary>
+        public static string MatchSummary_Label_Lost {
+            get {
+                return ResourceManager.GetString("MatchSummary_Label_Lost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Player: .
         /// </summary>
         public static string MatchSummary_Label_Player {
             get {
                 return ResourceManager.GetString("MatchSummary_Label_Player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Summary: .
+        /// </summary>
+        public static string MatchSummary_Label_Summary {
+            get {
+                return ResourceManager.GetString("MatchSummary_Label_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Time Remaining:.
+        /// </summary>
+        public static string MatchSummary_Label_TimeRemaining {
+            get {
+                return ResourceManager.GetString("MatchSummary_Label_TimeRemaining", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You Win! :D.
+        /// </summary>
+        public static string MatchSummary_Label_Win {
+            get {
+                return ResourceManager.GetString("MatchSummary_Label_Win", resourceCulture);
             }
         }
         
@@ -1249,6 +1537,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Hellooo {0}! To access your friends, statistics, and profile, you need to register your account with an email address.
+        /// </summary>
+        public static string PlayerProfile_Message_NotAvaible {
+            get {
+                return ResourceManager.GetString("PlayerProfile_Message_NotAvaible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Registration failed. The email may already be in use.
         /// </summary>
         public static string RegisterAccount_Message_Failed {
@@ -1276,6 +1573,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a You cannot report yourself.
+        /// </summary>
+        public static string ReportUserDialog_Error_AutoReport {
+            get {
+                return ResourceManager.GetString("ReportUserDialog_Error_AutoReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Are you sure you want to report this player for bad behavior?.
         /// </summary>
         public static string ReportUserDialog_Message_Report {
@@ -1285,11 +1591,29 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a User reported successfully. Admins will review the case :).
+        /// </summary>
+        public static string ReportUserDialog_Message_ReportSuccess {
+            get {
+                return ResourceManager.GetString("ReportUserDialog_Message_ReportSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Report Player .
         /// </summary>
         public static string ReportUserDialog_Title_Report {
             get {
                 return ResourceManager.GetString("ReportUserDialog_Title_Report", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Report Sent.
+        /// </summary>
+        public static string ReportUserDialog_Title_ReportSuccess {
+            get {
+                return ResourceManager.GetString("ReportUserDialog_Title_ReportSuccess", resourceCulture);
             }
         }
         
@@ -1452,6 +1776,33 @@ namespace Client.Properties.Langs {
         public static string Singleplayer_Title_Won {
             get {
                 return ResourceManager.GetString("Singleplayer_Title_Won", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You are already friends :&gt;.
+        /// </summary>
+        public static string Social_Error_AlreadyFriends {
+            get {
+                return ResourceManager.GetString("Social_Error_AlreadyFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Friend request already pending.
+        /// </summary>
+        public static string Social_Error_RequestExists {
+            get {
+                return ResourceManager.GetString("Social_Error_RequestExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You cannot add yourself.
+        /// </summary>
+        public static string Social_Error_SelfAdd {
+            get {
+                return ResourceManager.GetString("Social_Error_SelfAdd", resourceCulture);
             }
         }
         
