@@ -35,8 +35,10 @@ namespace Client.Views.Session
 
         public SetupProfile(string email)
         {
+            string registeredEmail = string.Format(Lang.Global_Label_RegisteredEmail, email);
             InitializeComponent();
             _email = email ?? throw new ArgumentNullException(nameof(email));
+            LabelEmail.Content = registeredEmail;
         }
 
         private void ButtonSelectAvatar_Click(object sender, RoutedEventArgs e)

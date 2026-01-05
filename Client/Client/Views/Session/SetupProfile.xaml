@@ -70,11 +70,9 @@
                         </StackPanel>
                     </Border>
 
-                    <Button Content="{x:Static language:Lang.Global_Button_Back}" 
-                            Style="{StaticResource SecondaryButtonStyle}"
-                            HorizontalAlignment="Center" 
-                            Margin="0,15,0,0" 
-                            Click="ButtonBackToTitleScreen_Click"/>
+                    <Label x:Name="LabelEmail"
+                           Style="{StaticResource SubTitleStyle}" Foreground="{StaticResource PrimaryTextColor}" 
+                           Content="Email" Margin="0,20,0,0" HorizontalAlignment="Center" />
                 </StackPanel>
             </Viewbox>
         </Grid>

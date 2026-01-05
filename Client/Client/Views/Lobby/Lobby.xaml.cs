@@ -247,7 +247,7 @@ namespace Client.Views.Lobby
             {
                 if (this.Owner != null)
                 {
-                    this.Owner.Show(); // Mostrar ventana anterior
+                    this.Owner.Show();
                 }
 
                 if (_isConnected)

@@ -76,9 +76,9 @@ namespace Client.Utilities
             CardsHidden?.Invoke(cardIndex1, cardIndex2);
         }
 
-        void IGameLobbyServiceCallback.CardFlipped(int cardIndex1, int cardIndex2)
+        void IGameLobbyServiceCallback.CardFlipped(int cardIndex, int cardIndex2)
         {
-            CardFlipped?.Invoke(cardIndex1, cardIndex2);
+            CardFlipped?.Invoke(cardIndex, cardIndex2);
         }
 
         public void SetCardsAsMatched(int cardIndex1, int cardIndex2)
