@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Client.Properties.Langs;
+using Client.Views.Controls;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Helpers
 {
@@ -17,93 +21,66 @@ namespace Client.Helpers
             {
                 return null;
             }
-            try
-            {
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = new System.IO.MemoryStream(imageData);
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-                image.Freeze();
-                return image;
-            }
-            catch
-            {
-                return null;
-            }
+
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = new System.IO.MemoryStream(imageData);
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+            image.Freeze();
+            return image;
         }
 
         public static byte[] ImageSourceToByteArray(BitmapImage image)
         {
-            if (image == null)
-            {
-                return null;
-            }
+            if (image == null) return Array.Empty<byte>();
 
-            try
-            {
-                var encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(image));
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(image));
 
-                using (var stream = new System.IO.MemoryStream())
-                {
-                    encoder.Save(stream);
-                    return stream.ToArray();
-                }
-            }
-            catch
+            using (var stream = new MemoryStream())
             {
-                return null;
+                encoder.Save(stream);
+                return stream.ToArray();
             }
         }
 
         public static byte[] ResizeImage(byte[] imageData, int maxWidth, int maxHeight)
         {
-            if (imageData == null || imageData.Length == 0 || imageData.Length > MAX_IMAGE_SIZE)
+            if (imageData == null || imageData.Length == 0)
             {
-                return null;
+                return Array.Empty<byte>();
             }
 
-            try
+            if (imageData.Length > MAX_IMAGE_SIZE)
             {
-                var originalImage = ByteArrayToImageSource(imageData);
-                if (originalImage == null)
-                {
-                    return imageData;
-                }
-
-                if (originalImage.PixelWidth > 10000 || originalImage.PixelHeight > 10000)
-                {
-                    return null;
-                }
-
-                double ratioX = (double)maxWidth / originalImage.PixelWidth;
-                double ratioY = (double)maxHeight / originalImage.PixelHeight;
-                double ratio = Math.Min(ratioX, ratioY);
-
-                if (ratio >= 1)
-                {
-                    return imageData;
-                }
-
-                var resized = new TransformedBitmap(originalImage,
-                    new System.Windows.Media.ScaleTransform(ratio, ratio));
-
-                var encoder = new JpegBitmapEncoder
-                {
-                    QualityLevel = 90
-                };
-                encoder.Frames.Add(BitmapFrame.Create(resized));
-
-                using (var stream = new System.IO.MemoryStream())
-                {
-                    encoder.Save(stream);
-                    return stream.ToArray();
-                }
+                throw new InvalidOperationException("Image_Too_Large");
             }
-            catch
+
+            var originalImage = ByteArrayToImageSource(imageData);
+            if (originalImage == null) return Array.Empty<byte>();
+
+            if (originalImage.PixelWidth > 5000 || originalImage.PixelHeight > 5000)
             {
-                return imageData;
+                throw new InvalidOperationException("Image_Dimensions_Too_Big");
+            }
+
+            double ratioX = (double)maxWidth / originalImage.PixelWidth;
+            double ratioY = (double)maxHeight / originalImage.PixelHeight;
+            double ratio = Math.Min(ratioX, ratioY);
+
+            if (ratio >= 1) return imageData;
+
+            var resized = new TransformedBitmap(originalImage,
+                new System.Windows.Media.ScaleTransform(ratio, ratio));
+
+            var encoder = new JpegBitmapEncoder { QualityLevel = 90 };
+            encoder.Frames.Add(BitmapFrame.Create(resized));
+
+            using (var stream = new MemoryStream())
+            {
+                encoder.Save(stream);
+                return stream.ToArray();
             }
         }
     }

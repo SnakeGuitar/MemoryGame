@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client.Helpers
 {
-    internal class EmailHelper
+    internal static class EmailHelper
     {
         public static bool isValidEmail(string email)
         {

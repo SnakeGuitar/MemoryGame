@@ -97,6 +97,16 @@ namespace Client.Helpers
                 case "Global_ValidationUsername_InvalidChars":
                     return Lang.Global_ValidationUsername_InvalidChars;
 
+                case "Global_Error_UserNotFound":
+                    return Lang.Global_Error_UserNotFound;
+
+                case "Social_Error_SelfAddFriend":
+                    return Lang.Social_Error_SelfAdd;
+                case "Social_Error_AlreadyFriends":
+                    return Lang.Social_Error_AlreadyFriends;
+                case "Social_Error_RequestExists":
+                    return Lang.Social_Error_RequestExists;
+
                 default:
                     return Lang.Global_ServiceError_Unknown;
             }
