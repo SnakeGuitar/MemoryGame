@@ -1,7 +1,10 @@
 ﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
+using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,10 +18,10 @@ namespace Client.Views.Profile
         public StatsHistory()
         {
             InitializeComponent();
-            LoadMatchHistory();
+            _ = LoadMatchHistory();
         }
 
-        private async void LoadMatchHistory()
+        private async Task LoadMatchHistory()
         {
             try
             {
@@ -28,10 +31,18 @@ namespace Client.Views.Profile
                     DataGridHistory.ItemsSource = history;
                 }
             }
-            catch (Exception)
+            catch (EndpointNotFoundException ex)
             {
-                var msgBox = new CustomMessageBox("Error", "Could not load match history.", this, CustomMessageBox.MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ShowError(Lang.Global_Title_NetworkError, LocalizationHelper.GetString(ex));
+            }
+            catch (TimeoutException ex)
+            {
+                ShowError(Lang.Global_Title_NetworkError, LocalizationHelper.GetString(ex));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                ShowError(Lang.Global_Title_Error, Lang.MatchHistory_Label_ErrorHistory);
             }
         }
 
@@ -48,10 +59,18 @@ namespace Client.Views.Profile
         {
             if (sender is Button btn && btn.Tag is MatchHistoryDTO matchInfo)
             {
-                var reportDialog = new Client.Views.Controls.ReportUserDialog(matchInfo.WinnerName, matchInfo.MatchId);
+                string userToReport = matchInfo.WinnerName;
+
+                var reportDialog = new ReportUserDialog(userToReport, matchInfo.MatchId);
                 reportDialog.Owner = this;
                 reportDialog.ShowDialog();
             }
+        }
+
+        private void ShowError(string title, string msg)
+        {
+            var msgBox = new CustomMessageBox(title, msg, this, CustomMessageBox.MessageBoxType.Error);
+            msgBox.ShowDialog();
         }
     }
 }

@@ -1,44 +1,184 @@
 ﻿<Window x:Class="Client.Views.Profile.EditProfile"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Editar Perfil" Height="688" Width="450"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        Background="{StaticResource BackgroundColor}">
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:language="clr-namespace:Client.Properties.Langs"
+        
+        Title="Edit Profile" 
+        MinHeight="720" MinWidth="1280"
+        WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="20">
-        <StackPanel>
-            <Label Content="Editar Perfil" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+    <Window.Resources>
+        <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="10"/>
+        </Style>
+    </Window.Resources>
 
-            <GroupBox Header="Avatar" Foreground="White" Margin="0,0,0,15">
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Margin="0,0,15,0">
-                        <Image x:Name="ImageAvatar" Width="80" Height="80" Stretch="UniformToFill"/>
-                    </Border>
-                    <Button x:Name="ButtonChangeAvatar" Content="Cambiar Avatar" Click="ButtonChangeAvatar_Click" VerticalAlignment="Center" Height="30" Width="120"/>
-                </StackPanel>
-            </GroupBox>
+    <Grid Background="{StaticResource BackgroundColor}">
 
-            <GroupBox Header="Cambiar Contraseña" Foreground="White" Margin="0,0,0,15">
-                <StackPanel Margin="10">
-                    <Label Content="Contraseña Actual:" Foreground="White"/>
-                    <PasswordBox x:Name="PasswordBoxCurrent" Height="30" Margin="0,0,0,5"/>
+        <Viewbox Stretch="Uniform">
 
-                    <Label Content="Nueva Contraseña:" Foreground="White"/>
-                    <PasswordBox x:Name="PasswordBoxNew" Height="30"/>
+            <Grid Width="1450" Height="900">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <Button x:Name="ButtonUpdatePassword" Content="Actualizar Contraseña" Click="ButtonUpdatePassword_Click" Margin="0,15,0,0" Height="30"/>
-                </StackPanel>
-            </GroupBox>
+                <Label Grid.Row="0" 
+                       Content="{x:Static language:Lang.EditProfile_Label_EditProfile}" 
+                       Style="{StaticResource TitleLabelStyle}"
+                       Margin="0,15,0,5"/>
 
-            <GroupBox Header="Cambiar Nombre de Usuario" Foreground="White" Margin="0,0,0,15">
-                <StackPanel Margin="10">
-                    <Label Content="Nuevo Nombre de Usuario:" Foreground="White"/>
-                    <TextBox x:Name="TextBoxNewUsername" Height="30"/>
-                    <Button x:Name="ButtonUpdateUsername" Content="Actualizar Nombre" Click="ButtonUpdateUsername_Click" Margin="0,15,0,0" Height="30"/>
-                </StackPanel>
-            </GroupBox>
+                <Border Grid.Row="1" 
+                        Background="{StaticResource PrimaryTextColor}" 
+                        CornerRadius="20" 
+                        BorderThickness="5"
+                        Margin="50,5,50,10" 
+                        Padding="25">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-            <Button x:Name="ButtonBack" Content="Volver" Click="ButtonBack_Click" Margin="0,10,0,0" Height="35" Width="100" HorizontalAlignment="Center"/>
-        </StackPanel>
+                        <StackPanel Grid.Column="0" Margin="0,0,30,0">
+
+                            <GroupBox Header="{x:Static language:Lang.Global_Label_Avatar}" 
+                                      Style="{StaticResource GroupBoxStyle}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Border BorderBrush="{StaticResource AccentForegroundColor}" BorderThickness="3" CornerRadius="10" Margin="0,0,20,0">
+                                        <Border Name="AvatarDisplay" CornerRadius="8" Width="120" Height="120">
+                                            <Image Name="ImageAvatar" Stretch="UniformToFill" Margin="2"/>
+                                        </Border>
+                                    </Border>
+                                    <Button Content="{x:Static language:Lang.EditProfile_Button_ChangeAvatar}"
+                                            Style="{StaticResource MenuExitLobbyButtonStyle}"
+                                            Width="180" Height="50" FontSize="20"
+                                            VerticalAlignment="Center"
+                                            Click="ButtonChangeAvatar_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="{x:Static language:Lang.EditProfile_Label_UpdatePersonalnfo}" 
+                                      Style="{StaticResource GroupBoxStyle}" Margin="0,10,0,0">
+                                <StackPanel>
+                                    <Label Content="{x:Static language:Lang.Global_Label_Name}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" FontSize="18"/>
+                                    <TextBox x:Name="TextBoxName" Style="{StaticResource RegisterTextBoxStyle}" Width="Auto" Height="35" FontSize="18"/>
+
+                                    <Label Content="{x:Static language:Lang.Global_Label_LastName}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" Margin="0,5,0,0" FontSize="18"/>
+                                    <TextBox x:Name="TextBoxLastName" Style="{StaticResource RegisterTextBoxStyle}" Width="Auto" Height="35" FontSize="18"/>
+
+                                    <Button Content="{x:Static language:Lang.Global_Button_Update}"
+                                            Style="{StaticResource FormPrimaryButtonStyle}"
+                                            HorizontalAlignment="Right" Width="140" Height="40" Margin="0,10,0,0" FontSize="20"
+                                            Click="ButtonUpdatePersonalInfo_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="{x:Static language:Lang.PlayerProfile_Label_Social}" 
+                                      Style="{StaticResource GroupBoxStyle}" Margin="0,10,0,0">
+                                <StackPanel>
+
+                                    <ItemsControl x:Name="ItemsControlSocials" MaxHeight="100" Margin="0,0,0,10">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Text="{Binding Account}" 
+                                                               Foreground="{StaticResource AccentForegroundColor}" 
+                                                               FontSize="18" VerticalAlignment="Center" 
+                                                               FontFamily="{StaticResource BodyFont}"
+                                                               TextTrimming="CharacterEllipsis"/>
+
+                                                    <Button Grid.Column="1" Content="X" 
+                                                            Style="{StaticResource HardButtonStyle}" 
+                                                            Width="35" Height="30" FontSize="14"
+                                                            Tag="{Binding SocialNetworkId}"
+                                                            Click="ButtonRemoveSocial_Click"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox x:Name="TextBoxNewSocial" 
+                                                 Grid.Column="0"
+                                                 Style="{StaticResource RegisterTextBoxStyle}" 
+                                                 HorizontalAlignment="Stretch" Width="Auto"
+                                                 Height="40" FontSize="18"
+                                                 Margin="0,0,10,0"/>
+
+                                        <Button Grid.Column="1" 
+                                                Content="+" 
+                                                Style="{StaticResource PrimaryButtonStyle}" 
+                                                Width="50" Height="40" FontSize="24"
+                                                Click="ButtonAddSocial_Click"/>
+                                    </Grid>
+
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="30,0,0,0">
+
+                            <GroupBox Header="{x:Static language:Lang.EditProfile_Button_UpdateUsername}" 
+                                      Style="{StaticResource GroupBoxStyle}">
+                                <StackPanel>
+                                    <Label Content="{x:Static language:Lang.EditProfile_Label_NewUsername}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" FontSize="18"/>
+                                    <TextBox x:Name="TextBoxNewUsername" Style="{StaticResource RegisterTextBoxStyle}" Width="Auto" Height="35" FontSize="18"/>
+
+                                    <Button Content="{x:Static language:Lang.Global_Button_Update}"
+                                            x:Name="ButtonUpdateUsername"
+                                            Style="{StaticResource MenuExitLobbyButtonStyle}"
+                                            HorizontalAlignment="Right" Width="140" Height="40" Margin="0,10,0,0" FontSize="20"
+                                            Click="ButtonUpdateUsername_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="{x:Static language:Lang.EditProfile_Button_UpdatePassword}" 
+                                      Style="{StaticResource GroupBoxStyle}" Margin="0,30,0,0">
+                                <StackPanel>
+                                    <Label Content="{x:Static language:Lang.EditProfile_Label_ActualPassword}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" FontSize="18"/>
+                                    <PasswordBox x:Name="PasswordBoxCurrent" Style="{StaticResource RegisterPasswordBoxStyle}" Width="Auto" Height="35" FontSize="18"/>
+
+                                    <Label Content="{x:Static language:Lang.EditProfile_Label_NewPassword}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" Margin="0,10,0,0" FontSize="18"/>
+                                    <PasswordBox x:Name="PasswordBoxNew" Style="{StaticResource RegisterPasswordBoxStyle}" Width="Auto" Height="35" FontSize="18"/>
+
+                                    <Button Content="{x:Static language:Lang.Global_Button_Update}"
+                                            Style="{StaticResource MenuExitLobbyButtonStyle}"
+                                            HorizontalAlignment="Right" Width="140" Height="40" Margin="0,10,0,0" FontSize="20"
+                                            Click="ButtonUpdatePassword_Click"/>
+                                </StackPanel>
+                            </GroupBox>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Button Grid.Row="2"
+                        Content="{x:Static language:Lang.Global_Button_Back}" 
+                        Style="{StaticResource SecondaryButtonStyle}" 
+                        Width="200" Height="50" FontSize="24"
+                        Margin="0,0,0,20"
+                        Click="ButtonBack_Click"/>
+            </Grid>
+        </Viewbox>
     </Grid>
 </Window>
