@@ -79,6 +79,9 @@
     <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Models\LanguageOption.cs" />
     <Compile Include="ViewModels\Card.cs" />
+    <Compile Include="Views\Controls\ConfirmationMessageBox.xaml.cs">
+      <DependentUpon>ConfirmationMessageBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\CustomMessageBox.xaml.cs">
       <DependentUpon>CustomMessageBox.xaml</DependentUpon>
     </Compile>
@@ -111,6 +114,9 @@
     </Compile>
     <Compile Include="Views\Profile\EditProfile.xaml.cs">
       <DependentUpon>EditProfile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Profile\PlayerProfile.xaml.cs">
+      <DependentUpon>PlayerProfile.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Profile\StatsHistory.xaml.cs">
       <DependentUpon>StatsHistory.xaml</DependentUpon>
@@ -148,6 +154,10 @@
     <Page Include="Themes\MainTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ConfirmationMessageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Controls\CustomMessageBox.xaml">
       <SubType>Designer</SubType>
@@ -192,6 +202,10 @@
     <Page Include="Views\Profile\EditProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Profile\PlayerProfile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Profile\StatsHistory.xaml">
       <SubType>Designer</SubType>
@@ -275,7 +289,7 @@
       <LastGenOutput>Lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Connected Services\GameLobbyServiceReference\GameLobbyService.wsdl" />
@@ -365,79 +379,35 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\africa.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\ana.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\ari.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\blanca.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\emily.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\fer.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\katya.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\lala.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\linda.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\paul.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\saddy.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\sara.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\africa.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\ana.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\ari.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\blanca.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\emily.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\fer.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\katya.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\lala.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\linda.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\paul.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\saddy.png" />
+    <Resource Include="Resources\Images\Cards\Fronts\Normal\sara.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Cards\Fronts\Normal\sara.png" />
+    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Cards\Backs\default.png" />
