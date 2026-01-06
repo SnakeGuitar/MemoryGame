@@ -1,5 +1,6 @@
 ﻿using Client.GameLobbyServiceReference;
 using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
 using Client.Utilities;
 using Client.Views.Controls;
