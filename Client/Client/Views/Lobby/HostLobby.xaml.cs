@@ -16,19 +16,14 @@ using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Lobby
 {
-    /// <summary>
-    /// Logic for HostLobby.xaml. Manages lobby creation and game configuration.
-    /// </summary>
     public partial class HostLobby : Window
     {
         #region Private Fields
         private readonly string _lobbyCode;
         private bool _isConnected = false;
-
-        private readonly Label[] _playerLabels;
+        private bool _isGameStarting = false;
 
         private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
-        private bool _isGameStarting = false;
 
         private int _selectedCardCount = GameConstants.DefaultCardCount;
         private int _secondsPerTurn = GameConstants.DefaultTurnTimeSeconds;
@@ -40,27 +35,25 @@ namespace Client.Views.Lobby
 
             _lobbyCode = ClientHelper.GenerateGameCode();
 
-            if (FindName("LabelGameCode") is Label labelGameCode)
+            if (LabelGameCode != null)
             {
-                labelGameCode.Content = _lobbyCode;
+                LabelGameCode.Content = _lobbyCode;
             }
 
-            _playerLabels = new Label[]
+            if (LabelTimerValue != null)
             {
-                FindName("LabelPlayer1") as Label,
-                FindName("LabelPlayer2") as Label,
-                FindName("LabelPlayer3") as Label,
-                FindName("LabelPlayer4") as Label
-            };
+                LabelTimerValue.Content = _secondsPerTurn.ToString();
+            }
+
+            if (ComboBoxNumberOfCards != null)
+            {
+                ComboBoxNumberOfCards.SelectedIndex = 0;
+            }
 
             ConfigureEvents();
         }
 
         #region Event Configuration
-
-        /// <summary>
-        /// Subscribes to game service events.
-        /// </summary>
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -69,9 +62,6 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
         }
 
-        /// <summary>
-        /// Unsubscribes from game service events to prevent memory leaks.
-        /// </summary>
         private void UnsubscribeEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated -= OnPlayerListUpdated;
@@ -88,22 +78,24 @@ namespace Client.Views.Lobby
                 bool success = await GameServiceManager.Instance.Client.CreateLobbyAsync(
                     UserSession.SessionToken,
                     _lobbyCode
-                    );
+                );
 
                 if (success)
                 {
                     _isConnected = true;
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+
+                    string myName = UserSession.Username;
+                    if (!_currentPlayers.Any(p => p.Name == myName))
+                    {
+                        _currentPlayers.Add(new LobbyPlayerInfo { Name = myName });
+                        UpdatePlayerUI();
+                    }
+
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess, this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed, this, MessageBoxType.Error).ShowDialog();
                     this.Close();
                 }
             }
@@ -112,6 +104,8 @@ namespace Client.Views.Lobby
                 ExceptionManager.Handle(ex, this, () => this.Close());
             }
         }
+
+        #region Game Logic
 
         private void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
         {
@@ -122,14 +116,39 @@ namespace Client.Views.Lobby
 
             if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
             {
-                MessageBox.Show(
-                    "Waiting for more players...",
-                    "Notice",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                MessageBox.Show("Waiting for more players to join...", "Cannot Start", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
+            ValidateSettings();
+
+            try
+            {
+                var settings = new GameSettings
+                {
+                    CardCount = _selectedCardCount,
+                    TurnTimeSeconds = _secondsPerTurn
+                };
+
+                if (ButtonStart != null)
+                {
+                    ButtonStart.IsEnabled = false;
+                }
+
+                GameServiceManager.Instance.Client.StartGame(settings);
+            }
+            catch (Exception ex)
+            {
+                if (ButtonStart != null)
+                {
+                    ButtonStart.IsEnabled = true;
+                }
+                ExceptionManager.Handle(ex, this, () => this.Close());
+            }
+        }
+
+        private void ValidateSettings()
+        {
             if (_selectedCardCount < GameConstants.MinCardCount ||
                 _selectedCardCount > GameConstants.MaxCardCount ||
                 _selectedCardCount % 2 != 0)
@@ -141,96 +160,47 @@ namespace Client.Views.Lobby
             {
                 _secondsPerTurn = GameConstants.MinTurnTimeSecondsFallback;
             }
-
-            try
-            {
-                var settings = new GameSettings
-                {
-                    CardCount = _selectedCardCount,
-                    TurnTimeSeconds = _secondsPerTurn
-                };
-                GameServiceManager.Instance.Client.StartGame(settings);
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.Handle(ex, this, () => this.Close());
-            }
         }
+        #endregion
 
-        private async void ButtonSendMessageToChat_Click(object sender, RoutedEventArgs e)
-        {
-            if (FindName("ChatTextBox") is TextBox txtMsg && !string.IsNullOrWhiteSpace(txtMsg.Text))
-            {
-                string msgToSend = txtMsg.Text;
-                txtMsg.Text = string.Empty;
-
-                try
-                {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
-                }
-                catch (Exception ex)
-                {
-                    ExceptionManager.Handle(ex, this, null);
-                }
-            }
-        }
-
-        private void ButtonSendInvitationToFriend_Click(object sender, RoutedEventArgs e)
-        {
-            string friendEmail = TextBoxFriendEmail.Text.Trim();
-
-            if (string.IsNullOrEmpty(friendEmail))
-            {
-                MessageBox.Show("Please enter an email address.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                string subject = "Join my Memory Game Lobby!";
-                string body = $"Join me! The lobby code is: {_lobbyCode}";
-                string mailtoUri = $"mailto:{friendEmail}?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}";
-
-                Process.Start(new ProcessStartInfo(mailtoUri) { UseShellExecute = true });
-
-                MessageBox.Show($"Invitation opened for {friendEmail}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                TextBoxFriendEmail.Text = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.Handle(ex, this, null);
-            }
-        }
-
-        private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
-        {
-            await LeaveLobbySafe();
-            this.Close();
-        }
-
-        #region Server Callbacks
+        #region UI Updates & Callbacks
 
         private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
         {
             Dispatcher.Invoke(() =>
             {
                 _currentPlayers = players.ToList();
-                UpdatePlayerLabels();
+                UpdatePlayerUI();
             });
+        }
+
+        private void UpdatePlayerUI()
+        {
+            if (PlayersListBox == null)
+            {
+                return;
+            }
+
+            PlayersListBox.Items.Clear();
+            foreach (var player in _currentPlayers)
+            {
+                string displayName = player.Name == UserSession.Username ? $"{player.Name} (Host)" : player.Name;
+                PlayersListBox.Items.Add(displayName);
+            }
         }
 
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
             Dispatcher.Invoke(() =>
             {
-                if (FindName("ChatListBox") is ListBox chatBox)
+                if (ChatListBox != null)
                 {
                     string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
-                    chatBox.Items.Add(formattedMessage);
+                    ChatListBox.Items.Add(formattedMessage);
 
-                    if (chatBox.Items.Count > 0)
+                    if (ChatListBox.Items.Count > 0)
                     {
-                        chatBox.ScrollIntoView(chatBox.Items[chatBox.Items.Count - 1]);
+                        ChatListBox.ScrollIntoView(ChatListBox.Items[ChatListBox.Items.Count - 1]);
                     }
                 }
             });
@@ -244,14 +214,12 @@ namespace Client.Views.Lobby
                 if (playerToRemove != null)
                 {
                     _currentPlayers.Remove(playerToRemove);
-                    UpdatePlayerLabels();
+                    UpdatePlayerUI();
+                    OnChatMessageReceived("System", $"{playerName} left the lobby.", true);
                 }
             });
         }
 
-        /// <summary>
-        /// Handles game start event. Closes lobby and opens game window with synced cards.
-        /// </summary>
         private void OnGameStarted(List<CardInfo> cards)
         {
             Dispatcher.Invoke(() =>
@@ -260,6 +228,7 @@ namespace Client.Views.Lobby
                 _isGameStarting = true;
 
                 var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
+
                 if (this.Owner != null)
                 {
                     multiplayerGame.Owner = this.Owner;
@@ -268,11 +237,60 @@ namespace Client.Views.Lobby
                 {
                     multiplayerGame.Owner = this;
                 }
+
                 multiplayerGame.Show();
                 this.Hide();
             });
         }
         #endregion
+
+        #region Interaction Handlers
+
+        private async void ButtonSendMessageToChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (ChatTextBox != null && !string.IsNullOrWhiteSpace(ChatTextBox.Text))
+            {
+                string msg = ChatTextBox.Text;
+                ChatTextBox.Text = string.Empty;
+                try
+                {
+                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Chat Error: {ex.Message}");
+                }
+            }
+        }
+
+        private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
+        {
+            await LeaveLobbySafe();
+            this.Close();
+        }
+
+        private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item)
+            {
+                if (int.TryParse(item.Content.ToString(), out int val))
+                {
+                    _selectedCardCount = val;
+                }
+            }
+        }
+
+        private void SliderSecondsPerTurn_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _secondsPerTurn = (int)e.NewValue;
+            if (LabelTimerValue != null)
+            {
+                LabelTimerValue.Content = _secondsPerTurn.ToString();
+            }
+        }
+        #endregion
+
+        #region Cleanup
 
         protected override async void OnClosed(EventArgs e)
         {
@@ -291,24 +309,6 @@ namespace Client.Views.Lobby
             base.OnClosed(e);
         }
 
-        #region Helper Methods
-
-        private void UpdatePlayerLabels()
-        {
-            foreach (var label in _playerLabels)
-            {
-                if (label != null) label.Content = string.Empty;
-            }
-
-            for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
-            {
-                if (_playerLabels[i] != null)
-                {
-                    _playerLabels[i].Content = _currentPlayers[i].Name;
-                }
-            }
-        }
-
         private async Task LeaveLobbySafe()
         {
             if (_isConnected)
@@ -320,34 +320,10 @@ namespace Client.Views.Lobby
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[LeaveLobbySafe Error]: {ex.Message}");
+                    Debug.WriteLine($"[LeaveLobbySafe]: {ex.Message}");
                 }
             }
         }
-
-        private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ComboBoxNumberOfCards.SelectedIndex >= 0)
-            {
-                var selectedText = ComboBoxNumberOfCards.SelectedItem.ToString();
-                _selectedCardCount = int.Parse(selectedText);
-            }
-        }
-
-        private void SliderSecondsPerTurn_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (LabelTimerValue != null)
-            {
-                LabelTimerValue.Content = e.NewValue.ToString("F0");
-            }
-
-            _secondsPerTurn = (int)SliderSecondsPerTurn.Value;
-        }
-
-        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
-
-        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
-
         #endregion
     }
 }
