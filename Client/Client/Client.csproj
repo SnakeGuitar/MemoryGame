@@ -73,6 +73,7 @@
     <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="Models\DifficultyPresets.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
+    <Compile Include="Utilities\ExceptionManager.cs" />
     <Compile Include="Utilities\GameConstants.cs" />
     <Compile Include="Utilities\GameManager.cs" />
     <Compile Include="Utilities\GameServiceManager.cs" />

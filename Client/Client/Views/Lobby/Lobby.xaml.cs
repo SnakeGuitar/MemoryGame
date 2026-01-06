@@ -17,16 +17,17 @@ using static Client.Views.Controls.CustomMessageBox;
 namespace Client.Views.Lobby
 {
     /// <summary>
-    /// Lógica de interacción para Lobby.xaml
+    /// Logic for Lobby.xaml. Manages guest connection and waiting room.
     /// </summary>
     public partial class Lobby : Window
     {
+        #region Private Fields
         private readonly string _lobbyCode;
         private bool _isConnected = false;
         private readonly Label[] _playerLabels;
-
         private bool _isGameStarting = false;
         private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
+        #endregion
 
         public Lobby(string lobbyCode)
         {
@@ -49,6 +50,8 @@ namespace Client.Views.Lobby
             ConfigureEvents();
         }
 
+        #region Event Configuration
+
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -65,11 +68,13 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
         }
 
+        #endregion
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                bool success = false;
+                bool success;
 
                 if (UserSession.IsGuest)
                 {
@@ -93,121 +98,25 @@ namespace Client.Views.Lobby
                 if (success)
                 {
                     _isConnected = true;
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.Lobby_Notification_PlayerJoined,
-                        this, MessageBoxType.Information);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Notification_PlayerJoined, this, MessageBoxType.Information).ShowDialog();
                 }
                 else
                 {
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Error, Lang.Lobby_Error_JoinFailed,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-
+                    new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_JoinFailed, this, MessageBoxType.Error).ShowDialog();
                     this.Close();
                 }
-
             }
             catch (Exception ex)
             {
-                HandleConnectionError(ex);
+                ExceptionManager.Handle(ex, this, async () =>
+                {
+                    await LeaveLobbySafe();
+                    this.Close();
+                });
             }
         }
 
-        private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
-        {
-            if (FindName("ChatTextBox") is TextBox txtMsg && !string.IsNullOrWhiteSpace(txtMsg.Text))
-            {
-                string msgToSend = txtMsg.Text;
-                txtMsg.Text = string.Empty;
-
-                try
-                {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error enviando mensaje: " + ex.Message);
-                }
-            }
-        }
-
-        private void ButtonInvite_Click(object sender, RoutedEventArgs e)
-        {
-            var inviteDialog = new InviteFriendDialog(_lobbyCode);
-            inviteDialog.Owner = this;
-            inviteDialog.ShowDialog();
-        }
-
-        private void ButtonReady_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.IsEnabled = false;
-                button.Content = "Ready!";
-            }
-        }
-
-        private async Task ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
-        {
-            await LeaveLobbySafe();
-            this.Close();
-        }
-
-        private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                _currentPlayers = players.ToList();
-                UpdatePlayerLabels();
-            });
-        }
-
-        private void OnChatMessageReceived(string sender, string message, bool isNotification)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (FindName("ChatListBox") is ListBox chatBox)
-                {
-                    string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
-                    chatBox.Items.Add(formattedMessage);
-
-                    if (chatBox.Items.Count > 0)
-                    {
-                        chatBox.ScrollIntoView(chatBox.Items[chatBox.Items.Count - 1]);
-                    }
-                }
-            });
-        }
-
-        private void OnPlayerLeft(string name)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                var p = _currentPlayers.FirstOrDefault(x => x.Name == name);
-                if (p != null)
-                {
-                    _currentPlayers.Remove(p);
-                    UpdatePlayerLabels();
-                }
-            });
-        }
-
-        private void UpdatePlayerLabels()
-        {
-            foreach (var label in _playerLabels)
-            {
-                if (label != null) label.Content = "";
-            }
-            for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
-            {
-                if (_playerLabels[i] != null)
-                {
-                    _playerLabels[i].Content = _currentPlayers[i].Name;
-                }
-            }
-        }
+        #region Server Callbacks
 
         private void OnGameStarted(List<CardInfo> cards)
         {
@@ -228,27 +137,122 @@ namespace Client.Views.Lobby
             });
         }
 
+        private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _currentPlayers = players.ToList();
+                UpdatePlayerLabels();
+            });
+        }
+
+        private void OnPlayerLeft(string name)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var p = _currentPlayers.FirstOrDefault(x => x.Name == name);
+                if (p != null)
+                {
+                    _currentPlayers.Remove(p);
+                    UpdatePlayerLabels();
+                }
+            });
+        }
+
+        private void OnChatMessageReceived(string sender, string message, bool isNotification)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (FindName("ChatListBox") is ListBox chatBox)
+                {
+                    string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
+                    chatBox.Items.Add(formattedMessage);
+
+                    if (chatBox.Items.Count > 0)
+                    {
+                        chatBox.ScrollIntoView(chatBox.Items[chatBox.Items.Count - 1]);
+                    }
+                }
+            });
+        }
+
+        #endregion
+
+        #region UI Interactions
+
+        private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (FindName("ChatTextBox") is TextBox txtMsg && !string.IsNullOrWhiteSpace(txtMsg.Text))
+            {
+                string msgToSend = txtMsg.Text;
+                txtMsg.Text = string.Empty;
+
+                try
+                {
+                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionManager.Handle(ex, this, null);
+                }
+            }
+        }
+
+        private void ButtonInvite_Click(object sender, RoutedEventArgs e)
+        {
+            var inviteDialog = new InviteFriendDialog(_lobbyCode);
+            inviteDialog.Owner = this;
+            inviteDialog.ShowDialog();
+        }
+
+        private void ButtonReady_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.IsEnabled = false;
+                button.Content = "Ready!";
+            }
+        }
+
+        private async void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
+        {
+            await LeaveLobbySafe();
+            this.Close();
+        }
+
+        private void UpdatePlayerLabels()
+        {
+            foreach (var label in _playerLabels)
+            {
+                if (label != null) label.Content = "";
+            }
+            for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
+            {
+                if (_playerLabels[i] != null)
+                {
+                    _playerLabels[i].Content = _currentPlayers[i].Name;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Cleanup
+
         protected override async void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
+
             if (!_isGameStarting)
             {
                 await LeaveLobbySafe();
+
                 if (this.Owner != null)
                 {
                     this.Owner.Show();
                 }
             }
             base.OnClosed(e);
-        }
-
-        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
 
         private async Task LeaveLobbySafe()
@@ -262,37 +266,13 @@ namespace Client.Views.Lobby
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[WARNING] Error at leaving lobby: {ex.Message}");
+                    Debug.WriteLine($"[LeaveLobbySafe Warning]: {ex.Message}");
                 }
             }
         }
 
-        private void HandleConnectionError(Exception ex)
-        {
-            string title = Lang.Global_Title_AppError;
-
-            switch (ex)
-            {
-                case EndpointNotFoundException _:
-                    title = Lang.Global_Title_ServerOffline;
-                    break;
-
-                case CommunicationException _:
-                    title = Lang.Global_Title_NetworkError;
-                    break;
-
-                case TimeoutException _:
-                    title = Lang.Global_Title_NetworkError;
-                    break;
-
-                default:
-                    title = Lang.Global_Title_AppError;
-                    break;
-            }
-            string message = LocalizationHelper.GetString(ex);
-            Debug.WriteLine($"[{title} - {ex.GetType().Name}]: {ex.Message}");
-            new CustomMessageBox(title, message, this, MessageBoxType.Error).ShowDialog();
-            _ = ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
-        }
+        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+        #endregion
     }
 }

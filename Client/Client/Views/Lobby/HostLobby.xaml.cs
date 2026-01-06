@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,12 +16,12 @@ using static Client.Views.Controls.CustomMessageBox;
 namespace Client.Views.Lobby
 {
     /// <summary>
-    /// Lógica de interacción para HostLobby.xaml
+    /// Logic for HostLobby.xaml. Manages lobby creation and game configuration.
     /// </summary>
     public partial class HostLobby : Window
     {
-        #region
-        private readonly String _lobbyCode;
+        #region Private Fields
+        private readonly string _lobbyCode;
         private bool _isConnected = false;
 
         private readonly Label[] _playerLabels;
@@ -56,7 +55,11 @@ namespace Client.Views.Lobby
             ConfigureEvents();
         }
 
-        #region Event configuration
+        #region Event Configuration
+
+        /// <summary>
+        /// Subscribes to game service events.
+        /// </summary>
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -65,6 +68,9 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
         }
 
+        /// <summary>
+        /// Unsubscribes from game service events to prevent memory leaks.
+        /// </summary>
         private void UnsubscribeEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated -= OnPlayerListUpdated;
@@ -102,7 +108,7 @@ namespace Client.Views.Lobby
             }
             catch (Exception ex)
             {
-                HandleConnectionError(ex);
+                ExceptionManager.Handle(ex, this, () => this.Close());
             }
         }
 
@@ -120,6 +126,7 @@ namespace Client.Views.Lobby
                     "Notice",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+                return;
             }
 
             if (_selectedCardCount < GameConstants.MinCardCount ||
@@ -145,7 +152,7 @@ namespace Client.Views.Lobby
             }
             catch (Exception ex)
             {
-                HandleConnectionError(ex);
+                ExceptionManager.Handle(ex, this, () => this.Close());
             }
         }
 
@@ -162,7 +169,7 @@ namespace Client.Views.Lobby
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error enviando mensaje: " + ex.Message);
+                    ExceptionManager.Handle(ex, this, null);
                 }
             }
         }
@@ -190,42 +197,24 @@ namespace Client.Views.Lobby
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not open mail client: " + ex.Message);
+                ExceptionManager.Handle(ex, this, null);
             }
         }
 
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (_isConnected)
-            {
-                try
-                {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
-                    _isConnected = false;
-                }
-                catch { }
-            }
+            await LeaveLobbySafe();
             this.Close();
         }
+
+        #region Server Callbacks
 
         private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
         {
             Dispatcher.Invoke(() =>
             {
                 _currentPlayers = players.ToList();
-
-                foreach (var label in _playerLabels)
-                {
-                    if (label != null) label.Content = string.Empty;
-                }
-
-                for (int i = 0; i < players.Length && i < _playerLabels.Length; i++)
-                {
-                    if (_playerLabels[i] != null)
-                    {
-                        _playerLabels[i].Content = players[i].Name;
-                    }
-                }
+                UpdatePlayerLabels();
             });
         }
 
@@ -250,11 +239,6 @@ namespace Client.Views.Lobby
         {
             Dispatcher.Invoke(() =>
             {
-                MessageBox.Show(
-                    $"{playerName} has left the lobby.", "Player Left",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-
                 var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
                 if (playerToRemove != null)
                 {
@@ -264,6 +248,9 @@ namespace Client.Views.Lobby
             });
         }
 
+        /// <summary>
+        /// Handles game start event. Closes lobby and opens game window with synced cards.
+        /// </summary>
         private void OnGameStarted(List<CardInfo> cards)
         {
             Dispatcher.Invoke(() =>
@@ -284,6 +271,7 @@ namespace Client.Views.Lobby
                 this.Hide();
             });
         }
+        #endregion
 
         protected override async void OnClosed(EventArgs e)
         {
@@ -291,59 +279,26 @@ namespace Client.Views.Lobby
 
             if (!_isGameStarting)
             {
-                try
-                {
-                    await LeaveLobbySafe();
-                    _isConnected = false;
-                }
-                catch { }
-            }
+                await LeaveLobbySafe();
 
-            if (this.Owner != null)
-            {
-                this.Owner.Show();
+                if (this.Owner != null)
+                {
+                    this.Owner.Show();
+                }
             }
 
             base.OnClosed(e);
         }
 
-        private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ComboBoxNumberOfCards.SelectedIndex >= 0)
-            {
-                var selectedText = ComboBoxNumberOfCards.SelectedItem.ToString();
-                _selectedCardCount = int.Parse(selectedText);
-            }
-
-        }
-
-        private void SliderSecondsPerTurn_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (LabelTimerValue != null)
-            {
-                LabelTimerValue.Content = e.NewValue.ToString("F0");
-            }
-
-            _secondsPerTurn = (int)SliderSecondsPerTurn.Value;
-        }
-
-        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
-
-        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
+        #region Helper Methods
 
         private void UpdatePlayerLabels()
         {
             foreach (var label in _playerLabels)
             {
-                if (label != null)
-                {
-                    label.Content = string.Empty;
-                }
+                if (label != null) label.Content = string.Empty;
             }
+
             for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
             {
                 if (_playerLabels[i] != null)
@@ -364,36 +319,34 @@ namespace Client.Views.Lobby
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[LeaveLobbySafe Error]: {ex.ToString()}");
+                    Debug.WriteLine($"[LeaveLobbySafe Error]: {ex.Message}");
                 }
             }
         }
 
-        private void HandleConnectionError(Exception ex)
+        private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string title = Lang.Global_Title_AppError;
-            switch (ex)
+            if (ComboBoxNumberOfCards.SelectedIndex >= 0)
             {
-                case EndpointNotFoundException _:
-                    title = Lang.Global_Title_ServerOffline;
-                    break;
-
-                case CommunicationException _:
-                    title = Lang.Global_Title_NetworkError;
-                    break;
-
-                case TimeoutException _:
-                    title = Lang.Global_Title_NetworkError;
-                    break;
-
-                default:
-                    title = Lang.Global_Title_AppError;
-                    break;
+                var selectedText = ComboBoxNumberOfCards.SelectedItem.ToString();
+                _selectedCardCount = int.Parse(selectedText);
             }
-            string message = LocalizationHelper.GetString(ex);
-            Debug.WriteLine($"[{title} - {ex.GetType().Name}]: {ex.Message}");
-            new CustomMessageBox(title, message, this, MessageBoxType.Error).ShowDialog();
-            this.Close();
         }
+
+        private void SliderSecondsPerTurn_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (LabelTimerValue != null)
+            {
+                LabelTimerValue.Content = e.NewValue.ToString("F0");
+            }
+
+            _secondsPerTurn = (int)SliderSecondsPerTurn.Value;
+        }
+
+        private void PlayersListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+
+        private void ChatListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+
+        #endregion
     }
 }
