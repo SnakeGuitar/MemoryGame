@@ -22,6 +22,7 @@ namespace Client.Utilities
         public event Action<int> ScoreUpdated;
         public event Action GameWon;
         public event Action GameLost;
+        public event Action TurnTimeEnded;
         #endregion
 
         #region Private Fields
@@ -31,7 +32,10 @@ namespace Client.Utilities
         private bool _isProcessingTurn;
         private Card _firstCardFlipped;
         private readonly ObservableCollection<Card> _cardsOnBoard;
+        private int _turnDurationSeconds;
         #endregion
+
+        public bool IsMultiplayerMode { get; set; } = false;
 
         public GameManager(ObservableCollection<Card> cardsCollection)
         {
@@ -57,6 +61,11 @@ namespace Client.Utilities
                 }
                 else
                 {
+                    if (IsMultiplayerMode)
+                    {
+                        _gameTimer.Stop();
+                        TurnTimeEnded?.Invoke();
+                    }
                     StopGame();
                     TimerUpdated?.Invoke("00:00");
                     GameLost?.Invoke();
@@ -82,7 +91,6 @@ namespace Client.Utilities
             {
                 _cardsOnBoard.Add(card);
             }
-
             _gameTimer.Start();
         }
 
@@ -91,18 +99,28 @@ namespace Client.Utilities
         /// </summary>
         public void StartMultiplayerGame(GameConfiguration configuration, List<CardInfo> serverCards)
         {
-            ResetGameState(configuration.TimeLimitSeconds);
+            IsMultiplayerMode = true;
+            _turnDurationSeconds = configuration.TimeLimitSeconds;
+            ResetGameState(_turnDurationSeconds);
 
             int index = 0;
             foreach (var info in serverCards)
             {
                 string imagePath = $"{GameConstants.ColorCardFrontBasePath}{info.ImageIdentifier}.png";
                 var newCard = new Card(index, info.CardId, imagePath);
-
                 _cardsOnBoard.Add(newCard);
                 index++;
+            } 
+        }
+
+        public void ResetTurnTimer()
+        {
+            _timeLeft = TimeSpan.FromSeconds(_turnDurationSeconds);
+            TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
+            if (!_gameTimer.IsEnabled)
+            {
+                _gameTimer.Start();
             }
-            _gameTimer.Start();
         }
 
         private void ResetGameState(int seconds)
@@ -170,6 +188,11 @@ namespace Client.Utilities
                     _score += GameConstants.PointsPerMatch;
                     ScoreUpdated?.Invoke(_score);
 
+                    if (IsMultiplayerMode)
+                    {
+                        ResetTurnTimer();
+                    }
+
                     CheckWinCondition();
                 }
                 else
@@ -178,6 +201,11 @@ namespace Client.Utilities
 
                     _firstCardFlipped.IsFlipped = false;
                     clickedCard.IsFlipped = false;
+
+                    if (IsMultiplayerMode)
+                    {
+                        _gameTimer.Stop();
+                    }
                 }
 
                 _firstCardFlipped = null;
