@@ -109,38 +109,9 @@ namespace Client.Views.Lobby
                 }
 
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_Error, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
-            }
             catch (Exception ex)
             {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
+                HandleConnectionError(ex);
             }
         }
 
@@ -171,11 +142,16 @@ namespace Client.Views.Lobby
 
         private void ButtonReady_Click(object sender, RoutedEventArgs e)
         {
-
+            if (sender is Button button)
+            {
+                button.IsEnabled = false;
+                button.Content = "Ready!";
+            }
         }
 
-        private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
+        private async Task ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
+            await LeaveLobbySafe();
             this.Close();
         }
 
@@ -184,19 +160,7 @@ namespace Client.Views.Lobby
             Dispatcher.Invoke(() =>
             {
                 _currentPlayers = players.ToList();
-
-                foreach (var label in _playerLabels)
-                {
-                    if (label != null) label.Content = string.Empty;
-                }
-
-                for (int i = 0; i < players.Length && i < _playerLabels.Length; i++)
-                {
-                    if (_playerLabels[i] != null)
-                    {
-                        _playerLabels[i].Content = players[i].Name;
-                    }
-                }
+                UpdatePlayerLabels();
             });
         }
 
@@ -232,10 +196,16 @@ namespace Client.Views.Lobby
 
         private void UpdatePlayerLabels()
         {
-            foreach (var label in _playerLabels) if (label != null) label.Content = "";
+            foreach (var label in _playerLabels)
+            {
+                if (label != null) label.Content = "";
+            }
             for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
             {
-                if (_playerLabels[i] != null) _playerLabels[i].Content = _currentPlayers[i].Name;
+                if (_playerLabels[i] != null)
+                {
+                    _playerLabels[i].Content = _currentPlayers[i].Name;
+                }
             }
         }
 
@@ -246,7 +216,7 @@ namespace Client.Views.Lobby
                 UnsubscribeEvents();
                 _isGameStarting = true;
 
-                PlayGameMultiplayer gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
+                var gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
 
                 if (this.Owner != null)
                 {
@@ -290,8 +260,39 @@ namespace Client.Views.Lobby
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
                     _isConnected = false;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[WARNING] Error at leaving lobby: {ex.Message}");
+                }
             }
+        }
+
+        private void HandleConnectionError(Exception ex)
+        {
+            string title = Lang.Global_Title_AppError;
+
+            switch (ex)
+            {
+                case EndpointNotFoundException _:
+                    title = Lang.Global_Title_ServerOffline;
+                    break;
+
+                case CommunicationException _:
+                    title = Lang.Global_Title_NetworkError;
+                    break;
+
+                case TimeoutException _:
+                    title = Lang.Global_Title_NetworkError;
+                    break;
+
+                default:
+                    title = Lang.Global_Title_AppError;
+                    break;
+            }
+            string message = LocalizationHelper.GetString(ex);
+            Debug.WriteLine($"[{title} - {ex.GetType().Name}]: {ex.Message}");
+            new CustomMessageBox(title, message, this, MessageBoxType.Error).ShowDialog();
+            _ = ButtonBackToMainMenu_Click(this, new RoutedEventArgs());
         }
     }
 }

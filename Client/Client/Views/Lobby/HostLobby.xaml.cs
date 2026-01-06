@@ -2,17 +2,17 @@
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
-using Client.Views.Multiplayer;
 using Client.Views.Controls;
+using Client.Views.Multiplayer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static Client.Views.Controls.CustomMessageBox;
-using System.Threading.Tasks;
 
 namespace Client.Views.Lobby
 {
@@ -21,6 +21,7 @@ namespace Client.Views.Lobby
     /// </summary>
     public partial class HostLobby : Window
     {
+        #region
         private readonly String _lobbyCode;
         private bool _isConnected = false;
 
@@ -29,8 +30,9 @@ namespace Client.Views.Lobby
         private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
         private bool _isGameStarting = false;
 
-        private int _selectedCardCount = 16;
-        private int _secondsPerTurn = 30;
+        private int _selectedCardCount = GameConstants.DefaultCardCount;
+        private int _secondsPerTurn = GameConstants.DefaultTurnTimeSeconds;
+        #endregion
 
         public HostLobby()
         {
@@ -54,6 +56,7 @@ namespace Client.Views.Lobby
             ConfigureEvents();
         }
 
+        #region Event configuration
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -69,6 +72,7 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
             GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
         }
+        #endregion
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -96,38 +100,9 @@ namespace Client.Views.Lobby
                     this.Close();
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_ServerOffline, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                this.Close();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                this.Close();
-            }
             catch (Exception ex)
             {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                this.Close();
+                HandleConnectionError(ex);
             }
         }
 
@@ -137,28 +112,30 @@ namespace Client.Views.Lobby
             {
                 return;
             }
-            
-            if (_currentPlayers.Count < 1)
+
+            if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
             {
                 MessageBox.Show(
-                    "Waiting for more players...", 
-                    "Notice", 
-                    MessageBoxButton.OK, 
+                    "Waiting for more players...",
+                    "Notice",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Information);
+            }
+
+            if (_selectedCardCount < GameConstants.MinCardCount ||
+                _selectedCardCount > GameConstants.MaxCardCount ||
+                _selectedCardCount % 2 != 0)
+            {
+                _selectedCardCount = GameConstants.DefaultCardCount;
+            }
+
+            if (_secondsPerTurn < GameConstants.MinTurnTimeSeconds)
+            {
+                _secondsPerTurn = GameConstants.MinTurnTimeSecondsFallback;
             }
 
             try
             {
-                if (_selectedCardCount < 4 || _selectedCardCount > 36 || _selectedCardCount % 2 != 0)
-                {
-                    _selectedCardCount = 16;
-                }
-
-                if (_secondsPerTurn < 5)
-                { 
-                    _secondsPerTurn = 10;
-                }
-
                 var settings = new GameSettings
                 {
                     CardCount = _selectedCardCount,
@@ -166,26 +143,9 @@ namespace Client.Views.Lobby
                 };
                 GameServiceManager.Instance.Client.StartGame(settings);
             }
-            catch (FaultException ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                this.Close();
-            }
             catch (Exception ex)
             {
-                string errorMessage = LocalizationHelper.GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-                this.Close();
+                HandleConnectionError(ex);
             }
         }
 
@@ -291,8 +251,8 @@ namespace Client.Views.Lobby
             Dispatcher.Invoke(() =>
             {
                 MessageBox.Show(
-                    $"{playerName} has left the lobby.", "Player Left", 
-                    MessageBoxButton.OK, 
+                    $"{playerName} has left the lobby.", "Player Left",
+                    MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
                 var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
@@ -377,11 +337,19 @@ namespace Client.Views.Lobby
 
         private void UpdatePlayerLabels()
         {
-            foreach (var label in _playerLabels) if (label != null) label.Content = string.Empty;
-
+            foreach (var label in _playerLabels)
+            {
+                if (label != null)
+                {
+                    label.Content = string.Empty;
+                }
+            }
             for (int i = 0; i < _currentPlayers.Count && i < _playerLabels.Length; i++)
             {
-                if (_playerLabels[i] != null) _playerLabels[i].Content = _currentPlayers[i].Name;
+                if (_playerLabels[i] != null)
+                {
+                    _playerLabels[i].Content = _currentPlayers[i].Name;
+                }
             }
         }
 
@@ -394,9 +362,38 @@ namespace Client.Views.Lobby
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
                     _isConnected = false;
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[LeaveLobbySafe Error]: {ex.ToString()}");
+                }
             }
+        }
+
+        private void HandleConnectionError(Exception ex)
+        {
+            string title = Lang.Global_Title_AppError;
+            switch (ex)
+            {
+                case EndpointNotFoundException _:
+                    title = Lang.Global_Title_ServerOffline;
+                    break;
+
+                case CommunicationException _:
+                    title = Lang.Global_Title_NetworkError;
+                    break;
+
+                case TimeoutException _:
+                    title = Lang.Global_Title_NetworkError;
+                    break;
+
+                default:
+                    title = Lang.Global_Title_AppError;
+                    break;
+            }
+            string message = LocalizationHelper.GetString(ex);
+            Debug.WriteLine($"[{title} - {ex.GetType().Name}]: {ex.Message}");
+            new CustomMessageBox(title, message, this, MessageBoxType.Error).ShowDialog();
+            this.Close();
         }
     }
 }
-
