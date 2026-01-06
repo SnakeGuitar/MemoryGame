@@ -36,7 +36,7 @@ namespace Server.LobbyService
 
             _logger = logger;
             _stateManager = new LobbyStateManager(_logger);
-            _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId));
+            _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId), _logger);
             _dbFactory = dbFactory;
         }
 
@@ -157,7 +157,7 @@ namespace Server.LobbyService
             }
 
             var lobby = _stateManager.GetLobbyBySession(sessionId);
-            _notifier.BroadcastMessage(lobby, "Game has started!", true);
+            _notifier.BroadcastMessage(lobby, "Game has started!", true, "System");
         }
 
         public void FlipCard(int cardIndex)
