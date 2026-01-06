@@ -733,4 +733,10 @@ You need to log in with your new account :)</value>
   <data name="Global_Label_RegisteredEmail" xml:space="preserve">
     <value>Registered email</value>
   </data>
+  <data name="Lobby_Label_GameCode" xml:space="preserve">
+    <value>Game Code:</value>
+  </data>
+  <data name="Lobby_Button_Invite" xml:space="preserve">
+    <value>Invite Friend</value>
+  </data>
 </root>

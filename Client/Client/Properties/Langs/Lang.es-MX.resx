@@ -735,4 +735,10 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Label_RegisteredEmail" xml:space="preserve">
     <value>Correo registrado:</value>
   </data>
+  <data name="Lobby_Label_GameCode" xml:space="preserve">
+    <value>Código de Juego:</value>
+  </data>
+  <data name="Lobby_Button_Invite" xml:space="preserve">
+    <value>Invite Friend</value>
+  </data>
 </root>
