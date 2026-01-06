@@ -5,95 +5,151 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lang="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
-        Title="Lobby" Height="600" Width="900"
+        Title="Lobby" Height="600" Width="1000"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource PrimaryTextColor}"
+        Background="#2D3E50"
         Loaded="Window_Loaded">
 
     <Window.Resources>
-        <Style x:Key="LobbyBoxStyle" TargetType="ListBox">
-            <Setter Property="Background" Value="#33000000"/>
-            <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+        <Style x:Key="PanelBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="#34495E"/>
+            <Setter Property="BorderBrush" Value="#5D6D7E"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="TransparentListBox" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS, Arial"/>
+        </Style>
+
+        <Style x:Key="HandwrittenTitle" TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS, Segoe UI"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
         </Style>
     </Window.Resources>
 
     <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="1.2*"/>
+        </Grid.ColumnDefinitions>
 
-        <Label Content="MULTIPLAYER LOBBY" Style="{StaticResource MainMenuTitleStyle}" 
-               Grid.Row="0" HorizontalAlignment="Center" FontSize="32"/>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
-            <Label Content="{x:Static lang:Lang.Lobby_Label_GameCode}" Foreground="White" FontSize="18" FontWeight="Bold"/>
-            <Label x:Name="LabelLobbyCode" Content="----" Foreground="{StaticResource AccentColor}" FontSize="18" FontWeight="Bold" Margin="10,0,0,0"/>
-        </StackPanel>
+            <Label Content="PLAYERS" Style="{StaticResource HandwrittenTitle}" Grid.Row="0" Margin="0,0,0,10"/>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Border Grid.Row="1" Style="{StaticResource PanelBorderStyle}">
+                <ListBox x:Name="PlayersListBox" Style="{StaticResource TransparentListBox}" Margin="10"/>
+            </Border>
 
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Label Content="{x:Static lang:Lang.Global_Title_Players}" Style="{StaticResource MainMenuTitleStyle}" HorizontalAlignment="Center"/>
+            <Grid Grid.Row="2" Margin="0,15,0,0" Height="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
 
-                <ListBox x:Name="PlayersListBox" Grid.Row="1" Style="{StaticResource LobbyBoxStyle}"/>
-            </Grid>
+                <Button x:Name="ButtonBack" Grid.Column="0" 
+                        Click="ButtonBackToMainMenu_Click"
+                        Background="#2C3E50" BorderBrush="White" BorderThickness="1" Foreground="White">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10,0,0,10">
+                                <Path Data="M 15,10 L 5,20 L 15,30" Stroke="White" StrokeThickness="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Label Content="{x:Static lang:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}" HorizontalAlignment="Center"/>
+                <Button x:Name="ButtonInvite" Grid.Column="2" Content="Invite Friend"
+                        Click="ButtonInvite_Click"
+                        FontSize="18" Foreground="White" Background="#5D8AA8" BorderThickness="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
 
-                <ListBox x:Name="ChatListBox" Grid.Row="1" Style="{StaticResource LobbyBoxStyle}"/>
-
-                <Grid Grid.Row="2" Margin="5,10,5,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="ChatTextBox" Height="35" VerticalContentAlignment="Center" Padding="5" FontSize="14"/>
-                    <Button Content="{x:Static lang:Lang.Global_Button_Send}" Width="80" Height="35" Margin="10,0,0,0" Grid.Column="1"
-                            Style="{StaticResource GameButtonStyle}" Click="ButtonSendMessageChat_Click"/>
-                </Grid>
+                <Button x:Name="ButtonReady" Grid.Column="4" 
+                        Click="ButtonReady_Click"
+                        Background="#2C3E50" BorderBrush="White" BorderThickness="1">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ReadyBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0,10,10,0">
+                                <Path x:Name="CheckIcon" Data="M 5,15 L 10,20 L 20,5" Stroke="White" StrokeThickness="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ReadyBorder" Property="Background" Value="#27AE60"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </Grid>
         </Grid>
 
-        <Grid Grid.Row="3" Margin="0,20,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <Button x:Name="ButtonBack" Content="{x:Static lang:Lang.Global_Button_Back}" 
-                    Style="{StaticResource GameButtonStyle}" Width="150" Height="45"
-                    Grid.Column="0" HorizontalAlignment="Left" Click="ButtonBackToMainMenu_Click"/>
+            <Label Content="CHAT" Style="{StaticResource HandwrittenTitle}" Grid.Row="0" Margin="0,0,0,10"/>
 
-            <Button x:Name="ButtonInvite" Content="{x:Static lang:Lang.Lobby_Button_Invite}" 
-                    Style="{StaticResource GameButtonStyle}" Width="180" Height="45"
-                    Grid.Column="1" HorizontalAlignment="Center" Click="ButtonInvite_Click"/>
+            <Border Grid.Row="1" Style="{StaticResource PanelBorderStyle}" Margin="5,5,5,0">
+                <ListBox x:Name="ChatListBox" Style="{StaticResource TransparentListBox}" Margin="5"/>
+            </Border>
 
-            <Button x:Name="ButtonReady" Content="Ready" 
-                    Style="{StaticResource GameButtonStyle}" Width="150" Height="45" Background="{StaticResource AccentColor}"
-                    Grid.Column="2" HorizontalAlignment="Right" Click="ButtonReady_Click"/>
+            <Grid Grid.Row="2" Margin="5,10,5,0" Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="ChatTextBox" Grid.Column="0" 
+                         Background="#95A5A6" Foreground="Black" FontSize="14" 
+                         VerticalContentAlignment="Center" Padding="5">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+
+                <Button Content="Send" Grid.Column="2" 
+                        Click="ButtonSendMessageChat_Click"
+                        Background="#5D8AA8" Foreground="White" FontSize="14" FontWeight="Bold" BorderThickness="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="15">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
