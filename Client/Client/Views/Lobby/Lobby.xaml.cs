@@ -29,6 +29,11 @@ namespace Client.Views.Lobby
             InitializeComponent();
             _lobbyCode = lobbyCode;
 
+            if (LabelLobbyCode != null)
+            {
+                LabelLobbyCode.Content = _lobbyCode;
+            }
+
             ConfigureEvents();
         }
 
@@ -79,6 +84,12 @@ namespace Client.Views.Lobby
                     }
 
                     OnChatMessageReceived("System", $"{username} has joined the lobby.", true);
+
+                    string successMsg = Lang.Lobby_Notification_PlayerJoined.Contains("{0}")
+                        ? string.Format(Lang.Lobby_Notification_PlayerJoined, username)
+                        : Lang.Lobby_Notification_PlayerJoined;
+
+                    new CustomMessageBox(Lang.Global_Title_Success, successMsg, this, MessageBoxType.Information).ShowDialog();
                 }
                 else
                 {
@@ -147,7 +158,7 @@ namespace Client.Views.Lobby
             if (sender is Button btn)
             {
                 btn.IsEnabled = false;
-                _ = GameServiceManager.Instance.Client.SendChatMessageAsync("I am ready!");
+                btn.Content = "Waiting...";
             }
         }
 
@@ -192,6 +203,7 @@ namespace Client.Views.Lobby
                 _isGameStarting = true;
 
                 var gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
+
                 if (this.Owner != null)
                 {
                     gameWindow.Owner = this.Owner;
@@ -222,6 +234,7 @@ namespace Client.Views.Lobby
             if (!_isGameStarting)
             {
                 await LeaveLobbySafe();
+
                 if (this.Owner != null)
                 {
                     this.Owner.Show();
