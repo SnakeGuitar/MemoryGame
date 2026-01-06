@@ -1,4 +1,4 @@
-﻿namespace Client.Utilities
+﻿namespace Client.Models
 {
     public static class GameConstants
     {

@@ -1,345 +1,220 @@
 ﻿using Client.GameLobbyServiceReference;
+using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
 using Client.Utilities;
 using Client.ViewModels;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Client.Views.Multiplayer
 {
     /// <summary>
-    /// Lógica de interacción para PlayGameMultiplayer.xaml
+    /// Interaction logic for PlayGameMultiplayer.xaml.
+    /// Implements synchronized gameplay, thread-safe UI updates, and robust resource cleanup.
     /// </summary>
     public partial class PlayGameMultiplayer : Window
     {
+        #region Private Fields & Constants
+        private const int MaxChatMessages = 100;
+
+        private readonly GameManager _gameManager;
+        private readonly List<LobbyPlayerInfo> _players;
+
+        private Border[] _playerBorders;
+        private Label[] _playerNames;
+        private Label[] _playerScores;
+        private Label[] _playerTimes;
+        #endregion
+
+        #region Properties
         public ObservableCollection<Card> Cards { get; set; }
-        public readonly List<LobbyPlayerInfo> _players;
-        public readonly List<CardInfo> _initialBoard;
+        #endregion
 
-        private DispatcherTimer _uiTurnTimer;
-        private int _remainingTimeSeconds;
-        private string _currentActivePlayerName;
-
-        public PlayGameMultiplayer(List<CardInfo> board, List<LobbyPlayerInfo> players)
+        /// <summary>
+        /// Initializes a new instance of the multiplayer game session.
+        /// </summary>
+        /// <param name="serverCards">The deck configuration received from the server.</param>
+        /// <param name="players">The list of participants.</param>
+        public PlayGameMultiplayer(List<CardInfo> serverCards, List<LobbyPlayerInfo> players)
         {
             InitializeComponent();
 
-            _initialBoard = board;
-            _players = players;
-
-            InitializeGame();
-            InitializeTimer();
-            ConfigureGameEvents();
-        }
-
-        private void InitializeTimer()
-        {
-            _uiTurnTimer = new DispatcherTimer();
-            _uiTurnTimer.Interval = TimeSpan.FromSeconds(1);
-            _uiTurnTimer.Tick += OnUiTimerTick;
-        }
-
-        private void InitializeGame()
-        {
-            BorderP1.Visibility = Visibility.Collapsed;
-            BorderP2.Visibility = Visibility.Collapsed;
-            BorderP3.Visibility = Visibility.Collapsed;
-            BorderP4.Visibility = Visibility.Collapsed;
-
-            if (_players != null && _players.Count > 0)
-            {
-                if (_players.Count >= 1)
-                {
-                    LabelP1Name.Content = _players[0].Name;
-                    LabelP1Score.Content = $"{Lang.Global_Label_Score}: 0";
-                    LabelP1Time.Content = "--";
-                    BorderP1.Visibility = Visibility.Visible;
-                }
-
-                if (_players.Count >= 2)
-                {
-                    LabelP2Name.Content = _players[1].Name;
-                    LabelP2Score.Content = $"{Lang.Global_Label_Score}: 0";
-                    LabelP2Time.Content = "--";
-                    BorderP2.Visibility = Visibility.Visible;
-                }
-
-                if (_players.Count >= 3)
-                {
-                    LabelP3Name.Content = _players[2].Name;
-                    LabelP3Score.Content = $"{Lang.Global_Label_Score}: 0";
-                    LabelP3Time.Content = "--";
-                    BorderP3.Visibility = Visibility.Visible;
-                }
-
-                if (_players.Count >= 4)
-                {
-                    LabelP4Name.Content = _players[3].Name;
-                    LabelP4Score.Content = $"{Lang.Global_Label_Score}: 0";
-                    LabelP4Time.Content = "--";
-                    BorderP4.Visibility = Visibility.Visible;
-                }
-            }
-
-
+            _players = players ?? new List<LobbyPlayerInfo>();
             Cards = new ObservableCollection<Card>();
 
-            for (int i = 0; i < _initialBoard.Count; i++)
-            {
-                var cardInfo = _initialBoard[i];
-                var newCard = new Card(i, cardInfo.CardId, string.Empty);
-                Cards.Add(newCard);
-            }
+            InitializeUIArrays();
 
             GameBoard.ItemsSource = Cards;
+            this.DataContext = this;
+
+            SetupPlayerUI();
+
+            _gameManager = new GameManager(Cards);
+            ConfigureEvents();
+
+            StartGameSafe(serverCards);
         }
 
-        private void ConfigureGameEvents()
+        #region Initialization
+
+        private void InitializeUIArrays()
         {
-            GameServiceManager.Instance.CardShown += OnCardShown;
-            GameServiceManager.Instance.CardsHidden += OnCardsHidden;
-            GameServiceManager.Instance.CardsMatched += OnCardsMatched;
-            GameServiceManager.Instance.TurnUpdated += OnTurnUpdated;
-            GameServiceManager.Instance.ScoreUpdated += OnScoreUpdated;
+            _playerBorders = new Border[] { BorderP1, BorderP2, BorderP3, BorderP4 };
+            _playerNames = new Label[] { LabelP1Name, LabelP2Name, LabelP3Name, LabelP4Name };
+            _playerScores = new Label[] { LabelP1Score, LabelP2Score, LabelP3Score, LabelP4Score };
+            _playerTimes = new Label[] { LabelP1Time, LabelP2Time, LabelP3Time, LabelP4Time };
+        }
+
+        private void SetupPlayerUI()
+        {
+            for (int i = 0; i < _playerBorders.Length; i++)
+            {
+                if (i < _players.Count)
+                {
+                    _playerBorders[i].Visibility = Visibility.Visible;
+                    _playerNames[i].Content = _players[i].Name;
+                    _playerScores[i].Content = "Pairs: 0";
+                    _playerTimes[i].Content = "Time: --";
+
+                    if (_players[i].Name == UserSession.Username)
+                    {
+                        _playerNames[i].Foreground = Brushes.Gold;
+                        _playerNames[i].FontWeight = FontWeights.Bold;
+                    }
+                }
+                else
+                {
+                    _playerBorders[i].Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        private void StartGameSafe(List<CardInfo> serverCards)
+        {
+            try
+            {
+                var config = new GameConfiguration
+                {
+                    NumberOfCards = serverCards.Count,
+                    TimeLimitSeconds = GameConstants.DefaultTurnTimeSeconds
+                };
+
+                _gameManager.StartMultiplayerGame(config, serverCards);
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Handle(ex, this, () => this.Close());
+            }
+        }
+
+        #endregion
+
+        #region Event Management
+
+        private void ConfigureEvents()
+        {
+            _gameManager.TimerUpdated += OnTimerUpdated;
+            _gameManager.ScoreUpdated += OnScoreUpdated;
+            _gameManager.GameWon += OnGameWon;
+            _gameManager.GameLost += OnGameLost;
+
             GameServiceManager.Instance.ChatMessageReceived += OnChatMessageReceived;
-            GameServiceManager.Instance.GameFinished += OnGameFinished;
             GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
         }
 
         private void UnsubscribeEvents()
         {
-            GameServiceManager.Instance.CardShown -= OnCardShown;
-            GameServiceManager.Instance.CardsHidden -= OnCardsHidden;
-            GameServiceManager.Instance.CardsMatched -= OnCardsMatched;
-            GameServiceManager.Instance.TurnUpdated -= OnTurnUpdated;
-            GameServiceManager.Instance.ScoreUpdated -= OnScoreUpdated;
+            _gameManager.TimerUpdated -= OnTimerUpdated;
+            _gameManager.ScoreUpdated -= OnScoreUpdated;
+            _gameManager.GameWon -= OnGameWon;
+            _gameManager.GameLost -= OnGameLost;
+
             GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
-            GameServiceManager.Instance.GameFinished -= OnGameFinished;
             GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
-            _uiTurnTimer.Stop();
         }
 
-        private async void Card_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is int cardId)
-            {
-                var card = Cards.FirstOrDefault(c => c.Id == cardId);
+        #endregion
 
-                if (card != null && !card.IsFlipped && !card.IsMatched)
-                {
-                    try
-                    {
-                        await GameServiceManager.Instance.Client.FlipCardAsync(cardId);
-                    }
-                    catch (CommunicationException)
-                    {
-                        MessageBox.Show("Connection lost to the server.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        CloseGameAndLeave();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message); // CHANGE WHEN POSSIBLE
-                    }
-                }
-            }
-        }
+        #region Game Callbacks (Thread-Safe)
 
-        private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
-            {
-                string msgToSend = ChatTextBox.Text;
-                ChatTextBox.Text = string.Empty;
-
-                try
-                {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msgToSend);
-                }
-                catch (CommunicationException)
-                {
-                    MessageBox.Show("Connection lost to the server.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    CloseGameAndLeave();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message); // CHANGE WHEN POSSIBLE
-                }
-            }
-        }
-
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
-        {
-            var result = MessageBox.Show("Exit?",
-                                         "Do you want to leave?",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes)
-            {
-                CloseGameAndLeave();
-            }
-        }
-
-        private void OnUiTimerTick(object sender, EventArgs e)
-        {
-            if (_remainingTimeSeconds > 0)
-            {
-                _remainingTimeSeconds--;
-                UpdateAllPlayerActiveStates(_currentActivePlayerName, _remainingTimeSeconds);
-            }
-            else
-            {
-                _uiTurnTimer.Stop();
-            }
-        }
-
-        private void UpdateAllPlayerActiveStates(string activePlayer, int time)
-        {
-            UpdateSinglePlayerState(LabelP1Name, LabelP1Time, activePlayer, time);
-            UpdateSinglePlayerState(LabelP2Name, LabelP2Time, activePlayer, time);
-            UpdateSinglePlayerState(LabelP3Name, LabelP3Time, activePlayer, time);
-            UpdateSinglePlayerState(LabelP4Name, LabelP4Time, activePlayer, time);
-        }
-
-        private void UpdateSinglePlayerState(Label nameLabel, Label timeLabel, string activePlayer, int time)
-        {
-            bool isActive = nameLabel.Content?.ToString() == activePlayer;
-            nameLabel.Foreground = isActive ? Brushes.Gold : Brushes.White;
-            nameLabel.FontWeight = isActive ? FontWeights.Bold : FontWeights.Normal;
-            timeLabel.Content = isActive ? $"{Lang.Global_Label_Time}: {time}s" : "--";
-        }
-
-        private void OnCardShown(int cardIndex, string imageIdentifier)
+        private void OnTimerUpdated(string timeString)
         {
             Dispatcher.Invoke(() =>
             {
-                var card = Cards.FirstOrDefault(c => c.Id == cardIndex);
-                if (card != null)
-                {
-                    string fullPath = $"/Client;component/Resources/Images/Cards/Fronts/Color/{imageIdentifier}.png";
+                if (!this.IsLoaded) return;
 
-                    card.SetFrontImage(fullPath);
-                    card.IsFlipped = true;
+                if (_playerTimes[0] != null)
+                {
+                    _playerTimes[0].Content = $"Time: {timeString}";
                 }
             });
         }
 
-        private void OnCardsHidden(int index1, int index2)
+        private void OnScoreUpdated(int newScore)
         {
             Dispatcher.Invoke(() =>
             {
-                var c1 = Cards.FirstOrDefault(c => c.Id == index1);
-                var c2 = Cards.FirstOrDefault(c => c.Id == index2);
+                if (!this.IsLoaded) return;
 
-                if (c1 != null)
+                int myIndex = _players.FindIndex(p => p.Name == UserSession.Username);
+                if (myIndex >= 0 && myIndex < _playerScores.Length)
                 {
-                    c1.IsFlipped = false;
-                }
-                if (c2 != null)
-                {
-                    c2.IsFlipped = false;
+                    int pairs = newScore / GameConstants.PointsPerMatch;
+                    _playerScores[myIndex].Content = $"Pairs: {pairs}";
                 }
             });
         }
 
-        private void OnCardsMatched(int index1, int index2)
+        private void OnGameWon()
         {
             Dispatcher.Invoke(() =>
             {
-                var c1 = Cards.FirstOrDefault(c => c.Id == index1);
-                var c2 = Cards.FirstOrDefault(c => c.Id == index2);
+                if (!this.IsLoaded) return;
 
-                if (c1 != null)
-                {
-                    c1.IsMatched = true;
-                }
-                if (c2 != null)
-                {
-                    c2.IsMatched = true;
-                }
+                string winnerName = UserSession.Username ?? "Player";
+                string statsInfo = $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}";
+                ShowMatchSummary(winnerName, statsInfo);
             });
         }
 
-        private void OnTurnUpdated(string currentPlayerName, int timeLeft)
+        private void OnGameLost()
         {
             Dispatcher.Invoke(() =>
             {
-                UpdatePlayerActiveState(LabelP1Name, LabelP1Time, currentPlayerName, timeLeft);
-                UpdatePlayerActiveState(LabelP2Name, LabelP2Time, currentPlayerName, timeLeft);
-                UpdatePlayerActiveState(LabelP3Name, LabelP3Time, currentPlayerName, timeLeft);
-                UpdatePlayerActiveState(LabelP4Name, LabelP4Time, currentPlayerName, timeLeft);
+                if (!this.IsLoaded) return;
 
-                _currentActivePlayerName = currentPlayerName;
-                _remainingTimeSeconds = timeLeft;
-                _uiTurnTimer.Stop();
-                _uiTurnTimer.Start();
-                UpdateAllPlayerActiveStates(currentPlayerName, timeLeft);
+                string title = Lang.Singleplayer_Title_TimeOver;
+                string statsInfo = $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}";
+                ShowMatchSummary(title, statsInfo);
             });
         }
 
-        private void UpdatePlayerActiveState(Label nameLabel, Label timeLabel, string activePlayerName, int time)
-        {
-            bool isActive = nameLabel.Content.ToString() == activePlayerName;
+        #endregion
 
-            if (isActive)
-            {
-                nameLabel.Foreground = Brushes.Gold;
-                nameLabel.FontWeight = FontWeights.Bold;
-                timeLabel.Content = $"{Lang.Global_Label_Time}: {time}s";
-            }
-            else
-            {
-                nameLabel.Foreground = Brushes.White;
-                nameLabel.FontWeight = FontWeights.Normal;
-                timeLabel.Content = "--";
-            }
-        }
-
-        private void OnScoreUpdated(string playerName, int newScore)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                string scoreText = $"{Lang.Global_Label_Score}: {newScore}";
-
-                if (LabelP1Name.Content.ToString() == playerName)
-                {
-                    LabelP1Score.Content = scoreText;
-                }
-                else if (LabelP2Name.Content.ToString() == playerName)
-                {
-                    LabelP2Score.Content = scoreText;
-                }
-                else if (LabelP3Name.Content.ToString() == playerName)
-                {
-                    LabelP3Score.Content = scoreText;
-                }
-                else if (LabelP4Name.Content.ToString() == playerName)
-                {
-                    LabelP4Score.Content = scoreText;
-                }
-            });
-        }
+        #region Service Callbacks (Chat & Players)
 
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
             Dispatcher.Invoke(() =>
             {
-                string displayMessage = isNotification
-                    ? $"--- {message} ---"
-                    : $"{sender}: {message}";
+                if (!this.IsLoaded) return;
 
-                ChatListBox.Items.Add(displayMessage);
+                string formattedMsg = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
+                ChatListBox.Items.Add(formattedMsg);
+
+                if (ChatListBox.Items.Count > MaxChatMessages)
+                {
+                    ChatListBox.Items.RemoveAt(0);
+                }
 
                 if (ChatListBox.Items.Count > 0)
                 {
@@ -348,56 +223,129 @@ namespace Client.Views.Multiplayer
             });
         }
 
-        private void OnGameFinished(string winnerName)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                string scoreInfo = "Match results";
-                var summaryWindow = new Controls.MatchSummary(winnerName, scoreInfo);
-                summaryWindow.Owner = this;
-                summaryWindow.ShowDialog();
-                CloseGameAndLeave();
-            });
-        }
-
         private void OnPlayerLeft(string playerName)
         {
             Dispatcher.Invoke(() =>
             {
-                MessageBox.Show($"{playerName} left",
-                                "Player left",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
+                if (!this.IsLoaded) return;
 
-                CloseGameAndLeave();
+                ChatListBox.Items.Add($"--- {playerName} left the game ---");
+
+                int index = _players.FindIndex(p => p.Name == playerName);
+                if (index >= 0 && index < _playerBorders.Length)
+                {
+                    _playerBorders[index].Opacity = 0.5;
+                    _playerNames[index].Content += " (Left)";
+                }
             });
         }
 
-        private async void CloseGameAndLeave()
+        #endregion
+
+        #region User Interaction
+
+        private async void Card_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.DataContext is Card clickedCard)
+            {
+                try
+                {
+                    await _gameManager.HandleCardClick(clickedCard);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionManager.Handle(ex, this, null);
+                }
+            }
+        }
+
+        private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
+            {
+                string msg = ChatTextBox.Text;
+                ChatTextBox.Text = string.Empty;
+
+                try
+                {
+                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionManager.Handle(ex, this, null);
+                }
+            }
+        }
+
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+            _gameManager.StopGame();
+            var settingsWindow = new Settings();
+            settingsWindow.Owner = this;
+            settingsWindow.ShowDialog();
+        }
+
+        private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
+        {
+            await LeaveGameSafe();
+        }
+
+        #endregion
+
+        #region Helpers & Cleanup
+
+        private string GetMyCurrentScore()
+        {
+            int myIndex = _players.FindIndex(p => p.Name == UserSession.Username);
+            if (myIndex >= 0 && myIndex < _playerScores.Length)
+            {
+                return _playerScores[myIndex].Content.ToString();
+            }
+            return "0";
+        }
+
+        private void ShowMatchSummary(string title, string stats)
+        {
+            var summaryWindow = new MatchSummary(title, stats);
+            summaryWindow.Owner = this;
+            summaryWindow.ShowDialog();
+
+            _ = LeaveGameSafe();
+        }
+
+        private async Task LeaveGameSafe()
         {
             UnsubscribeEvents();
+            _gameManager.StopGame();
 
             try
             {
                 await GameServiceManager.Instance.Client.LeaveLobbyAsync();
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"[LeaveGame Warning]: {ex.Message}");
             }
-
-            if (this.Owner != null)
+            finally
             {
-                this.Owner.Show();
-                this.Owner.WindowState = WindowState.Normal;
+                if (this.Owner != null)
+                {
+                    this.Owner.Show();
+                }
+                this.Close();
             }
-
-            this.Close();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
+            _gameManager.StopGame();
+
+            try { GameServiceManager.Instance.Client.LeaveLobbyAsync(); } catch { }
+
             base.OnClosed(e);
         }
+
+        #endregion
     }
 }

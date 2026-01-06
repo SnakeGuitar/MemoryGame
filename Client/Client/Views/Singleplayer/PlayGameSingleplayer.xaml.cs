@@ -5,36 +5,37 @@ using Client.Utilities;
 using Client.ViewModels;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Singleplayer
 {
     /// <summary>
-    /// Lógica de interacción para PlayGameSingleplayer.xaml
+    /// Interaction logic for PlayGameSingleplayer.xaml.
+    /// Manages the local game loop, UI updates, and user interaction for single-player mode.
     /// </summary>
     public partial class PlayGameSingleplayer : Window
     {
+        #region Properties
         public ObservableCollection<Card> Cards { get; set; }
         public int GameRows { get; set; }
         public int GameColumns { get; set; }
+
         private readonly GameManager _gameManager;
+        #endregion
 
         public PlayGameSingleplayer(GameConfiguration config)
         {
             InitializeComponent();
+
+            // For safety fallback reasons
+            if (config.NumberRows * config.NumberColumns != config.NumberOfCards)
+            {
+                config.NumberRows = 4;
+                config.NumberColumns = 4;
+                config.NumberOfCards = 16;
+            }
 
             Cards = new ObservableCollection<Card>();
             GameBoard.ItemsSource = Cards;
@@ -44,14 +45,39 @@ namespace Client.Views.Singleplayer
             this.DataContext = this;
 
             _gameManager = new GameManager(Cards);
+            ConfigureGameEvents();
 
+            try
+            {
+                _gameManager.StartSingleplayerGame(config);
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Handle(ex, this, () => this.Close());
+            }
+        }
+
+        #region Event Configuration
+
+        private void ConfigureGameEvents()
+        {
             _gameManager.TimerUpdated += OnTimerUpdated;
             _gameManager.ScoreUpdated += OnScoreUpdated;
             _gameManager.GameWon += OnGameWon;
             _gameManager.GameLost += OnGameLost;
-
-            _gameManager.StartSingleplayerGame(config);
         }
+
+        private void UnsubscribeEvents()
+        {
+            _gameManager.TimerUpdated -= OnTimerUpdated;
+            _gameManager.ScoreUpdated -= OnScoreUpdated;
+            _gameManager.GameWon -= OnGameWon;
+            _gameManager.GameLost -= OnGameLost;
+        }
+
+        #endregion
+
+        #region Game Event Handlers
 
         private void OnTimerUpdated(string timeString)
         {
@@ -68,11 +94,7 @@ namespace Client.Views.Singleplayer
             string winnerName = UserSession.Username ?? "Player";
             string statsInfo = $"{Lang.Global_Label_Score} {LabelScore.Content} | {Lang.MatchSummary_Label_TimeRemaining} {LabelTimer.Content}";
 
-            var summaryWindow = new MatchSummary(winnerName, statsInfo);
-            summaryWindow.Owner = this;
-            summaryWindow.ShowDialog();
-
-            ButtonBackToSelectDifficulty_Click(null, null);
+            ShowMatchSummary(winnerName, statsInfo);
         }
 
         private void OnGameLost()
@@ -80,46 +102,64 @@ namespace Client.Views.Singleplayer
             string title = Lang.Singleplayer_Title_TimeOver;
             string statsInfo = $"{Lang.Global_Label_Score}: {LabelScore.Content}";
 
-            var summaryWindow = new MatchSummary(title, statsInfo);
+            ShowMatchSummary(title, statsInfo);
+        }
+
+        private void ShowMatchSummary(string title, string stats)
+        {
+            var summaryWindow = new MatchSummary(title, stats);
             summaryWindow.Owner = this;
             summaryWindow.ShowDialog();
-
             ButtonBackToSelectDifficulty_Click(null, null);
         }
 
+        #endregion
+
+        #region UI Interactions
+
         private async void Card_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var clickedCard = button.DataContext as Card;
-
-            if (clickedCard != null)
+            if (sender is Button button && button.DataContext is Card clickedCard)
             {
-                await _gameManager.HandleCardClick(clickedCard);
+                try
+                {
+                    await _gameManager.HandleCardClick(clickedCard);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionManager.Handle(ex, this);
+                }
             }
         }
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
             _gameManager.StopGame();
-            Window settingsWindow = new Settings();
+            var settingsWindow = new Settings();
             settingsWindow.Owner = this;
-            settingsWindow.WindowState = this.WindowState;
             settingsWindow.ShowDialog();
         }
 
         public void ButtonBackToSelectDifficulty_Click(object sender, RoutedEventArgs e)
         {
+            UnsubscribeEvents();
             _gameManager.StopGame();
-            Window menuDifficulty = this.Owner;
 
-            if (menuDifficulty != null)
+            if (this.Owner != null)
             {
-                menuDifficulty.WindowState = this.WindowState;
-                menuDifficulty.Show();
+                this.Owner.WindowState = this.WindowState;
+                this.Owner.Show();
             }
             this.Close();
         }
 
-        
+        protected override void OnClosed(EventArgs e)
+        {
+            UnsubscribeEvents();
+            _gameManager.StopGame();
+            base.OnClosed(e);
+        }
+
+        #endregion
     }
 }

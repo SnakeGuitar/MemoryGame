@@ -74,7 +74,7 @@
     <Compile Include="Models\DifficultyPresets.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
     <Compile Include="Utilities\ExceptionManager.cs" />
-    <Compile Include="Utilities\GameConstants.cs" />
+    <Compile Include="Models\GameConstants.cs" />
     <Compile Include="Utilities\GameManager.cs" />
     <Compile Include="Utilities\GameServiceManager.cs" />
     <Compile Include="Utilities\UserSession.cs" />
