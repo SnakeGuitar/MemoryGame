@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -47,16 +48,25 @@ namespace Client.Utilities
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            if (_timeLeft.TotalSeconds > 0)
+            try
             {
-                _timeLeft = _timeLeft.Subtract(TimeSpan.FromSeconds(1));
-                TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
+                if (_timeLeft.TotalSeconds > 0)
+                {
+                    _timeLeft = _timeLeft.Subtract(TimeSpan.FromSeconds(1));
+                    TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
+                }
+                else
+                {
+                    StopGame();
+                    TimerUpdated?.Invoke("00:00");
+                    GameLost?.Invoke();
+                }
             }
-            else
+            catch (Exception ex)
             {
                 StopGame();
-                TimerUpdated?.Invoke("00:00");
                 GameLost?.Invoke();
+                System.Diagnostics.Debug.WriteLine($"[GAME MANAGER] Timer error: {ex.Message}");
             }
         }
 
