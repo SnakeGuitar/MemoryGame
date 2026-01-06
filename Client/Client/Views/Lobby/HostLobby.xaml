@@ -3,194 +3,137 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Client.Views.Lobby"
+        xmlns:lang="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
-        xmlns:language="clr-namespace:Client.Properties.Langs"
-        
-        Title="HostLobby" 
-        MinHeight="720" MinWidth="1280" 
+        Title="Host Lobby" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen"
+        Background="{StaticResource PrimaryTextColor}"
         Loaded="Window_Loaded">
 
-    <Grid Background="{StaticResource BackgroundColor}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-        <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20" ClipToBounds="True">
+        <Grid Grid.Row="0" Margin="20,10,20,0">
+            <Label Content="MULTIPLAYER" Style="{StaticResource LobbyTitleStyle}" 
+                   HorizontalAlignment="Left"/>
 
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Label Content="{x:Static lang:Lang.Lobby_Label_GameCode}" 
+                       Style="{StaticResource SubTitleStyle}" 
+                       Foreground="{StaticResource AccentForegroundColor}"
+                       FontSize="24" Margin="0,0,10,0"/>
+                <Label x:Name="LabelGameCode" Content="000000" 
+                       Style="{StaticResource SubTitleStyle}" 
+                       Foreground="{StaticResource AccentForegroundColor}"
+                       FontSize="24" FontWeight="Bold"/>
+            </StackPanel>
+        </Grid>
 
-                <Grid Grid.Row="0" Margin="20,10,20,0">
+        <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}">
+
+            <TabItem Header="Lobby" Style="{StaticResource TabItemStyle}">
+                <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="{x:Static language:Lang.Global_Title_Multiplayer}" 
-                           Style="{StaticResource LobbyTitleStyle}" 
-                           FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                    <Grid Grid.Column="0" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Label Content="{x:Static language:Lang.HostLobby_Label_GameCode}" 
-                               Style="{StaticResource RegisterLabelStyle}" Margin="0"/>
-                        
-                        <Label Name="LabelGameCode" Content="XXXXXX" 
-                               Foreground="White" FontWeight="Bold" 
-                               FontFamily="{StaticResource BodyFont}" FontSize="24" 
-                               VerticalAlignment="Center"/>
-                        
-                    </StackPanel>
-                </Grid>
+                        <Label Content="{x:Static lang:Lang.Global_Title_Players}" 
+                               Style="{StaticResource LobbySubTitleStyle}"/>
 
-                <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}" Margin="0,10,0,10">
-
-                    <TabItem Header="{x:Static language:Lang.Global_Title_Lobby}" Style="{StaticResource TabItemStyle}" Margin="-5,0,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Grid Grid.Column="0" Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <Label Content="{x:Static language:Lang.Global_Title_Players}" Style="{StaticResource LobbyTitleStyle}"/>
-                                <ListBox x:Name="PlayersListBox" 
-                                         Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1" Margin="5" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="PlayersListBox_SelectionChanged">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="5">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Label Content="{Binding Username}" 
-                                                       Grid.Column="0"
-                                                       FontFamily="{StaticResource BodyFont}" 
-                                                       FontSize="18"
-                                                       Padding="5,0,0,0"
-                                                       Foreground="{StaticResource AccentForegroundColor}"/>
-                                                <Label Grid.Column="1" 
-                                                       FontFamily="{StaticResource BodyFont}"
-                                                       FontSize="16" FontWeight="Bold">
-                                                    <Label.Style>
-                                                        <Style TargetType="Label">
-                                                            <Setter Property="Content" Value="No Listo"/>
-                                                            <Setter Property="Foreground" Value="{StaticResource AccentHoverColor}"/>
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding IsReady}" Value="True">
-                                                                    <Setter Property="Content" Value="Listo"/>
-                                                                    <Setter Property="Foreground" Value="#86C361"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Label.Style>
-                                                </Label>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </Grid>
-
-                            <Grid Grid.Column="1" Margin="10">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource LobbyTitleStyle}"/>
-                                <ListBox x:Name="ChatListBox" Style="{StaticResource LobbyListBoxStyle}" Grid.Row="1" Margin="5" SelectionChanged="ChatListBox_SelectionChanged" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-                                <Grid Grid.Row="2" VerticalAlignment="Bottom">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" Margin="5,5,5,5"/>
-                                    <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,5,0" Click="ButtonSendMessageToChat_Click"/>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </TabItem>
-
-                    <TabItem Header="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource TabItemStyle}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0" Margin="10">
-                                <Label Content="{x:Static language:Lang.HostLobby_Title_InviteFriends}" Style="{StaticResource LobbySubTitleStyle}"/>
-
-                                <Border Style="{StaticResource QuadrantBorderStyle}">
-                                    <StackPanel>
-                                        <Label Content="{x:Static language:Lang.HostLobby_Label_EnterFriendEmail}" Style="{StaticResource RegisterLabelStyle}" HorizontalAlignment="Left" Margin="10,0,0,5"/>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBox x:Name="TextBoxFriendEmail" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" />
-                                            <Button Content="{x:Static language:Lang.HostLobby_Button_SendInvitation}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" FontSize="16" Width="120" Click="ButtonSendInvitationToFriend_Click"/>
-                                        </Grid>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1" Margin="10">
-                                <Label Content="{x:Static language:Lang.HostLobby_Title_GameSettings}" Style="{StaticResource LobbySubTitleStyle}"/>
-
-                                <Border Style="{StaticResource QuadrantBorderStyle}">
-                                    <StackPanel>
-                                        <Label Content="{x:Static language:Lang.Global_Label_NumberOfCards}" Style="{StaticResource RegisterLabelStyle}"/>
-                                        <ComboBox x:Name="ComboBoxNumberOfCards" Style="{StaticResource FormComboBoxStyle}" SelectionChanged="ComboBoxNumberOfCards_SelectionChanged"/>
-                                        <Label Content="{x:Static language:Lang.HostLobby_Label_TimePerTurn}" Style="{StaticResource RegisterLabelStyle}"/>
-                                        <Slider x:Name="SliderSecondsPerTurn" Style="{StaticResource FormSliderStyle}" ValueChanged="SliderSecondsPerTurn_ValueChanged"/>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Label x:Name="LabelTimerValue" Content="30" Style="{StaticResource FormValueLabelStyle}"/>
-                                            <Label Content="{x:Static language:Lang.Global_Label_Seconds}" Style="{StaticResource FormUnitLabelStyle}"/>
-                                        </StackPanel>
-                                        <Label Content="Player" Style="{StaticResource RegisterLabelStyle}" 
-                                               x:Name ="LabelPlayer1" Width="592"/>
-                                        <Label Content="Player" Style="{StaticResource RegisterLabelStyle}"
-                                               x:Name= "LabelPlayer3" Width="592"/>
-                                        <Label Content="Player" Style="{StaticResource RegisterLabelStyle}" 
-                                               x:Name ="LabelPlayer2" Width="592"/>
-                                        <Label Content="Player" Style="{StaticResource RegisterLabelStyle}"
-                                                  x:Name= "LabelPlayer4" Width="592"/>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-
-                        </Grid>
-                    </TabItem>
-
-                </TabControl>
-
-                <Border Grid.Row="2" Background="{StaticResource PrimaryTextColor}" Padding="10,0,10,0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Content="{x:Static language:Lang.Global_Button_Back}" 
-                                Style="{StaticResource MenuExitLobbyButtonStyle}" 
-                                Grid.Column="0" HorizontalAlignment="Left" Margin="200,10,0,10"
-                                Click="ButtonBackToMenu_Click"/>
-
-                        <Button Content="{x:Static language:Lang.Global_Button_Play}" 
-                                Style="{StaticResource PrimaryLobbyButtonStyle}" 
-                                Grid.Column="1" HorizontalAlignment="Right" Margin="0,10,200,10"
-                                Click="ButtonStartMatch_Click"/>
+                        <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}">
+                            <ListBox x:Name="PlayersListBox" Style="{StaticResource LobbyListBoxStyle}"/>
+                        </Border>
                     </Grid>
-                </Border>
-            </Grid>
-        </Border>
+
+                    <Grid Grid.Column="1" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{x:Static lang:Lang.Global_Title_Chat}" 
+                               Style="{StaticResource LobbySubTitleStyle}"/>
+
+                        <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}">
+                            <ListBox x:Name="ChatListBox" Style="{StaticResource LobbyListBoxStyle}"/>
+                        </Border>
+
+                        <Grid Grid.Row="2" Margin="10,0,10,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}"/>
+
+                            <Button Content="{x:Static lang:Lang.Global_Button_Send}" 
+                                    Style="{StaticResource SendButtonStyle}" 
+                                    Grid.Column="1" Click="ButtonSendMessageToChat_Click"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Settings" Style="{StaticResource TabItemStyle}">
+                <Grid>
+                    <Border Style="{StaticResource QuadrantBorderStyle}" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center" 
+                            Width="500" Height="400">
+                        <StackPanel VerticalAlignment="Center">
+
+                            <Label Content="Number of Cards" Style="{StaticResource FormUnitLabelStyle}" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="ComboBoxNumberOfCards" Style="{StaticResource FormComboBoxStyle}"
+                                      SelectionChanged="ComboBoxNumberOfCards_SelectionChanged">
+                                <ComboBoxItem Content="16"/>
+                                <ComboBoxItem Content="20"/>
+                                <ComboBoxItem Content="24"/>
+                                <ComboBoxItem Content="30"/>
+                                <ComboBoxItem Content="36"/>
+                            </ComboBox>
+
+                            <Label Content="Seconds per Turn" Style="{StaticResource FormUnitLabelStyle}" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Slider x:Name="SliderSecondsPerTurn" Style="{StaticResource FormSliderStyle}"
+                                        Minimum="5" Maximum="60" Value="30" 
+                                        TickFrequency="5" IsSnapToTickEnabled="True"
+                                        ValueChanged="SliderSecondsPerTurn_ValueChanged"/>
+                                <Label x:Name="LabelTimerValue" Content="30" Style="{StaticResource FormValueLabelStyle}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="2" Margin="40,0,40,30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="ButtonBack" 
+                    Content="{x:Static lang:Lang.Global_Button_Back}" 
+                    Style="{StaticResource MenuExitLobbyButtonStyle}"
+                    Grid.Column="0" Click="ButtonBackToMenu_Click"/>
+
+            <Button x:Name="ButtonStart" 
+                    Content="Play" 
+                    Style="{StaticResource PrimaryLobbyButtonStyle}"
+                    Grid.Column="2" Click="ButtonStartMatch_Click"/>
+        </Grid>
     </Grid>
 </Window>
