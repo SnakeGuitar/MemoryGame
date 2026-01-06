@@ -10,47 +10,59 @@ using System.Windows.Threading;
 
 namespace Client.Utilities
 {
+    /// <summary>
+    /// Manages the core game logic, including turn processing, score tracking, 
+    /// timer management, and win/loss conditions.
+    /// </summary>
     public class GameManager
     {
+        #region Events
         public event Action<string> TimerUpdated;
         public event Action<int> ScoreUpdated;
         public event Action GameWon;
         public event Action GameLost;
+        #endregion
 
-        private DispatcherTimer gameTimer;
-        private TimeSpan timeLeft;
-        private int score;
-        private bool isProcessingTurn;
-        private Card firstCardFlipped;
-        private readonly ObservableCollection<Card> cardsOnBoard;
+        #region Private Fields
+        private DispatcherTimer _gameTimer;
+        private TimeSpan _timeLeft;
+        private int _score;
+        private bool _isProcessingTurn;
+        private Card _firstCardFlipped;
+        private readonly ObservableCollection<Card> _cardsOnBoard;
+        #endregion
 
         public GameManager(ObservableCollection<Card> cardsCollection)
         {
-            cardsOnBoard = cardsCollection;
+            _cardsOnBoard = cardsCollection ?? throw new ArgumentNullException(nameof(cardsCollection));
             InitializeTimer();
         }
 
         private void InitializeTimer()
         {
-            gameTimer = new DispatcherTimer();
-            gameTimer.Interval = TimeSpan.FromSeconds(1);
-            gameTimer.Tick += GameTimer_Tick;
+            _gameTimer = new DispatcherTimer();
+            _gameTimer.Interval = TimeSpan.FromSeconds(1);
+            _gameTimer.Tick += GameTimer_Tick;
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-            if (timeLeft.TotalSeconds > 0)
+            if (_timeLeft.TotalSeconds > 0)
             {
-                timeLeft = timeLeft.Subtract(TimeSpan.FromSeconds(1));
-                TimerUpdated?.Invoke(timeLeft.ToString(@"mm\:ss"));
+                _timeLeft = _timeLeft.Subtract(TimeSpan.FromSeconds(1));
+                TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
             }
             else
             {
-                gameTimer.Stop();
+                StopGame();
                 TimerUpdated?.Invoke("00:00");
                 GameLost?.Invoke();
             }
         }
+
+        /// <summary>
+        /// Starts a singleplayer game with a locally generated random deck.
+        /// </summary>
         public void StartSingleplayerGame(GameConfiguration configuration)
         {
             ResetGameState(configuration.TimeLimitSeconds);
@@ -58,12 +70,46 @@ namespace Client.Utilities
             var deck = GenerateRandomDeck(configuration.NumberOfCards);
             foreach (var card in deck)
             {
-                cardsOnBoard.Add(card);
+                _cardsOnBoard.Add(card);
             }
 
-            gameTimer.Start();
+            _gameTimer.Start();
         }
 
+        /// <summary>
+        /// Starts a multiplayer game using the synchronized deck provided by the server.
+        /// </summary>
+        public void StartMultiplayerGame(GameConfiguration configuration, List<CardInfo> serverCards)
+        {
+            ResetGameState(configuration.TimeLimitSeconds);
+
+            int index = 0;
+            foreach (var info in serverCards)
+            {
+                string imagePath = $"{GameConstants.ColorCardFrontBasePath}{info.ImageIdentifier}.png";
+                var newCard = new Card(index, info.CardId, imagePath);
+
+                _cardsOnBoard.Add(newCard);
+                index++;
+            }
+            _gameTimer.Start();
+        }
+
+        private void ResetGameState(int seconds)
+        {
+            _timeLeft = TimeSpan.FromSeconds(seconds);
+            _score = 0;
+            _firstCardFlipped = null;
+            _isProcessingTurn = false;
+            _cardsOnBoard.Clear();
+
+            TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
+            ScoreUpdated?.Invoke(0);
+        }
+
+        /// <summary>
+        /// Generates a shuffled deck of cards locally.
+        /// </summary>
         private List<Card> GenerateRandomDeck(int numberOfCards)
         {
             List<string> imagePaths = new List<string>
@@ -78,87 +124,69 @@ namespace Client.Utilities
             for (int i = 0; i < pairsNeeded; i++)
             {
                 string imgName = imagePaths[i % imagePaths.Count];
-                string fullPath = $"/Client;component/Resources/Images/Cards/Fronts/Color/{imgName}.png";
+                string fullPath = $"{GameConstants.ColorCardFrontBasePath}{imgName}.png";
 
                 deck.Add(new Card(i * 2, i, fullPath));
                 deck.Add(new Card(i * 2 + 1, i, fullPath));
             }
 
-            Random rng = new Random();
-            return deck.OrderBy(x => rng.Next()).ToList();
+            return deck.OrderBy(x => Guid.NewGuid()).ToList();
         }
 
-        public void StartMultiplayerGame(GameConfiguration configuration, List<CardInfo> serverCards)
-        {
-            ResetGameState(configuration.TimeLimitSeconds);
-
-            int index = 0;
-            foreach (var info in serverCards)
-            {
-                string imagePath = $"/Client;component/Resources/Images/Cards/Fronts/Color/{info.ImageIdentifier}.png";
-                var newCard = new Card(index, info.CardId, imagePath);
-
-                cardsOnBoard.Add(newCard);
-                index++;
-            }
-            gameTimer.Start();
-        }
-        private void ResetGameState(int seconds)
-        {
-            timeLeft = TimeSpan.FromSeconds(seconds);
-            score = 0;
-            firstCardFlipped = null;
-            isProcessingTurn = false;
-            cardsOnBoard.Clear();
-
-            TimerUpdated?.Invoke(timeLeft.ToString(@"mm\:ss"));
-            ScoreUpdated?.Invoke(0);
-        }
+        /// <summary>
+        /// Handles the logic when a card is clicked by the user.
+        /// </summary>
         public async Task HandleCardClick(Card clickedCard)
         {
-            if (isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched) return;
+            if (_isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched) return;
 
             clickedCard.IsFlipped = true;
 
-            if (firstCardFlipped == null)
+            if (_firstCardFlipped == null)
             {
-                firstCardFlipped = clickedCard;
+                _firstCardFlipped = clickedCard;
             }
             else
             {
-                isProcessingTurn = true;
-                if (firstCardFlipped.PairId == clickedCard.PairId)
+                _isProcessingTurn = true;
+
+                if (_firstCardFlipped.PairId == clickedCard.PairId)
                 {
-                    await Task.Delay(500);
-                    firstCardFlipped.IsMatched = true;
+                    await Task.Delay(GameConstants.MatchFeedbackDelay);
+
+                    _firstCardFlipped.IsMatched = true;
                     clickedCard.IsMatched = true;
-                    score += 10;
-                    ScoreUpdated?.Invoke(score);
+
+                    _score += GameConstants.PointsPerMatch;
+                    ScoreUpdated?.Invoke(_score);
+
                     CheckWinCondition();
                 }
                 else
                 {
-                    await Task.Delay(1000);
-                    firstCardFlipped.IsFlipped = false;
+                    await Task.Delay(GameConstants.MismatchFeedbackDelay);
+
+                    _firstCardFlipped.IsFlipped = false;
                     clickedCard.IsFlipped = false;
                 }
-                firstCardFlipped = null;
-                isProcessingTurn = false;
+
+                _firstCardFlipped = null;
+                _isProcessingTurn = false;
             }
         }
 
         private void CheckWinCondition()
         {
-            if (cardsOnBoard.All(c => c.IsMatched))
+            if (_cardsOnBoard.All(c => c.IsMatched))
             {
-                gameTimer.Stop();
+                StopGame();
                 GameWon?.Invoke();
             }
         }
 
         public void StopGame()
         {
-            gameTimer?.Stop();
+            _gameTimer?.Stop();
         }
     }
 }
