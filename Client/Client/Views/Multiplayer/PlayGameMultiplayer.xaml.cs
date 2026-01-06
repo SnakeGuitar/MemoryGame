@@ -8,7 +8,6 @@ using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,31 +18,56 @@ namespace Client.Views.Multiplayer
 {
     /// <summary>
     /// Interaction logic for PlayGameMultiplayer.xaml.
-    /// Implements synchronized gameplay, thread-safe UI updates, and robust resource cleanup.
+    /// Manages the synchronized game session, turn logic, and UI updates for multiple players.
     /// </summary>
     public partial class PlayGameMultiplayer : Window
     {
         #region Private Fields & Constants
-        private const int MaxChatMessages = 100;
 
+        /// <summary>
+        /// Maximum number of messages to keep in the chat list to prevent memory issues.
+        /// </summary>
+        private const int MaxChatMessages = 50;
+
+        /// <summary>
+        /// Manages the core game logic (timer, matches) locally.
+        /// </summary>
         private readonly GameManager _gameManager;
+
+        /// <summary>
+        /// List of players participating in the current match.
+        /// </summary>
         private readonly List<LobbyPlayerInfo> _players;
+
+        /// <summary>
+        /// Tracks the username of the player whose turn is currently active.
+        /// Used to direct timer and score updates to the correct UI slot.
+        /// </summary>
+        private string _currentTurnPlayer;
 
         private Border[] _playerBorders;
         private Label[] _playerNames;
         private Label[] _playerScores;
         private Label[] _playerTimes;
+
         #endregion
 
-        #region Properties
-        public ObservableCollection<Card> Cards { get; set; }
-        #endregion
+        #region Public Properties
 
         /// <summary>
-        /// Initializes a new instance of the multiplayer game session.
+        /// Collection of cards bound to the GameBoard UI.
         /// </summary>
-        /// <param name="serverCards">The deck configuration received from the server.</param>
-        /// <param name="players">The list of participants.</param>
+        public ObservableCollection<Card> Cards { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the multiplayer game window.
+        /// </summary>
+        /// <param name="serverCards">The shuffled list of cards received from the server.</param>
+        /// <param name="players">The list of players in the lobby.</param>
         public PlayGameMultiplayer(List<CardInfo> serverCards, List<LobbyPlayerInfo> players)
         {
             InitializeComponent();
@@ -61,11 +85,19 @@ namespace Client.Views.Multiplayer
             _gameManager = new GameManager(Cards);
             ConfigureEvents();
 
+            _currentTurnPlayer = _players.FirstOrDefault()?.Name;
+            HighlightActivePlayer(_currentTurnPlayer);
+
             StartGameSafe(serverCards);
         }
 
+        #endregion
+
         #region Initialization
 
+        /// <summary>
+        /// Maps XAML controls to arrays for easy index-based manipulation.
+        /// </summary>
         private void InitializeUIArrays()
         {
             _playerBorders = new Border[] { BorderP1, BorderP2, BorderP3, BorderP4 };
@@ -74,6 +106,9 @@ namespace Client.Views.Multiplayer
             _playerTimes = new Label[] { LabelP1Time, LabelP2Time, LabelP3Time, LabelP4Time };
         }
 
+        /// <summary>
+        /// Configures the visibility and initial content of player panels based on the lobby list.
+        /// </summary>
         private void SetupPlayerUI()
         {
             for (int i = 0; i < _playerBorders.Length; i++)
@@ -98,6 +133,9 @@ namespace Client.Views.Multiplayer
             }
         }
 
+        /// <summary>
+        /// Starts the game logic within a try-catch block to handle potential startup errors.
+        /// </summary>
         private void StartGameSafe(List<CardInfo> serverCards)
         {
             try
@@ -120,6 +158,9 @@ namespace Client.Views.Multiplayer
 
         #region Event Management
 
+        /// <summary>
+        /// Subscribes to GameManager and GameServiceManager events.
+        /// </summary>
         private void ConfigureEvents()
         {
             _gameManager.TimerUpdated += OnTimerUpdated;
@@ -131,6 +172,9 @@ namespace Client.Views.Multiplayer
             GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
         }
 
+        /// <summary>
+        /// Unsubscribes from all events to prevent memory leaks and ghost updates.
+        /// </summary>
         private void UnsubscribeEvents()
         {
             _gameManager.TimerUpdated -= OnTimerUpdated;
@@ -144,34 +188,91 @@ namespace Client.Views.Multiplayer
 
         #endregion
 
-        #region Game Callbacks (Thread-Safe)
+        #region Game Logic Callbacks
 
+        /// <summary>
+        /// Called when the game timer ticks. Updates the UI timer for the current turn player.
+        /// </summary>
+        /// <param name="timeString">Formatted time string (e.g., "00:30").</param>
         private void OnTimerUpdated(string timeString)
         {
             Dispatcher.Invoke(() =>
             {
                 if (!this.IsLoaded) return;
 
-                if (_playerTimes[0] != null)
+                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
+
+                if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
                 {
-                    _playerTimes[0].Content = $"Time: {timeString}";
+                    if (_playerTimes[activeIndex] != null)
+                    {
+                        _playerTimes[activeIndex].Content = $"Time: {timeString}";
+                    }
                 }
             });
         }
 
+        /// <summary>
+        /// Called when a match is found. Updates the score for the current turn player.
+        /// </summary>
+        /// <param name="newScore">The accumulated score.</param>
         private void OnScoreUpdated(int newScore)
         {
             Dispatcher.Invoke(() =>
             {
                 if (!this.IsLoaded) return;
 
-                int myIndex = _players.FindIndex(p => p.Name == UserSession.Username);
-                if (myIndex >= 0 && myIndex < _playerScores.Length)
+                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
+
+                if (activeIndex >= 0 && activeIndex < _playerScores.Length)
                 {
                     int pairs = newScore / GameConstants.PointsPerMatch;
-                    _playerScores[myIndex].Content = $"Pairs: {pairs}";
+                    _playerScores[activeIndex].Content = $"Pairs: {pairs}";
                 }
             });
+        }
+
+        /// <summary>
+        /// Updates the local turn state when the server notifies a turn change.
+        /// </summary>
+        /// <param name="nextPlayerName">The username of the next player.</param>
+        public void OnTurnUpdated(string nextPlayerName)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _currentTurnPlayer = nextPlayerName;
+
+                foreach (var lbl in _playerTimes)
+                {
+                    if (lbl != null && lbl.Visibility == Visibility.Visible)
+                        lbl.Content = "Time: --";
+                }
+
+                HighlightActivePlayer(nextPlayerName);
+            });
+        }
+
+        /// <summary>
+        /// Visually highlights the active player's name.
+        /// </summary>
+        private void HighlightActivePlayer(string playerName)
+        {
+            for (int i = 0; i < _playerNames.Length; i++)
+            {
+                if (i < _players.Count)
+                {
+                    if (_players[i].Name == playerName)
+                    {
+                        _playerNames[i].Foreground = Brushes.Gold;
+                        _playerNames[i].FontWeight = FontWeights.Bold;
+                    }
+                    else
+                    {
+                        _playerNames[i].Foreground = Brushes.White;
+                        _playerNames[i].FontWeight = FontWeights.Normal;
+                    }
+                }
+            }
         }
 
         private void OnGameWon()
@@ -180,9 +281,10 @@ namespace Client.Views.Multiplayer
             {
                 if (!this.IsLoaded) return;
 
-                string winnerName = UserSession.Username ?? "Player";
+                string winnerName = DetermineWinner();
                 string statsInfo = $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}";
-                ShowMatchSummary(winnerName, statsInfo);
+
+                ShowMatchSummary(winnerName + " Wins!", statsInfo);
             });
         }
 
@@ -191,17 +293,17 @@ namespace Client.Views.Multiplayer
             Dispatcher.Invoke(() =>
             {
                 if (!this.IsLoaded) return;
-
-                string title = Lang.Singleplayer_Title_TimeOver;
-                string statsInfo = $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}";
-                ShowMatchSummary(title, statsInfo);
+                ShowMatchSummary(Lang.Singleplayer_Title_TimeOver, $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}");
             });
         }
 
         #endregion
 
-        #region Service Callbacks (Chat & Players)
+        #region Service Callbacks (Chat & Connection)
 
+        /// <summary>
+        /// Handles incoming chat messages from the server.
+        /// </summary>
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
             Dispatcher.Invoke(() =>
@@ -223,6 +325,9 @@ namespace Client.Views.Multiplayer
             });
         }
 
+        /// <summary>
+        /// Handles a player leaving the game session.
+        /// </summary>
         private void OnPlayerLeft(string playerName)
         {
             Dispatcher.Invoke(() =>
@@ -242,10 +347,18 @@ namespace Client.Views.Multiplayer
 
         #endregion
 
-        #region User Interaction
+        #region UI Interactions
 
+        /// <summary>
+        /// Handles card click events.
+        /// </summary>
         private async void Card_Click(object sender, RoutedEventArgs e)
         {
+            if (_currentTurnPlayer != UserSession.Username)
+            {
+                return;
+            }
+
             if (sender is Button button && button.DataContext is Card clickedCard)
             {
                 try
@@ -259,6 +372,9 @@ namespace Client.Views.Multiplayer
             }
         }
 
+        /// <summary>
+        /// Sends a chat message to the lobby.
+        /// </summary>
         private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
@@ -279,7 +395,6 @@ namespace Client.Views.Multiplayer
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-            _gameManager.StopGame();
             var settingsWindow = new Settings();
             settingsWindow.Owner = this;
             settingsWindow.ShowDialog();
@@ -293,6 +408,11 @@ namespace Client.Views.Multiplayer
         #endregion
 
         #region Helpers & Cleanup
+
+        private string DetermineWinner()
+        {
+            return "Game Over";
+        }
 
         private string GetMyCurrentScore()
         {
@@ -313,6 +433,9 @@ namespace Client.Views.Multiplayer
             _ = LeaveGameSafe();
         }
 
+        /// <summary>
+        /// Safely leaves the lobby and closes the window.
+        /// </summary>
         private async Task LeaveGameSafe()
         {
             UnsubscribeEvents();
@@ -324,7 +447,7 @@ namespace Client.Views.Multiplayer
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[LeaveGame Warning]: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[LeaveGame Warning]: {ex.Message}");
             }
             finally
             {
@@ -336,12 +459,19 @@ namespace Client.Views.Multiplayer
             }
         }
 
+        /// <summary>
+        /// Ensures cleanup when the window is closed by external means (Alt+F4).
+        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
             _gameManager.StopGame();
 
-            try { GameServiceManager.Instance.Client.LeaveLobbyAsync(); } catch { }
+            try
+            {
+                GameServiceManager.Instance.Client.LeaveLobbyAsync();
+            }
+            catch { }
 
             base.OnClosed(e);
         }
