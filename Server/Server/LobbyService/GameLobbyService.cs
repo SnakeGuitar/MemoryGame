@@ -5,8 +5,10 @@ using Server.Shared;
 using Server.Validator;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace Server.LobbyService
 {
@@ -22,6 +24,7 @@ namespace Server.LobbyService
         private readonly IGameLobbyServiceValidator _validator;
         private readonly ILoggerManager _logger;
         private readonly IDbContextFactory _dbFactory;
+
         public GameLobbyService(ISecurityService securityService,
             ISessionManager sessionManager,
             ILobbyCallbackProvider callbackProvider,
@@ -82,31 +85,30 @@ namespace Server.LobbyService
 
         public bool CreateLobby(string token, string gameCode)
         {
+            if (!_validator.IsValidGameCode(gameCode))
             {
-                if (!_validator.IsValidGameCode(gameCode))
-                { 
-                    return false;
-                }
-
-                var client = PrepareClient(token, false, null);
-                if (client == null) 
-                { 
-                    return false; 
-                }
-
-                if (_stateManager.TryCreateLobby(gameCode, client, out var lobby))
-                {
-                    _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
-                    SubscribeToDisconnect(client.Callback, client.SessionId);
-                    return true;
-                }
-
                 return false;
             }
+
+            var client = PrepareClient(token, false, null);
+            if (client == null)
+            {
+                return false;
+            }
+
+            if (_stateManager.TryCreateLobby(gameCode, client, out var lobby))
+            {
+                _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
+                SubscribeToDisconnect(client.Callback, client.SessionId);
+                return true;
+            }
+
+            return false;
         }
+
         public void LeaveLobby()
         {
-            var sessionId = OperationContext.Current?.SessionId;
+            var sessionId = _callbackProvider.GetSessionId();
             if (sessionId != null)
             {
                 HandleDisconnection(sessionId);
@@ -122,7 +124,7 @@ namespace Server.LobbyService
                 return;
             }
 
-            var sessionId = OperationContext.Current?.SessionId;
+            var sessionId = _callbackProvider.GetSessionId();
             if (sessionId == null)
             {
                 _logger.LogWarn("Chat message attempted with null session ID.");
@@ -143,26 +145,91 @@ namespace Server.LobbyService
 
         public void StartGame(GameSettings settings)
         {
-            var sessionId = OperationContext.Current?.SessionId;
+            var sessionId = _callbackProvider.GetSessionId();
             if (sessionId == null)
             {
-                _logger.LogWarn($"{nameof(StartGame)}");
+                _logger.LogWarn($"{nameof(StartGame)} called with null session ID.");
                 return;
+            }
+
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
+            if (lobby == null)
+            {
+                _logger.LogWarn($"Cannot start game: Session {sessionId} not in lobby.");
+                throw new FaultException("Not in a lobby.");
             }
 
             if (!_stateManager.TryStartGame(sessionId, settings, out var gameCode))
             {
-                _logger.LogInfo($"Starting game {sessionId}");
+                _logger.LogInfo($"Failed to start game {gameCode}");
                 throw new FaultException("Cannot start game. Either not in lobby or game already started.");
             }
 
-            var lobby = _stateManager.GetLobbyBySession(sessionId);
+            var gameManager = _stateManager.GetGameManager(sessionId);
+            if (gameManager != null)
+            {
+                gameManager.GameEnded += (winnerId, scores) => OnGameEnded(lobby, winnerId, scores);
+            }
+
             _notifier.BroadcastMessage(lobby, "Game has started!", true, "System");
+        }
+
+        private void OnGameEnded(Lobby lobby, string winnerClientId, Dictionary<string, int> scores)
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    using (var db = _dbFactory.Create())
+                    {
+                        var match = new match
+                        {
+                            endDateTime = DateTime.UtcNow
+                        };
+                        db.match.Add(match);
+                        db.SaveChanges();
+
+                        int? winnerUserId = null;
+                        if (lobby.Clients.TryGetValue(winnerClientId, out var winnerClient))
+                        {
+                            winnerUserId = winnerClient.UserId;
+                        }
+
+                        foreach (var kvp in scores)
+                        {
+                            string clientId = kvp.Key;
+                            int score = kvp.Value;
+
+                            if (lobby.Clients.TryGetValue(clientId, out var client))
+                            {
+                                if (client.UserId.HasValue)
+                                {
+                                    var history = new matchHistory
+                                    {
+                                        matchId = match.matchId,
+                                        userId = client.UserId.Value,
+                                        score = score,
+                                        winnerId = winnerUserId ?? -1
+                                    };
+                                    db.matchHistory.Add(history);
+                                }
+                            }
+                        }
+
+                        db.SaveChanges();
+                        _logger.LogInfo($"Match stats saved for Game {lobby.GameCode}. Match ID: {match.matchId}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error saving match stats for lobby {lobby.GameCode}: {ex.Message}");
+                }
+            });
         }
 
         public void FlipCard(int cardIndex)
         {
-            var sessionId = OperationContext.Current?.SessionId;
+            var sessionId = _callbackProvider.GetSessionId();
             if (sessionId == null)
             {
                 _logger.LogWarn($"{nameof(FlipCard)} called with null session ID.");
@@ -177,7 +244,7 @@ namespace Server.LobbyService
                 if (_validator.IsValidCardIndex(cardIndex, 100))
                 {
                     gameManager.HandleFlipCard(playerId, cardIndex);
-                    _logger.LogInfo($"Player {playerId} flipped card {cardIndex}.");
+                    _logger.LogInfo($"Player {playerId} flipped card {cardIndex} in session {sessionId}.");
                 }
             }
         }
@@ -210,7 +277,8 @@ namespace Server.LobbyService
         private LobbyClient PrepareClient(string token, bool isGuest, string guestName)
         {
             var callback = _callbackProvider.GetCallback();
-            string sessionId = OperationContext.Current?.SessionId ?? Guid.NewGuid().ToString();
+
+            string sessionId = _callbackProvider.GetSessionId() ?? Guid.NewGuid().ToString();
 
             if (_stateManager.IsInLobby(sessionId))
             {
@@ -218,7 +286,8 @@ namespace Server.LobbyService
                 return null;
             }
 
-            string playerName = ResolvePlayerName(token, isGuest, guestName);
+            string playerName = ResolvePlayerIdentity(token, isGuest, guestName, out int? userId);
+
             if (string.IsNullOrEmpty(playerName))
             {
                 _logger.LogWarn($"Failed to resolve player name for session {sessionId}.");
@@ -226,6 +295,7 @@ namespace Server.LobbyService
             }
 
             _logger.LogInfo($"Preparing LobbyClient for player {playerName} (Session: {sessionId})");
+
             return new LobbyClient
             {
                 Id = Guid.NewGuid().ToString("N"),
@@ -233,22 +303,27 @@ namespace Server.LobbyService
                 IsGuest = isGuest,
                 Callback = callback,
                 JoinedAt = DateTime.UtcNow,
-                SessionId = sessionId
+                SessionId = sessionId,
+                UserId = userId
             };
         }
 
-        private string ResolvePlayerName(string token, bool isGuest, string guestName)
+        private string ResolvePlayerIdentity(string token, bool isGuest, string guestName, out int? userId)
         {
+            userId = null;
+
             if (isGuest)
             {
                 _logger.LogInfo("Resolving guest player name.");
                 return _validator.IsValidGuestName(guestName) ? guestName.Trim() : null;
             }
-            int? userId = _sessionManager.GetUserIdFromToken(token);
+
+            userId = _sessionManager.GetUserIdFromToken(token);
 
             _logger.LogInfo(userId.HasValue
                 ? $"Resolved player name for user ID {userId.Value}."
                 : "Failed to resolve player name from token.");
+
             return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
         }
     }

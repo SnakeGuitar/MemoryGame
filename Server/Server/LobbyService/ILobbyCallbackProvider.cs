@@ -10,6 +10,7 @@ namespace Server.LobbyService
     public interface ILobbyCallbackProvider
     {
         IGameLobbyCallback GetCallback();
+        string GetSessionId();
     }
 
     public class WcfLobbyCallbackProvider : ILobbyCallbackProvider
@@ -17,6 +18,11 @@ namespace Server.LobbyService
         public IGameLobbyCallback GetCallback()
         {
             return OperationContext.Current.GetCallbackChannel<IGameLobbyCallback>();
+        }
+
+        public string GetSessionId()
+        {
+            return OperationContext.Current.SessionId;
         }
     }
 }
