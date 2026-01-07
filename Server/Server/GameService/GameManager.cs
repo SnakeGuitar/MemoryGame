@@ -9,6 +9,8 @@ namespace Server.GameService
 {
     public class GameManager
     {
+        #region Private Fields
+
         private readonly GameDeck _deck;
         private readonly GameNotifier _notifier;
         private readonly GameTurnTimer _turnTimer;
@@ -21,6 +23,8 @@ namespace Server.GameService
         private int _currentPlayerIndex;
         private GameDeck.GameCard _firstFlippedCard;
         private bool _isProcessingMismatch;
+
+        #endregion
 
         public bool IsGameInProgress { get; private set; }
 
@@ -42,9 +46,12 @@ namespace Server.GameService
         {
             lock (_gameLock)
             {
-                if (IsGameInProgress) return;
-                IsGameInProgress = true;
+                if (IsGameInProgress)
+                {
+                    return;
+                }
 
+                IsGameInProgress = true;
                 _currentPlayerIndex = new Random().Next(_players.Count);
             }
 
@@ -62,14 +69,27 @@ namespace Server.GameService
 
             lock (_gameLock)
             {
-                if (!IsGameInProgress || _isProcessingMismatch) return;
+                if (!IsGameInProgress || _isProcessingMismatch)
+                {
+                    return;
+                }
 
                 var currentPlayer = _players[_currentPlayerIndex];
-                if (currentPlayer.Id != playerId) return;
+                if (currentPlayer.Id != playerId)
+                {
+                    return;
+                }
 
                 var card = _deck.GetCard(cardIndex);
-                if (card == null || card.IsMatched) return;
-                if (_firstFlippedCard != null && _firstFlippedCard.Index == cardIndex) return;
+                if (card == null || card.IsMatched)
+                {
+                    return;
+                }
+
+                if (_firstFlippedCard != null && _firstFlippedCard.Index == cardIndex)
+                {
+                    return;
+                }
 
                 imageToSend = card.Info.ImageIdentifier;
 
@@ -83,6 +103,7 @@ namespace Server.GameService
                     card1 = _firstFlippedCard;
                     card2 = card;
                     _firstFlippedCard = null;
+
                     _turnTimer.Stop();
 
                     if (card1.Info.CardId == card2.Info.CardId)
@@ -171,10 +192,14 @@ namespace Server.GameService
 
         private void OnTurnTimeout()
         {
+            bool shouldAdvance = false;
+
             lock (_gameLock)
             {
                 if (!_isProcessingMismatch && IsGameInProgress)
                 {
+                    shouldAdvance = true;
+
                     if (_firstFlippedCard != null)
                     {
                         var c = _firstFlippedCard;
@@ -183,7 +208,11 @@ namespace Server.GameService
                     }
                 }
             }
-            AdvanceTurn();
+
+            if (shouldAdvance)
+            {
+                AdvanceTurn();
+            }
         }
 
         private void AdvanceTurn()
@@ -198,9 +227,13 @@ namespace Server.GameService
         private void StartNewTurn(bool samePlayer = false)
         {
             string name;
+
             lock (_gameLock)
             {
-                if (!IsGameInProgress) return;
+                if (!IsGameInProgress)
+                {
+                    return;
+                }
                 name = _players[_currentPlayerIndex].Name;
             }
 
@@ -210,8 +243,14 @@ namespace Server.GameService
 
         private GameSettings SanitizeSettings(GameSettings s)
         {
-            if (s.CardCount < 16 || s.CardCount % 2 != 0) s.CardCount = 16;
-            if (s.TurnTimeSeconds < 5) s.TurnTimeSeconds = 5;
+            if (s.CardCount < 16 || s.CardCount % 2 != 0)
+            {
+                s.CardCount = 16;
+            }
+            if (s.TurnTimeSeconds < 5)
+            {
+                s.TurnTimeSeconds = 5;
+            }
             return s;
         }
     }
