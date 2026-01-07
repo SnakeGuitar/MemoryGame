@@ -5,27 +5,30 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Client.Utilities
 {
     /// <summary>
-    /// Manages the core game logic, including turn processing, score tracking, 
-    /// timer management, and win/loss conditions.
+    /// Manages game state, timer, and card interactions.
+    /// In Multiplayer, acts as a visual state holder.
+    /// In Singleplayer, controls the game rules.
     /// </summary>
     public class GameManager
     {
         #region Events
+
         public event Action<string> TimerUpdated;
         public event Action<int> ScoreUpdated;
         public event Action GameWon;
         public event Action GameLost;
         public event Action TurnTimeEnded;
+
         #endregion
 
         #region Private Fields
+
         private DispatcherTimer _gameTimer;
         private TimeSpan _timeLeft;
         private int _score;
@@ -33,6 +36,7 @@ namespace Client.Utilities
         private Card _firstCardFlipped;
         private readonly ObservableCollection<Card> _cardsOnBoard;
         private int _turnDurationSeconds;
+
         #endregion
 
         public bool IsMultiplayerMode { get; set; } = false;
@@ -61,29 +65,35 @@ namespace Client.Utilities
                 }
                 else
                 {
-                    if (IsMultiplayerMode)
-                    {
-                        _gameTimer.Stop();
-                        TurnTimeEnded?.Invoke();
-                    }
-                    StopGame();
-                    TimerUpdated?.Invoke("00:00");
-                    GameLost?.Invoke();
+                    HandleTimerExpiration();
                 }
             }
             catch (Exception ex)
             {
                 StopGame();
-                GameLost?.Invoke();
                 System.Diagnostics.Debug.WriteLine($"[GAME MANAGER] Timer error: {ex.Message}");
             }
         }
 
-        /// <summary>
-        /// Starts a singleplayer game with a locally generated random deck.
-        /// </summary>
+        private void HandleTimerExpiration()
+        {
+            if (IsMultiplayerMode)
+            {
+                _gameTimer.Stop();
+                TimerUpdated?.Invoke("00:00");
+                TurnTimeEnded?.Invoke();
+            }
+            else
+            {
+                StopGame();
+                TimerUpdated?.Invoke("00:00");
+                GameLost?.Invoke();
+            }
+        }
+
         public void StartSingleplayerGame(GameConfiguration configuration)
         {
+            IsMultiplayerMode = false;
             ResetGameState(configuration.TimeLimitSeconds);
 
             var deck = GenerateRandomDeck(configuration.NumberOfCards);
@@ -91,16 +101,15 @@ namespace Client.Utilities
             {
                 _cardsOnBoard.Add(card);
             }
+
             _gameTimer.Start();
         }
 
-        /// <summary>
-        /// Starts a multiplayer game using the synchronized deck provided by the server.
-        /// </summary>
         public void StartMultiplayerGame(GameConfiguration configuration, List<CardInfo> serverCards)
         {
             IsMultiplayerMode = true;
             _turnDurationSeconds = configuration.TimeLimitSeconds;
+
             ResetGameState(_turnDurationSeconds);
 
             int index = 0;
@@ -108,19 +117,25 @@ namespace Client.Utilities
             {
                 string imagePath = $"{GameConstants.ColorCardFrontBasePath}{info.ImageIdentifier}.png";
                 var newCard = new Card(index, info.CardId, imagePath);
+
+                newCard.IsFlipped = false;
                 _cardsOnBoard.Add(newCard);
                 index++;
-            } 
+            }
+        }
+
+        public void UpdateTurnDuration(int seconds)
+        {
+            _turnDurationSeconds = seconds;
         }
 
         public void ResetTurnTimer()
         {
             _timeLeft = TimeSpan.FromSeconds(_turnDurationSeconds);
             TimerUpdated?.Invoke(_timeLeft.ToString(@"mm\:ss"));
-            if (!_gameTimer.IsEnabled)
-            {
-                _gameTimer.Start();
-            }
+
+            _gameTimer.Stop();
+            _gameTimer.Start();
         }
 
         private void ResetGameState(int seconds)
@@ -135,9 +150,6 @@ namespace Client.Utilities
             ScoreUpdated?.Invoke(0);
         }
 
-        /// <summary>
-        /// Generates a shuffled deck of cards locally.
-        /// </summary>
         private List<Card> GenerateRandomDeck(int numberOfCards)
         {
             List<string> imagePaths = new List<string>
@@ -162,11 +174,20 @@ namespace Client.Utilities
         }
 
         /// <summary>
-        /// Handles the logic when a card is clicked by the user.
+        /// Handles card clicks ONLY for Singleplayer mode.
+        /// Multiplayer clicks are handled by the GameServiceManager directly in the View.
         /// </summary>
         public async Task HandleCardClick(Card clickedCard)
         {
-            if (_isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched) return;
+            if (IsMultiplayerMode)
+            {
+                return;
+            }
+
+            if (_isProcessingTurn || clickedCard.IsFlipped || clickedCard.IsMatched)
+            {
+                return;
+            }
 
             clickedCard.IsFlipped = true;
 
@@ -180,37 +201,37 @@ namespace Client.Utilities
 
                 if (_firstCardFlipped.PairId == clickedCard.PairId)
                 {
-                    await Task.Delay(GameConstants.MatchFeedbackDelay);
-
-                    _firstCardFlipped.IsMatched = true;
-                    clickedCard.IsMatched = true;
-
-                    _score += GameConstants.PointsPerMatch;
-                    ScoreUpdated?.Invoke(_score);
-
-                    if (IsMultiplayerMode)
-                    {
-                        ResetTurnTimer();
-                    }
-
-                    CheckWinCondition();
+                    await ProcessMatch(clickedCard);
                 }
                 else
                 {
-                    await Task.Delay(GameConstants.MismatchFeedbackDelay);
-
-                    _firstCardFlipped.IsFlipped = false;
-                    clickedCard.IsFlipped = false;
-
-                    if (IsMultiplayerMode)
-                    {
-                        _gameTimer.Stop();
-                    }
+                    await ProcessMismatch(clickedCard);
                 }
 
                 _firstCardFlipped = null;
                 _isProcessingTurn = false;
             }
+        }
+
+        private async Task ProcessMatch(Card secondCard)
+        {
+            await Task.Delay(GameConstants.MatchFeedbackDelay);
+
+            _firstCardFlipped.IsMatched = true;
+            secondCard.IsMatched = true;
+
+            _score += GameConstants.PointsPerMatch;
+            ScoreUpdated?.Invoke(_score);
+
+            CheckWinCondition();
+        }
+
+        private async Task ProcessMismatch(Card secondCard)
+        {
+            await Task.Delay(GameConstants.MismatchFeedbackDelay);
+
+            _firstCardFlipped.IsFlipped = false;
+            secondCard.IsFlipped = false;
         }
 
         private void CheckWinCondition()

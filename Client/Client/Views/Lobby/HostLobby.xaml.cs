@@ -19,6 +19,7 @@ namespace Client.Views.Lobby
     public partial class HostLobby : Window
     {
         #region Private Fields
+
         private readonly string _lobbyCode;
         private bool _isConnected = false;
         private bool _isGameStarting = false;
@@ -27,6 +28,7 @@ namespace Client.Views.Lobby
 
         private int _selectedCardCount = GameConstants.DefaultCardCount;
         private int _secondsPerTurn = GameConstants.DefaultTurnTimeSeconds;
+
         #endregion
 
         public HostLobby()
@@ -54,6 +56,7 @@ namespace Client.Views.Lobby
         }
 
         #region Event Configuration
+
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -69,6 +72,7 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
             GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
         }
+
         #endregion
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -83,8 +87,8 @@ namespace Client.Views.Lobby
                 if (success)
                 {
                     _isConnected = true;
-
                     string myName = UserSession.Username;
+
                     if (!_currentPlayers.Any(p => p.Name == myName))
                     {
                         _currentPlayers.Add(new LobbyPlayerInfo { Name = myName });
@@ -120,8 +124,6 @@ namespace Client.Views.Lobby
                 return;
             }
 
-            ValidateSettings();
-
             try
             {
                 var settings = new GameSettings
@@ -147,20 +149,6 @@ namespace Client.Views.Lobby
             }
         }
 
-        private void ValidateSettings()
-        {
-            if (_selectedCardCount < GameConstants.MinCardCount ||
-                _selectedCardCount > GameConstants.MaxCardCount ||
-                _selectedCardCount % 2 != 0)
-            {
-                _selectedCardCount = GameConstants.DefaultCardCount;
-            }
-
-            if (_secondsPerTurn < GameConstants.MinTurnTimeSeconds)
-            {
-                _secondsPerTurn = GameConstants.MinTurnTimeSecondsFallback;
-            }
-        }
         #endregion
 
         #region UI Updates & Callbacks
@@ -242,6 +230,7 @@ namespace Client.Views.Lobby
                 this.Hide();
             });
         }
+
         #endregion
 
         #region Interaction Handlers
@@ -252,6 +241,7 @@ namespace Client.Views.Lobby
             {
                 string msg = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
+
                 try
                 {
                     await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
@@ -288,6 +278,7 @@ namespace Client.Views.Lobby
                 LabelTimerValue.Content = _secondsPerTurn.ToString();
             }
         }
+
         #endregion
 
         #region Cleanup
@@ -316,14 +307,18 @@ namespace Client.Views.Lobby
                 try
                 {
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
-                    _isConnected = false;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[LeaveLobbySafe]: {ex.Message}");
+                    Debug.WriteLine($"[LeaveLobbySafe] Ignored error: {ex.Message}");
+                }
+                finally
+                {
+                    _isConnected = false;
                 }
             }
         }
+
         #endregion
     }
 }

@@ -18,10 +18,12 @@ namespace Client.Views.Lobby
     public partial class Lobby : Window
     {
         #region Private Fields
+
         private readonly string _lobbyCode;
         private bool _isConnected = false;
         private bool _isGameStarting = false;
         private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
+
         #endregion
 
         public Lobby(string lobbyCode)
@@ -38,6 +40,7 @@ namespace Client.Views.Lobby
         }
 
         #region Event Configuration
+
         private void ConfigureEvents()
         {
             GameServiceManager.Instance.PlayerListUpdated += OnPlayerListUpdated;
@@ -53,6 +56,7 @@ namespace Client.Views.Lobby
             GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
             GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
         }
+
         #endregion
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -149,6 +153,7 @@ namespace Client.Views.Lobby
                 }
             });
         }
+
         #endregion
 
         #region Interaction Handlers
@@ -175,6 +180,7 @@ namespace Client.Views.Lobby
             {
                 string msg = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
+
                 try
                 {
                     await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
@@ -191,6 +197,7 @@ namespace Client.Views.Lobby
             await LeaveLobbySafe();
             this.Close();
         }
+
         #endregion
 
         #region Server Callbacks & Cleanup
@@ -231,6 +238,7 @@ namespace Client.Views.Lobby
         protected override async void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
+
             if (!_isGameStarting)
             {
                 await LeaveLobbySafe();
@@ -240,6 +248,7 @@ namespace Client.Views.Lobby
                     this.Owner.Show();
                 }
             }
+
             base.OnClosed(e);
         }
 
@@ -250,14 +259,18 @@ namespace Client.Views.Lobby
                 try
                 {
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
-                    _isConnected = false;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[LeaveLobbySafe]: {ex.Message}");
+                    Debug.WriteLine($"[LeaveLobbySafe] Ignored error: {ex.Message}");
+                }
+                finally
+                {
+                    _isConnected = false;
                 }
             }
         }
+
         #endregion
     }
 }

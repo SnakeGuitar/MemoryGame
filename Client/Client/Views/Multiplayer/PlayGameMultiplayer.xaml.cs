@@ -16,33 +16,14 @@ using System.Windows.Media;
 
 namespace Client.Views.Multiplayer
 {
-    /// <summary>
-    /// Interaction logic for PlayGameMultiplayer.xaml.
-    /// Manages the synchronized game session, turn logic, and UI updates for multiple players.
-    /// </summary>
     public partial class PlayGameMultiplayer : Window
     {
         #region Private Fields & Constants
 
-        /// <summary>
-        /// Maximum number of messages to keep in the chat list to prevent memory issues.
-        /// </summary>
         private const int MaxChatMessages = 50;
 
-        /// <summary>
-        /// Manages the core game logic (timer, matches) locally.
-        /// </summary>
         private readonly GameManager _gameManager;
-
-        /// <summary>
-        /// List of players participating in the current match.
-        /// </summary>
         private readonly List<LobbyPlayerInfo> _players;
-
-        /// <summary>
-        /// Tracks the username of the player whose turn is currently active.
-        /// Used to direct timer and score updates to the correct UI slot.
-        /// </summary>
         private string _currentTurnPlayer;
 
         private Border[] _playerBorders;
@@ -52,22 +33,8 @@ namespace Client.Views.Multiplayer
 
         #endregion
 
-        #region Public Properties
-
-        /// <summary>
-        /// Collection of cards bound to the GameBoard UI.
-        /// </summary>
         public ObservableCollection<Card> Cards { get; set; }
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the multiplayer game window.
-        /// </summary>
-        /// <param name="serverCards">The shuffled list of cards received from the server.</param>
-        /// <param name="players">The list of players in the lobby.</param>
         public PlayGameMultiplayer(List<CardInfo> serverCards, List<LobbyPlayerInfo> players)
         {
             InitializeComponent();
@@ -76,7 +43,6 @@ namespace Client.Views.Multiplayer
             Cards = new ObservableCollection<Card>();
 
             InitializeUIArrays();
-
             GameBoard.ItemsSource = Cards;
             this.DataContext = this;
 
@@ -91,13 +57,6 @@ namespace Client.Views.Multiplayer
             StartGameSafe(serverCards);
         }
 
-        #endregion
-
-        #region Initialization
-
-        /// <summary>
-        /// Maps XAML controls to arrays for easy index-based manipulation.
-        /// </summary>
         private void InitializeUIArrays()
         {
             _playerBorders = new Border[] { BorderP1, BorderP2, BorderP3, BorderP4 };
@@ -106,9 +65,6 @@ namespace Client.Views.Multiplayer
             _playerTimes = new Label[] { LabelP1Time, LabelP2Time, LabelP3Time, LabelP4Time };
         }
 
-        /// <summary>
-        /// Configures the visibility and initial content of player panels based on the lobby list.
-        /// </summary>
         private void SetupPlayerUI()
         {
             for (int i = 0; i < _playerBorders.Length; i++)
@@ -133,9 +89,6 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        /// <summary>
-        /// Starts the game logic within a try-catch block to handle potential startup errors.
-        /// </summary>
         private void StartGameSafe(List<CardInfo> serverCards)
         {
             try
@@ -145,7 +98,6 @@ namespace Client.Views.Multiplayer
                     NumberOfCards = serverCards.Count,
                     TimeLimitSeconds = GameConstants.DefaultTurnTimeSeconds
                 };
-
                 _gameManager.StartMultiplayerGame(config, serverCards);
             }
             catch (Exception ex)
@@ -154,107 +106,180 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        #endregion
-
         #region Event Management
 
-        /// <summary>
-        /// Subscribes to GameManager and GameServiceManager events.
-        /// </summary>
         private void ConfigureEvents()
         {
-            _gameManager.TimerUpdated += OnTimerUpdated;
-            _gameManager.ScoreUpdated += OnScoreUpdated;
-            _gameManager.GameWon += OnGameWon;
-            _gameManager.GameLost += OnGameLost;
+            _gameManager.TimerUpdated += OnLocalTimerTick;
 
-            GameServiceManager.Instance.ChatMessageReceived += OnChatMessageReceived;
-            GameServiceManager.Instance.PlayerLeft += OnPlayerLeft;
+            var service = GameServiceManager.Instance;
+            service.TurnUpdated += OnServerTurnUpdated;
+            service.CardShown += OnServerCardShown;
+            service.CardsHidden += OnServerCardsHidden;
+            service.CardsMatched += OnServerCardsMatched;
+            service.ScoreUpdated += OnServerScoreUpdated;
+            service.GameFinished += OnServerGameFinished;
+            service.ChatMessageReceived += OnChatMessageReceived;
+            service.PlayerLeft += OnPlayerLeft;
         }
 
-        /// <summary>
-        /// Unsubscribes from all events to prevent memory leaks and ghost updates.
-        /// </summary>
         private void UnsubscribeEvents()
         {
-            _gameManager.TimerUpdated -= OnTimerUpdated;
-            _gameManager.ScoreUpdated -= OnScoreUpdated;
-            _gameManager.GameWon -= OnGameWon;
-            _gameManager.GameLost -= OnGameLost;
+            _gameManager.TimerUpdated -= OnLocalTimerTick;
 
-            GameServiceManager.Instance.ChatMessageReceived -= OnChatMessageReceived;
-            GameServiceManager.Instance.PlayerLeft -= OnPlayerLeft;
+            var service = GameServiceManager.Instance;
+            service.TurnUpdated -= OnServerTurnUpdated;
+            service.CardShown -= OnServerCardShown;
+            service.CardsHidden -= OnServerCardsHidden;
+            service.CardsMatched -= OnServerCardsMatched;
+            service.ScoreUpdated -= OnServerScoreUpdated;
+            service.GameFinished -= OnServerGameFinished;
+            service.ChatMessageReceived -= OnChatMessageReceived;
+            service.PlayerLeft -= OnPlayerLeft;
         }
 
         #endregion
 
-        #region Game Logic Callbacks
+        #region Server Callbacks Implementation
 
-        /// <summary>
-        /// Called when the game timer ticks. Updates the UI timer for the current turn player.
-        /// </summary>
-        /// <param name="timeString">Formatted time string (e.g., "00:30").</param>
-        private void OnTimerUpdated(string timeString)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (!this.IsLoaded) return;
-
-                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
-
-                if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
-                {
-                    if (_playerTimes[activeIndex] != null)
-                    {
-                        _playerTimes[activeIndex].Content = $"Time: {timeString}";
-                    }
-                }
-            });
-        }
-
-        /// <summary>
-        /// Called when a match is found. Updates the score for the current turn player.
-        /// </summary>
-        /// <param name="newScore">The accumulated score.</param>
-        private void OnScoreUpdated(int newScore)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (!this.IsLoaded) return;
-
-                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
-
-                if (activeIndex >= 0 && activeIndex < _playerScores.Length)
-                {
-                    int pairs = newScore / GameConstants.PointsPerMatch;
-                    _playerScores[activeIndex].Content = $"Pairs: {pairs}";
-                }
-            });
-        }
-
-        /// <summary>
-        /// Updates the local turn state when the server notifies a turn change.
-        /// </summary>
-        /// <param name="nextPlayerName">The username of the next player.</param>
-        public void OnTurnUpdated(string nextPlayerName)
+        private void OnServerTurnUpdated(string nextPlayerName, int seconds)
         {
             Dispatcher.Invoke(() =>
             {
                 _currentTurnPlayer = nextPlayerName;
 
-                foreach (var lbl in _playerTimes)
+                foreach (var label in _playerTimes)
                 {
-                    if (lbl != null && lbl.Visibility == Visibility.Visible)
-                        lbl.Content = "Time: --";
+                    if (label != null && label.Visibility == Visibility.Visible)
+                    {
+                        label.Content = "Time: --";
+                    }
                 }
 
                 HighlightActivePlayer(nextPlayerName);
+
+                _gameManager.UpdateTurnDuration(seconds);
+                _gameManager.ResetTurnTimer();
             });
         }
 
-        /// <summary>
-        /// Visually highlights the active player's name.
-        /// </summary>
+        private void OnServerCardShown(int cardIndex, string imageId)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var card = Cards.FirstOrDefault(c => c.Id == cardIndex);
+                if (card != null)
+                {
+                    card.IsFlipped = true;
+                }
+            });
+        }
+
+        private void OnServerCardsHidden(int idx1, int idx2)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
+                var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
+
+                if (c1 != null)
+                {
+                    c1.IsFlipped = false;
+                }
+                if (c2 != null)
+                {
+                    c2.IsFlipped = false;
+                }
+            });
+        }
+
+        private void OnServerCardsMatched(int idx1, int idx2)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
+                var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
+
+                if (c1 != null)
+                {
+                    c1.IsMatched = true;
+                    c1.IsFlipped = true;
+                }
+                if (c2 != null)
+                {
+                    c2.IsMatched = true;
+                    c2.IsFlipped = true;
+                }
+            });
+        }
+
+        private void OnServerScoreUpdated(string playerName, int score)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                int index = _players.FindIndex(p => p.Name == playerName);
+                if (index >= 0 && index < _playerScores.Length)
+                {
+                    _playerScores[index].Content = $"Pairs: {score}";
+                }
+            });
+        }
+
+        private void OnServerGameFinished(string winnerName)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                string myScoreText = GetMyCurrentScore();
+                ShowMatchSummary($"{winnerName} Wins!", $"{Lang.Global_Label_Score}: {myScoreText}");
+            });
+        }
+
+        #endregion
+
+        #region Local UI Logic
+
+        private void OnLocalTimerTick(string timeString)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
+                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
+                if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
+                {
+                    _playerTimes[activeIndex].Content = $"Time: {timeString}";
+                }
+            });
+        }
+
+        private async void Card_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentTurnPlayer != UserSession.Username)
+            {
+                return;
+            }
+
+            if (sender is Button button && button.DataContext is Card clickedCard)
+            {
+                if (clickedCard.IsFlipped || clickedCard.IsMatched)
+                {
+                    return;
+                }
+
+                try
+                {
+                    await GameServiceManager.Instance.Client.FlipCardAsync(clickedCard.Id);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error sending flip: {ex.Message}");
+                }
+            }
+        }
+
         private void HighlightActivePlayer(string playerName)
         {
             for (int i = 0; i < _playerNames.Length; i++)
@@ -275,41 +300,24 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        private void OnGameWon()
+        private string GetMyCurrentScore()
         {
-            Dispatcher.Invoke(() =>
+            int myIndex = _players.FindIndex(p => p.Name == UserSession.Username);
+            if (myIndex >= 0 && myIndex < _playerScores.Length)
             {
-                if (!this.IsLoaded) return;
-
-                string winnerName = DetermineWinner();
-                string statsInfo = $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}";
-
-                ShowMatchSummary(winnerName + " Wins!", statsInfo);
-            });
-        }
-
-        private void OnGameLost()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (!this.IsLoaded) return;
-                ShowMatchSummary(Lang.Singleplayer_Title_TimeOver, $"{Lang.Global_Label_Score}: {GetMyCurrentScore()}");
-            });
+                return _playerScores[myIndex].Content.ToString();
+            }
+            return "0";
         }
 
         #endregion
 
-        #region Service Callbacks (Chat & Connection)
+        #region Chat & Cleanup
 
-        /// <summary>
-        /// Handles incoming chat messages from the server.
-        /// </summary>
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded) return;
-
                 string formattedMsg = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
                 ChatListBox.Items.Add(formattedMsg);
 
@@ -325,18 +333,13 @@ namespace Client.Views.Multiplayer
             });
         }
 
-        /// <summary>
-        /// Handles a player leaving the game session.
-        /// </summary>
         private void OnPlayerLeft(string playerName)
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded) return;
-
                 ChatListBox.Items.Add($"--- {playerName} left the game ---");
-
                 int index = _players.FindIndex(p => p.Name == playerName);
+
                 if (index >= 0 && index < _playerBorders.Length)
                 {
                     _playerBorders[index].Opacity = 0.5;
@@ -345,59 +348,19 @@ namespace Client.Views.Multiplayer
             });
         }
 
-        #endregion
-
-        #region UI Interactions
-
-        /// <summary>
-        /// Handles card click events.
-        /// </summary>
-        private async void Card_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentTurnPlayer != UserSession.Username)
-            {
-                return;
-            }
-
-            if (sender is Button button && button.DataContext is Card clickedCard)
-            {
-                try
-                {
-                    await _gameManager.HandleCardClick(clickedCard);
-                }
-                catch (Exception ex)
-                {
-                    ExceptionManager.Handle(ex, this, null);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Sends a chat message to the lobby.
-        /// </summary>
         private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                string msg = ChatTextBox.Text;
-                ChatTextBox.Text = string.Empty;
-
                 try
                 {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
+                    await GameServiceManager.Instance.Client.SendChatMessageAsync(ChatTextBox.Text);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ExceptionManager.Handle(ex, this, null);
                 }
+                ChatTextBox.Text = string.Empty;
             }
-        }
-
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
-        {
-            var settingsWindow = new Settings();
-            settingsWindow.Owner = this;
-            settingsWindow.ShowDialog();
         }
 
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
@@ -405,37 +368,14 @@ namespace Client.Views.Multiplayer
             await LeaveGameSafe();
         }
 
-        #endregion
-
-        #region Helpers & Cleanup
-
-        private string DetermineWinner()
-        {
-            return "Game Over";
-        }
-
-        private string GetMyCurrentScore()
-        {
-            int myIndex = _players.FindIndex(p => p.Name == UserSession.Username);
-            if (myIndex >= 0 && myIndex < _playerScores.Length)
-            {
-                return _playerScores[myIndex].Content.ToString();
-            }
-            return "0";
-        }
-
         private void ShowMatchSummary(string title, string stats)
         {
-            var summaryWindow = new MatchSummary(title, stats);
-            summaryWindow.Owner = this;
-            summaryWindow.ShowDialog();
-
+            var summary = new MatchSummary(title, stats);
+            summary.Owner = this;
+            summary.ShowDialog();
             _ = LeaveGameSafe();
         }
 
-        /// <summary>
-        /// Safely leaves the lobby and closes the window.
-        /// </summary>
         private async Task LeaveGameSafe()
         {
             UnsubscribeEvents();
@@ -445,9 +385,8 @@ namespace Client.Views.Multiplayer
             {
                 await GameServiceManager.Instance.Client.LeaveLobbyAsync();
             }
-            catch (Exception ex)
+            catch
             {
-                System.Diagnostics.Debug.WriteLine($"[LeaveGame Warning]: {ex.Message}");
             }
             finally
             {
@@ -459,9 +398,6 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        /// <summary>
-        /// Ensures cleanup when the window is closed by external means (Alt+F4).
-        /// </summary>
         protected override void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
@@ -471,11 +407,17 @@ namespace Client.Views.Multiplayer
             {
                 GameServiceManager.Instance.Client.LeaveLobbyAsync();
             }
-            catch { }
+            catch
+            {
+            }
 
             base.OnClosed(e);
         }
 
         #endregion
+
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Utilities
@@ -11,10 +10,16 @@ namespace Client.Utilities
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class GameServiceManager : IGameLobbyServiceCallback
     {
+        #region Singleton & Properties
+
         private static GameServiceManager _instance;
         public static GameServiceManager Instance => _instance ?? (_instance = new GameServiceManager());
 
         public GameLobbyServiceClient Client { get; private set; }
+
+        #endregion
+
+        #region Events
 
         public event Action<string, string, bool> ChatMessageReceived;
         public event Action<string, bool> PlayerJoined;
@@ -25,16 +30,35 @@ namespace Client.Utilities
         public event Action<string, int> TurnUpdated;
         public event Action<int, string> CardShown;
         public event Action<int, int> CardsHidden;
-        public event Action<int, int> CardFlipped;
         public event Action<int, int> CardsMatched;
         public event Action<string, int> ScoreUpdated;
         public event Action<string> GameFinished;
 
+        #endregion
+
         private GameServiceManager()
+        {
+            InitializeClient();
+        }
+
+        private void InitializeClient()
         {
             InstanceContext context = new InstanceContext(this);
             Client = new GameLobbyServiceClient(context);
         }
+
+        /// <summary>
+        /// Wrapper method to make the call semantic and safer.
+        /// </summary>
+        public async Task FlipCardAsync(int cardIndex)
+        {
+            if (Client != null && Client.State == CommunicationState.Opened)
+            {
+                await Client.FlipCardAsync(cardIndex);
+            }
+        }
+
+        #region IGameLobbyServiceCallback Implementation
 
         public void ReceiveChatMessage(string senderName, string message, bool isNotification)
         {
@@ -78,7 +102,6 @@ namespace Client.Utilities
 
         void IGameLobbyServiceCallback.CardFlipped(int cardIndex, int cardIndex2)
         {
-            CardFlipped?.Invoke(cardIndex, cardIndex2);
         }
 
         public void SetCardsAsMatched(int cardIndex1, int cardIndex2)
@@ -95,5 +118,7 @@ namespace Client.Utilities
         {
             GameFinished?.Invoke(winnerName);
         }
+
+        #endregion
     }
 }
