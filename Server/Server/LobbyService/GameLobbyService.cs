@@ -209,7 +209,7 @@ namespace Server.LobbyService
                                         matchId = match.matchId,
                                         userId = client.UserId.Value,
                                         score = score,
-                                        winnerId = winnerUserId ?? -1
+                                        winnerId = winnerUserId
                                     };
                                     db.matchHistory.Add(history);
                                 }

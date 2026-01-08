@@ -41,7 +41,9 @@ namespace Server.SessionService.Core
                         Date = h.match.endDateTime,
                         Score = h.score,
 
-                        WinnerName = db.user.Find(h.winnerId)?.username ?? "Unknown"
+                        WinnerName = h.winnerId.HasValue
+                        ? (db.user.Find(h.winnerId)?.username ?? "Unknown")
+                        : "Guest"
                     }).ToList();
                 }
             }
