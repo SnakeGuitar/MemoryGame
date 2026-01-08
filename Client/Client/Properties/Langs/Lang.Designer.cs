@@ -628,6 +628,24 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The session has expired.
+        /// </summary>
+        public static string Global_Error_SessionExpired {
+            get {
+                return ResourceManager.GetString("Global_Error_SessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Invalid email or password.
+        /// </summary>
+        public static string Global_Error_UserAlreadyLoggedIn {
+            get {
+                return ResourceManager.GetString("Global_Error_UserAlreadyLoggedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a That username is already in use. Please choose another.
         /// </summary>
         public static string Global_Error_UsernameInUse {
@@ -777,6 +795,15 @@ namespace Client.Properties.Langs {
         public static string Global_Label_Password {
             get {
                 return ResourceManager.GetString("Global_Label_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Registered email.
+        /// </summary>
+        public static string Global_Label_RegisteredEmail {
+            get {
+                return ResourceManager.GetString("Global_Label_RegisteredEmail", resourceCulture);
             }
         }
         
@@ -1348,6 +1375,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Invite Friend.
+        /// </summary>
+        public static string Lobby_Button_Invite {
+            get {
+                return ResourceManager.GetString("Lobby_Button_Invite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Guests are not allowed to send chat messages.
         /// </summary>
         public static string Lobby_Error_GuestChat {
@@ -1371,6 +1407,15 @@ namespace Client.Properties.Langs {
         public static string Lobby_Error_SendChatFailed {
             get {
                 return ResourceManager.GetString("Lobby_Error_SendChatFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Game Code:.
+        /// </summary>
+        public static string Lobby_Label_GameCode {
+            get {
+                return ResourceManager.GetString("Lobby_Label_GameCode", resourceCulture);
             }
         }
         
