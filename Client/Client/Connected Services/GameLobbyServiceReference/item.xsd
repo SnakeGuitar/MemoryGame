@@ -80,6 +80,18 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="VoteToKick">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="targetUsername" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VoteToKickResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ReceiveChatMessage">
     <xs:complexType>
       <xs:sequence>

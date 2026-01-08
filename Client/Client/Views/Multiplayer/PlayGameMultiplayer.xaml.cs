@@ -76,6 +76,8 @@ namespace Client.Views.Multiplayer
                     _playerScores[i].Content = "Pairs: 0";
                     _playerTimes[i].Content = "Time: --";
 
+                    _playerBorders[i].Tag = _players[i].Name;
+
                     if (_players[i].Name == UserSession.Username)
                     {
                         _playerNames[i].Foreground = Brushes.Gold;
@@ -344,6 +346,7 @@ namespace Client.Views.Multiplayer
                 {
                     _playerBorders[index].Opacity = 0.5;
                     _playerNames[index].Content += " (Left)";
+                    _playerBorders[index].ContextMenu = null;
                 }
             });
         }
@@ -419,5 +422,38 @@ namespace Client.Views.Multiplayer
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
         }
+
+        #region Local UI Loigc and Vote Kick
+
+        private async void VoteKick_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem &&
+                menuItem.Parent is ContextMenu contextMenu &&
+                contextMenu.PlacementTarget is Border targetBorder &&
+                targetBorder.Tag is string targetPlayerName)
+            {
+                if (targetPlayerName == UserSession.Username)
+                {
+                    MessageBox.Show("You cannot kick yourself.", "Action not allowed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                var result = MessageBox.Show($"Vote to kick {targetPlayerName}?", "Confirm Vote", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        await GameServiceManager.Instance.Client.VoteToKickAsync(targetPlayerName);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Failed to send vote.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        System.Diagnostics.Debug.WriteLine($"Error voting kick: {ex.Message}");
+                        ExceptionManager.Handle(ex, this, null);
+                    }
+                }
+            }
+        }
+        #endregion
     }
 }

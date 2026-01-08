@@ -331,12 +331,18 @@ namespace Server.LobbyService
         public void VoteToKick(string targetUsername) 
         {
             var sessionId = _callbackProvider.GetSessionId();
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
+
+            if (lobby == null)
+            {
+                return;
+            }
+
             var gameManager = _stateManager.GetGameManager(sessionId);
             var voterId = _stateManager.GetPlayerId(sessionId);
 
             if (gameManager != null && voterId != null)
             {
-                var lobby = _stateManager.GetLobbyBySession(sessionId);
                 var targetClient = lobby.Clients.Values.FirstOrDefault(c => c.Name == targetUsername);
 
                 if (targetClient != null)

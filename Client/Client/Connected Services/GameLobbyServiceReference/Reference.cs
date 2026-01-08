@@ -267,6 +267,12 @@ namespace Client.GameLobbyServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/FlipCard", ReplyAction="http://tempuri.org/IGameLobbyService/FlipCardResponse")]
         System.Threading.Tasks.Task FlipCardAsync(int cardIndex);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/VoteToKick", ReplyAction="http://tempuri.org/IGameLobbyService/VoteToKickResponse")]
+        void VoteToKick(string targetUsername);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/VoteToKick", ReplyAction="http://tempuri.org/IGameLobbyService/VoteToKickResponse")]
+        System.Threading.Tasks.Task VoteToKickAsync(string targetUsername);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -383,6 +389,14 @@ namespace Client.GameLobbyServiceReference {
         
         public System.Threading.Tasks.Task FlipCardAsync(int cardIndex) {
             return base.Channel.FlipCardAsync(cardIndex);
+        }
+        
+        public void VoteToKick(string targetUsername) {
+            base.Channel.VoteToKick(targetUsername);
+        }
+        
+        public System.Threading.Tasks.Task VoteToKickAsync(string targetUsername) {
+            return base.Channel.VoteToKickAsync(targetUsername);
         }
     }
 }
