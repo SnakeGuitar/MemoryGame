@@ -270,14 +270,15 @@ namespace Server.GameService
                     _kickVotes[targetId] = new HashSet<string>();
                 }
 
-                if (_kickVotes[targetId].Contains(voterId))
+                if (_kickVotes[targetId].Add(voterId))
                 {
                     var voterName = _players.First(p => p.Id == voterId).Name;
                     var targetName = _players.First(p => p.Id == targetId).Name;
                     int required = GetRequiredVotes();
+
                     _notifier.NotifyChatMessage("System", $"{voterName} voted to kick {targetName}. ({_kickVotes[targetId].Count}/{GetRequiredVotes()})", true);
                     
-                    if (_kickVotes[targetId].Count > required)
+                    if (_kickVotes[targetId].Count >= required)
                     {
                         KickPlayer(targetId);
                     }
