@@ -2,6 +2,7 @@
 using Server.LobbyService;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -155,10 +156,20 @@ namespace Server.GameService
                 if (isGameOver)
                 {
                     var maxScore = _scores.Values.Max();
-                    winnerId = _scores.First(x => x.Value == maxScore).Key;
-                    winnerName = _players.First(p => p.Id == winnerId).Name;
-                    IsGameInProgress = false;
+                    var winners = _scores.Where(x => x.Value == maxScore).Select(x => x.Key).ToList();
+
+                    if (winners.Count > 1)
+                    {
+                        winnerId = null;
+                        winnerName = "Draw";
+                    }
+                    else
+                    {
+                        winnerId = winners.First();
+                        winnerName = _players.First(p => p.Id == winnerId).Name;
+                    }
                 }
+                IsGameInProgress = false;
             }
 
             _notifier.NotifyMatch(c1.Index, c2.Index, playerName, score);
