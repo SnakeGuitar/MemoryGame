@@ -327,5 +327,23 @@ namespace Server.LobbyService
 
             return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
         }
+
+        public void VoteToKick(string targetUsername) 
+        {
+            var sessionId = _callbackProvider.GetSessionId();
+            var gameManager = _stateManager.GetGameManager(sessionId);
+            var voterId = _stateManager.GetPlayerId(sessionId);
+
+            if (gameManager != null && voterId != null)
+            {
+                var lobby = _stateManager.GetLobbyBySession(sessionId);
+                var targetClient = lobby.Clients.Values.FirstOrDefault(c => c.Name == targetUsername);
+
+                if (targetClient != null)
+                {
+                    gameManager.HandleVoteKick(voterId, targetClient.Id);
+                }
+            }
+        }
     }
 }

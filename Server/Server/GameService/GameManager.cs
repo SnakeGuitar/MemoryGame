@@ -20,6 +20,7 @@ namespace Server.GameService
         private readonly List<LobbyClient> _players;
         private readonly Dictionary<string, int> _scores;
         private readonly GameSettings _settings;
+        private readonly Dictionary<string, HashSet<string>> _kickVotes =  new Dictionary<string, HashSet<string>>();
 
         private int _currentPlayerIndex;
         private GameDeck.GameCard _firstFlippedCard;
@@ -144,8 +145,6 @@ namespace Server.GameService
             int score = 0;
             string playerName = "";
             bool isGameOver = false;
-            string winnerName = "";
-            string winnerId = "";
 
             lock (_gameLock)
             {
@@ -153,22 +152,6 @@ namespace Server.GameService
                 playerName = _players.First(p => p.Id == playerId).Name;
                 isGameOver = _deck.IsAllMatched();
 
-                if (isGameOver)
-                {
-                    var maxScore = _scores.Values.Max();
-                    var winners = _scores.Where(x => x.Value == maxScore).Select(x => x.Key).ToList();
-
-                    if (winners.Count > 1)
-                    {
-                        winnerId = null;
-                        winnerName = "Draw";
-                    }
-                    else
-                    {
-                        winnerId = winners.First();
-                        winnerName = _players.First(p => p.Id == winnerId).Name;
-                    }
-                }
                 IsGameInProgress = false;
             }
 
@@ -176,9 +159,7 @@ namespace Server.GameService
 
             if (isGameOver)
             {
-                _notifier.NotifyWinner(winnerName);
-                _turnTimer.Dispose();
-                GameEnded?.Invoke(winnerId, new Dictionary<string, int>(_scores));
+                EndGame();
             }
             else
             {
@@ -263,6 +244,129 @@ namespace Server.GameService
                 s.TurnTimeSeconds = 5;
             }
             return s;
+        }
+
+        public void HandleVoteKick(string voterId, string targetId)
+        {
+            lock (_gameLock)
+            {
+                if (!IsGameInProgress)
+                {
+                    return;
+                }
+
+                if (voterId == targetId)
+                {
+                    return;
+                }
+
+                if (!_players.Any(p => p.Id == voterId) || !_players.Any(p => p.Id == targetId))
+                {
+                    return;
+                }
+
+                if (!_kickVotes.ContainsKey(targetId))
+                {
+                    _kickVotes[targetId] = new HashSet<string>();
+                }
+
+                if (_kickVotes[targetId].Contains(voterId))
+                {
+                    var voterName = _players.First(p => p.Id == voterId).Name;
+                    var targetName = _players.First(p => p.Id == targetId).Name;
+                    int required = GetRequiredVotes();
+                    _notifier.NotifyChatMessage("System", $"{voterName} voted to kick {targetName}. ({_kickVotes[targetId].Count}/{GetRequiredVotes()})", true);
+                    
+                    if (_kickVotes[targetId].Count > required)
+                    {
+                        KickPlayer(targetId);
+                    }
+                }
+            }
+        }
+
+        private int GetRequiredVotes()
+        {
+            return (_players.Count / 2) + 1;
+        }
+
+        private void KickPlayer(string playerId)
+        {
+            int playerIndex = _players.FindIndex(p => p.Id == playerId);
+            if (playerIndex == -1) return;
+
+            var playerToRemove = _players[playerIndex];
+            bool wasHisTurn = (playerIndex == _currentPlayerIndex);
+
+            _notifier.NotifyChatMessage("System", $"{playerToRemove.Name} has been kicked by majority vote.", true);
+            _notifier.NotifyPlayerLeft(playerToRemove.Name);
+
+            if (playerIndex < _currentPlayerIndex)
+            {
+                _currentPlayerIndex--;
+            }
+
+            _players.RemoveAt(playerIndex);
+            _kickVotes.Remove(playerId);
+
+            foreach (var key in _kickVotes.Keys.ToList())
+            {
+                _kickVotes[key].Remove(playerId);
+            }
+
+            if (_players.Count < 2)
+            {
+                EndGame();
+            }
+            else if (wasHisTurn)
+            {
+                if (_currentPlayerIndex >= _players.Count)
+                {
+                    _currentPlayerIndex = 0;
+                }
+
+                StartNewTurn(samePlayer: false);
+            }
+            else
+            {
+                if (_currentPlayerIndex >= _players.Count)
+                {
+                    _currentPlayerIndex = 0;
+                }
+            }
+        }
+
+        private void EndGame()
+        {
+            IsGameInProgress = false;
+            _turnTimer.Dispose();
+
+            string winnerId = null;
+            string winnerName = "Draw";
+
+            lock (_gameLock)
+            {
+                if (_players.Count == 1)
+                {
+                    var survivor = _players.First();
+                    winnerId = survivor.Id;
+                    winnerName = survivor.Name;
+                }
+                else if (_scores.Count > 0)
+                {
+                    var maxScore = _scores.Values.Max();
+                    var winners = _scores.Where(x => x.Value == maxScore).Select(x => x.Key).ToList();
+
+                    if (winners.Count == 1)
+                    {
+                        winnerId = winners.First();
+                        winnerName = _players.First(p => p.Id == winnerId).Name;
+                    }
+                }
+            }
+
+            _notifier.NotifyWinner(winnerName);
+            GameEnded?.Invoke(winnerId, new Dictionary<string, int>(_scores));
         }
     }
 }

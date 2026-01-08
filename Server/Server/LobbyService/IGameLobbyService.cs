@@ -14,11 +14,11 @@ namespace Server.LobbyService
         void LeaveLobby();
         [OperationContract]
         void SendChatMessage(string message);
-
         [OperationContract]
         void StartGame(GameSettings settings);
         [OperationContract]
         void FlipCard(int cardIndex);
-
+        [OperationContract]
+        void VoteToKick(string targetUsername);
     }
 }

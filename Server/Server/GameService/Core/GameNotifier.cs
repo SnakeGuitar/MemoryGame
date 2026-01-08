@@ -48,6 +48,16 @@ namespace Server.GameService.Core
             Broadcast(c => c.Callback.GameFinished(winnerName));
         }
 
+        public void NotifyChatMessage(string sender, string message, bool isNotification)
+        {
+            Broadcast(c => c.Callback.ReceiveChatMessage(sender, message, isNotification));
+        }
+
+        public void NotifyPlayerLeft(string playerName)
+        {
+            Broadcast(c => c.Callback.PlayerLeft(playerName));
+        }
+
         private void Broadcast(Action<LobbyClient> action)
         {
             foreach (var player in _players)
