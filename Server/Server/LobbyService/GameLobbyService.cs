@@ -184,6 +184,7 @@ namespace Server.LobbyService
                     {
                         var match = new match
                         {
+                            startDateTime = DateTime.UtcNow,
                             endDateTime = DateTime.UtcNow
                         };
                         db.match.Add(match);
