@@ -135,7 +135,7 @@ namespace Client.Views.Profile
                         ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
                     }
                 }
-                catch(InvalidOperationException ex) when (ex.Message == "ImageTooLarge")
+                catch (InvalidOperationException ex) when (ex.Message == "ImageTooLarge")
                 {
                     ShowError(Lang.Global_Title_Error, Lang.Global_Error_ImageTooLarge);
                 }
@@ -177,7 +177,7 @@ namespace Client.Views.Profile
             if (string.IsNullOrWhiteSpace(currentPass) || string.IsNullOrWhiteSpace(newPass))
             {
                 CustomMessageBox messageBox = new CustomMessageBox(
-                    Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields, 
+                    Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields,
                     this, MessageBoxType.Warning);
                 return;
             }
@@ -267,10 +267,14 @@ namespace Client.Views.Profile
                 }
                 else
                 {
-                    if (response.MessageKey == "Global_Error_UsernameInUse")
+                    if (response.MessageKey == ServerKeys.UsernameInUse)
+                    {
                         ShowError(Lang.Global_Title_Error, Lang.Global_Error_UsernameInUse);
+                    }
                     else
-                        ShowError(Lang.Global_Title_Error, "Could not update username.");
+                    {
+                        ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
+                    }
                 }
             }
             catch (EndpointNotFoundException ex)

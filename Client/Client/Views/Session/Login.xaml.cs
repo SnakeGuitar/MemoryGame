@@ -86,7 +86,7 @@ namespace Client.Views.Session
                 {
                     string errorMessage;
 
-                    if (response.MessageKey == "Global_Error_UserAlreadyLoggedIn")
+                    if (response.MessageKey == ServerKeys.UserAlreadyLoggedIn)
                     {
                         errorMessage = Lang.Global_Error_InvalidCredentials;
                     }
