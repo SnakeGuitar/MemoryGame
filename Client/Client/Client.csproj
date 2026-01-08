@@ -73,6 +73,16 @@
     <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="Models\DifficultyPresets.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
+    <Compile Include="Properties\Langs\Lang.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Lang.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Langs\Lang.ja-JP.Designer.cs">
+      <DependentUpon>Lang.ja-JP.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Utilities\Converters\SelfReportVisibilityConverter.cs" />
     <Compile Include="Utilities\UserServiceManager.cs" />
     <Compile Include="Utilities\ExceptionManager.cs" />
@@ -273,11 +283,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Langs\Lang.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Lang.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -288,6 +293,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Langs\Lang.ja-JP.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Lang.ja-JP.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Langs\Lang.es-MX.resx" />
     <EmbeddedResource Include="Properties\Langs\Lang.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -339,6 +349,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\HachiMaruPop-Regular.ttf" />
     <Resource Include="Resources\Fonts\Comico-Regular.ttf" />
     <Resource Include="Resources\Fonts\Pangolin-Regular.ttf" />
   </ItemGroup>

@@ -39,6 +39,7 @@ namespace Client.Views
             {
                 new LanguageOption { DisplayCultureName = "Español", CultureCode = "es-MX" },
                 new LanguageOption { DisplayCultureName = "English", CultureCode = "en-US" },
+                new LanguageOption { DisplayCultureName = "日本語", CultureCode = "ja-JP" }
             };
 
             ComboBoxLanguage.ItemsSource = languages;
