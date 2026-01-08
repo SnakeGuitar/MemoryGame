@@ -57,8 +57,8 @@ namespace Server.SessionService
         {
             using (var db = _dbFactory.Create())
             {
-                var expiredSessions = db.userSession.Where(s => s.expiresAt <= DateTime.Now);
-                db.userSession.RemoveRange(expiredSessions);
+                var userSessions = db.userSession.Where(s => s.userId == userId);
+                db.userSession.RemoveRange(userSessions);
 
                 string token = Guid.NewGuid().ToString("N");
 
