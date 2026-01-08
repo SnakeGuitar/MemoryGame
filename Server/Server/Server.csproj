@@ -142,6 +142,7 @@
     <Compile Include="SessionService\Core\SocialCore.cs" />
     <Compile Include="SessionService\Core\StatisticsCore.cs" />
     <Compile Include="SessionService\Core\UserProfileCore.cs" />
+    <Compile Include="SessionService\IUserCallback.cs" />
     <Compile Include="SessionService\ISessionManager.cs" />
     <Compile Include="SessionService\IUserService.cs" />
     <Compile Include="SessionService\UserService.cs" />

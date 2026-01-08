@@ -1,23 +1,24 @@
-﻿using log4net.Core;
-using Server.Shared;
+﻿using Server.Shared;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ServiceModel;
 
 namespace Server.SessionService
 {
     public interface ISessionManager
     {
         string CreateSessionToken(int userId);
+        bool RenewSession(string token);
         int? GetUserIdFromToken(string token);
         bool IsUserOnline(string email);
+        void RegisterUserCallback(int userId);
     }
 
     public class SessionManager : ISessionManager
     {
-        private const int SESSION_DURATION_HOURS = 2;
+        private const int SESSION_DURATION_MINUTES = 2;
+        private static ConcurrentDictionary<int, IUserCallback> _activeUserCallbacks = new ConcurrentDictionary<int, IUserCallback>();
 
         private readonly IDbContextFactory _dbFactory;
         private readonly ILoggerManager _logger;
@@ -55,6 +56,8 @@ namespace Server.SessionService
 
         public string CreateSessionToken(int userId)
         {
+            RegisterUserCallback(userId);
+
             using (var db = _dbFactory.Create())
             {
                 var userSessions = db.userSession.Where(s => s.userId == userId);
@@ -67,7 +70,7 @@ namespace Server.SessionService
                     token = token,
                     userId = userId,
                     createdAt = DateTime.Now,
-                    expiresAt = DateTime.Now.AddHours(SESSION_DURATION_HOURS)
+                    expiresAt = DateTime.Now.AddMinutes(SESSION_DURATION_MINUTES)
                 };
 
                 db.userSession.Add(session);
@@ -75,6 +78,23 @@ namespace Server.SessionService
 
                 _logger.LogInfo($"Created new session for userId {userId} with token: {token}");
                 return token;
+            }
+        }
+
+        public bool RenewSession(string token)
+        {
+            using (var db = _dbFactory.Create())
+            {
+                var session = db.userSession.FirstOrDefault(s => s.token == token);
+                if (session != null && session.expiresAt > DateTime.Now)
+                {
+                    session.expiresAt = DateTime.UtcNow.AddMinutes(SESSION_DURATION_MINUTES);
+                    db.SaveChanges();
+                    _logger.LogInfo($"Renew session token: {token}");
+                    return true;
+                }
+                _logger.LogInfo($"Couldn't renew session for userId {session.userId}");
+                return false;
             }
         }
 
@@ -87,5 +107,27 @@ namespace Server.SessionService
                 return db.userSession.Any(s => s.user.email == email && s.expiresAt > DateTime.Now);
             }
         }
+
+        public void RegisterUserCallback(int userId)
+        {
+            var callback = OperationContext.Current.GetCallbackChannel<IUserCallback>();
+            if (callback != null)
+            {
+                if (_activeUserCallbacks.TryGetValue(userId, out var oldCallback))
+                {
+                    try
+                    {
+                        oldCallback.ForceLogout("Logged in from another location");
+                    }
+                    catch 
+                    {
+                        
+                    }
+                }
+
+                _activeUserCallbacks.AddOrUpdate(userId, callback, (k, v) => callback);
+            }
+        }
+
     }
 }

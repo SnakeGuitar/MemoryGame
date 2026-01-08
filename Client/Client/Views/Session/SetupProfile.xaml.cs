@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using Microsoft.Win32;
 using System;
@@ -29,7 +30,6 @@ namespace Client.Views.Session
     /// </summary>
     public partial class SetupProfile : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         private readonly string _email;
         private byte[] profileImage;
 
@@ -92,7 +92,7 @@ namespace Client.Views.Session
 
             try
             {
-                LoginResponse response = await _userServiceClient.FinalizeRegistrationAsync(
+                LoginResponse response = await UserServiceManager.Instance.Client.FinalizeRegistrationAsync(
                     _email,
                     username,
                     profileImage);
@@ -177,21 +177,6 @@ namespace Client.Views.Session
 
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                if (_userServiceClient?.State == System.ServiceModel.CommunicationState.Opened)
-                {
-                    _userServiceClient.Close();
-                }
-                else
-                {
-                    _userServiceClient.Abort();
-                }
-            }
-            catch
-            {
-                _userServiceClient.Abort();
-            }
             base.OnClosed(e);
         }
     }

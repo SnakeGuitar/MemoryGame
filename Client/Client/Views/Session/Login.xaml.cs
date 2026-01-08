@@ -1,23 +1,14 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
 using static Client.Views.Controls.CustomMessageBox;
@@ -29,7 +20,6 @@ namespace Client.Views.Session
     /// </summary>
     public partial class Login : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         public Login()
         {
             InitializeComponent();
@@ -69,7 +59,7 @@ namespace Client.Views.Session
 
             try
             {
-                LoginResponse response = await _userServiceClient.LoginAsync(email, password);
+                LoginResponse response = await UserServiceManager.Instance.LoginAsync(email, password);
 
                 if (response.Success)
                 {
@@ -78,7 +68,7 @@ namespace Client.Views.Session
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_LoginSuccess, successMessage, 
+                        Lang.Global_Title_LoginSuccess, successMessage,
                         this, MessageBoxType.Success);
                     msgBox.ShowDialog();
 
@@ -94,7 +84,17 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
+                    string errorMessage;
+
+                    if (response.MessageKey == "Global_Error_UserAlreadyLoggedIn")
+                    {
+                        errorMessage = Lang.Global_Error_InvalidCredentials;
+                    }
+                    else
+                    {
+                        errorMessage = GetString(response.MessageKey);
+                    }
+
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_LoginFailed, errorMessage,
                         this, MessageBoxType.Error);
@@ -152,17 +152,6 @@ namespace Client.Views.Session
 
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                if (_userServiceClient?.State == System.ServiceModel.CommunicationState.Opened)
-                {
-                    _userServiceClient.Close();
-                }
-            }
-            catch
-            {
-                _userServiceClient.Abort();
-            }
             base.OnClosed(e);
         }
     }

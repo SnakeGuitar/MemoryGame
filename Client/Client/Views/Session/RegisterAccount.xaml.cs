@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,6 @@ namespace Client.Views.Session
     /// </summary>
     public partial class RegisterAccount : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         private readonly bool _isGuestRegister;
         public RegisterAccount(bool isGuestRegister = false)
         {
@@ -71,12 +71,12 @@ namespace Client.Views.Session
 
                 if (_isGuestRegister)
                 {
-                    response = await _userServiceClient.InitiateGuestRegistrationAsync(
+                    response = await UserServiceManager.Instance.Client.InitiateGuestRegistrationAsync(
                         UserSession.UserId, email, password);
                 }
                 else
                 {
-                    response = await _userServiceClient.StartRegistrationAsync(email, password);
+                    response = await UserServiceManager.Instance.Client.StartRegistrationAsync(email, password);
                 }
 
                 if (response.Success)
@@ -152,23 +152,7 @@ namespace Client.Views.Session
         }
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                if (_userServiceClient.State != System.ServiceModel.CommunicationState.Faulted)
-                {
-                    _userServiceClient.Close();
-                }
-                else
-                {
-                    _userServiceClient.Abort();
-                }
-            }
-            catch
-            {
-                _userServiceClient.Abort();
-            }
             base.OnClosed(e);
         }
-
     }
 }

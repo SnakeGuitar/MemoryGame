@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,6 @@ namespace Client.Views.Session
     public partial class VerifyCode : Window
     {
         private readonly string _email;
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         private const int PIN_LENGTH = 6;
         private readonly bool _isGuestRegister;
 
@@ -77,12 +77,12 @@ namespace Client.Views.Session
 
                 if (_isGuestRegister)
                 {
-                    response = await _userServiceClient.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
+                    response = await UserServiceManager.Instance.Client.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
                     messageSuccess = Lang.VerifyCode_Message_GuestSuccess;
                 }
                 else
                 {
-                    response = await _userServiceClient.VerifyRegistrationAsync(_email, code);
+                    response = await UserServiceManager.Instance.Client.VerifyRegistrationAsync(_email, code);
                 }
 
                 if (response.Success)
@@ -143,7 +143,7 @@ namespace Client.Views.Session
 
             try
             {
-                ResponseDTO response = await _userServiceClient.ResendVerificationCodeAsync(_email);
+                ResponseDTO response = await UserServiceManager.Instance.Client.ResendVerificationCodeAsync(_email);
 
                 if (response.Success)
                 {
@@ -191,21 +191,6 @@ namespace Client.Views.Session
 
         protected override void OnClosed(EventArgs e)
         {
-            try
-            {
-                if (_userServiceClient?.State == CommunicationState.Opened)
-                {
-                    _userServiceClient.Close();
-                }
-                else
-                {
-                    _userServiceClient.Abort();
-                }
-            }
-            catch
-            {
-                _userServiceClient.Abort();
-            }
             base.OnClosed(e);
         }
     }

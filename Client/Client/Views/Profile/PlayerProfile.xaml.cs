@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using static Client.Views.Controls.CustomMessageBox;
 using static Client.Helpers.LocalizationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Profile
 {
@@ -27,8 +28,6 @@ namespace Client.Views.Profile
     /// </summary>
     public partial class PlayerProfile : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
-
         public PlayerProfile()
         {
             InitializeComponent();
@@ -41,7 +40,7 @@ namespace Client.Views.Profile
         {
             try
             {
-                var bytes = await _userServiceClient.GetUserAvatarAsync(UserSession.Email);
+                var bytes = await UserServiceManager.Instance.Client.GetUserAvatarAsync(UserSession.Email);
                 if (bytes != null && bytes.Length > 0)
                 {
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
@@ -117,7 +116,7 @@ namespace Client.Views.Profile
                 {
                     try
                     {
-                        _userServiceClient.LogoutGuestAsync(UserSession.SessionToken);
+                        UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
                     }
                     catch (Exception ex)
                     {

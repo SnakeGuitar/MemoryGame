@@ -739,4 +739,10 @@ You need to log in with your new account :)</value>
   <data name="Lobby_Button_Invite" xml:space="preserve">
     <value>Invite Friend</value>
   </data>
+  <data name="Global_Error_UserAlreadyLoggedIn" xml:space="preserve">
+    <value>Invalid email or password</value>
+  </data>
+  <data name="Global_Error_SessionExpired" xml:space="preserve">
+    <value>The session has expired</value>
+  </data>
 </root>

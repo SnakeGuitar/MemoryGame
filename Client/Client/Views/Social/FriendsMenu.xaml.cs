@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static Client.Views.Controls.CustomMessageBox;
-using static Client.Views.Controls.ConfirmationMessageBox;
 using static Client.Helpers.LocalizationHelper;
+using static Client.Views.Controls.ConfirmationMessageBox;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Social
 {
@@ -25,7 +26,7 @@ namespace Client.Views.Social
         public FriendsMenu()
         {
             InitializeComponent();
-            _proxy = new UserServiceClient();
+            _proxy = UserServiceManager.Instance.Client;
             _ = LoadSocialData();
         }
 

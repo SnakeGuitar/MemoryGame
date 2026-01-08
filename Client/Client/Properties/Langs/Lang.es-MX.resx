@@ -741,4 +741,10 @@ Por favor inténtalo de nuevo</value>
   <data name="Lobby_Button_Invite" xml:space="preserve">
     <value>Invite Friend</value>
   </data>
+  <data name="Global_Error_UserAlreadyLoggedIn" xml:space="preserve">
+    <value>Correo o contraseña invalidos</value>
+  </data>
+  <data name="Global_Error_SessionExpired" xml:space="preserve">
+    <value>La sesión ha expirado</value>
+  </data>
 </root>

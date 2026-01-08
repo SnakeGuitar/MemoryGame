@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.ServiceModel;
@@ -25,11 +26,8 @@ namespace Client.Views.Profile
         {
             try
             {
-                using (var client = new UserServiceClient())
-                {
-                    var history = await client.GetMatchHistoryAsync(UserSession.SessionToken);
+                    var history = await UserServiceManager.Instance.Client.GetMatchHistoryAsync(UserSession.SessionToken);
                     DataGridHistory.ItemsSource = history;
-                }
             }
             catch (EndpointNotFoundException ex)
             {

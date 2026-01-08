@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,6 @@ namespace Client.Views.Session
     /// </summary>
     public partial class EnterUsernameGuest : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
         public EnterUsernameGuest()
         {
             InitializeComponent();
@@ -60,7 +60,7 @@ namespace Client.Views.Session
 
             try
             {
-                LoginResponse response = await _userServiceClient.LoginAsGuestAsync(username);
+                LoginResponse response = await UserServiceManager.Instance.Client.LoginAsGuestAsync(username);
 
                 if (response.Success)
                 {
@@ -139,6 +139,11 @@ namespace Client.Views.Session
                 titleScreen.Show();
             }
             this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
         }
     }
 }

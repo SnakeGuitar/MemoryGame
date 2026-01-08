@@ -289,6 +289,16 @@ namespace Server.SessionService.Core
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
 
+                    if (_sessionManager.IsUserOnline(email))
+                    {
+                        _logger.LogWarn($"Login blocked for {email}: User already playing/online.");
+                        return new LoginResponse
+                        {
+                            Success = false,
+                            MessageKey = "Global_Error_UserAlreadyLoggedIn"
+                        };
+                    }
+
                     if (user.penaltyId != null && user.penalty != null)
                     {
                         if (user.penalty.duration > DateTime.UtcNow)
@@ -457,7 +467,7 @@ namespace Server.SessionService.Core
 
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var guestUser = db.user.Find(guestUserId);
                     if (guestUser == null)
@@ -521,7 +531,7 @@ namespace Server.SessionService.Core
         {
             try
             {
-                using (var db = new memoryGameDBEntities())
+                using (var db = _dbFactory.Create())
                 {
                     var pending = db.pendingRegistration
                         .FirstOrDefault(p => p.email == email && p.pin == pin && p.expirationTime > DateTime.Now);
@@ -553,6 +563,35 @@ namespace Server.SessionService.Core
             {
                 _logger.LogError($"VerifyRegistration Error for email {email}: {ex.Message}");
                 return new ResponseDTO { Success = false, MessageKey = "Global_ServiceError_Unknown" };
+            }
+        }
+
+        public LoginResponse RenewSession(string token)
+        {
+            try
+            {
+                if (_sessionManager.RenewSession(token))
+                {
+                    return new LoginResponse
+                    {
+                        Success = true,
+                        SessionToken = token
+                    };
+                }
+                else
+                {
+                    _logger.LogInfo($"Session renewal failed for token: {token}");
+                    return new LoginResponse
+                    {
+                        Success = false,
+                        MessageKey = "Global_Error_SessionExpired"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"RenewSession Error: {ex.Message}");
+                return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
     }

@@ -564,7 +564,7 @@ namespace Client.UserServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserServiceReference.IUserService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserServiceReference.IUserService", CallbackContract=typeof(Client.UserServiceReference.IUserServiceCallback))]
     public interface IUserService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/StartRegistration", ReplyAction="http://tempuri.org/IUserService/StartRegistrationResponse")]
@@ -596,6 +596,12 @@ namespace Client.UserServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Login", ReplyAction="http://tempuri.org/IUserService/LoginResponse")]
         System.Threading.Tasks.Task<Client.UserServiceReference.LoginResponse> LoginAsync(string email, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RenewSession", ReplyAction="http://tempuri.org/IUserService/RenewSessionResponse")]
+        Client.UserServiceReference.LoginResponse RenewSession(string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/RenewSession", ReplyAction="http://tempuri.org/IUserService/RenewSessionResponse")]
+        System.Threading.Tasks.Task<Client.UserServiceReference.LoginResponse> RenewSessionAsync(string token);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/GetUserAvatar", ReplyAction="http://tempuri.org/IUserService/GetUserAvatarResponse")]
         byte[] GetUserAvatar(string email);
@@ -707,30 +713,38 @@ namespace Client.UserServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IUserServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IUserService/ForceLogout")]
+        void ForceLogout(string reason);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IUserServiceChannel : Client.UserServiceReference.IUserService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class UserServiceClient : System.ServiceModel.ClientBase<Client.UserServiceReference.IUserService>, Client.UserServiceReference.IUserService {
+    public partial class UserServiceClient : System.ServiceModel.DuplexClientBase<Client.UserServiceReference.IUserService>, Client.UserServiceReference.IUserService {
         
-        public UserServiceClient() {
+        public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public UserServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public UserServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public UserServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public UserServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public Client.UserServiceReference.ResponseDTO StartRegistration(string email, string password) {
@@ -771,6 +785,14 @@ namespace Client.UserServiceReference {
         
         public System.Threading.Tasks.Task<Client.UserServiceReference.LoginResponse> LoginAsync(string email, string password) {
             return base.Channel.LoginAsync(email, password);
+        }
+        
+        public Client.UserServiceReference.LoginResponse RenewSession(string token) {
+            return base.Channel.RenewSession(token);
+        }
+        
+        public System.Threading.Tasks.Task<Client.UserServiceReference.LoginResponse> RenewSessionAsync(string token) {
+            return base.Channel.RenewSessionAsync(token);
         }
         
         public byte[] GetUserAvatar(string email) {

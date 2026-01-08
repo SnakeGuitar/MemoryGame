@@ -268,5 +268,10 @@ namespace Server.SessionService
         {
             return _penaltyCore.ReportUser(token, targetUser, matchId);
         }
+
+        public LoginResponse RenewSession(string token)
+        {
+            return _authenticationCore.RenewSession(token);
+        }
     }
 }

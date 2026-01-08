@@ -6,7 +6,7 @@ using System.ServiceModel;
 
 namespace Server.SessionService
 {
-    [ServiceContract]
+    [ServiceContract(CallbackContract = typeof(IUserCallback))]
     public interface IUserService
     {
         [OperationContract]
@@ -23,6 +23,8 @@ namespace Server.SessionService
 
         [OperationContract]
         LoginResponse Login(string email, string password);
+        [OperationContract]
+        LoginResponse RenewSession(string token);
 
         [OperationContract]
         byte[] GetUserAvatar(string email);
@@ -73,6 +75,7 @@ namespace Server.SessionService
 
         [OperationContract]
         ResponseDTO ReportUser(string token, string targetUser, int matchId);
+
     }
 
     [DataContract]

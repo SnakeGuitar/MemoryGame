@@ -1,25 +1,17 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using Client.Views.Session;
 using Client.Views.Singleplayer;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
 
@@ -30,10 +22,11 @@ namespace Client.Views
     /// </summary>
     public partial class MainMenu : Window
     {
-        private readonly UserServiceClient _userServiceClient = new UserServiceClient();
+        private DispatcherTimer _keepAliveTimer;
         public MainMenu()
         {
             InitializeComponent();
+
             UsernameDisplay.Content = UserSession.Username;
             ButtonSignIn.Visibility = Visibility.Visible;
             UserSession.ProfileUpdated += OnProfileUpdated;
@@ -42,8 +35,8 @@ namespace Client.Views
             {
                 _ = LoadAvatarAsync();
                 ButtonSignIn.Visibility = Visibility.Collapsed;
+                InitializeKeepAlive();
             }
-
         }
 
         private void ButtonSinglePlayer_Click(object sender, RoutedEventArgs e)
@@ -114,7 +107,7 @@ namespace Client.Views
                 {
                     try
                     {
-                        _userServiceClient.LogoutGuestAsync(UserSession.SessionToken);
+                        UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
                     }
                     catch (Exception ex)
                     {
@@ -130,7 +123,7 @@ namespace Client.Views
         {
             try
             {
-                byte[] avatarBytes = await _userServiceClient.GetUserAvatarAsync(UserSession.Email);
+                byte[] avatarBytes = await UserServiceManager.Instance.Client.GetUserAvatarAsync(UserSession.Email);
 
                 if (avatarBytes != null && avatarBytes.Length > 0)
                 {
@@ -178,6 +171,7 @@ namespace Client.Views
         }
         protected override void OnClosed(EventArgs e)
         {
+            _keepAliveTimer?.Stop();
             UserSession.ProfileUpdated -= OnProfileUpdated;
             Window owner = this.Owner;
             if (owner != null)
@@ -185,6 +179,50 @@ namespace Client.Views
                 owner.Show();
             }
             base.OnClosed(e);
+        }
+
+        private void InitializeKeepAlive()
+        {
+            _keepAliveTimer = new DispatcherTimer();
+            _keepAliveTimer.Interval = TimeSpan.FromSeconds(50);
+            _keepAliveTimer.Tick += async (s, e) => await SendHeartbeatAsync();
+            _keepAliveTimer.Start();
+        }
+
+        private async Task SendHeartbeatAsync()
+        {
+            try
+            {
+                var response = await UserServiceManager.Instance.Client.RenewSessionAsync(UserSession.SessionToken);
+
+                if (!response.Success)
+                {
+                    Debug.WriteLine("Heartbeat: Session expired server-side.");
+                    HandleSessionExpiration();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Heartbeat failed (Network/Service): {ex.Message}");
+                HandleSessionExpiration();
+            }
+        }
+
+        private void HandleSessionExpiration()
+        {
+            _keepAliveTimer?.Stop();
+
+            MessageBox.Show(
+                Lang.Global_Error_SessionExpired, 
+                Lang.Global_Title_Error, 
+                MessageBoxButton.OK, 
+                MessageBoxImage.Warning);
+
+            UserSession.EndSession();
+
+            var loginWindow = new Login();
+            loginWindow.Show();
+            this.Close();
         }
     }
 }

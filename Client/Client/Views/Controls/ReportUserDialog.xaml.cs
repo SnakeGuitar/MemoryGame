@@ -1,11 +1,12 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
+using Client.Utilities;
 using System;
 using System.Windows;
 using System.Windows.Input;
-using static Client.Views.Controls.CustomMessageBox;
 using static Client.Helpers.LocalizationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Controls
 {
@@ -35,7 +36,7 @@ namespace Client.Views.Controls
             }
 
             ButtonReport.IsEnabled = false;
-            var client = new UserServiceClient();
+            var client = UserServiceManager.Instance.Client;
 
             try
             {
