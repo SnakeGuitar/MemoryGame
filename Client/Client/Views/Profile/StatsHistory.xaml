@@ -4,12 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Views.Profile"
+        xmlns:converters="clr-namespace:Client.Utilities.Converters"
+        
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="Match History" 
         MinHeight="720" MinWidth="1280"
         WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <converters:SelfReportVisibilityConverter x:Key="SelfReportVisiblityConverter"/>
+    </Window.Resources>
 
     <Grid Background="{StaticResource BackgroundColor}">
 
@@ -122,7 +128,9 @@
                                                     Style="{StaticResource HardButtonStyle}"
                                                     Foreground="White" FontSize="18"
                                                     Height="40" Width="120"
-                                                    Click="ButtonReport_Click"/>
+                                                    Click="ButtonReport_Click"
+                                                    
+                                                    Visibility="{Binding WinnerName, Converter={StaticResource SelfReportVisiblityConverter}}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
