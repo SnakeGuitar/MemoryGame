@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,13 @@ namespace Client.Helpers
 
             nextWindow.Show();
             currentWindow.Close();
+        }
+
+        public static bool? ShowDialog(Window parentWindow, Window dialogWindow)
+        {
+            dialogWindow.Owner = parentWindow;
+            dialogWindow.WindowState = parentWindow.WindowState;
+            return dialogWindow.ShowDialog();
         }
 
         public static void ExitApplication()
