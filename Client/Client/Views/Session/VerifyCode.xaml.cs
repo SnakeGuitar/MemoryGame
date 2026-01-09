@@ -4,21 +4,10 @@ using Client.UserServiceReference;
 using Client.Utilities;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
 using static Client.Views.Controls.CustomMessageBox;
@@ -97,9 +86,10 @@ namespace Client.Views.Session
                         UserSession.EndSession();
 
                         Login loginWindow = new Login();
-                        Application.Current.MainWindow = loginWindow;
-                        loginWindow.Show();
 
+                        Application.Current.MainWindow = loginWindow;
+
+                        loginWindow.Show();
                         Window ownerWindow = this.Owner;
                         this.Close();
                         ownerWindow?.Close();
@@ -108,6 +98,9 @@ namespace Client.Views.Session
                     {
                         var profileSetupWindow = new SetupProfile(UserSession.Email);
                         profileSetupWindow.WindowState = this.WindowState;
+
+                        Application.Current.MainWindow = profileSetupWindow;
+
                         profileSetupWindow.Show();
                         this.Close();
                     }
@@ -125,6 +118,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
+<<<<<<< Updated upstream
                 string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Error]: {ex.Message}");
 
@@ -134,6 +128,9 @@ namespace Client.Views.Session
                 msgBox.ShowDialog();
 
                 ButtonVerifyCode.IsEnabled = true;
+=======
+                ExceptionManager.Handle(ex, this, () => ButtonVerifyCode.IsEnabled = true);
+>>>>>>> Stashed changes
             }
         }
 
@@ -160,9 +157,11 @@ namespace Client.Views.Session
                         this, MessageBoxType.Error);
                     msgBox.ShowDialog();
                 }
+                ButtonResendCode.IsEnabled = true;
             }
             catch (Exception ex)
             {
+<<<<<<< Updated upstream
                 string errorMessage = GetString(ex);
                 
                 Debug.WriteLine($"[Resend Code Error]: {ex.ToString()}");
@@ -174,6 +173,9 @@ namespace Client.Views.Session
             finally
             {
                 ButtonResendCode.IsEnabled = true;
+=======
+                ExceptionManager.Handle(ex, this, () => ButtonResendCode.IsEnabled = true);
+>>>>>>> Stashed changes
             }
         }
 

@@ -4,20 +4,10 @@ using Client.UserServiceReference;
 using Client.Utilities;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
 using static Client.Views.Controls.CustomMessageBox;
@@ -68,7 +58,7 @@ namespace Client.Views.Session
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_LoginAsGuestSuccess, successMessage, 
+                        Lang.Global_Title_LoginAsGuestSuccess, successMessage,
                         this, MessageBoxType.Success);
                     msgBox.ShowDialog();
 
@@ -87,45 +77,16 @@ namespace Client.Views.Session
                 {
                     string errorMessage = GetString(response.MessageKey);
                     var msgBox = new Views.Controls.CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage, 
+                        Lang.Global_Title_Error, errorMessage,
                         this, MessageBoxType.Error);
                     msgBox.ShowDialog();
 
                     ButtonAcceptUsernameGuest.IsEnabled = true;
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_ServerOffline,
-                    errorMessage, this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptUsernameGuest.IsEnabled = true;
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError,
-                    errorMessage, this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptUsernameGuest.IsEnabled = true;
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new Views.Controls.CustomMessageBox(
-                    Lang.Global_Title_NetworkError,
-                    errorMessage, this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptUsernameGuest.IsEnabled = true;
+                ExceptionManager.Handle(ex, this, () => ButtonAcceptUsernameGuest.IsEnabled = true);
             }
         }
 

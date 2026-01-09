@@ -30,23 +30,27 @@ namespace Client.Views.Profile
             InitializeComponent();
             SocialNetworksList = new ObservableCollection<SocialNetworkDTO>();
             ItemsControlSocials.ItemsSource = SocialNetworksList;
-            _ = LoadCurrentAvatar();
             LoadExistingData();
+            InitializeAsync();
+        }
 
+        private async void InitializeAsync()
+        {
+            await LoadCurrentAvatar();
         }
 
         private void LoadExistingData()
         {
-            if (FindName("TextBoxNewUsername") is System.Windows.Controls.TextBox txtUser)
+            if (FindName("TextBoxNewUsername") is TextBox txtUser)
             {
                 txtUser.Text = UserSession.Username;
             }
 
-            if (FindName("TextBoxName") is System.Windows.Controls.TextBox txtName)
+            if (FindName("TextBoxName") is TextBox txtName)
             {
                 txtName.Text = UserSession.Name ?? "";
             }
-            if (FindName("TextBoxLastName") is System.Windows.Controls.TextBox txtLast)
+            if (FindName("TextBoxLastName") is TextBox txtLast)
             {
                 txtLast.Text = UserSession.LastName ?? "";
             }
@@ -70,32 +74,9 @@ namespace Client.Views.Profile
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
         }
 
@@ -127,7 +108,6 @@ namespace Client.Views.Profile
                     {
                         ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(resizedBytes);
                         UserSession.OnProfileUpdated();
-
                         ShowSuccess(Lang.Global_Title_Success, Lang.EditProfile_Label_AvatarUpdated);
                     }
                     else
@@ -139,32 +119,9 @@ namespace Client.Views.Profile
                 {
                     ShowError(Lang.Global_Title_Error, Lang.Global_Error_ImageTooLarge);
                 }
-                catch (EndpointNotFoundException ex)
-                {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_NetworkError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-                }
-                catch (CommunicationException ex)
-                {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_NetworkError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-                }
                 catch (Exception ex)
                 {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_AppError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                    ExceptionManager.Handle(ex, this);
                 }
             }
         }
@@ -177,8 +134,10 @@ namespace Client.Views.Profile
             if (string.IsNullOrWhiteSpace(currentPass) || string.IsNullOrWhiteSpace(newPass))
             {
                 CustomMessageBox messageBox = new CustomMessageBox(
-                    Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields,
-                    this, MessageBoxType.Warning);
+                    Lang.Global_Title_Warning,
+                    Lang.EditProfile_Label_ErrorPasswordFields,
+                    this,
+                    MessageBoxType.Warning);
                 return;
             }
 
@@ -196,32 +155,9 @@ namespace Client.Views.Profile
                     ShowError(Lang.Global_Title_Error, Lang.EditProfile_Label_ErrorPasswordUpdate);
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
         }
 
@@ -256,6 +192,7 @@ namespace Client.Views.Profile
                     UserSession.EndSession();
 
                     Login loginWindow = new Login();
+                    Application.Current.MainWindow = loginWindow;
                     loginWindow.Show();
 
                     this.Close();
@@ -277,36 +214,16 @@ namespace Client.Views.Profile
                     }
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
             finally
             {
-                ButtonUpdateUsername.IsEnabled = true;
+                if (ButtonUpdateUsername != null && !ButtonUpdateUsername.IsEnabled && Application.Current.MainWindow == this)
+                {
+                    ButtonUpdateUsername.IsEnabled = true;
+                }
             }
         }
 
@@ -322,7 +239,6 @@ namespace Client.Views.Profile
                 {
                     UserSession.Name = name;
                     UserSession.LastName = lastName;
-
                     ShowSuccess(Lang.Global_Title_Success, Lang.EditProfile_Label_SuccesUpdateInfo);
                 }
                 else
@@ -330,32 +246,9 @@ namespace Client.Views.Profile
                     ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
         }
 
@@ -370,42 +263,24 @@ namespace Client.Views.Profile
                     if (response.Success)
                     {
                         var itemToRemove = SocialNetworksList.FirstOrDefault(s => s.SocialNetworkId == socialId);
-                        if (itemToRemove != null) SocialNetworksList.Remove(itemToRemove);
-
+                        if (itemToRemove != null)
+                        {
+                            SocialNetworksList.Remove(itemToRemove);
+                        }
                         var sessionItem = UserSession.SocialNetworks.FirstOrDefault(s => s.SocialNetworkId == socialId);
-                        if (sessionItem != null) UserSession.SocialNetworks.Remove(sessionItem);
+                        if (sessionItem != null)
+                        {
+                            UserSession.SocialNetworks.Remove(sessionItem);
+                        }
                     }
                     else
                     {
                         ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
                     }
                 }
-                catch (EndpointNotFoundException ex)
-                {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_NetworkError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-                }
-                catch (CommunicationException ex)
-                {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_NetworkError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-                }
                 catch (Exception ex)
                 {
-                    string errorMessage = GetString(ex);
-                    Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_AppError, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                    ExceptionManager.Handle(ex, this);
                 }
             }
         }
@@ -413,7 +288,10 @@ namespace Client.Views.Profile
         private async void ButtonAddSocial_Click(object sender, RoutedEventArgs e)
         {
             string account = TextBoxNewSocial.Text.Trim();
-            if (string.IsNullOrEmpty(account)) return;
+            if (string.IsNullOrEmpty(account))
+            {
+                return;
+            }
 
             try
             {
@@ -421,10 +299,9 @@ namespace Client.Views.Profile
 
                 if (response.Success)
                 {
-                    SocialNetworksList.Add(new SocialNetworkDTO { Account = account });
-
+                    var newSocial = new SocialNetworkDTO { Account = account };
+                    SocialNetworksList.Add(newSocial);
                     UserSession.SocialNetworks.Add(new SocialNetworkDTO { Account = account });
-
                     TextBoxNewSocial.Text = string.Empty;
                 }
                 else
@@ -432,32 +309,9 @@ namespace Client.Views.Profile
                     ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
         }
 

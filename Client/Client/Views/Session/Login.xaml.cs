@@ -63,7 +63,20 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
+<<<<<<< Updated upstream
                     UserSession.StartSession(response.SessionToken, response.User);
+=======
+                    UserSession.StartSession(
+                        response.SessionToken, 
+                        response.User.UserId, 
+                        response.User.Username, 
+                        response.User.Email,
+                        response.User.Name, 
+                        response.User.LastName, 
+                        response.User.RegistrationDate,
+                        response.User.SocialNetworks.ToList()
+                        );
+>>>>>>> Stashed changes
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new CustomMessageBox(
@@ -74,7 +87,9 @@ namespace Client.Views.Session
                     var mainMenu = new MainMenu();
                     mainMenu.WindowState = this.WindowState;
                     Application.Current.MainWindow = mainMenu;
+
                     mainMenu.Show();
+
                     this.Close();
 
                     if (this.Owner != null)
@@ -103,38 +118,9 @@ namespace Client.Views.Session
                     ButtonAcceptLogin.IsEnabled = true;
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_ServerOffline, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptLogin.IsEnabled = true;
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptLogin.IsEnabled = true;
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonAcceptLogin.IsEnabled = true;
+                ExceptionManager.Handle(ex, this, () => ButtonAcceptLogin.IsEnabled = false);
             }
         }
 
