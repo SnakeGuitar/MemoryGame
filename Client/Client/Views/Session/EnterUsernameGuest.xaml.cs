@@ -64,7 +64,7 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    UserSession.StartGuestSession(response.SessionToken, response.User.UserId, response.User.Username);
+                    UserSession.StartSession(response.SessionToken, response.User);
 
                     string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
                     var msgBox = new CustomMessageBox(

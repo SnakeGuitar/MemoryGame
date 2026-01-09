@@ -14,33 +14,29 @@ namespace Client.Helpers
         public static string SessionToken { get; set; }
         public static int UserId { get; private set; }
         public static string Username { get; set; }
-        public static string Email { get; private set; }
         public static bool IsGuest { get; set; }
-        public static DateTime RegistrationDate { get; set; }
+        public static string Email { get; private set; }
         public static string Name { get; set; } = string.Empty;
         public static string LastName { get; set; } = string.Empty;
+        public static DateTime RegistrationDate { get; set; }
         public static List<SocialNetworkDTO> SocialNetworks { get; set; } = new List<SocialNetworkDTO>();
+        
 
-        public static void StartSession(string token, int id, string username, string email, string name, string lastname,
-            DateTime registrationDate, List<SocialNetworkDTO> socialNetworks)
+        public static void StartSession(string token, UserDTO user)
         {
-            SessionToken = token;
-            UserId = id;
-            Username = username;
-            Email = email;
-            IsGuest = false;
-            Name = name;
-            LastName = lastname;
-            RegistrationDate = registrationDate;
-            SocialNetworks = socialNetworks;
-        }
+            if (user == null) throw new ArgumentNullException(nameof(user));
 
-        public static void StartGuestSession(string token, int id, string username)
-        {
             SessionToken = token;
-            UserId = id;
-            Username = username;
-            IsGuest = true;
+            UserId = user.UserId;
+            Username = user.Username;
+            IsGuest = user.IsGuest;
+            Email = user.Email;
+            Name = user.Name;
+            LastName = user.LastName;
+            RegistrationDate = user.RegistrationDate;
+            SocialNetworks = user.SocialNetworks != null
+                ? new List<SocialNetworkDTO>(user.SocialNetworks)
+                : new List<SocialNetworkDTO>();
         }
 
         public static void EndSession()
