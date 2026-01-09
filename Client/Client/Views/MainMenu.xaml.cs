@@ -103,17 +103,25 @@ namespace Client.Views
             bool? result = confirmationBox.ShowDialog();
             if (result == true)
             {
-                if (UserSession.IsGuest)
+                try
                 {
-                    try
+                    if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
                     {
-                        UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error on LogoutGuest: {ex.Message}");
+                        if (UserSession.IsGuest)
+                        {
+                            UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken).Wait(TimeSpan.FromSeconds(2));
+                        }
+                        else
+                        {
+                            UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken).Wait(TimeSpan.FromSeconds(2));
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error on Logout: {ex.Message}");
+                }
+
                 UserSession.EndSession();
                 Application.Current.Shutdown();
             }
@@ -169,7 +177,8 @@ namespace Client.Views
             UsernameDisplay.Content = UserSession.Username;
             _ = LoadAvatarAsync();
         }
-        protected override async void OnClosed(EventArgs e)
+
+        protected override void OnClosed(EventArgs e)
         {
             _keepAliveTimer?.Stop();
             UserSession.ProfileUpdated -= OnProfileUpdated;
@@ -178,13 +187,18 @@ namespace Client.Views
             {
                 if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
                 {
-                    await UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
+                    if (UserSession.IsGuest)
+                    {
+                        UserServiceManager.Instance.Client.LogoutGuest(UserSession.SessionToken);
+                    }
+                    else
+                    {
+                        UserServiceManager.Instance.Client.Logout(UserSession.SessionToken);
+                    }
                 }
             }
-            catch
-            (TimeoutException)
+            catch (Exception)
             {
-                
             }
 
             Window owner = this.Owner;
