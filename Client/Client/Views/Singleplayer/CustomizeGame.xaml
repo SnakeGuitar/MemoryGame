@@ -35,7 +35,7 @@
                         <StackPanel Margin="25" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                             <Label Content="{x:Static language:Lang.Global_Label_NumberOfCards}" 
-                               Style="{StaticResource RegisterLabelStyle}" FontSize="35"/>
+                               Style="{StaticResource RegisterLabelStyle}" FontSize="40" FontWeight="Bold"/>
 
                             <Grid HorizontalAlignment="Center">
                                 <Grid.ColumnDefinitions>
@@ -57,12 +57,12 @@
                                    Style="{StaticResource FormUnitLabelStyle}"/>
                             </Grid>
 
-                            <Label Content="{x:Static language:Lang.Global_Label_TimerLimit}" FontSize="35" 
-                               Style="{StaticResource RegisterLabelStyle}" Margin="0,35,0,0"/>
+                            <Label Content="{x:Static language:Lang.Global_Label_TimerLimit}" FontSize="40" 
+                               Style="{StaticResource RegisterLabelStyle}" Margin="0,35,0,0" FontWeight="Bold"/>
 
                             <Slider x:Name="TimerSlider" 
                                 Style="{StaticResource FormSliderStyle}"
-                                Minimum="30" Maximum="300" Value="180" 
+                                Minimum="30" Maximum="300" Value="180" Width="300"
                                 IsSnapToTickEnabled="True" TickFrequency="15"
                                 ValueChanged="TimerSlider_ValueChanged"/>
 

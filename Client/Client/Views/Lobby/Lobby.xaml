@@ -90,7 +90,7 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="ButtonBack" 
-                    Content="{x:Static lang:Lang.Global_Button_Back}" 
+                    Content="{x:Static lang:Lang.Global_Button_Leave}" 
                     Style="{StaticResource MenuExitLobbyButtonStyle}"
                     Grid.Column="0" Click="ButtonBackToMainMenu_Click"/>
 

@@ -106,7 +106,7 @@ namespace Client.Views.Session
                     }
                     else
                     {
-                        var profileSetupWindow = new SetupProfile(_email);
+                        var profileSetupWindow = new SetupProfile(UserSession.Email);
                         profileSetupWindow.WindowState = this.WindowState;
                         profileSetupWindow.Show();
                         this.Close();
@@ -114,7 +114,7 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = LocalizationHelper.GetString(response.MessageKey);
+                    string errorMessage = GetString(response.MessageKey);
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
                         this, MessageBoxType.Error);
@@ -125,7 +125,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 Debug.WriteLine($"[Error]: {ex.Message}");
 
                 var msgBox = new CustomMessageBox(
@@ -163,7 +163,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-                string errorMessage = Helpers.LocalizationHelper.GetString(ex);
+                string errorMessage = GetString(ex);
                 
                 Debug.WriteLine($"[Resend Code Error]: {ex.ToString()}");
                 var msgBox = new CustomMessageBox(

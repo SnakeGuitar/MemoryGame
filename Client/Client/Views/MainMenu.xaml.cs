@@ -109,11 +109,11 @@ namespace Client.Views
                     {
                         if (UserSession.IsGuest)
                         {
-                            UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken).Wait(TimeSpan.FromSeconds(2));
+                            UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
                         }
                         else
                         {
-                            UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken).Wait(TimeSpan.FromSeconds(2));
+                            UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
                         }
                     }
                 }

@@ -78,7 +78,7 @@
                                     Width="200" Margin="0,0,0,15"
                                     Click="ButtonEditProfile_Click"/>
 
-                            <Button Content="{x:Static language:Lang.Global_Button_CloseSession}"
+                            <Button Content="{x:Static language:Lang.Global_Button_LogOut}"
                                     Style="{StaticResource HardButtonStyle}"
                                     Width="200" Foreground="{StaticResource AccentForegroundColor}"
                                     Click="ButtonCloseSession_Click"/>
@@ -86,9 +86,12 @@
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
 
-                            <TextBlock x:Name="TextBlockUsername" Text="Username"
-                                       Style="{StaticResource TitleTextStyle}" Width="Auto"
-                                       HorizontalAlignment="Left"/>
+                            <Viewbox Stretch="Uniform" HorizontalAlignment="Left" MaxWidth="550" Height="80">
+                                <TextBlock x:Name="TextBlockUsername" FontSize="90"
+                                           Text="Username"
+                                           Style="{StaticResource TitleTextStyle}"
+                                           TextWrapping="NoWrap"/>
+                            </Viewbox>
 
                             <StackPanel Orientation="Horizontal" Margin="0,10">
                                 <Label Content="{x:Static language:Lang.PlayerProfile_Label_Name}" Style="{StaticResource CardLabelStyle}" FontSize="25"/>

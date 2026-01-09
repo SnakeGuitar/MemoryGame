@@ -99,8 +99,7 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    UserSession.StartSession(response.SessionToken, response.User.UserId, response.User.Username, response.User.Email,
-                        response.User.Name, response.User.LastName, response.User.RegistrationDate, response.User.SocialNetworks.ToList());
+                    UserSession.StartSession(response.SessionToken, response.User);
 
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,

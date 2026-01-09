@@ -90,7 +90,7 @@ namespace Client.Views.Profile
 
             TextBlockUsername.Text = UserSession.Username;
             TextEmail.Text = UserSession.Email;
-            TextDate.Text = UserSession.RegistrationDate.ToString("MMMM dd, yyyy");
+            TextDate.Text = UserSession.RegistrationDate.ToString("MMMM dd yyyy");
             ItemsControlSocialNetworks.ItemsSource = UserSession.SocialNetworks;
         }
 
@@ -106,29 +106,28 @@ namespace Client.Views.Profile
         private void ButtonCloseSession_Click(object sender, RoutedEventArgs e)
         {
             var confirmationBox = new ConfirmationMessageBox(
-                Lang.Global_Button_CloseSession, Lang.Global_Message_CloseSession,
+                Lang.Global_Button_LogOut, Lang.Global_Message_CloseSession,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
 
             bool? result = confirmationBox.ShowDialog();
             if (result == true)
             {
-                if (UserSession.IsGuest)
-                {
-                    try
-                    {
-                        UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error on LogoutGuest: {ex.Message}");
-                    }
-                }
                 UserSession.EndSession();
 
                 var titleScreen = new TitleScreen();
-                titleScreen.WindowState = this.WindowState;
                 titleScreen.Show();
-                this.Close();
+
+                for (int i = Application.Current.Windows.Count - 1; i >= 0; i--)
+                {
+                    Window window = Application.Current.Windows[i];
+
+                    if (window != titleScreen)
+                    {
+                        window.Close();
+                    }
+                }
+
+                Application.Current.MainWindow = titleScreen;
             }
         }
 

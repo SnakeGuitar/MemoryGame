@@ -263,8 +263,17 @@ namespace Client.Views.Lobby
 
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            await LeaveLobbySafe();
-            this.Close();
+            ConfirmationMessageBox confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_LeaveLobby, Lang.HostLobby_Message_LeaveLobby,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
+
+            bool? result = confirmationBox.ShowDialog();
+
+            if (result == true)
+            {
+                await LeaveLobbySafe();
+                this.Close();
+            }
         }
 
         private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)

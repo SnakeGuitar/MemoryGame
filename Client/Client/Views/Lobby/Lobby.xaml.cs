@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -194,8 +195,18 @@ namespace Client.Views.Lobby
 
         private async void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
-            await LeaveLobbySafe();
-            this.Close();
+            ConfirmationMessageBox confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_LeaveLobby, Lang.Lobby_Message_LeaveLobby,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
+
+            bool? result = confirmationBox.ShowDialog();
+
+            if (result == true)
+            {
+                await LeaveLobbySafe();
+                this.Close();
+            }
+            
         }
 
         #endregion
