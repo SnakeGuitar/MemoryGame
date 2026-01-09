@@ -36,7 +36,9 @@
 
         <TabControl Grid.Row="1" Style="{StaticResource TabControlStyle}">
 
-            <TabItem Header="Lobby" Style="{StaticResource TabItemStyle}">
+            <TabItem Header="{x:Static lang:Lang.Global_Title_Lobby}" 
+                     Style="{StaticResource TabItemStyle}" 
+                     FontSize="28">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -87,32 +89,54 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Settings" Style="{StaticResource TabItemStyle}">
+            <TabItem Header="{x:Static lang:Lang.Global_Button_Settings}" 
+                     Style="{StaticResource TabItemStyle}"
+                     FontSize="28">
                 <Grid>
                     <Border Style="{StaticResource QuadrantBorderStyle}" 
                             HorizontalAlignment="Center" VerticalAlignment="Center" 
                             Width="500" Height="400">
-                        <StackPanel VerticalAlignment="Center">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                            <Label Content="Number of Cards" Style="{StaticResource FormUnitLabelStyle}" HorizontalAlignment="Center"/>
-                            <ComboBox x:Name="ComboBoxNumberOfCards" Style="{StaticResource FormComboBoxStyle}"
-                                      SelectionChanged="ComboBoxNumberOfCards_SelectionChanged">
-                                <ComboBoxItem Content="16"/>
-                                <ComboBoxItem Content="20"/>
-                                <ComboBoxItem Content="24"/>
-                                <ComboBoxItem Content="30"/>
-                                <ComboBoxItem Content="36"/>
-                            </ComboBox>
+                            <Label Content="{x:Static lang:Lang.Global_Label_NumberOfCards}" 
+                                   Style="{StaticResource RegisterLabelStyle}" FontSize="35"/>
 
-                            <Label Content="Seconds per Turn" Style="{StaticResource FormUnitLabelStyle}" HorizontalAlignment="Center" Margin="0,20,0,0"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Slider x:Name="SliderSecondsPerTurn" Style="{StaticResource FormSliderStyle}"
-                                        Minimum="5" Maximum="60" Value="30" 
-                                        TickFrequency="5" IsSnapToTickEnabled="True"
-                                        ValueChanged="SliderSecondsPerTurn_ValueChanged"/>
-                                <Label x:Name="LabelTimerValue" Content="30" Style="{StaticResource FormValueLabelStyle}"/>
+                            <Grid HorizontalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="ComboBoxNumberOfCards" Grid.Column="0" FontSize="28" Width="70" 
+                                          Style="{StaticResource FormComboBoxStyle}">
+                                    <ComboBoxItem Content="16"/>
+                                    <ComboBoxItem Content="20"/>
+                                    <ComboBoxItem Content="24"/>
+                                    <ComboBoxItem Content="30"/>
+                                    <ComboBoxItem Content="36"/>
+                                </ComboBox>
+
+                                <Label Content="{x:Static lang:Lang.Global_Label_Cards}" 
+                                       Grid.Column="1"
+                                       Style="{StaticResource FormUnitLabelStyle}"/>
+                            </Grid>
+
+                            <Label Content="{x:Static lang:Lang.Global_Label_TimerLimit}" 
+                                   Style="{StaticResource RegisterLabelStyle}" Margin="0, 35,0,0" FontSize="35"/>
+
+                            <Slider x:Name="SliderSecondsPerTurn" 
+                                    Style="{StaticResource FormSliderStyle}"
+                                    Minimum="30" Maximum="60" Value="30" 
+                                    IsSnapToTickEnabled="True" TickFrequency="15"
+                                    ValueChanged="TimerSlider_ValueChanged"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
+                                <Label x:Name="LabelTimerValue" FontSize="28" 
+                                       Style="{StaticResource FormValueLabelStyle}"
+                                       Content="30"/>
+                                <Label Content="{x:Static lang:Lang.Global_Label_Seconds}" 
+                                       Style="{StaticResource FormUnitLabelStyle}"/>
                             </StackPanel>
-
                         </StackPanel>
                     </Border>
                 </Grid>
