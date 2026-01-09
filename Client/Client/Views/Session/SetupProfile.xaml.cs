@@ -5,20 +5,7 @@ using Client.Utilities;
 using Client.Views.Controls;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
 using static Client.Views.Controls.CustomMessageBox;
@@ -99,19 +86,7 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-<<<<<<< Updated upstream
                     UserSession.StartSession(response.SessionToken, response.User);
-=======
-                    UserSession.StartSession(
-                        response.SessionToken, 
-                        response.User.UserId, 
-                        response.User.Username, 
-                        response.User.Email,
-                        response.User.Name, 
-                        response.User.LastName, 
-                        response.User.RegistrationDate, 
-                        response.User.SocialNetworks.ToList());
->>>>>>> Stashed changes
 
                     var msgBox = new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,

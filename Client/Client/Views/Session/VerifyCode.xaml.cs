@@ -118,19 +118,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-<<<<<<< Updated upstream
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Error]: {ex.Message}");
-
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_Error, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonVerifyCode.IsEnabled = true;
-=======
                 ExceptionManager.Handle(ex, this, () => ButtonVerifyCode.IsEnabled = true);
->>>>>>> Stashed changes
             }
         }
 
@@ -161,21 +149,7 @@ namespace Client.Views.Session
             }
             catch (Exception ex)
             {
-<<<<<<< Updated upstream
-                string errorMessage = GetString(ex);
-                
-                Debug.WriteLine($"[Resend Code Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, CustomMessageBox.MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            finally
-            {
-                ButtonResendCode.IsEnabled = true;
-=======
                 ExceptionManager.Handle(ex, this, () => ButtonResendCode.IsEnabled = true);
->>>>>>> Stashed changes
             }
         }
 
