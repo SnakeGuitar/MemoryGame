@@ -5,28 +5,28 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3f3401e7d63f47e78f932cea28859365" Name="Diagram1" ZoomLevel="69">
-        <EntityTypeShape EntityType="memoryGameModel.card" Width="1.5" PointX="13.5" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.FriendRequest" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.inventory" Width="1.5" PointX="13.5" PointY="9" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.match" Width="1.5" PointX="13.5" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.matchHistory" Width="1.5" PointX="9.375" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.penalty" Width="1.5" PointX="9.375" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.pendingRegistration" Width="1.5" PointX="8.875" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.socialNetwork" Width="1.5" PointX="2.375" PointY="11.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.sysdiagrams" Width="1.5" PointX="5" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.user" Width="1.5" PointX="5.25" PointY="10" IsExpanded="true" />
-        <EntityTypeShape EntityType="memoryGameModel.userSession" Width="1.5" PointX="2.5" PointY="14.625" IsExpanded="true" />
-        <AssociationConnector Association="memoryGameModel.FK_card_inventory" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_FriendRequest_Receiver" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_FriendRequest_Sender" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_inventory_match" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_matchHistory_match" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_penalty_match" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_matchHistory_user" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_user_penalty" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_socialNetwork_user" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.FK_userSession_user" ManuallyRouted="false" />
-        <AssociationConnector Association="memoryGameModel.friend" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="memoryGameModel.card" Width="1.5" PointX="5.25" PointY="3" />
+        <EntityTypeShape EntityType="memoryGameModel.FriendRequest" Width="1.5" PointX="7.5" PointY="13.875" />
+        <EntityTypeShape EntityType="memoryGameModel.inventory" Width="1.5" PointX="3" PointY="3" />
+        <EntityTypeShape EntityType="memoryGameModel.match" Width="1.5" PointX="0.75" PointY="7" />
+        <EntityTypeShape EntityType="memoryGameModel.matchHistory" Width="1.5" PointX="10.5" PointY="9.75" />
+        <EntityTypeShape EntityType="memoryGameModel.penalty" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="memoryGameModel.pendingRegistration" Width="1.5" PointX="2.75" PointY="5.75" />
+        <EntityTypeShape EntityType="memoryGameModel.socialNetwork" Width="1.5" PointX="7.5" PointY="8.625" />
+        <EntityTypeShape EntityType="memoryGameModel.sysdiagrams" Width="1.5" PointX="4.75" PointY="5.75" />
+        <EntityTypeShape EntityType="memoryGameModel.user" Width="1.5" PointX="5.25" PointY="10" />
+        <EntityTypeShape EntityType="memoryGameModel.userSession" Width="1.5" PointX="7.5" PointY="11.125" />
+        <AssociationConnector Association="memoryGameModel.FK_card_inventory" />
+        <AssociationConnector Association="memoryGameModel.FK_FriendRequest_Receiver" />
+        <AssociationConnector Association="memoryGameModel.FK_FriendRequest_Sender" />
+        <AssociationConnector Association="memoryGameModel.FK_inventory_match" />
+        <AssociationConnector Association="memoryGameModel.FK_matchHistory_match" />
+        <AssociationConnector Association="memoryGameModel.FK_penalty_match" />
+        <AssociationConnector Association="memoryGameModel.FK_matchHistory_user" />
+        <AssociationConnector Association="memoryGameModel.FK_user_penalty" />
+        <AssociationConnector Association="memoryGameModel.FK_socialNetwork_user" />
+        <AssociationConnector Association="memoryGameModel.FK_userSession_user" />
+        <AssociationConnector Association="memoryGameModel.friend" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

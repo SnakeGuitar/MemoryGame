@@ -10,8 +10,8 @@
             <PropertyRef Name="cardId" />
           </Key>
           <Property Name="cardId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="description" Type="varchar" MaxLength="80" />
+          <Property Name="name" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="80" />
           <Property Name="inventoryId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="friend">
@@ -36,7 +36,7 @@
             <PropertyRef Name="inventoryId" />
           </Key>
           <Property Name="inventoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="matchId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="match">
@@ -71,8 +71,8 @@
             <PropertyRef Name="pendingRegistrationId" />
           </Key>
           <Property Name="pendingRegistrationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="pin" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="pin" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="expirationTime" Type="datetime" Nullable="false" />
           <Property Name="createdAt" Type="datetime" Nullable="false" />
           <Property Name="hashedPassword" Type="nvarchar(max)" />
@@ -82,7 +82,7 @@
             <PropertyRef Name="socialNetworkId" />
           </Key>
           <Property Name="socialNetworkId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="account" Type="varchar" MaxLength="50" />
+          <Property Name="account" Type="nvarchar" MaxLength="50" />
           <Property Name="userId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -100,16 +100,16 @@
             <PropertyRef Name="userId" />
           </Key>
           <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="password" Type="varchar(max)" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar(max)" Nullable="false" />
           <Property Name="avatar" Type="varbinary(max)" />
           <Property Name="penaltyId" Type="int" />
           <Property Name="isGuest" Type="bit" Nullable="false" />
           <Property Name="verifiedEmail" Type="bit" Nullable="false" />
           <Property Name="registrationDate" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="name" Type="varchar" MaxLength="50" />
-          <Property Name="lastName" Type="varchar" MaxLength="50" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="userSession">
           <Key>
@@ -368,321 +368,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="memoryGameModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="card">
-          <Key>
-            <PropertyRef Name="cardId" />
-          </Key>
-          <Property Name="cardId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="inventoryId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="inventory" Relationship="Self.FK_card_inventory" FromRole="card" ToRole="inventory" />
-        </EntityType>
-        <EntityType Name="FriendRequest">
-          <Key>
-            <PropertyRef Name="requestId" />
-          </Key>
-          <Property Name="requestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="senderId" Type="Int32" Nullable="false" />
-          <Property Name="receiverId" Type="Int32" Nullable="false" />
-          <Property Name="sentAt" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="user" Relationship="Self.FK_FriendRequest_Receiver" FromRole="FriendRequest" ToRole="user" />
-          <NavigationProperty Name="user1" Relationship="Self.FK_FriendRequest_Sender" FromRole="FriendRequest" ToRole="user" />
-        </EntityType>
-        <EntityType Name="inventory">
-          <Key>
-            <PropertyRef Name="inventoryId" />
-          </Key>
-          <Property Name="inventoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="matchId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="card" Relationship="Self.FK_card_inventory" FromRole="inventory" ToRole="card" />
-          <NavigationProperty Name="match" Relationship="Self.FK_inventory_match" FromRole="inventory" ToRole="match" />
-        </EntityType>
-        <EntityType Name="match">
-          <Key>
-            <PropertyRef Name="matchId" />
-          </Key>
-          <Property Name="matchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="startDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="endDateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="inventory" Relationship="Self.FK_inventory_match" FromRole="match" ToRole="inventory" />
-          <NavigationProperty Name="matchHistory" Relationship="Self.FK_matchHistory_match" FromRole="match" ToRole="matchHistory" />
-          <NavigationProperty Name="penalty" Relationship="Self.FK_penalty_match" FromRole="match" ToRole="penalty" />
-        </EntityType>
-        <EntityType Name="matchHistory">
-          <Key>
-            <PropertyRef Name="userId" />
-            <PropertyRef Name="matchId" />
-          </Key>
-          <Property Name="userId" Type="Int32" Nullable="false" />
-          <Property Name="matchId" Type="Int32" Nullable="false" />
-          <Property Name="score" Type="Int32" Nullable="false" />
-          <Property Name="winnerId" Type="Int32" />
-          <NavigationProperty Name="match" Relationship="Self.FK_matchHistory_match" FromRole="matchHistory" ToRole="match" />
-          <NavigationProperty Name="user" Relationship="Self.FK_matchHistory_user" FromRole="matchHistory" ToRole="user" />
-        </EntityType>
-        <EntityType Name="penalty">
-          <Key>
-            <PropertyRef Name="penaltyId" />
-          </Key>
-          <Property Name="penaltyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="type" Type="Byte" Nullable="false" />
-          <Property Name="duration" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="matchId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="match" Relationship="Self.FK_penalty_match" FromRole="penalty" ToRole="match" />
-          <NavigationProperty Name="user" Relationship="Self.FK_user_penalty" FromRole="penalty" ToRole="user" />
-        </EntityType>
-        <EntityType Name="pendingRegistration">
-          <Key>
-            <PropertyRef Name="pendingRegistrationId" />
-          </Key>
-          <Property Name="pendingRegistrationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="pin" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="expirationTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="createdAt" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="hashedPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="socialNetwork">
-          <Key>
-            <PropertyRef Name="socialNetworkId" />
-          </Key>
-          <Property Name="socialNetworkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="account" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="userId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="user" Relationship="Self.FK_socialNetwork_user" FromRole="socialNetwork" ToRole="user" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="user">
-          <Key>
-            <PropertyRef Name="userId" />
-          </Key>
-          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="username" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="penaltyId" Type="Int32" />
-          <Property Name="isGuest" Type="Boolean" Nullable="false" />
-          <Property Name="verifiedEmail" Type="Boolean" Nullable="false" />
-          <Property Name="registrationDate" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="FriendRequest" Relationship="Self.FK_FriendRequest_Receiver" FromRole="user" ToRole="FriendRequest" />
-          <NavigationProperty Name="FriendRequest1" Relationship="Self.FK_FriendRequest_Sender" FromRole="user" ToRole="FriendRequest" />
-          <NavigationProperty Name="matchHistory" Relationship="Self.FK_matchHistory_user" FromRole="user" ToRole="matchHistory" />
-          <NavigationProperty Name="penalty" Relationship="Self.FK_user_penalty" FromRole="user" ToRole="penalty" />
-          <NavigationProperty Name="socialNetwork" Relationship="Self.FK_socialNetwork_user" FromRole="user" ToRole="socialNetwork" />
-          <NavigationProperty Name="userSession" Relationship="Self.FK_userSession_user" FromRole="user" ToRole="userSession" />
-          <NavigationProperty Name="user1" Relationship="Self.friend" FromRole="user" ToRole="user1" />
-          <NavigationProperty Name="user2" Relationship="Self.friend" FromRole="user1" ToRole="user" />
-        </EntityType>
-        <EntityType Name="userSession">
-          <Key>
-            <PropertyRef Name="token" />
-          </Key>
-          <Property Name="token" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="createdAt" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="expiresAt" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="userId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="user" Relationship="Self.FK_userSession_user" FromRole="userSession" ToRole="user" />
-        </EntityType>
-        <Association Name="FK_card_inventory">
-          <End Role="inventory" Type="Self.inventory" Multiplicity="1" />
-          <End Role="card" Type="Self.card" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="inventory">
-              <PropertyRef Name="inventoryId" />
-            </Principal>
-            <Dependent Role="card">
-              <PropertyRef Name="inventoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FriendRequest_Receiver">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="FriendRequest">
-              <PropertyRef Name="receiverId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FriendRequest_Sender">
-          <End Role="user" Type="Self.user" Multiplicity="1" />
-          <End Role="FriendRequest" Type="Self.FriendRequest" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="FriendRequest">
-              <PropertyRef Name="senderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_inventory_match">
-          <End Role="match" Type="Self.match" Multiplicity="1" />
-          <End Role="inventory" Type="Self.inventory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="match">
-              <PropertyRef Name="matchId" />
-            </Principal>
-            <Dependent Role="inventory">
-              <PropertyRef Name="matchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_matchHistory_match">
-          <End Role="match" Type="Self.match" Multiplicity="1" />
-          <End Role="matchHistory" Type="Self.matchHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="match">
-              <PropertyRef Name="matchId" />
-            </Principal>
-            <Dependent Role="matchHistory">
-              <PropertyRef Name="matchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_penalty_match">
-          <End Role="match" Type="Self.match" Multiplicity="1" />
-          <End Role="penalty" Type="Self.penalty" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="match">
-              <PropertyRef Name="matchId" />
-            </Principal>
-            <Dependent Role="penalty">
-              <PropertyRef Name="matchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_matchHistory_user">
-          <End Role="user" Type="Self.user" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="matchHistory" Type="Self.matchHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="matchHistory">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_user_penalty">
-          <End Role="penalty" Type="Self.penalty" Multiplicity="0..1" />
-          <End Role="user" Type="Self.user" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="penalty">
-              <PropertyRef Name="penaltyId" />
-            </Principal>
-            <Dependent Role="user">
-              <PropertyRef Name="penaltyId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_socialNetwork_user">
-          <End Role="user" Type="Self.user" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="socialNetwork" Type="Self.socialNetwork" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="socialNetwork">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_userSession_user">
-          <End Role="user" Type="Self.user" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="userSession" Type="Self.userSession" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="user">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="userSession">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="friend">
-          <End Role="user" Type="Self.user" Multiplicity="*" />
-          <End Role="user1" Type="Self.user" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="memoryGameDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="card" EntityType="Self.card" />
-          <EntitySet Name="FriendRequest" EntityType="Self.FriendRequest" />
-          <EntitySet Name="inventory" EntityType="Self.inventory" />
-          <EntitySet Name="match" EntityType="Self.match" />
-          <EntitySet Name="matchHistory" EntityType="Self.matchHistory" />
-          <EntitySet Name="penalty" EntityType="Self.penalty" />
-          <EntitySet Name="pendingRegistration" EntityType="Self.pendingRegistration" />
-          <EntitySet Name="socialNetwork" EntityType="Self.socialNetwork" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="user" EntityType="Self.user" />
-          <EntitySet Name="userSession" EntityType="Self.userSession" />
-          <AssociationSet Name="FK_card_inventory" Association="Self.FK_card_inventory">
-            <End Role="inventory" EntitySet="inventory" />
-            <End Role="card" EntitySet="card" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FriendRequest_Receiver" Association="Self.FK_FriendRequest_Receiver">
-            <End Role="user" EntitySet="user" />
-            <End Role="FriendRequest" EntitySet="FriendRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FriendRequest_Sender" Association="Self.FK_FriendRequest_Sender">
-            <End Role="user" EntitySet="user" />
-            <End Role="FriendRequest" EntitySet="FriendRequest" />
-          </AssociationSet>
-          <AssociationSet Name="FK_inventory_match" Association="Self.FK_inventory_match">
-            <End Role="match" EntitySet="match" />
-            <End Role="inventory" EntitySet="inventory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_matchHistory_match" Association="Self.FK_matchHistory_match">
-            <End Role="match" EntitySet="match" />
-            <End Role="matchHistory" EntitySet="matchHistory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_penalty_match" Association="Self.FK_penalty_match">
-            <End Role="match" EntitySet="match" />
-            <End Role="penalty" EntitySet="penalty" />
-          </AssociationSet>
-          <AssociationSet Name="FK_matchHistory_user" Association="Self.FK_matchHistory_user">
-            <End Role="user" EntitySet="user" />
-            <End Role="matchHistory" EntitySet="matchHistory" />
-          </AssociationSet>
-          <AssociationSet Name="FK_user_penalty" Association="Self.FK_user_penalty">
-            <End Role="penalty" EntitySet="penalty" />
-            <End Role="user" EntitySet="user" />
-          </AssociationSet>
-          <AssociationSet Name="FK_socialNetwork_user" Association="Self.FK_socialNetwork_user">
-            <End Role="user" EntitySet="user" />
-            <End Role="socialNetwork" EntitySet="socialNetwork" />
-          </AssociationSet>
-          <AssociationSet Name="FK_userSession_user" Association="Self.FK_userSession_user">
-            <End Role="user" EntitySet="user" />
-            <End Role="userSession" EntitySet="userSession" />
-          </AssociationSet>
-          <AssociationSet Name="friend" Association="Self.friend">
-            <End Role="user" EntitySet="user" />
-            <End Role="user1" EntitySet="user" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -714,6 +400,61 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="card" EntityType="memoryGameModel.card" />
+          <EntitySet Name="FriendRequest" EntityType="memoryGameModel.FriendRequest" />
+          <EntitySet Name="inventory" EntityType="memoryGameModel.inventory" />
+          <EntitySet Name="match" EntityType="memoryGameModel.match" />
+          <EntitySet Name="matchHistory" EntityType="memoryGameModel.matchHistory" />
+          <EntitySet Name="penalty" EntityType="memoryGameModel.penalty" />
+          <EntitySet Name="pendingRegistration" EntityType="memoryGameModel.pendingRegistration" />
+          <EntitySet Name="socialNetwork" EntityType="memoryGameModel.socialNetwork" />
+          <EntitySet Name="sysdiagrams" EntityType="memoryGameModel.sysdiagrams" />
+          <EntitySet Name="user" EntityType="memoryGameModel.user" />
+          <EntitySet Name="userSession" EntityType="memoryGameModel.userSession" />
+          <AssociationSet Name="FK_card_inventory" Association="memoryGameModel.FK_card_inventory">
+            <End Role="inventory" EntitySet="inventory" />
+            <End Role="card" EntitySet="card" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Receiver" Association="memoryGameModel.FK_FriendRequest_Receiver">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendRequest_Sender" Association="memoryGameModel.FK_FriendRequest_Sender">
+            <End Role="user" EntitySet="user" />
+            <End Role="FriendRequest" EntitySet="FriendRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK_inventory_match" Association="memoryGameModel.FK_inventory_match">
+            <End Role="match" EntitySet="match" />
+            <End Role="inventory" EntitySet="inventory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_matchHistory_match" Association="memoryGameModel.FK_matchHistory_match">
+            <End Role="match" EntitySet="match" />
+            <End Role="matchHistory" EntitySet="matchHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_penalty_match" Association="memoryGameModel.FK_penalty_match">
+            <End Role="match" EntitySet="match" />
+            <End Role="penalty" EntitySet="penalty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_matchHistory_user" Association="memoryGameModel.FK_matchHistory_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="matchHistory" EntitySet="matchHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_penalty" Association="memoryGameModel.FK_user_penalty">
+            <End Role="penalty" EntitySet="penalty" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_socialNetwork_user" Association="memoryGameModel.FK_socialNetwork_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="socialNetwork" EntitySet="socialNetwork" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userSession_user" Association="memoryGameModel.FK_userSession_user">
+            <End Role="user" EntitySet="user" />
+            <End Role="userSession" EntitySet="userSession" />
+          </AssociationSet>
+          <AssociationSet Name="friend" Association="memoryGameModel.friend">
+            <End Role="user" EntitySet="user" />
+            <End Role="user1" EntitySet="user" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -726,137 +467,271 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="card">
+          <Key>
+            <PropertyRef Name="cardId" />
+          </Key>
+          <Property Name="cardId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="inventoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="inventory" Relationship="memoryGameModel.FK_card_inventory" FromRole="card" ToRole="inventory" />
+        </EntityType>
+        <EntityType Name="FriendRequest">
+          <Key>
+            <PropertyRef Name="requestId" />
+          </Key>
+          <Property Name="requestId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="senderId" Type="Int32" Nullable="false" />
+          <Property Name="receiverId" Type="Int32" Nullable="false" />
+          <Property Name="sentAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="user" Relationship="memoryGameModel.FK_FriendRequest_Receiver" FromRole="FriendRequest" ToRole="user" />
+          <NavigationProperty Name="user1" Relationship="memoryGameModel.FK_FriendRequest_Sender" FromRole="FriendRequest" ToRole="user" />
+        </EntityType>
+        <EntityType Name="inventory">
+          <Key>
+            <PropertyRef Name="inventoryId" />
+          </Key>
+          <Property Name="inventoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="matchId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="card" Relationship="memoryGameModel.FK_card_inventory" FromRole="inventory" ToRole="card" />
+          <NavigationProperty Name="match" Relationship="memoryGameModel.FK_inventory_match" FromRole="inventory" ToRole="match" />
+        </EntityType>
+        <EntityType Name="match">
+          <Key>
+            <PropertyRef Name="matchId" />
+          </Key>
+          <Property Name="matchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="startDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="endDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="inventory" Relationship="memoryGameModel.FK_inventory_match" FromRole="match" ToRole="inventory" />
+          <NavigationProperty Name="matchHistory" Relationship="memoryGameModel.FK_matchHistory_match" FromRole="match" ToRole="matchHistory" />
+          <NavigationProperty Name="penalty" Relationship="memoryGameModel.FK_penalty_match" FromRole="match" ToRole="penalty" />
+        </EntityType>
+        <EntityType Name="matchHistory">
+          <Key>
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="matchId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="matchId" Type="Int32" Nullable="false" />
+          <Property Name="score" Type="Int32" Nullable="false" />
+          <Property Name="winnerId" Type="Int32" />
+          <NavigationProperty Name="match" Relationship="memoryGameModel.FK_matchHistory_match" FromRole="matchHistory" ToRole="match" />
+          <NavigationProperty Name="user" Relationship="memoryGameModel.FK_matchHistory_user" FromRole="matchHistory" ToRole="user" />
+        </EntityType>
+        <EntityType Name="penalty">
+          <Key>
+            <PropertyRef Name="penaltyId" />
+          </Key>
+          <Property Name="penaltyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="Byte" Nullable="false" />
+          <Property Name="duration" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="matchId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="match" Relationship="memoryGameModel.FK_penalty_match" FromRole="penalty" ToRole="match" />
+          <NavigationProperty Name="user" Relationship="memoryGameModel.FK_user_penalty" FromRole="penalty" ToRole="user" />
+        </EntityType>
+        <EntityType Name="pendingRegistration">
+          <Key>
+            <PropertyRef Name="pendingRegistrationId" />
+          </Key>
+          <Property Name="pendingRegistrationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="pin" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="expirationTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="createdAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="hashedPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="socialNetwork">
+          <Key>
+            <PropertyRef Name="socialNetworkId" />
+          </Key>
+          <Property Name="socialNetworkId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="account" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="memoryGameModel.FK_socialNetwork_user" FromRole="socialNetwork" ToRole="user" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="avatar" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="penaltyId" Type="Int32" />
+          <Property Name="isGuest" Type="Boolean" Nullable="false" />
+          <Property Name="verifiedEmail" Type="Boolean" Nullable="false" />
+          <Property Name="registrationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="FriendRequest" Relationship="memoryGameModel.FK_FriendRequest_Receiver" FromRole="user" ToRole="FriendRequest" />
+          <NavigationProperty Name="FriendRequest1" Relationship="memoryGameModel.FK_FriendRequest_Sender" FromRole="user" ToRole="FriendRequest" />
+          <NavigationProperty Name="matchHistory" Relationship="memoryGameModel.FK_matchHistory_user" FromRole="user" ToRole="matchHistory" />
+          <NavigationProperty Name="penalty" Relationship="memoryGameModel.FK_user_penalty" FromRole="user" ToRole="penalty" />
+          <NavigationProperty Name="socialNetwork" Relationship="memoryGameModel.FK_socialNetwork_user" FromRole="user" ToRole="socialNetwork" />
+          <NavigationProperty Name="userSession" Relationship="memoryGameModel.FK_userSession_user" FromRole="user" ToRole="userSession" />
+          <NavigationProperty Name="user1" Relationship="memoryGameModel.friend" FromRole="user" ToRole="user1" />
+          <NavigationProperty Name="user2" Relationship="memoryGameModel.friend" FromRole="user1" ToRole="user" />
+        </EntityType>
+        <EntityType Name="userSession">
+          <Key>
+            <PropertyRef Name="token" />
+          </Key>
+          <Property Name="token" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="createdAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="expiresAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="memoryGameModel.FK_userSession_user" FromRole="userSession" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_card_inventory">
+          <End Type="memoryGameModel.inventory" Role="inventory" Multiplicity="1" />
+          <End Type="memoryGameModel.card" Role="card" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="inventory">
+              <PropertyRef Name="inventoryId" />
+            </Principal>
+            <Dependent Role="card">
+              <PropertyRef Name="inventoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Receiver">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="1" />
+          <End Type="memoryGameModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="receiverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendRequest_Sender">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="1" />
+          <End Type="memoryGameModel.FriendRequest" Role="FriendRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="FriendRequest">
+              <PropertyRef Name="senderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_inventory_match">
+          <End Type="memoryGameModel.match" Role="match" Multiplicity="1" />
+          <End Type="memoryGameModel.inventory" Role="inventory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="match">
+              <PropertyRef Name="matchId" />
+            </Principal>
+            <Dependent Role="inventory">
+              <PropertyRef Name="matchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_matchHistory_match">
+          <End Type="memoryGameModel.match" Role="match" Multiplicity="1" />
+          <End Type="memoryGameModel.matchHistory" Role="matchHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="match">
+              <PropertyRef Name="matchId" />
+            </Principal>
+            <Dependent Role="matchHistory">
+              <PropertyRef Name="matchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_penalty_match">
+          <End Type="memoryGameModel.match" Role="match" Multiplicity="1" />
+          <End Type="memoryGameModel.penalty" Role="penalty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="match">
+              <PropertyRef Name="matchId" />
+            </Principal>
+            <Dependent Role="penalty">
+              <PropertyRef Name="matchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_matchHistory_user">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="memoryGameModel.matchHistory" Role="matchHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="matchHistory">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_user_penalty">
+          <End Type="memoryGameModel.penalty" Role="penalty" Multiplicity="0..1" />
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="penalty">
+              <PropertyRef Name="penaltyId" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="penaltyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_socialNetwork_user">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="memoryGameModel.socialNetwork" Role="socialNetwork" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="socialNetwork">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userSession_user">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="memoryGameModel.userSession" Role="userSession" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="userSession">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="friend">
+          <End Type="memoryGameModel.user" Role="user" Multiplicity="*" />
+          <End Type="memoryGameModel.user" Role="user1" Multiplicity="*" />
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="memoryGameModelStoreContainer" CdmEntityContainer="memoryGameDBEntities">
-          <EntitySetMapping Name="card">
-            <EntityTypeMapping TypeName="memoryGameModel.card">
-              <MappingFragment StoreEntitySet="card">
-                <ScalarProperty Name="cardId" ColumnName="cardId" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="FriendRequest">
-            <EntityTypeMapping TypeName="memoryGameModel.FriendRequest">
-              <MappingFragment StoreEntitySet="FriendRequest">
-                <ScalarProperty Name="requestId" ColumnName="requestId" />
-                <ScalarProperty Name="senderId" ColumnName="senderId" />
-                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
-                <ScalarProperty Name="sentAt" ColumnName="sentAt" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="inventory">
-            <EntityTypeMapping TypeName="memoryGameModel.inventory">
-              <MappingFragment StoreEntitySet="inventory">
-                <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="matchId" ColumnName="matchId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="match">
-            <EntityTypeMapping TypeName="memoryGameModel.match">
-              <MappingFragment StoreEntitySet="match">
-                <ScalarProperty Name="matchId" ColumnName="matchId" />
-                <ScalarProperty Name="startDateTime" ColumnName="startDateTime" />
-                <ScalarProperty Name="endDateTime" ColumnName="endDateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="matchHistory">
-            <EntityTypeMapping TypeName="memoryGameModel.matchHistory">
-              <MappingFragment StoreEntitySet="matchHistory">
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="matchId" ColumnName="matchId" />
-                <ScalarProperty Name="score" ColumnName="score" />
-                <ScalarProperty Name="winnerId" ColumnName="winnerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="penalty">
-            <EntityTypeMapping TypeName="memoryGameModel.penalty">
-              <MappingFragment StoreEntitySet="penalty">
-                <ScalarProperty Name="penaltyId" ColumnName="penaltyId" />
-                <ScalarProperty Name="type" ColumnName="type" />
-                <ScalarProperty Name="duration" ColumnName="duration" />
-                <ScalarProperty Name="matchId" ColumnName="matchId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="pendingRegistration">
-            <EntityTypeMapping TypeName="memoryGameModel.pendingRegistration">
-              <MappingFragment StoreEntitySet="pendingRegistration">
-                <ScalarProperty Name="pendingRegistrationId" ColumnName="pendingRegistrationId" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="pin" ColumnName="pin" />
-                <ScalarProperty Name="expirationTime" ColumnName="expirationTime" />
-                <ScalarProperty Name="createdAt" ColumnName="createdAt" />
-                <ScalarProperty Name="hashedPassword" ColumnName="hashedPassword" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="socialNetwork">
-            <EntityTypeMapping TypeName="memoryGameModel.socialNetwork">
-              <MappingFragment StoreEntitySet="socialNetwork">
-                <ScalarProperty Name="socialNetworkId" ColumnName="socialNetworkId" />
-                <ScalarProperty Name="account" ColumnName="account" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="memoryGameModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="user">
-            <EntityTypeMapping TypeName="memoryGameModel.user">
-              <MappingFragment StoreEntitySet="user">
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="username" ColumnName="username" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="lastName" ColumnName="lastName" />
-                <ScalarProperty Name="email" ColumnName="email" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="avatar" ColumnName="avatar" />
-                <ScalarProperty Name="penaltyId" ColumnName="penaltyId" />
-                <ScalarProperty Name="isGuest" ColumnName="isGuest" />
-                <ScalarProperty Name="verifiedEmail" ColumnName="verifiedEmail" />
-                <ScalarProperty Name="registrationDate" ColumnName="registrationDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="userSession">
-            <EntityTypeMapping TypeName="memoryGameModel.userSession">
-              <MappingFragment StoreEntitySet="userSession">
-                <ScalarProperty Name="token" ColumnName="token" />
-                <ScalarProperty Name="createdAt" ColumnName="createdAt" />
-                <ScalarProperty Name="expiresAt" ColumnName="expiresAt" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="friend" TypeName="memoryGameModel.friend" StoreEntitySet="friend">
-            <EndProperty Name="user">
-              <ScalarProperty Name="userId" ColumnName="userId1" />
-            </EndProperty>
-            <EndProperty Name="user1">
-              <ScalarProperty Name="userId" ColumnName="userId2" />
-            </EndProperty>
-          </AssociationSetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="memoryGameModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_CleanupGuestAccounts" FunctionName="memoryGameModel.Store.sp_CleanupGuestAccounts" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="memoryGameModel.Store.sp_creatediagram" />
@@ -882,6 +757,131 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="memoryGameModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="memoryGameModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="card">
+            <EntityTypeMapping TypeName="memoryGameModel.card">
+              <MappingFragment StoreEntitySet="card">
+                <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="cardId" ColumnName="cardId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FriendRequest">
+            <EntityTypeMapping TypeName="memoryGameModel.FriendRequest">
+              <MappingFragment StoreEntitySet="FriendRequest">
+                <ScalarProperty Name="sentAt" ColumnName="sentAt" />
+                <ScalarProperty Name="receiverId" ColumnName="receiverId" />
+                <ScalarProperty Name="senderId" ColumnName="senderId" />
+                <ScalarProperty Name="requestId" ColumnName="requestId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="inventory">
+            <EntityTypeMapping TypeName="memoryGameModel.inventory">
+              <MappingFragment StoreEntitySet="inventory">
+                <ScalarProperty Name="matchId" ColumnName="matchId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="match">
+            <EntityTypeMapping TypeName="memoryGameModel.match">
+              <MappingFragment StoreEntitySet="match">
+                <ScalarProperty Name="endDateTime" ColumnName="endDateTime" />
+                <ScalarProperty Name="startDateTime" ColumnName="startDateTime" />
+                <ScalarProperty Name="matchId" ColumnName="matchId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="matchHistory">
+            <EntityTypeMapping TypeName="memoryGameModel.matchHistory">
+              <MappingFragment StoreEntitySet="matchHistory">
+                <ScalarProperty Name="winnerId" ColumnName="winnerId" />
+                <ScalarProperty Name="score" ColumnName="score" />
+                <ScalarProperty Name="matchId" ColumnName="matchId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="penalty">
+            <EntityTypeMapping TypeName="memoryGameModel.penalty">
+              <MappingFragment StoreEntitySet="penalty">
+                <ScalarProperty Name="matchId" ColumnName="matchId" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="penaltyId" ColumnName="penaltyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pendingRegistration">
+            <EntityTypeMapping TypeName="memoryGameModel.pendingRegistration">
+              <MappingFragment StoreEntitySet="pendingRegistration">
+                <ScalarProperty Name="hashedPassword" ColumnName="hashedPassword" />
+                <ScalarProperty Name="createdAt" ColumnName="createdAt" />
+                <ScalarProperty Name="expirationTime" ColumnName="expirationTime" />
+                <ScalarProperty Name="pin" ColumnName="pin" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="pendingRegistrationId" ColumnName="pendingRegistrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="socialNetwork">
+            <EntityTypeMapping TypeName="memoryGameModel.socialNetwork">
+              <MappingFragment StoreEntitySet="socialNetwork">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="account" ColumnName="account" />
+                <ScalarProperty Name="socialNetworkId" ColumnName="socialNetworkId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="memoryGameModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="memoryGameModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="registrationDate" ColumnName="registrationDate" />
+                <ScalarProperty Name="verifiedEmail" ColumnName="verifiedEmail" />
+                <ScalarProperty Name="isGuest" ColumnName="isGuest" />
+                <ScalarProperty Name="penaltyId" ColumnName="penaltyId" />
+                <ScalarProperty Name="avatar" ColumnName="avatar" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userSession">
+            <EntityTypeMapping TypeName="memoryGameModel.userSession">
+              <MappingFragment StoreEntitySet="userSession">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="expiresAt" ColumnName="expiresAt" />
+                <ScalarProperty Name="createdAt" ColumnName="createdAt" />
+                <ScalarProperty Name="token" ColumnName="token" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="friend" TypeName="memoryGameModel.friend" StoreEntitySet="friend">
+            <EndProperty Name="user1">
+              <ScalarProperty Name="userId" ColumnName="userId2" />
+            </EndProperty>
+            <EndProperty Name="user">
+              <ScalarProperty Name="userId" ColumnName="userId1" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
