@@ -7,7 +7,7 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="Friends" 
-        MinHeight="720" MinWidth="1280"
+        MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">

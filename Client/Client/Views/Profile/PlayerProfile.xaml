@@ -8,7 +8,7 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="PlayerProfile" 
-        MinHeight="600" MinWidth="700"
+        MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>

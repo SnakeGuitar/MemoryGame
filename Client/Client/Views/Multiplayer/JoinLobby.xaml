@@ -8,7 +8,7 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="JoinLobby" 
-        MinHeight="550" MinWidth="450" 
+        MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">

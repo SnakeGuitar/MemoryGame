@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="Host Lobby" 
-        MinHeight="720" MinWidth="1280"
+        MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PrimaryTextColor}"
         Loaded="Window_Loaded">
