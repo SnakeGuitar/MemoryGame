@@ -747,4 +747,7 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Error_SessionExpired" xml:space="preserve">
     <value>La sesión ha expirado</value>
   </data>
+	<data name="Global_FontName" xml:space="preserve">
+    <value>Pangolin-Regular.ttf #Pangolin</value>
+  </data>
 </root>
