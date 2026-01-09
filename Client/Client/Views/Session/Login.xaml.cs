@@ -74,6 +74,7 @@ namespace Client.Views.Session
 
                     var mainMenu = new MainMenu();
                     mainMenu.WindowState = this.WindowState;
+                    Application.Current.MainWindow = mainMenu;
                     mainMenu.Show();
                     this.Close();
 
