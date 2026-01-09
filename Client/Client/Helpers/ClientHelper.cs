@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client.Helpers
 {
-    internal class ClientHelper
+    internal static class ClientHelper
     {
         public static string GenerateGameCode()
         {

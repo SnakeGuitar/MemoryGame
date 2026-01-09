@@ -19,7 +19,7 @@ namespace Client.Core
                     "Session Ended",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 
-                Helpers.UserSession.EndSession();
+                UserSession.EndSession();
 
                 var loginWindow = new Views.Session.Login();
                 loginWindow.Show();

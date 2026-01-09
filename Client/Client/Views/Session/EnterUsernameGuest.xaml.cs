@@ -1,7 +1,6 @@
-﻿using Client.Helpers;
-using Client.Properties.Langs;
+﻿using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Utilities;
+using Client.Core;
 using Client.Views.Controls;
 using System;
 using System.Diagnostics;

@@ -1,7 +1,6 @@
 ﻿using Client.GameLobbyServiceReference;
-using Client.Helpers;
 using Client.Properties.Langs;
-using Client.Utilities;
+using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using System;

@@ -1,4 +1,4 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;

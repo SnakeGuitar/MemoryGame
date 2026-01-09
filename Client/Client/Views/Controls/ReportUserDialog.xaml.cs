@@ -1,7 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Utilities;
+using Client.Core;
 using System;
 using System.Windows;
 using System.Windows.Input;

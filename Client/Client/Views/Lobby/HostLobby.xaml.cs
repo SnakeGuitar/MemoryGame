@@ -2,7 +2,7 @@
 using Client.Helpers;
 using Client.Models;
 using Client.Properties.Langs;
-using Client.Utilities;
+using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using System;
@@ -278,12 +278,10 @@ namespace Client.Views.Lobby
 
         private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item)
+            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item && 
+                int.TryParse(item.Content.ToString(), out int val))
             {
-                if (int.TryParse(item.Content.ToString(), out int val))
-                {
                     _selectedCardCount = val;
-                }
             }
         }
 

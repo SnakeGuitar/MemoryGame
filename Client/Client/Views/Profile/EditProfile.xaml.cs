@@ -1,7 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Utilities;
+using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Session;
 using Microsoft.Win32;
@@ -31,10 +31,10 @@ namespace Client.Views.Profile
             SocialNetworksList = new ObservableCollection<SocialNetworkDTO>();
             ItemsControlSocials.ItemsSource = SocialNetworksList;
             LoadExistingData();
-            InitializeAsync();
+            _ = InitializeAsync();
         }
 
-        private async void InitializeAsync()
+        private async Task InitializeAsync()
         {
             await LoadCurrentAvatar();
         }

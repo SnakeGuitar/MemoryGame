@@ -1,7 +1,6 @@
-﻿using Client.Helpers;
-using Client.Models;
+﻿using Client.Models;
 using Client.Properties.Langs;
-using Client.Utilities;
+using Client.Core;
 using Client.ViewModels;
 using Client.Views.Controls;
 using System;
