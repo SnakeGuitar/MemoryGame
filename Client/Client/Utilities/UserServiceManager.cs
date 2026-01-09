@@ -65,7 +65,10 @@ namespace Client.Utilities
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Application.Current.MainWindow is Views.Session.Login) return;
+                if (Application.Current.MainWindow is Views.Session.Login)
+                {
+                    return;
+                }
 
                 MessageBox.Show(
                     $"You have been disconnected: {reason}",

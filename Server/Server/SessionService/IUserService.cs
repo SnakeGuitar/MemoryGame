@@ -43,12 +43,12 @@ namespace Server.SessionService
         ResponseDTO AddSocialNetwork(string token, string accountName);
         [OperationContract]
         ResponseDTO RemoveSocialNetwork(string token, int socialNetworkId);
-
         [OperationContract]
         LoginResponse LoginAsGuest(string guestUsername);
-
         [OperationContract]
         void LogoutGuest(string sessionToken);
+        [OperationContract]
+        void Logout(string token);
         [OperationContract]
         ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword);
 

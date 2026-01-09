@@ -56,7 +56,7 @@ namespace Server.SessionService.Core
                     }
 
                     var existingPending = db.pendingRegistration
-                        .FirstOrDefault(p => p.email == email && p.expirationTime > DateTime.Now);
+                        .FirstOrDefault(p => p.email == email && p.expirationTime > DateTime.UtcNow);
 
                     if (existingPending != null)
                     {
@@ -71,8 +71,8 @@ namespace Server.SessionService.Core
                         email = email,
                         pin = pin,
                         hashedPassword = hashedPassword,
-                        expirationTime = DateTime.Now.AddMinutes(15),
-                        createdAt = DateTime.Now
+                        expirationTime = DateTime.UtcNow.AddMinutes(15),
+                        createdAt = DateTime.UtcNow
                     };
 
                     _logger.LogInfo($"Creating pending registration for email: {email}");
@@ -123,7 +123,7 @@ namespace Server.SessionService.Core
 
                     string newPin = _securityService.GeneratePin();
                     pending.pin = newPin;
-                    pending.expirationTime = DateTime.Now.AddMinutes(15);
+                    pending.expirationTime = DateTime.UtcNow.AddMinutes(15);
 
                     if (!_notificationService.SendVerificationEmail(email, newPin))
                     {
@@ -158,7 +158,7 @@ namespace Server.SessionService.Core
                     var pending = db.pendingRegistration
                         .FirstOrDefault(p => p.email == email &&
                         p.pin == pin &&
-                        p.expirationTime > DateTime.Now);
+                        p.expirationTime > DateTime.UtcNow);
 
                     if (pending == null)
                     {
@@ -166,7 +166,7 @@ namespace Server.SessionService.Core
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeInvalid" };
                     }
 
-                    if (pending.expirationTime <= DateTime.Now)
+                    if (pending.expirationTime <= DateTime.UtcNow)
                     {
                         _logger.LogInfo($"Expired verification code attempt for email: {email}");
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeExpired" };
@@ -179,7 +179,7 @@ namespace Server.SessionService.Core
                         username = email.Split('@')[0],
                         isGuest = false,
                         verifiedEmail = true,
-                        registrationDate = DateTime.Now
+                        registrationDate = DateTime.UtcNow
                     };
 
                     db.user.Add(newUser);
@@ -386,7 +386,7 @@ namespace Server.SessionService.Core
                         avatar = null,
                         isGuest = true,
                         verifiedEmail = false,
-                        registrationDate = DateTime.Now
+                        registrationDate = DateTime.UtcNow
                     };
 
                     db.user.Add(guestUser);
@@ -456,6 +456,27 @@ namespace Server.SessionService.Core
             }
         }
 
+        public void Logout(string token)
+        {
+            try
+            {
+                using (var db = _dbFactory.Create())
+                {
+                    var session = db.userSession.FirstOrDefault(s => s.token == token);
+                    if (session != null)
+                    {
+                        db.userSession.Remove(session);
+                        db.SaveChanges();
+                        _logger.LogInfo($"User {session.userId} logged out explicitly.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Logout Error: {ex.Message}");
+            }
+        }
+
         public ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword)
         {
             if (!_validator.IsValidPassword(newPassword))
@@ -498,8 +519,8 @@ namespace Server.SessionService.Core
                         email = newEmail,
                         hashedPassword = hashedPassword,
                         pin = pin,
-                        expirationTime = DateTime.Now.AddMinutes(15),
-                        createdAt = DateTime.Now
+                        expirationTime = DateTime.UtcNow.AddMinutes(15),
+                        createdAt = DateTime.UtcNow
                     };
                     db.pendingRegistration.Add(pending);
                     db.SaveChanges();
@@ -534,7 +555,7 @@ namespace Server.SessionService.Core
                 using (var db = _dbFactory.Create())
                 {
                     var pending = db.pendingRegistration
-                        .FirstOrDefault(p => p.email == email && p.pin == pin && p.expirationTime > DateTime.Now);
+                        .FirstOrDefault(p => p.email == email && p.pin == pin && p.expirationTime > DateTime.UtcNow);
 
                     if (pending == null)
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_CodeInvalid" };

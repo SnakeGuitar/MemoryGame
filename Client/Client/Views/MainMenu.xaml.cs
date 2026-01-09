@@ -169,15 +169,30 @@ namespace Client.Views
             UsernameDisplay.Content = UserSession.Username;
             _ = LoadAvatarAsync();
         }
-        protected override void OnClosed(EventArgs e)
+        protected override async void OnClosed(EventArgs e)
         {
             _keepAliveTimer?.Stop();
             UserSession.ProfileUpdated -= OnProfileUpdated;
+
+            try
+            {
+                if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
+                {
+                    await UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
+                }
+            }
+            catch
+            (TimeoutException)
+            {
+                
+            }
+
             Window owner = this.Owner;
             if (owner != null)
             {
                 owner.Show();
             }
+
             base.OnClosed(e);
         }
 

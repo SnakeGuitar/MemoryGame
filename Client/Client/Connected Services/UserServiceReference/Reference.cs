@@ -657,6 +657,12 @@ namespace Client.UserServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/LogoutGuest", ReplyAction="http://tempuri.org/IUserService/LogoutGuestResponse")]
         System.Threading.Tasks.Task LogoutGuestAsync(string sessionToken);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Logout", ReplyAction="http://tempuri.org/IUserService/LogoutResponse")]
+        void Logout(string token);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Logout", ReplyAction="http://tempuri.org/IUserService/LogoutResponse")]
+        System.Threading.Tasks.Task LogoutAsync(string token);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/InitiateGuestRegistration", ReplyAction="http://tempuri.org/IUserService/InitiateGuestRegistrationResponse")]
         Client.UserServiceReference.ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword);
         
@@ -865,6 +871,14 @@ namespace Client.UserServiceReference {
         
         public System.Threading.Tasks.Task LogoutGuestAsync(string sessionToken) {
             return base.Channel.LogoutGuestAsync(sessionToken);
+        }
+        
+        public void Logout(string token) {
+            base.Channel.Logout(token);
+        }
+        
+        public System.Threading.Tasks.Task LogoutAsync(string token) {
+            return base.Channel.LogoutAsync(token);
         }
         
         public Client.UserServiceReference.ResponseDTO InitiateGuestRegistration(int guestUserId, string newEmail, string newPassword) {

@@ -45,7 +45,7 @@ namespace Server.SessionService
             using (var db = _dbFactory.Create())
             {
                 var session = db.userSession
-                    .FirstOrDefault(s => s.token == token && s.expiresAt > DateTime.Now);
+                    .FirstOrDefault(s => s.token == token && s.expiresAt > DateTime.UtcNow);
 
                 _logger.LogInfo(session != null
                     ? $"Valid session found for token: {token}"
@@ -69,8 +69,8 @@ namespace Server.SessionService
                 {
                     token = token,
                     userId = userId,
-                    createdAt = DateTime.Now,
-                    expiresAt = DateTime.Now.AddMinutes(SESSION_DURATION_MINUTES)
+                    createdAt = DateTime.UtcNow,
+                    expiresAt = DateTime.UtcNow.AddMinutes(SESSION_DURATION_MINUTES)
                 };
 
                 db.userSession.Add(session);
@@ -86,7 +86,7 @@ namespace Server.SessionService
             using (var db = _dbFactory.Create())
             {
                 var session = db.userSession.FirstOrDefault(s => s.token == token);
-                if (session != null && session.expiresAt > DateTime.Now)
+                if (session != null && session.expiresAt > DateTime.UtcNow)
                 {
                     session.expiresAt = DateTime.UtcNow.AddMinutes(SESSION_DURATION_MINUTES);
                     db.SaveChanges();
@@ -104,7 +104,7 @@ namespace Server.SessionService
 
             using (var db = _dbFactory.Create())
             {
-                return db.userSession.Any(s => s.user.email == email && s.expiresAt > DateTime.Now);
+                return db.userSession.Any(s => s.user.email == email && s.expiresAt > DateTime.UtcNow);
             }
         }
 

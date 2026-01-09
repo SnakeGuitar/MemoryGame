@@ -115,6 +115,11 @@ namespace Server.SessionService
             _authenticationCore.LogoutGuest(sessionToken);
         }
 
+        public void Logout(string token)
+        {
+            _authenticationCore.Logout(token);
+        }
+
         /// <summary>
         /// Initiates the user registration process using an email address and password.
         /// A verification code is generated and sent to the provided email.
