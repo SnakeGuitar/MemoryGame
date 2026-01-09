@@ -236,6 +236,7 @@ namespace Server.SessionService.Core
                     {
                         UserId = user.userId,
                         Username = user.username,
+                        IsGuest = user.isGuest,
                         Email = user.email,
                         Name = user.name,
                         LastName = user.lastName,
@@ -325,6 +326,7 @@ namespace Server.SessionService.Core
                     {
                         UserId = user.userId,
                         Username = user.username,
+                        IsGuest = user.isGuest,
                         Email = user.email,
                         Name = user.name,
                         LastName = user.lastName,
