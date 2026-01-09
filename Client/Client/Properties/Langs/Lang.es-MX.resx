@@ -528,7 +528,7 @@
   <data name="Global_Button_Reject" xml:space="preserve">
     <value>Rechazar</value>
   </data>
-  <data name="Global_Button_CloseSession" xml:space="preserve">
+  <data name="Global_Button_LogOut" xml:space="preserve">
     <value>Cerrar Sesión</value>
   </data>
   <data name="Global_Message_CloseSession" xml:space="preserve">
@@ -747,13 +747,26 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Error_SessionExpired" xml:space="preserve">
     <value>La sesión ha expirado</value>
   </data>
-	<data name="Global_Error_FatalCrash" xml:space="preserve">
+  <data name="Global_Error_FatalCrash" xml:space="preserve">
     <value>Ocurrió un error crítico. La aplicación debe cerrarse.</value>
   </data>
-	<data name="Global_Error_AccessDenied" xml:space="preserve">
+  <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>Acceso denegado. No tienes permiso para realizar esta acción.</value>
   </data>
-	<data name="Global_FontName" xml:space="preserve">
+  <data name="Global_FontName" xml:space="preserve">
     <value>Pangolin-Regular.ttf #Pangolin</value>
+  </data>
+  <data name="Global_Button_Leave" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="Global_Title_LeaveLobby" xml:space="preserve">
+    <value>Salir de la Sala</value>
+  </data>
+  <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
+    <value>¿Quieres salir de la sala de juegos de tus amigos?</value>
+  </data>
+  <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
+    <value>¿Quieres salir de la sala de juego?
+Si aún hay jugadores en la sala, esta se cerrará</value>
   </data>
 </root>
