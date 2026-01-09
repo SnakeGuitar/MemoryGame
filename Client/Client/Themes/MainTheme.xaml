@@ -21,9 +21,9 @@
     <SolidColorBrush x:Key="informationHoverColor" Color="#2880D7"/>
 
     <SolidColorBrush x:Key="GreenGame" Color="#3A6351"/>
-    
-    <FontFamily x:Key="TitleFont">pack://application:,,,/Resources/Fonts/#Comico, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
-    <FontFamily x:Key="BodyFont">pack://application:,,,/Resources/Fonts/#Pangolin, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
+
+    <FontFamily x:Key="TitleFont">pack://application:,,,/Resources/Fonts/#Comico, pack://application:,,,/Resources/Fonts/#Pangolin Regular, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
+    <FontFamily x:Key="BodyFont">pack://application:,,,/Resources/Fonts/#Pangolin Regular, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
     
 
     <Style x:Key="TitleTextStyle" TargetType="TextBlock">

@@ -1,11 +1,8 @@
 ﻿using Client.Properties.Langs;
 using System;
-using System.Collections.Generic;
-using System.IO.Packaging;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Client.Helpers
 {
@@ -203,6 +200,16 @@ namespace Client.Helpers
                 return Lang.Global_ServiceError_NetworkDown;
             }
             return Lang.Global_ServiceError_Unknown;
+        }
+
+        public static void ApplyLanguageFont()
+        {
+            string fontName = Lang.Global_FontName;
+            string fontPath = $"pack://application:,,,/Resources/Fonts/{fontName}";
+            FontFamily newFont = new FontFamily(fontPath);
+
+            Application.Current.Resources["TitleFont"] = newFont;
+            Application.Current.Resources["BodyFont"] = newFont;
         }
     }
 }

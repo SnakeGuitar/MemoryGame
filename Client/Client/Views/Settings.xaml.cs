@@ -1,4 +1,5 @@
-﻿using Client.Properties.Langs;
+﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.Utilities;
 using Client.Views.Controls;
 using System;
@@ -39,7 +40,9 @@ namespace Client.Views
             {
                 new LanguageOption { DisplayCultureName = "Español", CultureCode = "es-MX" },
                 new LanguageOption { DisplayCultureName = "English", CultureCode = "en-US" },
-                new LanguageOption { DisplayCultureName = "日本語", CultureCode = "ja-JP" }
+                new LanguageOption { DisplayCultureName = "日本語", CultureCode = "ja-JP" },
+                new LanguageOption { DisplayCultureName = "中文", CultureCode = "zh-CN" },
+                new LanguageOption { DisplayCultureName = "한국어", CultureCode = "ko-KR" }
             };
 
             ComboBoxLanguage.ItemsSource = languages;
@@ -80,6 +83,8 @@ namespace Client.Views
                 Properties.Settings.Default.languageCode = newLangCode;
                 Properties.Settings.Default.Save();
                 Lang.Culture = new CultureInfo(newLangCode);
+
+                LocalizationHelper.ApplyLanguageFont();
 
                 languageChanged = true;
 
