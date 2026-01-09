@@ -55,6 +55,14 @@ namespace Client.Views.Lobby
             ConfigureEvents();
         }
 
+        private void TimerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (LabelTimerValue != null)
+            {
+                LabelTimerValue.Content = e.NewValue.ToString("F0");
+            }
+        }
+
         #region Event Configuration
 
         private void ConfigureEvents()

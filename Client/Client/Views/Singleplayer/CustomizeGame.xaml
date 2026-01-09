@@ -35,7 +35,7 @@
                         <StackPanel Margin="25" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                             <Label Content="{x:Static language:Lang.Global_Label_NumberOfCards}" 
-                               Style="{StaticResource RegisterLabelStyle}"/>
+                               Style="{StaticResource RegisterLabelStyle}" FontSize="35"/>
 
                             <Grid HorizontalAlignment="Center">
                                 <Grid.ColumnDefinitions>
@@ -44,7 +44,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <ComboBox x:Name="ComboBoxSelectNumberCards" 
-                                      Grid.Column="0"
+                                      Grid.Column="0" FontSize="28" Width="70"
                                       Style="{StaticResource FormComboBoxStyle}">
                                     <ComboBoxItem Content="16"/>
                                     <ComboBoxItem Content="24"/>
@@ -57,8 +57,8 @@
                                    Style="{StaticResource FormUnitLabelStyle}"/>
                             </Grid>
 
-                            <Label Content="{x:Static language:Lang.Global_Label_TimerLimit}" 
-                               Style="{StaticResource RegisterLabelStyle}"/>
+                            <Label Content="{x:Static language:Lang.Global_Label_TimerLimit}" FontSize="35" 
+                               Style="{StaticResource RegisterLabelStyle}" Margin="0,35,0,0"/>
 
                             <Slider x:Name="TimerSlider" 
                                 Style="{StaticResource FormSliderStyle}"
@@ -67,7 +67,7 @@
                                 ValueChanged="TimerSlider_ValueChanged"/>
 
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                                <Label x:Name="LabelTimerValue" 
+                                <Label x:Name="LabelTimerValue" FontSize="28"
                                    Style="{StaticResource FormValueLabelStyle}"
                                    Content="180"/>
                                 <Label Content="{x:Static language:Lang.Global_Label_Seconds}" 
@@ -77,14 +77,14 @@
                             <Button Content="{x:Static language:Lang.Global_Button_Play}" 
                                 Style="{StaticResource FormPrimaryButtonStyle}"
                                 HorizontalAlignment="Center" 
-                                Margin="0,20,0,0"
+                                Margin="0,30,0,0"
                                 Click="ButtonPlayGame_Click" />
                         </StackPanel>
                     </Border>
 
                     <Button Content="{x:Static language:Lang.Global_Button_Back}" 
                         Style="{StaticResource SecondaryButtonStyle}"
-                        HorizontalAlignment="Center" 
+                        HorizontalAlignment="Center"
                         Margin="0,15,0,0"
                         Click="ButtonBackToMainMenu_Click" />
                 </StackPanel>
