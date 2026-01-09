@@ -739,7 +739,12 @@
 		<data name="Lobby_Button_Invite" xml:space="preserve">
     <value>친구 초대</value>
   </data>
-
+	<data name="Global_Error_FatalCrash" xml:space="preserve">
+    <value>치명적인 오류가 발생했습니다. 애플리케이션을 종료해야 합니다.</value>
+  </data>
+	<data name="Global_Error_AccessDenied" xml:space="preserve">
+    <value>액세스가 거부되었습니다. 이 작업을 수행할 권한이 없습니다.</value>
+  </data>
 		<data name="Global_FontName" xml:space="preserve">
     <value>Jua-Regular.ttf #Jua</value>
   </data>

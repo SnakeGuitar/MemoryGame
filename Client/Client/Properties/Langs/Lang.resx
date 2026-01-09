@@ -745,6 +745,12 @@ You need to log in with your new account :)</value>
   <data name="Global_Error_SessionExpired" xml:space="preserve">
     <value>The session has expired</value>
   </data>
+	<data name="Global_Error_FatalCrash" xml:space="preserve">
+    <value>A critical error occurred. The application must close.</value>
+  </data>
+	<data name="Global_Error_AccessDenied" xml:space="preserve">
+    <value>Access denied. You do not have permission to perform this action.</value>
+  </data>
 	<data name="Global_FontName" xml:space="preserve">
     <value>Pangolin-Regular.ttf #Pangolin</value>
   </data>

@@ -739,7 +739,12 @@
 		<data name="Lobby_Button_Invite" xml:space="preserve">
     <value>邀请好友</value>
   </data>
-
+	<data name="Global_Error_FatalCrash" xml:space="preserve">
+    <value>发生严重错误。应用程序必须关闭。</value>
+  </data>
+	<data name="Global_Error_AccessDenied" xml:space="preserve">
+    <value>拒绝访问。您没有权限执行此操作。</value>
+  </data>
 		<data name="Global_FontName" xml:space="preserve">
     <value>NotoSansSC-Regular.otf #Noto Sans SC</value>
   </data>

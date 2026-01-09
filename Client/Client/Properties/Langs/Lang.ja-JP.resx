@@ -739,6 +739,12 @@
 		<data name="Lobby_Button_Invite" xml:space="preserve">
     <value>友達を招待</value>
   </data>
+	<data name="Global_Error_FatalCrash" xml:space="preserve">
+    <value>致命的なエラーが発生しました。アプリケーションを終了する必要があります。</value>
+  </data>
+	<data name="Global_Error_AccessDenied" xml:space="preserve">
+    <value>アクセスが拒否されました。この操作を実行する権限がありません。</value>
+  </data>
 	<data name="Global_FontName" xml:space="preserve">
     <value>HachiMaruPop-Regular.ttf #Hachi Maru Pop</value>
   </data>

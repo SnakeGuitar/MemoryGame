@@ -747,6 +747,12 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Error_SessionExpired" xml:space="preserve">
     <value>La sesión ha expirado</value>
   </data>
+	<data name="Global_Error_FatalCrash" xml:space="preserve">
+    <value>Ocurrió un error crítico. La aplicación debe cerrarse.</value>
+  </data>
+	<data name="Global_Error_AccessDenied" xml:space="preserve">
+    <value>Acceso denegado. No tienes permiso para realizar esta acción.</value>
+  </data>
 	<data name="Global_FontName" xml:space="preserve">
     <value>Pangolin-Regular.ttf #Pangolin</value>
   </data>

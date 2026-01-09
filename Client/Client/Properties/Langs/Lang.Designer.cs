@@ -511,6 +511,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access denied. You do not have permission to perform this action..
+        /// </summary>
+        public static string Global_Error_AccessDenied {
+            get {
+                return ResourceManager.GetString("Global_Error_AccessDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your verification code has expired. Please request a new one.
         /// </summary>
         public static string Global_Error_CodeExpired {
@@ -543,6 +552,15 @@ namespace Client.Properties.Langs {
         public static string Global_Error_EmailSendFailed {
             get {
                 return ResourceManager.GetString("Global_Error_EmailSendFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A critical error occurred. The application must close..
+        /// </summary>
+        public static string Global_Error_FatalCrash {
+            get {
+                return ResourceManager.GetString("Global_Error_FatalCrash", resourceCulture);
             }
         }
         
