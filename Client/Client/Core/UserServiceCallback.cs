@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Client.Utilities
+namespace Client.Core
 {
     public class UserServiceCallback : IUserServiceCallback
     {

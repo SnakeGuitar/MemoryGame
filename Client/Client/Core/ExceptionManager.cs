@@ -8,7 +8,7 @@ using System.ServiceModel;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace Client.Utilities
+namespace Client.Core
 {
     public static class ExceptionManager
     {

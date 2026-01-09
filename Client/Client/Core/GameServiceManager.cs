@@ -5,7 +5,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
-namespace Client.Utilities
+namespace Client.Core
 {
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class GameServiceManager : IGameLobbyServiceCallback

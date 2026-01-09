@@ -1,10 +1,10 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
 using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Client.Utilities.Converters
+namespace Client.Core.Converters
 {
     public class SelfReportVisibilityConverter : IValueConverter
     {

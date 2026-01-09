@@ -5,7 +5,7 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Client.Utilities
+namespace Client.Core
 {
     [CallbackBehavior(ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false)]
     public class UserServiceManager : IUserServiceCallback

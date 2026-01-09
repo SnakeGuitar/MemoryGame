@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace Client.Utilities
+namespace Client.Core
 {
     /// <summary>
     /// Manages game state, timer, and card interactions.
