@@ -1,6 +1,8 @@
 ﻿using Client.Core;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace Client.Helpers
@@ -26,10 +28,18 @@ namespace Client.Helpers
                 nextWindow.Top = currentWindow.Top;
                 nextWindow.Left = currentWindow.Left;
             }
-            
-            Application.Current.MainWindow = nextWindow;
             nextWindow.Show();
-            currentWindow.Close();
+            Application.Current.MainWindow = nextWindow;
+
+            List<Window> windowsToClose = Application.Current.Windows.Cast<Window>().ToList();
+
+            foreach (var window in windowsToClose)
+            {
+                if (window != nextWindow)
+                {
+                    window.Close();
+                }
+            }
         }
 
         public static bool? ShowDialog(Window parentWindow, Window dialogWindow)
