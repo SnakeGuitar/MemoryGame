@@ -1,6 +1,8 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Models;
 using Client.Properties.Langs;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -27,27 +29,44 @@ namespace Client.Views.Singleplayer
 
         private void ButtonPlayGame_Click(object sender, RoutedEventArgs e)
         {
-            int selectedCards = 16;
-
-            if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem &&
-                int.TryParse(selectedItem.Content.ToString(), out int result))
+            if (sender is Button button)
             {
-                selectedCards = result;
+                button.IsEnabled = false;
             }
 
-            int selectedTime = (int)TimerSlider.Value;
-            var (Rows, Columns) = DifficultyPresets.CalculateLayout(selectedCards);
-
-            var customConfig = new GameConfiguration
+            try
             {
-                NumberOfCards = selectedCards,
-                TimeLimitSeconds = selectedTime,
-                DifficultyLevel = Lang.Global_Button_Custom,
-                NumberRows = Rows,
-                NumberColumns = Columns
-            };
+                int selectedCards = 16;
 
-            var gameWindow = new PlayGameSingleplayer(customConfig);
+                if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem &&
+                    int.TryParse(selectedItem.Content.ToString(), out int result))
+                {
+                    selectedCards = result;
+                }
+
+                int selectedTime = (int)TimerSlider.Value;
+                var (Rows, Columns) = DifficultyPresets.CalculateLayout(selectedCards);
+
+                var customConfig = new GameConfiguration
+                {
+                    NumberOfCards = selectedCards,
+                    TimeLimitSeconds = selectedTime,
+                    DifficultyLevel = Lang.Global_Button_Custom,
+                    NumberRows = Rows,
+                    NumberColumns = Columns
+                };
+
+                var gameWindow = new PlayGameSingleplayer(customConfig);
+                NavigationHelper.NavigateTo(this, gameWindow);
+            }
+            catch (Exception ex)
+            {
+                if (sender is Button buttonError)
+                {
+                    buttonError.IsEnabled = true;
+                    ExceptionManager.Handle(ex, this);
+                }
+            }
         }
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
