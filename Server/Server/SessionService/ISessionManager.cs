@@ -17,7 +17,7 @@ namespace Server.SessionService
 
     public class SessionManager : ISessionManager
     {
-        private const int SESSION_DURATION_MINUTES = 2;
+        private const int SESSION_DURATION_MINUTES = 10;
         private static ConcurrentDictionary<int, IUserCallback> _activeUserCallbacks = new ConcurrentDictionary<int, IUserCallback>();
 
         private readonly IDbContextFactory _dbFactory;
@@ -45,12 +45,27 @@ namespace Server.SessionService
             using (var db = _dbFactory.Create())
             {
                 var session = db.userSession
-                    .FirstOrDefault(s => s.token == token && s.expiresAt > DateTime.UtcNow);
+                    .FirstOrDefault(s => s.token == token);
 
-                _logger.LogInfo(session != null
-                    ? $"Valid session found for token: {token}"
-                    : $"No valid session found for token: {token}");
-                return session?.userId;
+                if (session == null)
+                {
+                    _logger.LogInfo($"No session found for token: {token}");
+                    return null;
+                }
+
+                if (session.expiresAt < DateTime.UtcNow)
+                {
+                    _logger.LogInfo($"Token found but expired. ExpiresAt: {session.expiresAt}, UtcNow: {DateTime.UtcNow}");
+
+                    db.userSession.Remove(session);
+                    db.SaveChanges();
+
+                    return null;
+                }
+
+
+                _logger.LogInfo($"Valid session found for token: {token}");
+                return session.userId;
             }
         }
 
@@ -86,13 +101,14 @@ namespace Server.SessionService
             using (var db = _dbFactory.Create())
             {
                 var session = db.userSession.FirstOrDefault(s => s.token == token);
-                if (session != null && session.expiresAt > DateTime.UtcNow)
+                if (session != null)
                 {
                     session.expiresAt = DateTime.UtcNow.AddMinutes(SESSION_DURATION_MINUTES);
                     db.SaveChanges();
                     _logger.LogInfo($"Renew session token: {token}");
                     return true;
                 }
+
                 _logger.LogInfo($"Couldn't renew session for userId {session.userId}");
                 return false;
             }
@@ -100,7 +116,10 @@ namespace Server.SessionService
 
         public bool IsUserOnline(string email)
         {
-            if (string.IsNullOrEmpty(email)) return false;
+            if (string.IsNullOrEmpty(email))
+            {
+                return false;
+            }
 
             using (var db = _dbFactory.Create())
             {
@@ -117,14 +136,16 @@ namespace Server.SessionService
                 {
                     try
                     {
-                        oldCallback.ForceLogout("Logged in from another location");
+                        if (((ICommunicationObject)oldCallback).State == CommunicationState.Opened)
+                        {
+                            oldCallback.ForceLogout("Logged in from another location");
+                        }
                     }
                     catch 
                     {
                         
                     }
                 }
-
                 _activeUserCallbacks.AddOrUpdate(userId, callback, (k, v) => callback);
             }
         }
