@@ -53,8 +53,12 @@ namespace Client.Views.Multiplayer
             _gameManager = new GameManager(Cards);
             ConfigureEvents();
 
-            _currentTurnPlayer = _players.FirstOrDefault()?.Name;
-            HighlightActivePlayer(_currentTurnPlayer);
+            if (_players.Count > 0)
+            {
+                _currentTurnPlayer = _players[0].Name;
+                HighlightActivePlayer(_currentTurnPlayer);
+                Debug.WriteLine($"[Client] Initial turn set to: {_currentTurnPlayer}");
+            }
 
             StartGameSafe(serverCards);
         }
@@ -150,6 +154,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 _currentTurnPlayer = nextPlayerName;
 
                 foreach (var label in _playerTimes)
@@ -171,6 +180,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 var card = Cards.FirstOrDefault(c => c.Id == cardIndex);
                 if (card != null)
                 {
@@ -183,6 +197,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
                 var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
 
@@ -201,6 +220,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
                 var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
 
@@ -221,6 +245,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 int index = _players.FindIndex(p => p.Name == playerName);
                 if (index >= 0 && index < _playerScores.Length)
                 {
@@ -233,6 +262,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 string myScoreText = GetMyCurrentScore();
                 ShowMatchSummary($"{winnerName} Wins!", $"{Lang.Global_Label_Score}: {myScoreText}");
             });
@@ -323,6 +357,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 string formattedMsg = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
                 ChatListBox.Items.Add(formattedMsg);
 
@@ -342,6 +381,11 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
+                if (!this.IsLoaded)
+                {
+                    return;
+                }
+
                 ChatListBox.Items.Add($"--- {playerName} left the game ---");
                 int index = _players.FindIndex(p => p.Name == playerName);
 
@@ -459,12 +503,20 @@ namespace Client.Views.Multiplayer
                 {
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
                 }
-                catch {}
+                catch { }
             }
 
-            if (this.Owner != null && Application.Current.MainWindow != this.Owner)
+            try
             {
-                this.Owner.Show();
+
+                if (this.Owner != null && Application.Current.MainWindow != this.Owner)
+                {
+                    this.Owner.Show();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+
             }
 
             base.OnClosed(e);
