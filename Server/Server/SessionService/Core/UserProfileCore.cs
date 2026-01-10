@@ -1,6 +1,8 @@
-﻿using Server.Shared;
+﻿using log4net.Core;
+using Server.Shared;
 using Server.Validator;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.Linq;
 
@@ -243,10 +245,53 @@ namespace Server.SessionService.Core
             }
         }
 
-        public ResponseDTO AddSocialNetwork(string token, string accountName)
+        public List<SocialNetworkDTO> GetSocialNetworks(string token)
         {
             var userId = _sessionManager.GetUserIdFromToken(token);
-            if (userId == null) return new ResponseDTO { Success = false, MessageKey = "Global_Error_InvalidToken" };
+            if (userId == null)
+            {
+                return new List<SocialNetworkDTO>();
+            }
+
+            try
+            {
+                using (var db = _dbFactory.Create())
+                {
+                    var socialNetworks = db.socialNetwork
+                        .Where(sn => sn.userId == userId.Value)
+                        .OrderBy(sn => sn.account)
+                        .ToList();
+
+                    return socialNetworks.Select(n => new SocialNetworkDTO
+                    {
+                        SocialNetworkId = n.socialNetworkId,
+                        Account = n.account
+                    }).ToList();
+                }
+            }
+            catch (EntityException ex)
+            {
+                _logger.LogError($"GetSocialNetworks Database Error for userId {userId.Value}: {ex.Message}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"GetSocialNetworks Error for userId {userId.Value}: {ex.Message}");
+                return new List<SocialNetworkDTO>();
+            }
+        }
+
+        public AddSocialNetworkResponse AddSocialNetwork(string token, string accountName)
+        {
+            var response = new AddSocialNetworkResponse();
+            var userId = _sessionManager.GetUserIdFromToken(token);
+
+            if (userId == null)
+            {
+                response.Success = false;
+                response.MessageKey = "Global_Error_InvalidToken";
+                return response;
+            }
 
             try
             {
@@ -256,7 +301,9 @@ namespace Server.SessionService.Core
 
                     if (exists)
                     {
-                        return new ResponseDTO { Success = false, MessageKey = "Profile_Error_SocialDuplicate" };
+                        response.Success = false;
+                        response.MessageKey = "Profile_Error_SocialDuplicate";
+                        return response;
                     }
 
                     var social = new socialNetwork
@@ -269,13 +316,17 @@ namespace Server.SessionService.Core
                     db.SaveChanges();
 
                     _logger.LogInfo($"Added social network for userId {userId.Value}");
-                    return new ResponseDTO { Success = true };
+                    response.Success = true;
+                    response.NewSocialNetworkId = social.socialNetworkId;
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"AddSocialNetwork Error: {ex.Message}");
-                return new ResponseDTO { Success = false, MessageKey = "Global_Error_Database" };
+                response.Success = false;
+                response.MessageKey = "Global_Error_Database";
+                return response;
             }
         }
 

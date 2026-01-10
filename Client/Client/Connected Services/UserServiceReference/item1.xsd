@@ -166,6 +166,20 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetSocialNetworks">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="token" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSocialNetworksResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetSocialNetworksResult" nillable="true" type="q11:ArrayOfSocialNetworkDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="AddSocialNetwork">
     <xs:complexType>
       <xs:sequence>
@@ -177,7 +191,7 @@
   <xs:element name="AddSocialNetworkResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="AddSocialNetworkResult" nillable="true" type="q11:ResponseDTO" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="AddSocialNetworkResult" nillable="true" type="q12:AddSocialNetworkResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -192,7 +206,7 @@
   <xs:element name="RemoveSocialNetworkResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="RemoveSocialNetworkResult" nillable="true" type="q12:ResponseDTO" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="RemoveSocialNetworkResult" nillable="true" type="q13:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -206,7 +220,7 @@
   <xs:element name="LoginAsGuestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="LoginAsGuestResult" nillable="true" type="q13:LoginResponse" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="LoginAsGuestResult" nillable="true" type="q14:LoginResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -246,7 +260,7 @@
   <xs:element name="InitiateGuestRegistrationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="InitiateGuestRegistrationResult" nillable="true" type="q14:ResponseDTO" />
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="InitiateGuestRegistrationResult" nillable="true" type="q15:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -262,7 +276,7 @@
   <xs:element name="VerifyGuestRegistrationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="VerifyGuestRegistrationResult" nillable="true" type="q15:ResponseDTO" />
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="VerifyGuestRegistrationResult" nillable="true" type="q16:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -276,7 +290,7 @@
   <xs:element name="GetFriendsListResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetFriendsListResult" nillable="true" type="q16:ArrayOfFriendDTO" />
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetFriendsListResult" nillable="true" type="q17:ArrayOfFriendDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -291,7 +305,7 @@
   <xs:element name="SendFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="SendFriendRequestResult" nillable="true" type="q17:ResponseDTO" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="SendFriendRequestResult" nillable="true" type="q18:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -305,7 +319,7 @@
   <xs:element name="GetPendingRequestsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q18:ArrayOfFriendRequestDTO" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q19:ArrayOfFriendRequestDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -320,7 +334,7 @@
   <xs:element name="RemoveFriendResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="RemoveFriendResult" nillable="true" type="q19:ResponseDTO" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="RemoveFriendResult" nillable="true" type="q20:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -336,7 +350,7 @@
   <xs:element name="AnswerFriendRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="AnswerFriendRequestResult" nillable="true" type="q20:ResponseDTO" />
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="AnswerFriendRequestResult" nillable="true" type="q21:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -350,7 +364,7 @@
   <xs:element name="GetMatchHistoryResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetMatchHistoryResult" nillable="true" type="q21:ArrayOfMatchHistoryDTO" />
+        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="GetMatchHistoryResult" nillable="true" type="q22:ArrayOfMatchHistoryDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -366,7 +380,7 @@
   <xs:element name="ReportUserResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="ReportUserResult" nillable="true" type="q22:ResponseDTO" />
+        <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Server.SessionService" minOccurs="0" name="ReportUserResult" nillable="true" type="q23:ResponseDTO" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

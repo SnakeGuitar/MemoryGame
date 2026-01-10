@@ -44,6 +44,16 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SocialNetworkDTO" nillable="true" type="tns:SocialNetworkDTO" />
+  <xs:complexType name="AddSocialNetworkResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ResponseDTO">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="NewSocialNetworkId" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AddSocialNetworkResponse" nillable="true" type="tns:AddSocialNetworkResponse" />
   <xs:complexType name="ArrayOfFriendDTO">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendDTO" nillable="true" type="tns:FriendDTO" />

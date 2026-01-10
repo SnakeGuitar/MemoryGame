@@ -40,7 +40,9 @@ namespace Server.SessionService
         [OperationContract]
         ResponseDTO UpdatePersonalInfo(string email, string name, string lastName);
         [OperationContract]
-        ResponseDTO AddSocialNetwork(string token, string accountName);
+        List<SocialNetworkDTO> GetSocialNetworks(string token);
+        [OperationContract]
+        AddSocialNetworkResponse AddSocialNetwork(string token, string accountName);
         [OperationContract]
         ResponseDTO RemoveSocialNetwork(string token, int socialNetworkId);
         [OperationContract]
@@ -124,6 +126,13 @@ namespace Server.SessionService
         public int SocialNetworkId { get; set; }
         [DataMember]
         public string Account { get; set; }
+    }
+
+    [DataContract]
+    public class AddSocialNetworkResponse : ResponseDTO
+    {
+        [DataMember]
+        public int NewSocialNetworkId { get; set; }
     }
 
     [DataContract]

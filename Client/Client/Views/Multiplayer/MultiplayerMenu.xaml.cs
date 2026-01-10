@@ -16,6 +16,12 @@ namespace Client.Views.Multiplayer
         public MultiplayerMenu()
         {
             InitializeComponent();
+
+            if (UserSession.IsGuest)
+            {
+                ButtonCreateLobby.IsEnabled = false;
+                ButtonCreateLobby.Opacity = 0.5;
+            }
         }
 
         private void ButtonCreateLobby_Click(object sender, RoutedEventArgs e)

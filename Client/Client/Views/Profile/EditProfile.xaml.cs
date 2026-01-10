@@ -262,6 +262,12 @@ namespace Client.Views.Profile
         {
             if (sender is Button button && button.Tag is int socialId)
             {
+                if (socialId <= 0)
+                {
+                    var item = SocialNetworksList.FirstOrDefault(s => s.SocialNetworkId == socialId);
+                    if (item != null) SocialNetworksList.Remove(item);
+                    return;
+                }
                 try
                 {
                     var response = await UserServiceManager.Instance.Client.RemoveSocialNetworkAsync(UserSession.SessionToken, socialId);
@@ -299,16 +305,28 @@ namespace Client.Views.Profile
                 return;
             }
 
+            var button = sender as Button;
+            if (button != null) button.IsEnabled = false;
+
             try
             {
                 var response = await UserServiceManager.Instance.Client.AddSocialNetworkAsync(UserSession.SessionToken, account);
 
                 if (response.Success)
                 {
-                    var newSocial = new SocialNetworkDTO { Account = account };
-                    SocialNetworksList.Add(newSocial);
-                    UserSession.SocialNetworks.Add(new SocialNetworkDTO { Account = account });
                     TextBoxNewSocial.Text = string.Empty;
+
+                    var newSocial = new SocialNetworkDTO
+                    {
+                        Account = account,
+                        SocialNetworkId = response.NewSocialNetworkId
+                    };
+
+                    SocialNetworksList.Add(newSocial);
+
+                    UserSession.SocialNetworks.Add(newSocial);
+
+                    new CustomMessageBox(Lang.Global_Title_Success, ":3" ,this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {
@@ -319,11 +337,15 @@ namespace Client.Views.Profile
             {
                 ExceptionManager.Handle(ex, this);
             }
+            finally
+            {
+                if (button != null) button.IsEnabled = true;
+            }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, new PlayerProfile());
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new PlayerProfile());
         }
 
         private void ShowError(string title, string message)

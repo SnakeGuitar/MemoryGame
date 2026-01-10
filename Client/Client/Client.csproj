@@ -344,6 +344,9 @@
     <None Include="Connected Services\GameLobbyServiceReference\item3.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.AddSocialNetworkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.FriendDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -357,6 +360,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.ResponseDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\UserServiceReference\Client.UserServiceReference.SocialNetworkDTO.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\UserServiceReference\item.xsd">

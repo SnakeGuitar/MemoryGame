@@ -57,7 +57,11 @@ namespace Client.Views.Multiplayer
             {
                 _currentTurnPlayer = _players[0].Name;
                 HighlightActivePlayer(_currentTurnPlayer);
-                Debug.WriteLine($"[Client] Initial turn set to: {_currentTurnPlayer}");
+                int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
+                if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
+                {
+                    _playerTimes[activeIndex].Content = $"Time: {GameConstants.DefaultTurnTimeSeconds}";
+                }
             }
 
             StartGameSafe(serverCards);
@@ -329,11 +333,17 @@ namespace Client.Views.Multiplayer
                     {
                         _playerNames[i].Foreground = Brushes.Gold;
                         _playerNames[i].FontWeight = FontWeights.Bold;
+
+                        _playerBorders[i].BorderBrush = Brushes.Gold;
+                        _playerBorders[i].BorderThickness = new Thickness(3);
                     }
                     else
                     {
                         _playerNames[i].Foreground = Brushes.White;
                         _playerNames[i].FontWeight = FontWeights.Normal;
+
+                        _playerBorders[i].BorderBrush = Brushes.Transparent;
+                        _playerBorders[i].BorderThickness = new Thickness(1);
                     }
                 }
             }

@@ -31,7 +31,7 @@
 
                         <StackPanel Margin="25">
 
-                            <Button Content="{x:Static language:Lang.MultiplayerMenu_Button_CreateLobby}" 
+                            <Button x:Name="ButtonCreateLobby" Content="{x:Static language:Lang.MultiplayerMenu_Button_CreateLobby}" 
                                     Style="{StaticResource CreateLobbyButtonStyle}"
                                     Click="ButtonCreateLobby_Click"/>
 

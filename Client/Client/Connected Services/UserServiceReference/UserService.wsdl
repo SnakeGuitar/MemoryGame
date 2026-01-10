@@ -3,6 +3,10 @@
   <wsp:Policy wsu:Id="NetTcpBinding_IUserService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
+        <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
+          <wsrm:InactivityTimeout Milliseconds="1800000" />
+          <wsrm:AcknowledgementInterval Milliseconds="200" />
+        </wsrm:RMAssertion>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
         <wsaw:UsingAddressing />
       </wsp:All>
@@ -80,6 +84,12 @@
   </wsdl:message>
   <wsdl:message name="IUserService_UpdatePersonalInfo_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdatePersonalInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetSocialNetworks_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSocialNetworks" />
+  </wsdl:message>
+  <wsdl:message name="IUserService_GetSocialNetworks_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSocialNetworksResponse" />
   </wsdl:message>
   <wsdl:message name="IUserService_AddSocialNetwork_InputMessage">
     <wsdl:part name="parameters" element="tns:AddSocialNetwork" />
@@ -212,6 +222,10 @@
     <wsdl:operation name="UpdatePersonalInfo">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/UpdatePersonalInfo" message="tns:IUserService_UpdatePersonalInfo_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IUserService/UpdatePersonalInfoResponse" message="tns:IUserService_UpdatePersonalInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialNetworks">
+      <wsdl:input wsaw:Action="http://tempuri.org/IUserService/GetSocialNetworks" message="tns:IUserService_GetSocialNetworks_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IUserService/GetSocialNetworksResponse" message="tns:IUserService_GetSocialNetworks_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddSocialNetwork">
       <wsdl:input wsaw:Action="http://tempuri.org/IUserService/AddSocialNetwork" message="tns:IUserService_AddSocialNetwork_InputMessage" />
@@ -368,6 +382,15 @@
     </wsdl:operation>
     <wsdl:operation name="UpdatePersonalInfo">
       <soap12:operation soapAction="http://tempuri.org/IUserService/UpdatePersonalInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialNetworks">
+      <soap12:operation soapAction="http://tempuri.org/IUserService/GetSocialNetworks" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

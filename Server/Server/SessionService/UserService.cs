@@ -192,12 +192,15 @@ namespace Server.SessionService
         {
             return _userProfileCore.ChangeUsername(token, newUsername);
         }
-
         public ResponseDTO UpdatePersonalInfo(string email, string name, string lastName)
         {
             return _userProfileCore.UpdatePersonalInfo(email, name, lastName);
         }
-        public ResponseDTO AddSocialNetwork(string token, string accountName)
+        public List<SocialNetworkDTO> GetSocialNetworks(string token)
+        {
+            return _userProfileCore.GetSocialNetworks(token);
+        }
+        public AddSocialNetworkResponse AddSocialNetwork(string token, string accountName)
         {
             return _userProfileCore.AddSocialNetwork(token, accountName);
         }
