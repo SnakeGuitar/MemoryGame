@@ -2,7 +2,6 @@
 using Server.LobbyService;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,7 +19,7 @@ namespace Server.GameService
         private readonly List<LobbyClient> _players;
         private readonly Dictionary<string, int> _scores;
         private readonly GameSettings _settings;
-        private readonly Dictionary<string, HashSet<string>> _kickVotes =  new Dictionary<string, HashSet<string>>();
+        private readonly Dictionary<string, HashSet<string>> _kickVotes = new Dictionary<string, HashSet<string>>();
 
         private int _currentPlayerIndex;
         private GameDeck.GameCard _firstFlippedCard;
@@ -152,7 +151,10 @@ namespace Server.GameService
                 playerName = _players.First(p => p.Id == playerId).Name;
                 isGameOver = _deck.IsAllMatched();
 
-                IsGameInProgress = false;
+                if (isGameOver)
+                {
+                    IsGameInProgress = false;
+                }
             }
 
             _notifier.NotifyMatch(c1.Index, c2.Index, playerName, score);
@@ -277,7 +279,7 @@ namespace Server.GameService
                     int required = GetRequiredVotes();
 
                     _notifier.NotifyChatMessage("System", $"{voterName} voted to kick {targetName}. ({_kickVotes[targetId].Count}/{GetRequiredVotes()})", true);
-                    
+
                     if (_kickVotes[targetId].Count >= required)
                     {
                         KickPlayer(targetId);
@@ -294,7 +296,10 @@ namespace Server.GameService
         private void KickPlayer(string playerId)
         {
             int playerIndex = _players.FindIndex(p => p.Id == playerId);
-            if (playerIndex == -1) return;
+            if (playerIndex == -1)
+            {
+                return;
+            }
 
             var playerToRemove = _players[playerIndex];
             bool wasHisTurn = (playerIndex == _currentPlayerIndex);
