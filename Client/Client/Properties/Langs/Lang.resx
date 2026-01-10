@@ -757,14 +757,13 @@ You need to log in with your new account :)</value>
   <data name="Global_Button_Leave" xml:space="preserve">
     <value>Leave</value>
   </data>
-  <data name="Global_Title_LeaveLobby" xml:space="preserve">
-    <value>Leave of Lobby</value>
-  </data>
   <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
     <value>Do you want to leave your friends' game room?</value>
   </data>
   <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
-    <value>Do you want to leave the game room? 
-If there are still players in the room, it will be dissolved</value>
+    <value>Do you want to leave the game room? </value>
+  </data>
+  <data name="Global_Title_LeaveLobby" xml:space="preserve">
+    <value>Leave lobby</value>
   </data>
 </root>

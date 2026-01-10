@@ -738,6 +738,12 @@
   <data name="Lobby_Button_Invite" xml:space="preserve">
     <value>邀请好友</value>
   </data>
+  <data name="Global_Error_UserAlreadyLoggedIn" xml:space="preserve">
+    <value>无效的电子邮件地址或密码</value>
+  </data>
+  <data name="Global_Error_SessionExpired" xml:space="preserve">
+    <value>会话已过期。</value>
+  </data>
   <data name="Global_Error_FatalCrash" xml:space="preserve">
     <value>发生严重错误。应用程序必须关闭。</value>
   </data>
@@ -747,17 +753,17 @@
   <data name="Global_FontName" xml:space="preserve">
     <value>NotoSansSC-Regular.otf #Noto Sans SC</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Global_Button_Leave" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Global_Button_Leave" xml:space="preserve">
+    <value>离开</value>
   </data>
-  <data name="Global_Title_LeaveLobby" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
+    <value>你想离开朋友的游戏室吗？</value>
   </data>
-  <data name="Lobby_Message_LeaveLobby" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
+    <value>ゲームルームから退出しますか？
+ルーム内にまだプレイヤーが残っている場合は、解散されます</value>
   </data>
-  <data name="HostLobby_Message_LeaveLobby" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Global_Title_LeaveLobby" xml:space="preserve">
+    <value>离开大厅</value>
   </data>
 </root>

@@ -759,14 +759,13 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Button_Leave" xml:space="preserve">
     <value>Salir</value>
   </data>
-  <data name="Global_Title_LeaveLobby" xml:space="preserve">
-    <value>Salir de la Sala</value>
-  </data>
   <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
-    <value>¿Quieres salir de la sala de juegos de tus amigos?</value>
+    <value>Quieres abandonarnos unu?</value>
   </data>
   <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
-    <value>¿Quieres salir de la sala de juego?
-Si aún hay jugadores en la sala, esta se cerrará</value>
+    <value>Quieres salir de la sala? Si hay jugadores en ella, será disuelta.</value>
+  </data>
+  <data name="Global_Title_LeaveLobby" xml:space="preserve">
+    <value>Salir de la sala</value>
   </data>
 </root>
