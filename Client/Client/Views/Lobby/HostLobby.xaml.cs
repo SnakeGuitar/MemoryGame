@@ -116,8 +116,18 @@ namespace Client.Views.Lobby
 
         private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
         {
+            if (_isGameStarting)
+            {
+                return;
+            }
+
             Dispatcher.Invoke(() =>
             {
+                if (_isGameStarting || !this.IsLoaded)
+                {
+                    return;
+                }
+
                 _currentPlayers = players.ToList();
                 UpdatePlayerUI();
             });
@@ -140,8 +150,18 @@ namespace Client.Views.Lobby
 
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
+            if (_isGameStarting)
+            {
+                return;
+            }
+
             Dispatcher.Invoke(() =>
             {
+                if (_isGameStarting || !this.IsLoaded)
+                {
+                    return;
+                }
+
                 if (ChatListBox != null)
                 {
                     string formattedMessage = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
@@ -201,18 +221,15 @@ namespace Client.Views.Lobby
         {
             Dispatcher.Invoke(() =>
             {
-                UnsubscribeEvents();
                 _isGameStarting = true;
+
+                UnsubscribeEvents();
 
                 var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
 
                 if (this.Owner != null)
                 {
                     multiplayerGame.Owner = this.Owner;
-                }
-                else
-                {
-                    multiplayerGame.Owner = this;
                 }
 
                 NavigationHelper.NavigateTo(this, multiplayerGame);
@@ -225,8 +242,18 @@ namespace Client.Views.Lobby
 
         private void OnPlayerLeft(string playerName)
         {
+            if (_isGameStarting)
+            {
+                return;
+            }
+
             Dispatcher.Invoke(() =>
             {
+                if (_isGameStarting || !this.IsLoaded)
+                {
+                    return;
+                }
+
                 var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
                 if (playerToRemove != null)
                 {
