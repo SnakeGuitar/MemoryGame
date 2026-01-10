@@ -1,10 +1,9 @@
-﻿using Client.Properties.Langs;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Core;
+using Client.Helpers;
 using Client.Views.Controls;
 using System;
-using System.Diagnostics;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
@@ -37,11 +36,9 @@ namespace Client.Views.Session
             LabelUsernameError.Content = "";
 
             ValidationCode validationUsername = ValidateUsername(username);
-
             if (validationUsername != ValidationCode.Success)
             {
-                string errorMessage = GetString(validationUsername);
-                LabelUsernameError.Content = errorMessage;
+                LabelUsernameError.Content = GetString(validationUsername);
                 return;
             }
 
@@ -55,30 +52,18 @@ namespace Client.Views.Session
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
 
-                    string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_LoginAsGuestSuccess, successMessage,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(
+                        Lang.Global_Title_LoginAsGuestSuccess,
+                        string.Format(Lang.Global_Message_Welcome, response.User.Username),
+                        this, MessageBoxType.Success).ShowDialog();
 
-                    var mainMenu = new MainMenu();
-                    mainMenu.WindowState = this.WindowState;
-                    mainMenu.Show();
-                    this.Close();
-
-                    if (this.Owner != null)
-                    {
-                        this.Owner.Close();
-                    }
-
+                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new Views.Controls.CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(
+                        Lang.Global_Title_Error, GetString(response.MessageKey),
+                        this, MessageBoxType.Error).ShowDialog();
 
                     ButtonAcceptUsernameGuest.IsEnabled = true;
                 }
@@ -91,19 +76,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            Window titleScreen = this.Owner;
-
-            if (titleScreen != null)
-            {
-                titleScreen.WindowState = this.WindowState;
-                titleScreen.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
         }
     }
 }

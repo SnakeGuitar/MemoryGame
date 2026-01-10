@@ -1,11 +1,9 @@
-﻿using Client.Properties.Langs;
-using Client.UserServiceReference;
 using Client.Core;
+using Client.Helpers;
+using Client.Properties.Langs;
+using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
@@ -64,67 +62,35 @@ namespace Client.Views.Session
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
 
-                    string successMessage = string.Format(Lang.Global_Message_Welcome, response.User.Username);
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_LoginSuccess, successMessage,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(
+                        Lang.Global_Title_LoginSuccess,
+                        string.Format(Lang.Global_Message_Welcome, response.User.Username),
+                        this, MessageBoxType.Success).ShowDialog();
 
-                    var mainMenu = new MainMenu();
-                    mainMenu.WindowState = this.WindowState;
-                    Application.Current.MainWindow = mainMenu;
-
-                    mainMenu.Show();
-
-                    this.Close();
-
-                    if (this.Owner != null)
-                    {
-                        this.Owner.Close();
-                    }
+                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
-                    string errorMessage;
+                    string errorMessage = (response.MessageKey == ServerKeys.UserAlreadyLoggedIn)
+                        ? Lang.Global_Error_InvalidCredentials
+                        : GetString(response.MessageKey);
 
-                    if (response.MessageKey == ServerKeys.UserAlreadyLoggedIn)
-                    {
-                        errorMessage = Lang.Global_Error_InvalidCredentials;
-                    }
-                    else
-                    {
-                        errorMessage = GetString(response.MessageKey);
-                    }
-
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_LoginFailed, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Error).ShowDialog();
 
                     ButtonAcceptLogin.IsEnabled = true;
                 }
             }
             catch (Exception ex)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonAcceptLogin.IsEnabled = false);
+                ExceptionManager.Handle(ex, this, () => ButtonAcceptLogin.IsEnabled = true);
             }
         }
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            Window titleScreen = this.Owner;
-
-            if (titleScreen != null)
-            {
-                titleScreen.WindowState = this.WindowState;
-                titleScreen.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
         }
     }
 }

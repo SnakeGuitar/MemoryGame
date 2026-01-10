@@ -1,7 +1,6 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
-using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using Client.Views.Session;
@@ -12,60 +11,55 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views
 {
     /// <summary>
-    /// Lógica de interacción para MainMenu.xaml
+    /// Interaction logic for MainMenu.xaml
     /// </summary>
     public partial class MainMenu : Window
     {
         private DispatcherTimer _keepAliveTimer;
+        private const int KEEP_ALIVE_INTERVAL_SECONDS = 180;
+
         public MainMenu()
         {
             InitializeComponent();
 
             UsernameDisplay.Content = UserSession.Username;
-            ButtonSignIn.Visibility = Visibility.Visible;
-            UserSession.ProfileUpdated += OnProfileUpdated;
 
-            if (!UserSession.IsGuest)
+            if (UserSession.IsGuest)
             {
-                _ = LoadAvatarAsync();
+                ButtonSignIn.Visibility = Visibility.Visible;
+                ProfilePicture.Source = null;
+            }
+            else
+            {
                 ButtonSignIn.Visibility = Visibility.Collapsed;
+                UserSession.ProfileUpdated += OnProfileUpdated;
+                _ = LoadAvatarAsync();
                 InitializeKeepAlive();
             }
         }
 
+        #region Navigation Events
+
         private void ButtonSinglePlayer_Click(object sender, RoutedEventArgs e)
         {
-            var singlePlayerMenu = new SelectDifficulty();
-            singlePlayerMenu.WindowState = this.WindowState;
-            singlePlayerMenu.Owner = this;
-            singlePlayerMenu.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new SelectDifficulty());
         }
 
         private void ButtonMultiplayer_Click(object sender, RoutedEventArgs e)
         {
-            var multiplayerMenu = new MultiplayerMenu();
-            multiplayerMenu.WindowState = this.WindowState;
-            multiplayerMenu.Owner = this;
-            multiplayerMenu.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new MultiplayerMenu());
         }
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new Settings();
-            settingsWindow.WindowState = this.WindowState;
-            settingsWindow.Owner = this;
-            settingsWindow.Show();
-            this.Hide();
-
+            NavigationHelper.NavigateTo(this, new Settings());
         }
+
         private void ButtonProfile_Click(object sender, RoutedEventArgs e)
         {
             if (UserSession.IsGuest)
@@ -78,20 +72,12 @@ namespace Client.Views
                 return;
             }
 
-            var profileWindow = new Profile.PlayerProfile();
-            profileWindow.WindowState = this.WindowState;
-            profileWindow.Owner = this;
-            profileWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new Profile.PlayerProfile());
         }
 
         private void ButtonSignIn_Click(object sender, RoutedEventArgs e)
         {
-            var signInWindow = new RegisterAccount(true);
-            signInWindow.WindowState = this.WindowState;
-            signInWindow.Owner = this;
-            signInWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new RegisterAccount(isGuestRegister: true));
         }
 
         private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
@@ -100,32 +86,16 @@ namespace Client.Views
                 Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
 
-            bool? result = confirmationBox.ShowDialog();
-            if (result == true)
+            if (confirmationBox.ShowDialog() == true)
             {
-                try
-                {
-                    if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
-                    {
-                        if (UserSession.IsGuest)
-                        {
-                            UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
-                        }
-                        else
-                        {
-                            UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Error on Logout: {ex.Message}");
-                }
-
-                UserSession.EndSession();
-                Application.Current.Shutdown();
+                PerformLogout();
+                NavigationHelper.ExitApplication();
             }
         }
+
+        #endregion
+
+        #region Data & Logic
 
         private async Task LoadAvatarAsync()
         {
@@ -137,38 +107,10 @@ namespace Client.Views
                 {
                     ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(avatarBytes);
                 }
-                else
-                {
-                    Debug.WriteLine($"Avatar not found for user: {UserSession.Username}");
-                }
-
-            }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
             }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                Debug.WriteLine($"[MainMenu] Failed to load avatar: {ex.Message}");
             }
         }
 
@@ -178,42 +120,43 @@ namespace Client.Views
             _ = LoadAvatarAsync();
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void PerformLogout()
         {
-            _keepAliveTimer?.Stop();
-            UserSession.ProfileUpdated -= OnProfileUpdated;
-
-            try
+            if (UserSession.IsGuest)
             {
-                if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
+                try
                 {
-                    if (UserSession.IsGuest)
-                    {
-                        UserServiceManager.Instance.Client.LogoutGuest(UserSession.SessionToken);
-                    }
-                    else
-                    {
-                        UserServiceManager.Instance.Client.Logout(UserSession.SessionToken);
-                    }
+                    UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[MainMenu] Error on LogoutGuest: {ex.Message}");
                 }
             }
-            catch (Exception)
+            else
             {
+                try
+                {
+                    if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
+                    {
+                        UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[MainMenu] Error closing session: {ex.Message}");
+                }
             }
-
-            Window owner = this.Owner;
-            if (owner != null)
-            {
-                owner.Show();
-            }
-
-            base.OnClosed(e);
         }
+
+        #endregion
+
+        #region Keep Alive (Heartbeat)
 
         private void InitializeKeepAlive()
         {
             _keepAliveTimer = new DispatcherTimer();
-            _keepAliveTimer.Interval = TimeSpan.FromSeconds(50);
+            _keepAliveTimer.Interval = TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS);
             _keepAliveTimer.Tick += async (s, e) => await SendHeartbeatAsync();
             _keepAliveTimer.Start();
         }
@@ -226,14 +169,13 @@ namespace Client.Views
 
                 if (!response.Success)
                 {
-                    Debug.WriteLine("Heartbeat: Session expired server-side.");
+                    Debug.WriteLine("[MainMenu] Heartbeat: Session expired server-side.");
                     HandleSessionExpiration();
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Heartbeat failed (Network/Service): {ex.Message}");
-                HandleSessionExpiration();
+                Debug.WriteLine($"[MainMenu] Heartbeat failed: {ex.Message}");
             }
         }
 
@@ -241,17 +183,33 @@ namespace Client.Views
         {
             _keepAliveTimer?.Stop();
 
-            MessageBox.Show(
-                Lang.Global_Error_SessionExpired, 
-                Lang.Global_Title_Error, 
-                MessageBoxButton.OK, 
-                MessageBoxImage.Warning);
+            new CustomMessageBox(
+                Lang.Global_Title_Error,
+                Lang.Global_Error_SessionExpired,
+                this,
+                MessageBoxType.Error).ShowDialog();
 
             UserSession.EndSession();
 
-            var loginWindow = new Login();
-            loginWindow.Show();
-            this.Close();
+            NavigationHelper.NavigateTo(this, new Login());
         }
+
+        #endregion
+
+        #region Window Lifecycle
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _keepAliveTimer?.Stop();
+            UserSession.ProfileUpdated -= OnProfileUpdated;
+
+            if (Application.Current.MainWindow == this)
+            {
+                PerformLogout();
+            }
+            base.OnClosed(e);
+        }
+
+        #endregion
     }
 }

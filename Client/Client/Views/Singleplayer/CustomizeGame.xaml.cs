@@ -1,18 +1,8 @@
-﻿using Client.Models;
+﻿using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Client.Views.Singleplayer
 {
@@ -39,7 +29,7 @@ namespace Client.Views.Singleplayer
         {
             int selectedCards = 16;
 
-            if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem && 
+            if (ComboBoxSelectNumberCards.SelectedItem is ComboBoxItem selectedItem &&
                 int.TryParse(selectedItem.Content.ToString(), out int result))
             {
                 selectedCards = result;
@@ -58,24 +48,11 @@ namespace Client.Views.Singleplayer
             };
 
             var gameWindow = new PlayGameSingleplayer(customConfig);
-            gameWindow.Owner = this.Owner;
-            gameWindow.WindowState = this.WindowState;
-            gameWindow.Show();
-            this.Close();
         }
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
-            Window selectDifficulty = this.Owner;
-            
-
-            if (selectDifficulty != null)
-            {
-                selectDifficulty.WindowState = this.WindowState;
-                selectDifficulty.Show();
-            }
-            this.Close();
-
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new SelectDifficulty());
         }
     }
 }

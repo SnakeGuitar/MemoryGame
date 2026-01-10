@@ -1,25 +1,10 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
-using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static Client.Helpers.LocalizationHelper;
-using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Profile
 {
@@ -46,32 +31,9 @@ namespace Client.Views.Profile
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
                 }
             }
-            catch (EndpointNotFoundException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[EndpointNotFoundException]: {errorMessage}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
-            catch (CommunicationException ex)
-            {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[CommunicationException]: {ex.Message}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_NetworkError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-            }
             catch (Exception ex)
             {
-                string errorMessage = GetString(ex);
-                Debug.WriteLine($"[Unexpected Error]: {ex.ToString()}");
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_AppError, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                ExceptionManager.Handle(ex, this);
             }
         }
 
@@ -96,11 +58,7 @@ namespace Client.Views.Profile
 
         private void ButtonEditProfile_Click(object sender, RoutedEventArgs e)
         {
-            var profileWindow = new Profile.EditProfile();
-            profileWindow.WindowState = this.WindowState;
-            profileWindow.Owner = this;
-            profileWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new EditProfile());
         }
 
         private void ButtonCloseSession_Click(object sender, RoutedEventArgs e)
@@ -109,56 +67,39 @@ namespace Client.Views.Profile
                 Lang.Global_Button_LogOut, Lang.Global_Message_CloseSession,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
 
-            bool? result = confirmationBox.ShowDialog();
-            if (result == true)
+            if (confirmationBox.ShowDialog() == true)
             {
-                UserSession.EndSession();
-
-                var titleScreen = new TitleScreen();
-                titleScreen.Show();
-
-                for (int i = Application.Current.Windows.Count - 1; i >= 0; i--)
+                try
                 {
-                    Window window = Application.Current.Windows[i];
-
-                    if (window != titleScreen)
+                    if (UserSession.IsGuest)
                     {
-                        window.Close();
+                        UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
+                    }
+                    else
+                    {
+                        UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
                     }
                 }
+                catch (Exception) { }
 
-                Application.Current.MainWindow = titleScreen;
+                UserSession.EndSession();
+                NavigationHelper.NavigateTo(this, new TitleScreen());
             }
         }
 
         private void ButtonFriends_Click(object sender, RoutedEventArgs e)
         {
-            var friendsWindow = new Social.FriendsMenu();
-            friendsWindow.WindowState = this.WindowState;
-            friendsWindow.Owner = this;
-            friendsWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new Social.FriendsMenu());
         }
 
         private void ButtonStats_Click(object sender, RoutedEventArgs e)
         {
-            var statsWindow = new Profile.StatsHistory();
-            statsWindow.WindowState = this.WindowState;
-            statsWindow.Owner = this;
-            statsWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new StatsHistory());
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            Window mainMenu = this.Owner;
-
-            if (mainMenu != null)
-            {
-                mainMenu.WindowState = this.WindowState;
-                mainMenu.Show();
-            }
-            this.Close();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
         }
 
         private void OnProfileUpdated()
@@ -169,11 +110,6 @@ namespace Client.Views.Profile
         protected override void OnClosed(EventArgs e)
         {
             UserSession.ProfileUpdated -= OnProfileUpdated;
-            Window owner = this.Owner;
-            if (owner != null)
-            {
-                owner.Show();
-            }
             base.OnClosed(e);
         }
     }

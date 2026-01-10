@@ -1,6 +1,7 @@
-﻿using Client.GameLobbyServiceReference;
+﻿using Client.Core;
+using Client.GameLobbyServiceReference;
+using Client.Helpers;
 using Client.Properties.Langs;
-using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using System;
@@ -98,7 +99,7 @@ namespace Client.Views.Lobby
                 else
                 {
                     new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_JoinFailed, this, MessageBoxType.Error).ShowDialog();
-                    this.Close();
+                    GoBackToMenu();
                 }
             }
             catch (Exception ex)
@@ -130,7 +131,6 @@ namespace Client.Views.Lobby
             }
 
             PlayersListBox.Items.Clear();
-
             foreach (var player in _currentPlayers)
             {
                 PlayersListBox.Items.Add(player.Name);
@@ -170,8 +170,7 @@ namespace Client.Views.Lobby
         private void ButtonInvite_Click(object sender, RoutedEventArgs e)
         {
             var inviteDialog = new InviteFriendDialog(_lobbyCode);
-            inviteDialog.Owner = this;
-            inviteDialog.ShowDialog();
+            NavigationHelper.ShowDialog(this, inviteDialog);
         }
 
         private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
@@ -187,7 +186,7 @@ namespace Client.Views.Lobby
                 }
                 catch (Exception ex)
                 {
-                    ExceptionManager.Handle(ex, this, null);
+                    ExceptionManager.Handle(ex, this);
                 }
             }
         }
@@ -198,14 +197,16 @@ namespace Client.Views.Lobby
                 Lang.Global_Title_LeaveLobby, Lang.Lobby_Message_LeaveLobby,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
 
-            bool? result = confirmationBox.ShowDialog();
-
-            if (result == true)
+            if (confirmationBox.ShowDialog() == true)
             {
                 await LeaveLobbySafe();
-                this.Close();
+                GoBackToMenu();
             }
-            
+        }
+
+        private void GoBackToMenu()
+        {
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MultiplayerMenu());
         }
 
         #endregion
@@ -226,8 +227,7 @@ namespace Client.Views.Lobby
                     gameWindow.Owner = this.Owner;
                 }
 
-                gameWindow.Show();
-                this.Close();
+                NavigationHelper.NavigateTo(this, gameWindow);
             });
         }
 
@@ -235,10 +235,10 @@ namespace Client.Views.Lobby
         {
             Dispatcher.Invoke(() =>
             {
-                var p = _currentPlayers.FirstOrDefault(x => x.Name == name);
-                if (p != null)
+                var player = _currentPlayers.FirstOrDefault(x => x.Name == name);
+                if (player != null)
                 {
-                    _currentPlayers.Remove(p);
+                    _currentPlayers.Remove(player);
                     UpdatePlayerUI();
                     OnChatMessageReceived("System", $"{name} left the lobby.", true);
                 }
@@ -253,7 +253,7 @@ namespace Client.Views.Lobby
             {
                 await LeaveLobbySafe();
 
-                if (this.Owner != null)
+                if (this.Owner != null && Application.Current.MainWindow != this.Owner)
                 {
                     this.Owner.Show();
                 }

@@ -1,22 +1,8 @@
-﻿using Client.Core;
+﻿using Client.Helpers;
 using Client.Properties.Langs;
-using Client.UserServiceReference;
 using Client.Views.Controls;
 using Client.Views.Session;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Client.Views
 {
@@ -32,28 +18,16 @@ namespace Client.Views
 
         private void ButtonLoginAsGuest_Click(object sender, RoutedEventArgs e)
         {
-            var enterUsernameGuestWindow = new EnterUsernameGuest();
-            enterUsernameGuestWindow.WindowState = this.WindowState;
-            enterUsernameGuestWindow.Owner = this;
-            enterUsernameGuestWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new EnterUsernameGuest());
         }
 
         private void ButtonLogIn_Click(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new Login();
-            loginWindow.WindowState = this.WindowState;
-            loginWindow.Owner = this;
-            loginWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new Login());
         }
         private void ButtonSignIn_Click(object sender, RoutedEventArgs e)
         {
-            var registerAccountWindow = new RegisterAccount();
-            registerAccountWindow.WindowState = this.WindowState;
-            registerAccountWindow.Owner = this;
-            registerAccountWindow.Show();
-            this.Hide();
+            NavigationHelper.NavigateTo(this, new RegisterAccount());
         }
 
         private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
@@ -62,11 +36,9 @@ namespace Client.Views
                 Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Critic);
 
-            bool? result = confirmationBox.ShowDialog();
-            if (result == true)
+            if (confirmationBox.ShowDialog() == true)
             {
-                UserSession.EndSession();
-                Application.Current.Shutdown();
+                NavigationHelper.ExitApplication();
             }
         }
     }

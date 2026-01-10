@@ -1,23 +1,9 @@
-﻿using Client.GameLobbyServiceReference;
-using Client.Helpers;
-using Client.Views.Lobby;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
+﻿using Client.Helpers;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static Client.Helpers.ValidationHelper;
 using static Client.Helpers.LocalizationHelper;
+using static Client.Helpers.ValidationHelper;
 
 namespace Client.Views.Multiplayer
 {
@@ -34,8 +20,7 @@ namespace Client.Views.Multiplayer
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -55,30 +40,17 @@ namespace Client.Views.Multiplayer
 
             if (validationCode != ValidationCode.Success)
             {
-                string errorMessage = GetString(validationCode);
-                LabelCodeError.Content = errorMessage;
+                LabelCodeError.Content = GetString(validationCode);
                 return;
             }
 
             var lobbyWindow = new Lobby.Lobby(lobbyCode);
-            lobbyWindow.WindowState = this.WindowState;
-            lobbyWindow.Owner = this;
-            lobbyWindow.Show();
-            this.Hide();
-
-
+            NavigationHelper.NavigateTo(this, lobbyWindow);
         }
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
-            Window mainMenu = this.Owner;
-
-            if (mainMenu != null)
-            {
-                mainMenu.WindowState = this.WindowState;
-                mainMenu.Show();
-            }
-            this.Close();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MultiplayerMenu());
         }
     }
 }

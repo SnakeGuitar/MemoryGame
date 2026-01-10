@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Client.Views.Controls
 {
@@ -23,12 +13,22 @@ namespace Client.Views.Controls
         {
             Information,
             Warning,
-            Critic
+            Critic,
+            Question
         }
         public ConfirmationMessageBox(string title, string message, Window owner, ConfirmationBoxType type)
         {
             InitializeComponent();
-            this.Owner = owner;
+
+            if (owner != null && owner.IsVisible)
+            {
+                this.Owner = owner;
+            }
+            else
+            {
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
             TextBlockTitle.Text = title;
             TextBlockMessage.Text = message;
 
@@ -38,26 +38,24 @@ namespace Client.Views.Controls
         private void SetStyle(ConfirmationBoxType type)
         {
             SolidColorBrush borderBrush;
-            SolidColorBrush textMessageBrush;
-            string lightTextColor = "AccentForegroundColor";
+            SolidColorBrush textMessageBrush = (SolidColorBrush)Application.Current.FindResource("AccentForegroundColor");
 
             switch (type)
             {
                 case ConfirmationBoxType.Warning:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentHoverColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 case ConfirmationBoxType.Information:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("InformationColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 case ConfirmationBoxType.Critic:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("HardColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
+                    break;
+                case ConfirmationBoxType.Question:
+                    borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentColor");
                     break;
                 default:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
             }
             MessageBorder.Background = borderBrush;

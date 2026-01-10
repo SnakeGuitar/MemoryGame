@@ -71,6 +71,7 @@
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Helpers\NavigationHelper.cs" />
     <Compile Include="Models\DifficultyPresets.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
     <Compile Include="Properties\Langs\Lang.ko-KR.Designer.cs">
@@ -93,14 +94,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Utilities\Converters\SelfReportVisibilityConverter.cs" />
-    <Compile Include="Utilities\UserServiceManager.cs" />
-    <Compile Include="Utilities\ExceptionManager.cs" />
+    <Compile Include="Core\Converters\SelfReportVisibilityConverter.cs" />
+    <Compile Include="Core\UserServiceManager.cs" />
+    <Compile Include="Core\ExceptionManager.cs" />
     <Compile Include="Models\GameConstants.cs" />
-    <Compile Include="Utilities\GameManager.cs" />
-    <Compile Include="Utilities\GameServiceManager.cs" />
-    <Compile Include="Utilities\UserServiceCallback.cs" />
-    <Compile Include="Utilities\UserSession.cs" />
+    <Compile Include="Core\GameManager.cs" />
+    <Compile Include="Core\GameServiceManager.cs" />
+    <Compile Include="Core\UserSession.cs" />
     <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Models\LanguageOption.cs" />
     <Compile Include="ViewModels\Card.cs" />

@@ -1,18 +1,17 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Session;
-using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
 
@@ -82,18 +81,16 @@ namespace Client.Views.Profile
 
         private async void ButtonChangeAvatar_Click(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new OpenFileDialog
-            {
-                Title = Lang.SetupProfile_Dialog_Title,
-                Filter = Lang.SetupProfile_Dialog_Filter,
-                Multiselect = false
-            };
+            var avatarDialog = NavigationHelper.GetOpenFileDialog(
+                Lang.SetupProfile_Dialog_Title,
+                Lang.SetupProfile_Dialog_Filter,
+                false);
 
-            if (openFileDialog.ShowDialog() == true)
+            if (avatarDialog.ShowDialog() == true)
             {
                 try
                 {
-                    byte[] originalBytes = System.IO.File.ReadAllBytes(openFileDialog.FileName);
+                    byte[] originalBytes = File.ReadAllBytes(avatarDialog.FileName);
                     byte[] resizedBytes = ImageHelper.ResizeImage(originalBytes, 200, 200);
 
                     if (resizedBytes.Length == 0)
@@ -133,11 +130,8 @@ namespace Client.Views.Profile
 
             if (string.IsNullOrWhiteSpace(currentPass) || string.IsNullOrWhiteSpace(newPass))
             {
-                CustomMessageBox messageBox = new CustomMessageBox(
-                    Lang.Global_Title_Warning,
-                    Lang.EditProfile_Label_ErrorPasswordFields,
-                    this,
-                    MessageBoxType.Warning);
+                new CustomMessageBox(Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields,
+                    this, MessageBoxType.Warning).ShowDialog();
                 return;
             }
 
@@ -185,33 +179,28 @@ namespace Client.Views.Profile
 
                 if (response.Success)
                 {
-                    CustomMessageBox messageBox = new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.EditProfile_Label_SuccesUpdateUsername,
-                        this, MessageBoxType.Information);
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.EditProfile_Label_SuccesUpdateUsername,
+                        this, MessageBoxType.Information).ShowDialog();
+
+                    try
+                    {
+                        await UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error during logout: {ex.Message}");
+                    }
 
                     UserSession.EndSession();
-
-                    Login loginWindow = new Login();
-                    Application.Current.MainWindow = loginWindow;
-                    loginWindow.Show();
-
-                    this.Close();
-
-                    if (this.Owner != null)
-                    {
-                        this.Owner.Close();
-                    }
+                    NavigationHelper.NavigateTo(this, new Login());
                 }
                 else
                 {
-                    if (response.MessageKey == ServerKeys.UsernameInUse)
-                    {
-                        ShowError(Lang.Global_Title_Error, Lang.Global_Error_UsernameInUse);
-                    }
-                    else
-                    {
-                        ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
-                    }
+                    string msg = (response.MessageKey == ServerKeys.UsernameInUse)
+                        ? Lang.Global_Error_UsernameInUse
+                        : GetString(response.MessageKey);
+
+                    ShowError(Lang.Global_Title_Error, msg);
                 }
             }
             catch (Exception ex)
@@ -232,6 +221,14 @@ namespace Client.Views.Profile
             string name = TextBoxName.Text.Trim();
             string lastName = TextBoxLastName.Text.Trim();
 
+            var button = sender as Button;
+
+            if (button != null)
+            {
+                button.IsEnabled = false;
+                Mouse.OverrideCursor = Cursors.Wait;
+            }
+
             try
             {
                 var response = await UserServiceManager.Instance.Client.UpdatePersonalInfoAsync(UserSession.SessionToken, name, lastName);
@@ -239,7 +236,8 @@ namespace Client.Views.Profile
                 {
                     UserSession.Name = name;
                     UserSession.LastName = lastName;
-                    ShowSuccess(Lang.Global_Title_Success, Lang.EditProfile_Label_SuccesUpdateInfo);
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.EditProfile_Label_SuccesUpdateInfo,
+                        this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {
@@ -250,11 +248,19 @@ namespace Client.Views.Profile
             {
                 ExceptionManager.Handle(ex, this);
             }
+            finally
+            {
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                    Mouse.OverrideCursor = null;
+                }
+            }
         }
 
         private async void ButtonRemoveSocial_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is int socialId)
+            if (sender is Button button && button.Tag is int socialId)
             {
                 try
                 {
@@ -317,8 +323,7 @@ namespace Client.Views.Profile
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            if (Owner != null) Owner.Show();
-            this.Close();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
         }
 
         private void ShowError(string title, string message)

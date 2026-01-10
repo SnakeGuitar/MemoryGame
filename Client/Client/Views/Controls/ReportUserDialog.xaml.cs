@@ -27,10 +27,9 @@ namespace Client.Views.Controls
         {
             if (_targetUsername == UserSession.Username)
             {
-                var msgBox = new CustomMessageBox(
+                new CustomMessageBox(
                     Lang.Global_Title_Error, Lang.ReportUserDialog_Error_AutoReport,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
+                    this, MessageBoxType.Error).ShowDialog();
                 this.Close();
                 return;
             }
@@ -44,36 +43,23 @@ namespace Client.Views.Controls
 
                 if (response.Success)
                 {
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.ReportUserDialog_Title_ReportSuccess, Lang.ReportUserDialog_Message_Report,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Success).ShowDialog();
                     this.Close();
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                    new CustomMessageBox(
+                        Lang.Global_Title_Error, GetString(response.MessageKey),
+                        this, MessageBoxType.Error).ShowDialog();
 
                     ButtonReport.IsEnabled = true;
                 }
-
-                client.Close();
             }
             catch (Exception ex)
             {
-                client.Abort();
-                string errorMessage = GetString(ex);
-
-                var msgBox = new CustomMessageBox(
-                    Lang.Global_Title_Error, errorMessage,
-                    this, MessageBoxType.Error);
-                msgBox.ShowDialog();
-
-                ButtonReport.IsEnabled = true;
+                ExceptionManager.Handle(ex, this, () => ButtonReport.IsEnabled = true);
             }
         }
 

@@ -1,10 +1,9 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -19,8 +18,9 @@ namespace Client.Views.Session
     /// </summary>
     public partial class VerifyCode : Window
     {
-        private readonly string _email;
         private const int PIN_LENGTH = 6;
+
+        private readonly string _email;
         private readonly bool _isGuestRegister;
 
         public VerifyCode(string email, bool isGuestRegister = false)
@@ -33,8 +33,7 @@ namespace Client.Views.Session
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -76,33 +75,18 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Success, messageSuccess,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Success).ShowDialog();
 
                     if (_isGuestRegister)
                     {
                         UserSession.EndSession();
-
-                        Login loginWindow = new Login();
-
-                        Application.Current.MainWindow = loginWindow;
-
-                        loginWindow.Show();
-                        Window ownerWindow = this.Owner;
-                        this.Close();
-                        ownerWindow?.Close();
+                        NavigationHelper.NavigateTo(this, new Login());
                     }
                     else
                     {
-                        var profileSetupWindow = new SetupProfile(UserSession.Email);
-                        profileSetupWindow.WindowState = this.WindowState;
-
-                        Application.Current.MainWindow = profileSetupWindow;
-
-                        profileSetupWindow.Show();
-                        this.Close();
+                        NavigationHelper.NavigateTo(this, new SetupProfile(_email));
                     }
                 }
                 else
@@ -132,42 +116,31 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.Verify_Message_CodeResent,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {
                     string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Error).ShowDialog();
                 }
-                ButtonResendCode.IsEnabled = true;
             }
             catch (Exception ex)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonResendCode.IsEnabled = true);
+                ExceptionManager.Handle(ex, this);
+            }
+            finally
+            {
+                ButtonResendCode.IsEnabled = true;
             }
         }
 
         private void ButtonBackToSignIn_Click(object sender, RoutedEventArgs e)
         {
-            Window registerAccountWindow = this.Owner;
-
-            if (registerAccountWindow != null)
-            {
-                registerAccountWindow.WindowState = this.WindowState;
-                registerAccountWindow.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new RegisterAccount(_isGuestRegister));
         }
     }
 }

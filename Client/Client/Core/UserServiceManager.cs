@@ -1,5 +1,6 @@
 ﻿using Client.Helpers;
 using Client.UserServiceReference;
+using Client.Views.Session;
 using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -24,8 +25,27 @@ namespace Client.Core
 
         private void InitializeClient()
         {
-            InstanceContext context = new InstanceContext(this);
-            Client = new UserServiceClient(context);
+            try
+            {
+                if (Client != null)
+                {
+                    try 
+                    { 
+                        Client.Close(); 
+                    } 
+                    catch 
+                    { 
+                        Client.Abort(); 
+                    }
+                }
+
+                InstanceContext context = new InstanceContext(this);
+                Client = new UserServiceClient(context);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[UserServiceManager] Init Failed: {ex.Message}");
+            }
         }
 
         #region Wrappers
@@ -34,7 +54,14 @@ namespace Client.Core
         {
             if (EnsureConnection())
             {
-                return await Client.LoginAsync(email, password);
+                try
+                {
+                    return await Client.LoginAsync(email, password);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
             return new LoginResponse { Success = false, MessageKey = "Global_Error_ConnectionLost" };
         }
@@ -50,7 +77,9 @@ namespace Client.Core
 
         private bool EnsureConnection()
         {
-            if (Client == null || Client.State == CommunicationState.Closed || Client.State == CommunicationState.Faulted)
+            if (Client == null || 
+                Client.State == CommunicationState.Closed || 
+                Client.State == CommunicationState.Faulted)
             {
                 InitializeClient();
             }
@@ -65,7 +94,7 @@ namespace Client.Core
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Application.Current.MainWindow is Views.Session.Login)
+                if (Application.Current.MainWindow is Login)
                 {
                     return;
                 }
@@ -77,16 +106,16 @@ namespace Client.Core
 
                 UserSession.EndSession();
 
-                var loginWindow = new Views.Session.Login();
-                loginWindow.Show();
-                Application.Current.MainWindow = loginWindow;
-
-                foreach (Window window in Application.Current.Windows)
+                if (Application.Current.MainWindow != null)
                 {
-                    if (window != loginWindow)
-                    {
-                        window.Close();
-                    }
+                    NavigationHelper.NavigateTo(Application.Current.MainWindow, new Login());
+                }
+                else
+                {
+                    // Manual window opening or fallback reasons
+                    var login = new Login();
+                    Application.Current.MainWindow = login;
+                    login.Show();
                 }
             });
         }

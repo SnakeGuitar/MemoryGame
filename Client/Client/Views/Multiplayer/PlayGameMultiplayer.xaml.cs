@@ -1,18 +1,20 @@
-﻿using Client.GameLobbyServiceReference;
+﻿using Client.Core;
+using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Models;
 using Client.Properties.Langs;
-using Client.Core;
 using Client.ViewModels;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Multiplayer
 {
@@ -20,7 +22,7 @@ namespace Client.Views.Multiplayer
     {
         #region Private Fields & Constants
 
-        private const int MaxChatMessages = 50;
+        private const int MAX_CHAT_MESSAGES = 50;
 
         private readonly GameManager _gameManager;
         private readonly List<LobbyPlayerInfo> _players;
@@ -76,7 +78,7 @@ namespace Client.Views.Multiplayer
                     _playerScores[i].Content = "Pairs: 0";
                     _playerTimes[i].Content = "Time: --";
 
-                    _playerBorders[i].Tag = _players[i].Name;
+                    _playerBorders[i].Tag = _players[i].Name; // Important for context menu
 
                     if (_players[i].Name == UserSession.Username)
                     {
@@ -277,7 +279,8 @@ namespace Client.Views.Multiplayer
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error sending flip: {ex.Message}");
+                    Debug.WriteLine($"Error sending flip: {ex.Message}");
+                    ExceptionManager.Handle(ex, this);
                 }
             }
         }
@@ -314,7 +317,7 @@ namespace Client.Views.Multiplayer
 
         #endregion
 
-        #region Chat & Cleanup
+        #region Chat & Interaction
 
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
         {
@@ -323,7 +326,7 @@ namespace Client.Views.Multiplayer
                 string formattedMsg = isNotification ? $"--- {message} ---" : $"{sender}: {message}";
                 ChatListBox.Items.Add(formattedMsg);
 
-                if (ChatListBox.Items.Count > MaxChatMessages)
+                if (ChatListBox.Items.Count > MAX_CHAT_MESSAGES)
                 {
                     ChatListBox.Items.RemoveAt(0);
                 }
@@ -358,24 +361,71 @@ namespace Client.Views.Multiplayer
                 try
                 {
                     await GameServiceManager.Instance.Client.SendChatMessageAsync(ChatTextBox.Text);
+                    ChatTextBox.Text = string.Empty;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.WriteLine($"Chat Error: {ex.Message}");
                 }
-                ChatTextBox.Text = string.Empty;
             }
         }
 
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            await LeaveGameSafe();
+            var confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_LeaveLobby, Lang.Global_Message_ExitGame,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
+
+            if (confirmationBox.ShowDialog() == true)
+            {
+                await LeaveGameSafe();
+            }
+        }
+
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationHelper.ShowDialog(this, new Settings());
+        }
+
+        #endregion
+
+        #region Vote Kick & Cleanup
+
+        private async void VoteKick_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem &&
+                menuItem.Parent is ContextMenu contextMenu &&
+                contextMenu.PlacementTarget is Border targetBorder &&
+                targetBorder.Tag is string targetPlayerName)
+            {
+                if (targetPlayerName == UserSession.Username)
+                {
+                    new CustomMessageBox(Lang.Global_Title_Warning, "You cannot kick yourself.", this, MessageBoxType.Warning).ShowDialog();
+                    return;
+                }
+
+                var confirmation = new ConfirmationMessageBox($"Vote to kick {targetPlayerName}?", "Confirm Vote", this, ConfirmationMessageBox.ConfirmationBoxType.Question);
+
+                if (confirmation.ShowDialog() == true)
+                {
+                    try
+                    {
+                        await GameServiceManager.Instance.Client.VoteToKickAsync(targetPlayerName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error voting kick: {ex.Message}");
+                        ExceptionManager.Handle(ex, this);
+                    }
+                }
+            }
         }
 
         private void ShowMatchSummary(string title, string stats)
         {
             var summary = new MatchSummary(title, stats);
-            summary.Owner = this;
-            summary.ShowDialog();
+            NavigationHelper.ShowDialog(this, summary);
+
             _ = LeaveGameSafe();
         }
 
@@ -388,72 +438,38 @@ namespace Client.Views.Multiplayer
             {
                 await GameServiceManager.Instance.Client.LeaveLobbyAsync();
             }
-            catch
+            catch (Exception ex)
             {
+                Debug.WriteLine($"Error leaving game: {ex.Message}");
             }
             finally
             {
-                if (this.Owner != null)
-                {
-                    this.Owner.Show();
-                }
-                this.Close();
+                NavigationHelper.NavigateTo(this, new MultiplayerMenu());
             }
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override async void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
             _gameManager.StopGame();
 
-            try
+            if (GameServiceManager.Instance.Client.State == System.ServiceModel.CommunicationState.Opened)
             {
-                GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                try
+                {
+                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                }
+                catch {}
             }
-            catch
+
+            if (this.Owner != null && Application.Current.MainWindow != this.Owner)
             {
+                this.Owner.Show();
             }
 
             base.OnClosed(e);
         }
 
-        #endregion
-
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        #region Local UI Loigc and Vote Kick
-
-        private async void VoteKick_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is MenuItem menuItem &&
-                menuItem.Parent is ContextMenu contextMenu &&
-                contextMenu.PlacementTarget is Border targetBorder &&
-                targetBorder.Tag is string targetPlayerName)
-            {
-                if (targetPlayerName == UserSession.Username)
-                {
-                    MessageBox.Show("You cannot kick yourself.", "Action not allowed", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                var result = MessageBox.Show($"Vote to kick {targetPlayerName}?", "Confirm Vote", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        await GameServiceManager.Instance.Client.VoteToKickAsync(targetPlayerName);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to send vote.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        System.Diagnostics.Debug.WriteLine($"Error voting kick: {ex.Message}");
-                        ExceptionManager.Handle(ex, this, null);
-                    }
-                }
-            }
-        }
         #endregion
     }
 }

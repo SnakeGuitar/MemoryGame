@@ -1,11 +1,9 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using System;
-using System.Diagnostics;
-using System.ServiceModel;
 using System.Windows;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
@@ -70,24 +68,18 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    var msgBox = new CustomMessageBox(
+                    var messageBox = new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
-                        this, MessageBoxType.Success);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Success).ShowDialog();
 
-                    var verifyCodeWindow = new VerifyCode(email, _isGuestRegister);
-                    verifyCodeWindow.WindowState = this.WindowState;
-                    verifyCodeWindow.Owner = this;
-                    verifyCodeWindow.Show();
-                    this.Hide();
+                    NavigationHelper.NavigateTo(this, new VerifyCode(email, _isGuestRegister));
                 }
                 else
                 {
                     string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new CustomMessageBox(
+                    var messageBox = new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Error).ShowDialog();
 
                     ButtonAcceptRegisterAccount.IsEnabled = true;
                 }
@@ -100,18 +92,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            Window titleScreen = this.Owner;
-
-            if (titleScreen != null)
-            {
-                titleScreen.WindowState = this.WindowState;
-                titleScreen.Show();
-            }
-            this.Close();
-        }
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
         }
     }
 }

@@ -1,18 +1,14 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.ConfirmationMessageBox;
 using static Client.Views.Controls.CustomMessageBox;
@@ -36,52 +32,38 @@ namespace Client.Views.Social
             {
                 var requests = await _proxy.GetPendingRequestsAsync(UserSession.SessionToken);
 
-                var requestsDisplay = requests.Select(r => new RequestDisplay
+                var safeRequests = requests ?? new FriendRequestDTO[0];
+
+                var requestsDisplay = safeRequests.Select(r => new RequestDisplay
                 {
                     RequestId = r.RequestId,
                     SenderUsername = r.SenderUsername,
-                    AvatarImage = ImageHelper.ByteArrayToImageSource(r.SenderAvatar)
+                    AvatarImage = r.SenderAvatar != null
+                        ? ImageHelper.ByteArrayToImageSource(r.SenderAvatar)
+                        : null
                 }).ToList();
 
                 ListViewRequests.ItemsSource = requestsDisplay;
 
                 var friendsDto = await _proxy.GetFriendsListAsync(UserSession.SessionToken);
 
-                var friendDisplayList = friendsDto.Select(f => new FriendDisplay
+                var safeFriends = friendsDto ?? new FriendDTO[0];
+
+                var friendDisplayList = safeFriends.Select(f => new FriendDisplay
                 {
                     Username = f.Username,
                     IsOnline = f.IsOnline,
-                    AvatarImage = ImageHelper.ByteArrayToImageSource(f.Avatar)
+                    AvatarImage = f.Avatar != null
+                        ? ImageHelper.ByteArrayToImageSource(f.Avatar)
+                        : null
                 }).ToList();
 
                 DataGridFriends.ItemsSource = friendDisplayList;
             }
-            catch (EndpointNotFoundException ex)
-            {
-                HandleException(ex, Lang.Global_Title_ServerOffline);
-            }
-            catch (TimeoutException ex)
-            {
-                HandleException(ex, Lang.Global_Title_NetworkError);
-            }
-            catch (CommunicationException ex)
-            {
-                HandleException(ex, Lang.Global_Title_NetworkError);
-            }
             catch (Exception ex)
             {
-                HandleException(ex, Lang.Global_Title_AppError);
+                ExceptionManager.Handle(ex, this);
             }
-        }
-
-        private void HandleException(Exception ex, string titleKey)
-        {
-            string errorMessage = GetString(ex) ?? ex.Message;
-            Debug.WriteLine($"[{ex.GetType().Name}]: {ex.ToString()}");
-            var msgBox = new CustomMessageBox(
-                titleKey, errorMessage,
-                this, MessageBoxType.Error);
-            msgBox.ShowDialog();
         }
 
         private async void ButtonSendRequest_Click(object sender, RoutedEventArgs e)
@@ -91,7 +73,8 @@ namespace Client.Views.Social
 
             if (username == UserSession.Username)
             {
-                ShowError(Lang.Social_Error_SelfAdd);
+                new CustomMessageBox(Lang.Global_Title_Error, Lang.Social_Error_SelfAdd,
+                    this, MessageBoxType.Error).ShowDialog();
                 return;
             }
 
@@ -103,27 +86,21 @@ namespace Client.Views.Social
 
                 if (response.Success)
                 {
-                    string message = string.Format(Lang.Friends_Label_SuccessRequest, username);
-                    ShowSuccess(message);
+                    new CustomMessageBox(Lang.Global_Title_Success,
+                        string.Format(Lang.Friends_Label_SuccessRequest, username),
+                        this, MessageBoxType.Success).ShowDialog();
+
                     TextBoxSearchUser.Text = string.Empty;
                 }
                 else
                 {
-                    string msg = GetString(response.MessageKey);
-                    ShowError(msg);
+                    new CustomMessageBox(Lang.Global_Title_Error, GetString(response.MessageKey),
+                        this, MessageBoxType.Error).ShowDialog();
                 }
             }
-            catch (EndpointNotFoundException)
+            catch (Exception ex)
             {
-                ShowError(Lang.Global_Title_ServerOffline);
-            }
-            catch (TimeoutException)
-            {
-                ShowError(Lang.Global_Title_NetworkError);
-            }
-            catch (Exception)
-            {
-                ShowError(Lang.Friends_Error_SendRequest);
+                ExceptionManager.Handle(ex, this);
             }
             finally
             {
@@ -159,31 +136,25 @@ namespace Client.Views.Social
                 }
                 else
                 {
-                    ShowError(GetString(response.MessageKey));
+                    new CustomMessageBox(Lang.Global_Title_Error, GetString(response.MessageKey),
+                        this, MessageBoxType.Error).ShowDialog();
                 }
             }
-            catch (EndpointNotFoundException)
+            catch (Exception ex)
             {
-                ShowError(Lang.Global_Title_ServerOffline);
-            }
-            catch (Exception)
-            {
-                ShowError(Lang.Global_Label_ConnectionFailed);
+                ExceptionManager.Handle(ex, this);
             }
         }
 
         private async void ButtonRemoveFriend_Click(object sender, RoutedEventArgs e)
         {
-            
             if (sender is Button btn && btn.Tag is string username)
             {
-                string message = string.Format(Lang.Friends_Message_RemoveFriend, username);
+                var confirmationBox = new ConfirmationMessageBox(
+                    string.Format(Lang.Friends_Message_RemoveFriend, username),
+                    Lang.Global_Label_Confirm, this, ConfirmationBoxType.Warning);
 
-                ConfirmationMessageBox confirmationBox = new ConfirmationMessageBox(
-                message, Lang.Global_Label_Confirm, this, ConfirmationBoxType.Warning);
-
-                bool? result = confirmationBox.ShowDialog();
-                if (result == true)
+                if (confirmationBox.ShowDialog() == true)
                 {
                     try
                     {
@@ -195,16 +166,13 @@ namespace Client.Views.Social
                         }
                         else
                         {
-                            ShowError(Lang.Friends_Error_RemoveFriend);
+                            new CustomMessageBox(Lang.Global_Title_Error, Lang.Friends_Error_RemoveFriend,
+                                this, MessageBoxType.Error).ShowDialog();
                         }
                     }
-                    catch (EndpointNotFoundException)
+                    catch (Exception ex)
                     {
-                        ShowError(Lang.Global_Title_ServerOffline);
-                    }
-                    catch (Exception)
-                    {
-                        ShowError(Lang.Global_Label_ConnectionFailed);
+                        ExceptionManager.Handle(ex, this);
                     }
                 }
             }
@@ -212,25 +180,7 @@ namespace Client.Views.Social
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Owner != null)
-            {
-                this.Owner.Show();
-            }
-            this.Close();
-        }
-
-        private void ShowError(string message)
-        {
-            var msgBox = new CustomMessageBox(Lang.Global_Title_Error, message,
-                this, MessageBoxType.Error);
-            msgBox.ShowDialog();
-        }
-
-        private void ShowSuccess(string message)
-        {
-            var msgBox = new CustomMessageBox(Lang.Global_Title_Success, message,
-                this, MessageBoxType.Success);
-            msgBox.ShowDialog();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
         }
 
         public class FriendDisplay

@@ -1,10 +1,11 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Windows;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
@@ -22,45 +23,33 @@ namespace Client.Views.Session
 
         public SetupProfile(string email)
         {
-            string registeredEmail = string.Format(Lang.Global_Label_RegisteredEmail, email);
             InitializeComponent();
             _email = email ?? throw new ArgumentNullException(nameof(email));
-            LabelEmail.Content = registeredEmail;
+            LabelEmail.Content = string.Format(Lang.Global_Label_RegisteredEmail, email);
         }
 
         private void ButtonSelectAvatar_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog
-            {
-                Title = Lang.SetupProfile_Dialog_Title,
-                Filter = Lang.SetupProfile_Dialog_Filter,
-                Multiselect = false
-            };
+            var avatarDialog = NavigationHelper.GetOpenFileDialog(
+                Lang.SetupProfile_Dialog_Title, 
+                Lang.SetupProfile_Dialog_Filter, 
+                false);
 
-            if (dialog.ShowDialog() == true)
+            if (avatarDialog.ShowDialog() == true)
             {
                 try
                 {
-                    byte[] originalBytes = System.IO.File.ReadAllBytes(dialog.FileName);
+                    byte[] originalBytes = File.ReadAllBytes(avatarDialog.FileName);
                     profileImage = ImageHelper.ResizeImage(originalBytes, 200, 200);
-
-                    var bitmapImage = ImageHelper.ByteArrayToImageSource(profileImage);
-                    ProfilePicture.Source = bitmapImage;
-
+                    ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(profileImage);
                 }
                 catch (Exception ex)
                 {
-                    string errorMessage = string.Format(Lang.SetupProfile_Error_ImageLoad, ex.Message);
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-
+                    ExceptionManager.Handle(ex, this);
                     profileImage = null;
                     ProfilePicture.Source = null;
                 }
             }
-
         }
 
         private async void ButtonAcceptSetup_Click(object sender, RoutedEventArgs e)
@@ -88,31 +77,18 @@ namespace Client.Views.Session
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
 
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
-                        this, MessageBoxType.Information);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Information).ShowDialog();
 
-                    var mainMenu = new MainMenu();
-                    mainMenu.WindowState = this.WindowState;
-
-                    Application.Current.MainWindow = mainMenu;
-
-                    mainMenu.Show();
-                    this.Close();
-
-                    if (this.Owner != null)
-                    {
-                        this.Owner.Close();
-                    }
+                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
                     string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
+                        this, MessageBoxType.Error).ShowDialog();
 
                     ButtonAcceptSetupProfile.IsEnabled = true;
                 }
@@ -125,19 +101,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            Window titleScreen = this.Owner;
-
-            if (titleScreen != null)
-            {
-                titleScreen.WindowState = this.WindowState;
-                titleScreen.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
         }
     }
 }

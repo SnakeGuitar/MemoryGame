@@ -1,10 +1,8 @@
-﻿using Client.Helpers;
-using Client.Properties.Langs;
+﻿using Client.Core;
+using Client.Helpers;
 using Client.UserServiceReference;
-using Client.Core;
 using Client.Views.Controls;
 using System;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,49 +24,28 @@ namespace Client.Views.Profile
         {
             try
             {
-                    var history = await UserServiceManager.Instance.Client.GetMatchHistoryAsync(UserSession.SessionToken);
-                    DataGridHistory.ItemsSource = history;
-            }
-            catch (EndpointNotFoundException ex)
-            {
-                ShowError(Lang.Global_Title_NetworkError, LocalizationHelper.GetString(ex));
-            }
-            catch (TimeoutException ex)
-            {
-                ShowError(Lang.Global_Title_NetworkError, LocalizationHelper.GetString(ex));
+                var history = await UserServiceManager.Instance.Client.GetMatchHistoryAsync(UserSession.SessionToken);
+                DataGridHistory.ItemsSource = history;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-                ShowError(Lang.Global_Title_Error, Lang.MatchHistory_Label_ErrorHistory);
+                ExceptionManager.Handle(ex, this);
             }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            if (this.Owner != null)
-            {
-                this.Owner.Show();
-            }
-            this.Close();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new PlayerProfile());
         }
 
         private void ButtonReport_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Tag is MatchHistoryDTO matchInfo)
+            if (sender is Button button && button.Tag is MatchHistoryDTO matchInfo)
             {
                 string userToReport = matchInfo.WinnerName;
-
                 var reportDialog = new ReportUserDialog(userToReport, matchInfo.MatchId);
-                reportDialog.Owner = this;
-                reportDialog.ShowDialog();
+                NavigationHelper.ShowDialog(this, reportDialog);
             }
-        }
-
-        private void ShowError(string title, string msg)
-        {
-            var msgBox = new CustomMessageBox(title, msg, this, CustomMessageBox.MessageBoxType.Error);
-            msgBox.ShowDialog();
         }
     }
 }

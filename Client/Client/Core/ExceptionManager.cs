@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using System.ServiceModel;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Client.Core
 {
@@ -101,7 +100,7 @@ namespace Client.Core
             else if (ex is FaultException faultEx)
             {
                 title = Lang.Global_Title_Error;
-                message = LocalizationHelper.GetString(faultEx.Message); 
+                message = LocalizationHelper.GetString(faultEx.Message);
             }
             else if (ex is UnauthorizedAccessException)
             {

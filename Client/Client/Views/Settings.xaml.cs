@@ -1,21 +1,11 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
-using Client.Views.Controls;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Client.Views
 {
@@ -24,13 +14,13 @@ namespace Client.Views
     /// </summary>
     public partial class Settings : Window
     {
-        private bool isLoaded = false;
-        private bool languageChanged = false;
+        private bool _isLoaded = false;
+        private bool _languageChanged = false;
 
         public Settings(bool changeHappened = false)
         {
             InitializeComponent();
-            languageChanged = changeHappened;
+            _languageChanged = changeHappened;
             LoadLanguages();
         }
 
@@ -57,85 +47,48 @@ namespace Client.Views
             {
                 ComboBoxLanguage.SelectedIndex = 0;
             }
-
-            isLoaded = true;
-
+            _isLoaded = true;
         }
 
         private void ComboBoxLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!isLoaded)
+            if (!_isLoaded) return;
+
+            if (ComboBoxLanguage.SelectedItem is LanguageOption selectedOption)
             {
-                return;
-            }
+                string newLangCode = selectedOption.CultureCode;
 
-            LanguageOption selectedOption = ComboBoxLanguage.SelectedItem as LanguageOption;
+                if (Lang.Culture.Name != newLangCode)
+                {
+                    Properties.Settings.Default.languageCode = newLangCode;
+                    Properties.Settings.Default.Save();
+                    Lang.Culture = new CultureInfo(newLangCode);
 
-            if (selectedOption == null)
-            {
-                return;
-            }
+                    LocalizationHelper.ApplyLanguageFont();
 
-            string newLangCode = selectedOption.CultureCode;
-
-            if (Lang.Culture.Name != newLangCode)
-            {
-                Properties.Settings.Default.languageCode = newLangCode;
-                Properties.Settings.Default.Save();
-                Lang.Culture = new CultureInfo(newLangCode);
-
-                LocalizationHelper.ApplyLanguageFont();
-
-                languageChanged = true;
-
-                RefreshWindow();
+                    _languageChanged = true;
+                    RefreshWindow();
+                }
             }
         }
 
         private void RefreshWindow()
         {
-            Window owner = this.Owner;
-            this.Close();
-
             var newSettingsWindow = new Settings(true);
-            newSettingsWindow.Owner = owner;
-            newSettingsWindow.WindowState = this.WindowState;
-            newSettingsWindow.Show();
+            newSettingsWindow.Owner = this.Owner;
+            NavigationHelper.NavigateTo(this, newSettingsWindow);
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            if (languageChanged)
+            if (_languageChanged)
             {
-                var oldMainMenu = this.Owner;
-
-                var newMainMenu = new MainMenu();
-                newMainMenu.WindowState = this.WindowState;
-                newMainMenu.Show();
-
-                this.Close();
-
-                if (oldMainMenu != null)
-                {
-                    oldMainMenu.Close();
-                }
+                NavigationHelper.NavigateTo(this, new MainMenu());
             }
             else
             {
-                if (this.Owner != null)
-                {
-                    this.Owner.WindowState = this.WindowState;
-                    this.Owner.Show();
-                }
-                else
-                {
-                    var mainMenu = new MainMenu();
-                    mainMenu.WindowState = this.WindowState;
-                    mainMenu.Show();
-                }
-                    this.Close();
+                NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
             }
-
         }
     }
 }

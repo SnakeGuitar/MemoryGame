@@ -29,7 +29,16 @@ namespace Client.Views.Controls
         public CustomMessageBox(String title, string message, Window owner, MessageBoxType type)
         {
             InitializeComponent();
-            this.Owner = owner;
+
+            if (owner != null && owner.IsVisible)
+            {
+                this.Owner = owner;
+            }
+            else
+            {
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+
             TextBlockTitle.Text = title;
             TextBlockMessage.Text = message;
 
@@ -39,31 +48,24 @@ namespace Client.Views.Controls
         private void SetStyle(MessageBoxType type)
         {
             SolidColorBrush borderBrush;
-            SolidColorBrush textMessageBrush;
-            string lightTextColor = "AccentForegroundColor";
-            string darkTextColor = "PrimaryTextColor";
+            SolidColorBrush textMessageBrush = (SolidColorBrush)Application.Current.FindResource("AccentForegroundColor") ?? Brushes.Black;
 
             switch (type)
             {
                 case MessageBoxType.Success:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("EasyColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(darkTextColor);
                     break;
                 case MessageBoxType.Warning:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentHoverColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 case MessageBoxType.Error:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("HardColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 case MessageBoxType.Information:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("InformationColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
                 default:
                     borderBrush = (SolidColorBrush)Application.Current.FindResource("AccentColor");
-                    textMessageBrush = (SolidColorBrush)Application.Current.FindResource(lightTextColor);
                     break;
             }
 
@@ -73,6 +75,7 @@ namespace Client.Views.Controls
 
         private void ButtonAccept_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = true;
             this.Close();
         }
 

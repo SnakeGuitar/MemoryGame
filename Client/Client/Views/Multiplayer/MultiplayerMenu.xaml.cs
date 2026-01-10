@@ -1,20 +1,9 @@
 ﻿using Client.Core;
+using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Views.Controls;
 using Client.Views.Lobby;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Multiplayer
@@ -31,57 +20,26 @@ namespace Client.Views.Multiplayer
 
         private void ButtonCreateLobby_Click(object sender, RoutedEventArgs e)
         {
-            if(UserSession.IsGuest)
+            if (UserSession.IsGuest)
             {
-                string message = Lang.Global_Error_GuestsNotAllowed;
-                string title = Lang.Global_Title_NotAvailableFunction;
-                var msgBox = new CustomMessageBox(
-                    title, message, 
-                    this, MessageBoxType.Warning);
-                msgBox.ShowDialog();
+                new CustomMessageBox(
+                    Lang.Global_Title_NotAvailableFunction,
+                    Lang.Global_Error_GuestsNotAllowed,
+                    this, MessageBoxType.Warning).ShowDialog();
                 return;
             }
 
-            var createHostLobby = new HostLobby();
-            createHostLobby.WindowState = this.WindowState;
-            createHostLobby.Owner = this;
-            createHostLobby.Show();
-            this.Hide();
-
-
+            NavigationHelper.NavigateTo(this, new HostLobby());
         }
 
         private void ButtonJoinLobby_Click(object sender, RoutedEventArgs e)
         {
-            var joinLobby = new JoinLobby();
-            joinLobby.WindowState = this.WindowState;
-            joinLobby.Owner = this;
-            joinLobby.Show();
-            this.Hide();
-
+            NavigationHelper.NavigateTo(this, new JoinLobby());
         }
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
-            Window mainMenu = this.Owner;
-
-            if (mainMenu != null)
-            {
-                mainMenu.WindowState = this.WindowState;
-                mainMenu.Show();
-            }
-            this.Close();
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            Window owner = this.Owner;
-            if (owner != null)
-            {
-                owner.Show();
-            }
-
-            base.OnClosed(e);
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
         }
     }
 }

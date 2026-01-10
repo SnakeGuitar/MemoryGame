@@ -1,8 +1,8 @@
-﻿using Client.GameLobbyServiceReference;
+﻿using Client.Core;
+using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Models;
 using Client.Properties.Langs;
-using Client.Core;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
 using System;
@@ -41,26 +41,15 @@ namespace Client.Views.Lobby
             {
                 LabelGameCode.Content = _lobbyCode;
             }
-
             if (LabelTimerValue != null)
             {
                 LabelTimerValue.Content = _secondsPerTurn.ToString();
             }
-
             if (ComboBoxNumberOfCards != null)
             {
                 ComboBoxNumberOfCards.SelectedIndex = 0;
             }
-
             ConfigureEvents();
-        }
-
-        private void TimerSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (LabelTimerValue != null)
-            {
-                LabelTimerValue.Content = e.NewValue.ToString("F0");
-            }
         }
 
         #region Event Configuration
@@ -83,14 +72,14 @@ namespace Client.Views.Lobby
 
         #endregion
 
+        #region Loading & Creation
+
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
                 bool success = await GameServiceManager.Instance.Client.CreateLobbyAsync(
-                    UserSession.SessionToken,
-                    _lobbyCode
-                );
+                    UserSession.SessionToken, _lobbyCode);
 
                 if (success)
                 {
@@ -108,58 +97,22 @@ namespace Client.Views.Lobby
                 else
                 {
                     new CustomMessageBox(Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed, this, MessageBoxType.Error).ShowDialog();
-                    this.Close();
+                    GoBackToMenu();
                 }
             }
             catch (Exception ex)
             {
-                ExceptionManager.Handle(ex, this, () => this.Close());
-            }
-        }
-
-        #region Game Logic
-
-        private void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_isConnected)
-            {
-                return;
-            }
-
-            if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
-            {
-                MessageBox.Show("Waiting for more players to join...", "Cannot Start", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                var settings = new GameSettings
+                ExceptionManager.Handle(ex, this, async () =>
                 {
-                    CardCount = _selectedCardCount,
-                    TurnTimeSeconds = _secondsPerTurn
-                };
-
-                if (ButtonStart != null)
-                {
-                    ButtonStart.IsEnabled = false;
-                }
-
-                GameServiceManager.Instance.Client.StartGame(settings);
-            }
-            catch (Exception ex)
-            {
-                if (ButtonStart != null)
-                {
-                    ButtonStart.IsEnabled = true;
-                }
-                ExceptionManager.Handle(ex, this, () => this.Close());
+                    await LeaveLobbySafe();
+                    GoBackToMenu();
+                });
             }
         }
 
         #endregion
 
-        #region UI Updates & Callbacks
+        #region UI Updates (Thread Safe)
 
         private void OnPlayerListUpdated(LobbyPlayerInfo[] players)
         {
@@ -202,18 +155,46 @@ namespace Client.Views.Lobby
             });
         }
 
-        private void OnPlayerLeft(string playerName)
+        #endregion
+
+        #region Game Logic
+
+        private void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            if (!_isConnected)
             {
-                var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
-                if (playerToRemove != null)
+                return;
+            }
+
+            if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
+            {
+                MessageBox.Show("Waiting for more players to join...", "Cannot Start", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var settings = new GameSettings
                 {
-                    _currentPlayers.Remove(playerToRemove);
-                    UpdatePlayerUI();
-                    OnChatMessageReceived("System", $"{playerName} left the lobby.", true);
+                    CardCount = _selectedCardCount,
+                    TurnTimeSeconds = _secondsPerTurn
+                };
+
+                if (ButtonStart != null)
+                {
+                    ButtonStart.IsEnabled = false;
                 }
-            });
+
+                GameServiceManager.Instance.Client.StartGame(settings);
+            }
+            catch (Exception ex)
+            {
+                if (ButtonStart != null)
+                {
+                    ButtonStart.IsEnabled = true;
+                }
+                ExceptionManager.Handle(ex, this);
+            }
         }
 
         private void OnGameStarted(List<CardInfo> cards)
@@ -234,14 +215,27 @@ namespace Client.Views.Lobby
                     multiplayerGame.Owner = this;
                 }
 
-                multiplayerGame.Show();
-                this.Hide();
+                NavigationHelper.NavigateTo(this, multiplayerGame);
             });
         }
 
         #endregion
 
-        #region Interaction Handlers
+        #region Interaction & Server Callbacks
+
+        private void OnPlayerLeft(string playerName)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
+                if (playerToRemove != null)
+                {
+                    _currentPlayers.Remove(playerToRemove);
+                    UpdatePlayerUI();
+                    OnChatMessageReceived("System", $"{playerName} left the lobby.", true);
+                }
+            });
+        }
 
         private async void ButtonSendMessageToChat_Click(object sender, RoutedEventArgs e)
         {
@@ -263,25 +257,32 @@ namespace Client.Views.Lobby
 
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
-            ConfirmationMessageBox confirmationBox = new ConfirmationMessageBox(
+            var confirmationBox = new ConfirmationMessageBox(
                 Lang.Global_Title_LeaveLobby, Lang.HostLobby_Message_LeaveLobby,
                 this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
 
-            bool? result = confirmationBox.ShowDialog();
-
-            if (result == true)
+            if (confirmationBox.ShowDialog() == true)
             {
                 await LeaveLobbySafe();
-                this.Close();
+                GoBackToMenu();
             }
         }
 
+        private void GoBackToMenu()
+        {
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MultiplayerMenu());
+        }
+
+        #endregion
+
+        #region Settings UI
+
         private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item && 
-                int.TryParse(item.Content.ToString(), out int val))
+            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item &&
+                int.TryParse(item.Content.ToString(), out int value))
             {
-                    _selectedCardCount = val;
+                _selectedCardCount = value;
             }
         }
 
@@ -306,7 +307,7 @@ namespace Client.Views.Lobby
             {
                 await LeaveLobbySafe();
 
-                if (this.Owner != null)
+                if (this.Owner != null && Application.Current.MainWindow != this.Owner)
                 {
                     this.Owner.Show();
                 }

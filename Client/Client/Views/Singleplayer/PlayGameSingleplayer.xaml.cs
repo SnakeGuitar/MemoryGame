@@ -1,6 +1,7 @@
-﻿using Client.Models;
+﻿using Client.Core;
+using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
-using Client.Core;
 using Client.ViewModels;
 using Client.Views.Controls;
 using System;
@@ -28,7 +29,7 @@ namespace Client.Views.Singleplayer
         {
             InitializeComponent();
 
-            // For safety fallback reasons
+            // Safety fallback for layout config
             if (config.NumberRows * config.NumberColumns != config.NumberOfCards)
             {
                 config.NumberRows = 4;
@@ -107,8 +108,7 @@ namespace Client.Views.Singleplayer
         private void ShowMatchSummary(string title, string stats)
         {
             var summaryWindow = new MatchSummary(title, stats);
-            summaryWindow.Owner = this;
-            summaryWindow.ShowDialog();
+            NavigationHelper.ShowDialog(this, summaryWindow);
             ButtonBackToSelectDifficulty_Click(null, null);
         }
 
@@ -135,27 +135,25 @@ namespace Client.Views.Singleplayer
         {
             _gameManager.StopGame();
             var settingsWindow = new Settings();
-            settingsWindow.Owner = this;
-            settingsWindow.ShowDialog();
+            NavigationHelper.ShowDialog(this, settingsWindow);
         }
 
         public void ButtonBackToSelectDifficulty_Click(object sender, RoutedEventArgs e)
         {
             UnsubscribeEvents();
             _gameManager.StopGame();
-
-            if (this.Owner != null)
-            {
-                this.Owner.WindowState = this.WindowState;
-                this.Owner.Show();
-            }
-            this.Close();
+            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new SelectDifficulty());
         }
 
         protected override void OnClosed(EventArgs e)
         {
             UnsubscribeEvents();
             _gameManager.StopGame();
+            if (this.Owner != null && Application.Current.MainWindow != this.Owner)
+            {
+                this.Owner.Show();
+            }
+
             base.OnClosed(e);
         }
 
