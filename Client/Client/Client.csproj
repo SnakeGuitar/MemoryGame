@@ -72,6 +72,7 @@
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="Helpers\NavigationHelper.cs" />
+    <Compile Include="Helpers\WpfExtensions.cs" />
     <Compile Include="Models\DifficultyPresets.cs" />
     <Compile Include="Models\GameConfiguration.cs" />
     <Compile Include="Properties\Langs\Lang.ko-KR.Designer.cs">
