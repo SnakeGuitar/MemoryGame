@@ -323,7 +323,7 @@ namespace Client.Views.Profile
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
+            NavigationHelper.NavigateTo(this, new PlayerProfile());
         }
 
         private void ShowError(string title, string message)
