@@ -513,20 +513,22 @@ namespace Client.Views.Multiplayer
                 {
                     await GameServiceManager.Instance.Client.LeaveLobbyAsync();
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[PlayGameMultiplayer] Error leaving lobby: {ex.Message}");
+                }
             }
 
             try
             {
-
                 if (this.Owner != null && Application.Current.MainWindow != this.Owner)
                 {
                     this.Owner.Show();
                 }
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException ex)
             {
-
+                Debug.WriteLine($"[PlayGameMultiplayer] Could not show owner: {ex.Message}");
             }
 
             base.OnClosed(e);
