@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,8 +11,14 @@ namespace Client.Helpers
     {
         public static string GenerateGameCode()
         {
-            var random = new Random();
-            return random.Next(100000, 999999).ToString();
+            byte[] randomBytes = new byte[4];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+
+            int value = BitConverter.ToInt32(randomBytes, 0) & int.MaxValue;
+            return (value % 900000 + 100000).ToString();
         }
 
     }

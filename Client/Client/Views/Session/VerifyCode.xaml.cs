@@ -33,7 +33,11 @@ namespace Client.Views.Session
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
+            e.Handled = Regex.IsMatch(
+                e.Text,
+                "[^0-9]+",
+                RegexOptions.None,
+                TimeSpan.FromMilliseconds(100));
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
