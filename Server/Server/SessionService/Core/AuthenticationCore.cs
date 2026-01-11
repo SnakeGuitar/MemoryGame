@@ -401,7 +401,8 @@ namespace Server.SessionService.Core
                         {
                             UserId = guestUser.userId,
                             Username = guestUser.username,
-                            Email = guestUser.email
+                            Email = guestUser.email,
+                            IsGuest = guestUser.isGuest
                         }
                     };
                 }

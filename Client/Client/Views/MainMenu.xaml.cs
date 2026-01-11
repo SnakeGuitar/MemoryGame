@@ -131,7 +131,7 @@ namespace Client.Views
             _ = LoadAvatarAsync();
         }
 
-        private async Task PerformLogoutAsync()
+        private static async Task PerformLogoutAsync()
         {
             string token = UserSession.SessionToken;
 
