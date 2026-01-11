@@ -142,7 +142,7 @@ namespace Client.Views.Singleplayer
         {
             UnsubscribeEvents();
             _gameManager.StopGame();
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new SelectDifficulty());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new SelectDifficulty());
         }
 
         protected override void OnClosed(EventArgs e)

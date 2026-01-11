@@ -35,7 +35,7 @@ namespace Client.Views.Profile
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new PlayerProfile());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new PlayerProfile());
         }
 
         private void ButtonReport_Click(object sender, RoutedEventArgs e)

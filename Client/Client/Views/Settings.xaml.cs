@@ -87,7 +87,7 @@ namespace Client.Views
             }
             else
             {
-                NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
+                NavigationHelper.NavigateTo(this, this.Owner ?? new MainMenu());
             }
         }
     }

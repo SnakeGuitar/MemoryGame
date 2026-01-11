@@ -92,7 +92,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new TitleScreen());
         }
     }
 }

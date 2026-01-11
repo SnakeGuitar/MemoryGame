@@ -45,7 +45,7 @@ namespace Client.Views.Multiplayer
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MainMenu());
         }
     }
 }

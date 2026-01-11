@@ -140,7 +140,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToSignIn_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new RegisterAccount(_isGuestRegister));
+            NavigationHelper.NavigateTo(this, this.Owner ?? new RegisterAccount(_isGuestRegister));
         }
     }
 }

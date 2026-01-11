@@ -140,12 +140,9 @@ namespace Client.Views.Lobby
                 return;
             }
 
-            PlayersListBox.Items.Clear();
-            foreach (var player in _currentPlayers)
-            {
-                string displayName = player.Name == UserSession.Username ? $"{player.Name} (Host)" : player.Name;
-                PlayersListBox.Items.Add(displayName);
-            }
+            PlayersListBox.ItemsSource = _currentPlayers
+                .Select(player => player.Name == UserSession.Username ? $"{player.Name} (Host)" : player.Name)
+                .ToList();
         }
 
         private void OnChatMessageReceived(string sender, string message, bool isNotification)
@@ -297,7 +294,7 @@ namespace Client.Views.Lobby
 
         private void GoBackToMenu()
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MultiplayerMenu());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MultiplayerMenu());
         }
 
         #endregion
