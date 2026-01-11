@@ -8,7 +8,7 @@ namespace Client.Tests
     [TestClass]
     public class ValidationHelperTests
     {
-        // 1. USERNAME TESTS (12 Tests)
+        //  USERNAME TESTS
 
         [TestMethod]
         public void ValidateUsername_ValidStandard_ReturnsSuccess()
@@ -87,7 +87,7 @@ namespace Client.Tests
         }
 
 
-        // 2. PASSWORD TESTS (15 Tests)
+        // PASSWORD TESTS
 
         [TestMethod]
         public void ValidatePassword_ValidStandard_ReturnsSuccess()
@@ -196,7 +196,7 @@ namespace Client.Tests
         }
 
 
-        // 3. EMAIL TESTS
+        // EMAIL TESTS
 
         [TestMethod]
         public void ValidateEmail_ValidStandard_ReturnsSuccess()
@@ -263,7 +263,7 @@ namespace Client.Tests
         }
 
 
-        // 4. VERIFY CODE TESTS
+        // VERIFY CODE TESTS
 
         [TestMethod]
         public void ValidateVerifyCode_Valid_ReturnsSuccess()

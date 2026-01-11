@@ -5,85 +5,123 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:p="clr-namespace:Client.Properties.Langs" 
         mc:Ignorable="d"
+        
         Title="{x:Static p:Lang.Gallery_Title}" 
-        MinHeight="720" MinWidth="1280" 
+        MinHeight="500" MinWidth="600" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <Label Content="{x:Static p:Lang.Gallery_Collection}" 
-               Style="{StaticResource TitleLabelStyle}" 
-               Margin="0,20,0,10"/>
+            <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center" MaxHeight="60" Margin="0,0,0,15">
+                <Label Content="{x:Static p:Lang.Gallery_Collection}" 
+                       Style="{StaticResource TitleLabelStyle}" 
+                       Padding="0"/>
+            </Viewbox>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
-            <ItemsControl Name="GalleryItemsControl">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource CardBorderStyle}" 
-                                Width="260" Height="340"
-                                Margin="15"
-                                MouseLeftButtonUp="Card_MouseLeftButtonUp"
-                                ToolTip="{Binding Name}"
-                                Cursor="Hand">
-                            <Grid>
-                                <Image Source="{Binding FullPath}" Stretch="Uniform"/>
-                                <Label Content="{Binding DisplayCategory}" 
-                                       FontSize="16" 
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource AccentForegroundColor}"
-                                       VerticalAlignment="Bottom" 
-                                       HorizontalAlignment="Center"
-                                       Background="#AA000000"
-                                       Padding="5,2"/>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-
-        <Button Grid.Row="2" 
-                Content="{x:Static p:Lang.Gallery_Back}" 
-                Style="{StaticResource SecondaryButtonStyle}" 
-                HorizontalAlignment="Left" 
-                Margin="30,10,0,30"
-                Click="ButtonBack_Click"/>
-
-        <Grid x:Name="ZoomOverlay" 
-              Grid.RowSpan="3" 
-              Visibility="Collapsed" 
-              Background="#E6000000" 
-              MouseLeftButtonUp="ZoomOverlay_Click">
-
-            <Border BorderBrush="{StaticResource AccentColor}" 
-                    BorderThickness="2" 
+            <Border Grid.Row="1" 
+                    Background="{StaticResource PrimaryTextColor}" 
                     CornerRadius="15" 
-                    Margin="50"
-                    HorizontalAlignment="Center" 
-                    VerticalAlignment="Center"
-                    Background="White"
+                    BorderBrush="{StaticResource AccentColor}" 
+                    BorderThickness="3"
                     Padding="10">
-                <Image x:Name="ZoomedImage" Stretch="Uniform"/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                              HorizontalScrollBarVisibility="Disabled"
+                              Padding="5">
+
+                    <ItemsControl Name="GalleryItemsControl">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Center" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="200" Height="280" 
+                                        CornerRadius="10"
+                                        BorderBrush="{StaticResource AccentColor}"
+                                        BorderThickness="2"
+                                        Background="{StaticResource BackgroundColor}"
+                                        Margin="10"
+                                        Cursor="Hand"
+                                        MouseLeftButtonUp="Card_MouseLeftButtonUp"
+                                        ToolTip="{Binding Name}">
+
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="Black" BlurRadius="8" ShadowDepth="4" Opacity="0.4"/>
+                                    </Border.Effect>
+
+                                    <Grid>
+                                        <Border CornerRadius="8" ClipToBounds="True" Margin="2">
+                                            <Image Source="{Binding FullPath}" Stretch="UniformToFill"/>
+                                        </Border>
+
+                                        <Border VerticalAlignment="Bottom" 
+                                                Background="#CC000000" 
+                                                CornerRadius="0,0,8,8"
+                                                Height="35">
+                                            <Label Content="{Binding DisplayCategory}" 
+                                                   FontSize="16" 
+                                                   FontFamily="{StaticResource BodyFont}"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource AccentForegroundColor}"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Border>
 
-            <TextBlock Text="{x:Static p:Lang.Gallery_CloseZoom}"
-                       Style="{StaticResource TitleTextStyle}"
-                       FontSize="30"
-                       Foreground="White"
-                       VerticalAlignment="Bottom" 
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,20"
-                       IsHitTestVisible="False"/>
+            <Button Grid.Row="2" 
+                    Content="{x:Static p:Lang.Gallery_Back}" 
+                    Style="{StaticResource SecondaryButtonStyle}" 
+                    HorizontalAlignment="Center" 
+                    Width="180" Height="50" FontSize="22"
+                    Margin="0,15,0,0"
+                    Click="ButtonBack_Click"/>
+        </Grid>
+
+        <Grid x:Name="ZoomOverlay" 
+              Visibility="Collapsed" 
+              Background="#F2000000" 
+              MouseLeftButtonUp="ZoomOverlay_Click">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Viewbox Grid.Row="0" Margin="50">
+                    <Border BorderBrush="{StaticResource AccentColor}" 
+                            BorderThickness="3" 
+                            CornerRadius="20" 
+                            Background="White"
+                            Padding="10">
+                        <Image x:Name="ZoomedImage" Stretch="Uniform"/>
+                    </Border>
+                </Viewbox>
+
+                <TextBlock Grid.Row="1" 
+                           Text="{x:Static p:Lang.Gallery_CloseZoom}"
+                           Style="{StaticResource TitleTextStyle}"
+                           FontSize="30"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,30"
+                           IsHitTestVisible="False"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
