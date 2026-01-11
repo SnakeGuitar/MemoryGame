@@ -54,6 +54,11 @@ namespace Server.LobbyService
         {
         }
 
+        public void Ping()
+        {
+
+        }
+
         public bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null)
         {
             

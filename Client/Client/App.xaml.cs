@@ -43,11 +43,13 @@ namespace Client
 
             EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
             GameServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
+            UserServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             GameServiceManager.Instance.ServerConnectionLost -= OnGlobalServerConnectionLost;
+            UserServiceManager.Instance.ServerConnectionLost -= OnGlobalServerConnectionLost;
             base.OnExit(e);
         }
 

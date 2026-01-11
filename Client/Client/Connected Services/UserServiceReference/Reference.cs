@@ -607,6 +607,12 @@ namespace Client.UserServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="UserServiceReference.IUserService", CallbackContract=typeof(Client.UserServiceReference.IUserServiceCallback))]
     public interface IUserService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Ping", ReplyAction="http://tempuri.org/IUserService/PingResponse")]
+        void Ping();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/Ping", ReplyAction="http://tempuri.org/IUserService/PingResponse")]
+        System.Threading.Tasks.Task PingAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IUserService/StartRegistration", ReplyAction="http://tempuri.org/IUserService/StartRegistrationResponse")]
         Client.UserServiceReference.ResponseDTO StartRegistration(string email, string password);
         
@@ -797,6 +803,14 @@ namespace Client.UserServiceReference {
         
         public UserServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
+        }
+        
+        public void Ping() {
+            base.Channel.Ping();
+        }
+        
+        public System.Threading.Tasks.Task PingAsync() {
+            return base.Channel.PingAsync();
         }
         
         public Client.UserServiceReference.ResponseDTO StartRegistration(string email, string password) {

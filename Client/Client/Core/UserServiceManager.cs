@@ -18,6 +18,9 @@ namespace Client.Core
         #endregion
 
         public UserServiceClient Client { get; private set; }
+        private ServerConnectionMonitor _connectionMonitor;
+
+        public event Action ServerConnectionLost;
 
         private UserServiceManager()
         {
@@ -30,22 +33,48 @@ namespace Client.Core
             {
                 if (Client != null)
                 {
-                    try 
-                    { 
-                        Client.Close(); 
-                    } 
-                    catch 
-                    { 
-                        Client.Abort(); 
-                    }
+                    try { Client.Close(); } catch { Client.Abort(); }
                 }
+                _connectionMonitor?.Stop();
 
                 InstanceContext context = new InstanceContext(this);
                 Client = new UserServiceClient(context);
+                Client.Open();
+
+                _connectionMonitor = new ServerConnectionMonitor(async () =>
+                {
+                    try
+                    {
+                        if (Client == null ||
+                            Client.State == CommunicationState.Closed ||
+                            Client.State == CommunicationState.Faulted)
+                        {
+                            return false;
+                        }
+
+                        await Client.PingAsync();
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                });
+
+                _connectionMonitor.ConnectionLost += () =>
+                {
+                    Application.Current?.Dispatcher?.Invoke(() =>
+                    {
+                        ServerConnectionLost?.Invoke();
+                    });
+                };
+
+                _connectionMonitor.Start();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[UserServiceManager] Init Failed: {ex.Message}");
+                Application.Current?.Dispatcher?.Invoke(() => ServerConnectionLost?.Invoke());
             }
         }
 
@@ -53,11 +82,32 @@ namespace Client.Core
 
         public async Task<LoginResponse> LoginAsync(string email, string password)
         {
-            if (EnsureConnection())
+            if (Client == null || Client.State == CommunicationState.Faulted || Client.State == CommunicationState.Closed)
+            {
+                InitializeClient();
+            }
+
+            if (Client.State != CommunicationState.Opened)
+            {
+                return new LoginResponse
+                {
+                    Success = false,
+                    MessageKey = "Global_Error_ServerOffline"
+                };
+            }
+
+            try
             {
                 return await Client.LoginAsync(email, password);
             }
-            return new LoginResponse { Success = false, MessageKey = "Global_Error_ConnectionLost" };
+            catch (Exception)
+            {
+                return new LoginResponse
+                {
+                    Success = false,
+                    MessageKey = "Global_Error_ServerOffline"
+                };
+            }
         }
 
         public async Task LogoutAsync(string token)

@@ -60,11 +60,12 @@ namespace Client.Core
                     {
                         Client.Abort();
                     }
-
-                    _connectionMonitor?.Stop();
                 }
+                _connectionMonitor?.Stop();
+
                 InstanceContext context = new InstanceContext(this);
                 Client = new GameLobbyServiceClient(context);
+
                 Client.Open();
 
                 if (Client.InnerChannel != null)
@@ -72,9 +73,25 @@ namespace Client.Core
                     Client.InnerChannel.Faulted += (s, e) => NotifyDisconnect();
                 }
 
-                _connectionMonitor = new ServerConnectionMonitor(() =>
+                _connectionMonitor = new ServerConnectionMonitor(async () =>
                 {
-                    return Client != null && Client.State == CommunicationState.Opened;
+                    try
+                    {
+                        if (Client == null ||
+                            Client.State == CommunicationState.Closed ||
+                            Client.State == CommunicationState.Faulted)
+                        {
+                            return false;
+                        }
+
+                        await Client.PingAsync();
+                        
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
                 });
 
                 _connectionMonitor.ConnectionLost += NotifyDisconnect;
@@ -83,6 +100,7 @@ namespace Client.Core
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[GameServiceManager] Init Failed: {ex.Message}");
+                NotifyDisconnect();
             }
         }
 

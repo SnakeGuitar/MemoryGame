@@ -93,12 +93,12 @@ namespace Client.Views
 
             if (confirmationBox.ShowDialog() == true)
             {
-                if (sender is FrameworkElement btn)
+                if (sender is FrameworkElement button)
                 {
-                    btn.IsEnabled = false;
+                    button.IsEnabled = false;
                 }
 
-                await PerformLogoutAsync();
+                await Task.WhenAny(PerformLogoutAsync(), Task.Delay(2000));
 
                 NavigationHelper.ExitApplication();
             }
@@ -133,14 +133,23 @@ namespace Client.Views
 
         private static async Task PerformLogoutAsync()
         {
-            string token = UserSession.SessionToken;
-
-            if (!string.IsNullOrEmpty(token))
+            try
             {
-                await UserServiceManager.Instance.LogoutAsync(token);
-            }
+                string token = UserSession.SessionToken;
 
-            UserSession.EndSession();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    await UserServiceManager.Instance.LogoutAsync(token);
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                UserSession.EndSession();
+            }
         }
 
         #endregion

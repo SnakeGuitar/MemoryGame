@@ -1429,6 +1429,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username must be at least 3 characters.
+        /// </summary>
+        public static string Global_ValidationUsername_TooSmall {
+            get {
+                return ResourceManager.GetString("Global_ValidationUsername_TooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send invitation.
         /// </summary>
         public static string HostLobby_Button_SendInvitation {
@@ -1555,11 +1564,20 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Heeey budy, join my game so we can play :D The Lobby code is:.
+        ///   Looks up a localized string similar to Heeey budy, join my game so we can play :D The Lobby code is: {0}.
         /// </summary>
         public static string InviteFriendDialog_Message_BodyEmail {
             get {
                 return ResourceManager.GetString("InviteFriendDialog_Message_BodyEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation sent successfully!.
+        /// </summary>
+        public static string InviteFriendDialog_Message_EmailSentSuccess {
+            get {
+                return ResourceManager.GetString("InviteFriendDialog_Message_EmailSentSuccess", resourceCulture);
             }
         }
         

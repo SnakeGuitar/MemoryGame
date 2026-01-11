@@ -7,6 +7,8 @@ namespace Server.LobbyService
     public interface IGameLobbyService
     {
         [OperationContract]
+        void Ping();
+        [OperationContract]
         bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null);
         [OperationContract]
         bool CreateLobby(string token, string gameCode);

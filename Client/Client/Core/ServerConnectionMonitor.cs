@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Client.Core
@@ -6,13 +7,14 @@ namespace Client.Core
     public class ServerConnectionMonitor
     {
         private readonly DispatcherTimer _timer;
-        private readonly Func<bool> _checkConnectionStatus;
+        private readonly Func<Task<bool>> _checkConnectionAsync;
+        private bool _isCheckInProgress;
 
         public event Action ConnectionLost;
 
-        public ServerConnectionMonitor(Func<bool> checkCallback, int intervalSeconds = 3)
+        public ServerConnectionMonitor(Func<Task<bool>> checkCallback, int intervalSeconds = 3)
         {
-            _checkConnectionStatus = checkCallback ?? throw new ArgumentNullException(nameof(checkCallback));
+            _checkConnectionAsync = checkCallback ?? throw new ArgumentNullException(nameof(checkCallback));
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(intervalSeconds);
@@ -35,14 +37,32 @@ namespace Client.Core
             }
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private async void Timer_Tick(object sender, EventArgs e)
         {
-            bool isAlive = _checkConnectionStatus.Invoke();
+            if (_isCheckInProgress)
+            {
+                _isCheckInProgress = false;
+            }
 
-            if (!isAlive)
+            try
+            {
+
+                bool isAlive = await _checkConnectionAsync();
+
+                if (!isAlive)
+                {
+                    Stop();
+                    ConnectionLost?.Invoke();
+                }
+            }
+            catch 
             {
                 Stop();
                 ConnectionLost?.Invoke();
+            }
+            finally
+            {
+                _isCheckInProgress = false;
             }
         }
     }

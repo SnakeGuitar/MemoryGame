@@ -10,6 +10,9 @@ namespace Server.SessionService
     public interface IUserService
     {
         [OperationContract]
+        void Ping();
+        
+        [OperationContract]
         ResponseDTO StartRegistration(string email, string password);
 
         [OperationContract]
