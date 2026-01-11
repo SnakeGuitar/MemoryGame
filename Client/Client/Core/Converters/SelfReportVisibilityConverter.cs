@@ -1,5 +1,4 @@
-﻿using Client.Core;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -10,12 +9,9 @@ namespace Client.Core.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string winnerName)
+            if (value is string winnerName && winnerName == UserSession.Username)
             {
-                if (winnerName == UserSession.Username)
-                {
                     return Visibility.Collapsed;
-                }
             }
             return Visibility.Visible;
         }

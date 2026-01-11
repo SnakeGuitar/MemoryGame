@@ -55,14 +55,7 @@ namespace Client.Core
         {
             if (EnsureConnection())
             {
-                try
-                {
-                    return await Client.LoginAsync(email, password);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                return await Client.LoginAsync(email, password);
             }
             return new LoginResponse { Success = false, MessageKey = "Global_Error_ConnectionLost" };
         }

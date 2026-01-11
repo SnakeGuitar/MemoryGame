@@ -28,18 +28,15 @@ namespace Client.Helpers
                 nextWindow.Top = currentWindow.Top;
                 nextWindow.Left = currentWindow.Left;
             }
+
             nextWindow.Show();
             Application.Current.MainWindow = nextWindow;
 
-            List<Window> windowsToClose = Application.Current.Windows.Cast<Window>().ToList();
-
-            foreach (var window in windowsToClose)
-            {
-                if (window != nextWindow)
-                {
-                    window.Close();
-                }
-            }
+            Application.Current.Windows
+                .Cast<Window>()
+                .Where(window => window != nextWindow)
+                .ToList()
+                .ForEach(window => window.Close());
         }
 
         public static bool? ShowDialog(Window parentWindow, Window dialogWindow)
@@ -68,9 +65,9 @@ namespace Client.Helpers
                 }
                 UserSession.EndSession();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine($"[Exit Error]: {ex}");
             }
             finally
             {

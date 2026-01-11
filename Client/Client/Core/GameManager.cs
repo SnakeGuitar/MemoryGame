@@ -150,7 +150,7 @@ namespace Client.Core
             ScoreUpdated?.Invoke(0);
         }
 
-        private List<Card> GenerateRandomDeck(int numberOfCards)
+        private static List<Card> GenerateRandomDeck(int numberOfCards)
         {
             List<string> imagePaths = new List<string>
             {

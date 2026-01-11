@@ -12,7 +12,7 @@ namespace Client.Helpers
 {
     public static class WpfExtensions
     {
-        public static async void SafeExecute(this Button button, Func<Task> action, Window owner)
+        public static async Task SafeExecute(this Button button, Func<Task> action, Window owner)
         {
             if (button == null)
             {
