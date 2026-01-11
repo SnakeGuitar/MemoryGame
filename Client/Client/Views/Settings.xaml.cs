@@ -28,8 +28,11 @@ namespace Client.Views
         {
             var languages = new List<LanguageOption>
             {
-                new LanguageOption { DisplayCultureName = "Español", CultureCode = "es-MX" },
                 new LanguageOption { DisplayCultureName = "English", CultureCode = "en-US" },
+                new LanguageOption { DisplayCultureName = "Español", CultureCode = "es-MX" },
+                new LanguageOption { DisplayCultureName = "Français", CultureCode = "fr" },
+                new LanguageOption { DisplayCultureName = "Deutsch", CultureCode = "de" },
+                new LanguageOption { DisplayCultureName = "Português", CultureCode = "pt" },
                 new LanguageOption { DisplayCultureName = "日本語", CultureCode = "ja-JP" },
                 new LanguageOption { DisplayCultureName = "中文", CultureCode = "zh-CN" },
                 new LanguageOption { DisplayCultureName = "한국어", CultureCode = "ko-KR" }

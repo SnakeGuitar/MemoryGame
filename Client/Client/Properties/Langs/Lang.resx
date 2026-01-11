@@ -486,9 +486,6 @@
   <data name="EditProfile_Label_EditProfile" xml:space="preserve">
     <value>Edit Profile</value>
   </data>
-  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
-    <value>Change Avatar</value>
-  </data>
   <data name="EditProfile_Button_UpdatePassword" xml:space="preserve">
     <value>Update Password</value>
   </data>
@@ -819,5 +816,8 @@ You need to log in with your new account :)</value>
   </data>
   <data name="Gallery_Error_Load" xml:space="preserve">
     <value>Could not load image: {0}</value>
+  </data>
+  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
+    <value>Change Avatar</value>
   </data>
 </root>

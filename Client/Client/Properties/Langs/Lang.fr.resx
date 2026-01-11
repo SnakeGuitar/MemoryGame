@@ -118,706 +118,705 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Global_Button_Accept" xml:space="preserve">
-    <value>承諾</value>
+    <value>Accepter</value>
   </data>
   <data name="Global_Button_Custom" xml:space="preserve">
-    <value>カスタム</value>
+    <value>Personnalisé</value>
   </data>
   <data name="Global_Button_Guest" xml:space="preserve">
-    <value>ゲスト</value>
+    <value>Invité</value>
   </data>
   <data name="Global_Button_Join" xml:space="preserve">
-    <value>参加</value>
+    <value>Rejoindre</value>
   </data>
   <data name="Global_Button_LogIn" xml:space="preserve">
-    <value>ログイン</value>
+    <value>Connexion</value>
   </data>
   <data name="Global_Button_NotReady" xml:space="preserve">
-    <value>準備中</value>
+    <value>Pas prêt</value>
   </data>
   <data name="Global_Button_Play" xml:space="preserve">
-    <value>プレイ</value>
+    <value>Jouer</value>
   </data>
   <data name="Global_Button_Ready" xml:space="preserve">
-    <value>準備完了</value>
+    <value>Prêt</value>
   </data>
   <data name="Global_Button_SetupProfile" xml:space="preserve">
-    <value>プロファイル設定</value>
+    <value>Configurer le profil</value>
   </data>
   <data name="Global_Button_SignIn" xml:space="preserve">
-    <value>サインイン</value>
+    <value>S'inscrire</value>
   </data>
   <data name="Global_Button_Verify" xml:space="preserve">
-    <value>確認</value>
+    <value>Vérifier</value>
   </data>
   <data name="Global_Label_Cards" xml:space="preserve">
-    <value>カード</value>
+    <value>Cartes</value>
   </data>
   <data name="Global_Label_Difficulty" xml:space="preserve">
-    <value>難易度:</value>
+    <value>Difficulté :</value>
   </data>
   <data name="Global_Label_Email" xml:space="preserve">
-    <value>メール</value>
+    <value>E-mail</value>
   </data>
   <data name="Global_Label_EnterCode" xml:space="preserve">
-    <value>6桁のコードを入力:</value>
+    <value>Entrez le code à 6 chiffres :</value>
   </data>
   <data name="Global_Label_EnterUsername" xml:space="preserve">
-    <value>ユーザー名を入力:</value>
+    <value>Entrez un nom d'utilisateur :</value>
   </data>
   <data name="Global_Label_NumberOfCards" xml:space="preserve">
-    <value>カードの枚数</value>
+    <value>Nombre de cartes</value>
   </data>
   <data name="Global_Label_Password" xml:space="preserve">
-    <value>パスワード</value>
+    <value>Mot de passe</value>
   </data>
   <data name="Global_Label_Score" xml:space="preserve">
-    <value>スコア</value>
+    <value>Score</value>
   </data>
   <data name="Global_Label_Time" xml:space="preserve">
-    <value>タイマー:</value>
+    <value>Minuteur :</value>
   </data>
   <data name="Global_Title_Chat" xml:space="preserve">
-    <value>チャット</value>
+    <value>Chat</value>
   </data>
   <data name="Global_Title_CustomDifficulty" xml:space="preserve">
-    <value>カスタム設定</value>
+    <value>Paramètres personnalisés</value>
   </data>
   <data name="Global_Title_Lobby" xml:space="preserve">
-    <value>ロビー</value>
+    <value>Salon</value>
   </data>
   <data name="Global_Title_Multiplayer" xml:space="preserve">
-    <value>マルチプレイヤー</value>
+    <value>Multijoueur</value>
   </data>
   <data name="Global_Title_Singleplayer" xml:space="preserve">
-    <value>シングルプレイヤー</value>
+    <value>Un joueur</value>
   </data>
   <data name="HostLobby_Label_Available" xml:space="preserve">
-    <value>利用可能</value>
+    <value>Disponible</value>
   </data>
   <data name="HostLobby_Label_TimePerTurn" xml:space="preserve">
-    <value>ターン時間:</value>
+    <value>Temps par tour :</value>
   </data>
   <data name="MultiplayerMenu_Button_CreateLobby" xml:space="preserve">
-    <value>ロビー作成</value>
+    <value>Créer un salon</value>
   </data>
   <data name="SelectDifficulty_Button_Easy" xml:space="preserve">
-    <value>簡単</value>
+    <value>Facile</value>
   </data>
   <data name="SelectDifficulty_Button_Hard" xml:space="preserve">
-    <value>難しい</value>
+    <value>Difficile</value>
   </data>
   <data name="SetupProfile_Label_SelectAvatar" xml:space="preserve">
-    <value>アバターを選択:</value>
+    <value>Sélectionnez un avatar :</value>
   </data>
   <data name="TitleScreen_Label_Memorama" xml:space="preserve">
-    <value>メモリーゲーム</value>
+    <value>Jeu de mémoire</value>
   </data>
   <data name="Global_Title_Players" xml:space="preserve">
-    <value>プレイヤー</value>
+    <value>Joueurs</value>
   </data>
   <data name="VerifyCode_Button_SentAgain" xml:space="preserve">
-    <value>再送信する？</value>
+    <value>Renvoyer ?</value>
   </data>
   <data name="VerifyCode_Label_SentTo" xml:space="preserve">
-    <value>確認メールの送信先:</value>
+    <value>Un e-mail de vérification a été envoyé à :</value>
   </data>
   <data name="Global_Button_Back" xml:space="preserve">
-    <value>戻る</value>
+    <value>Retour</value>
   </data>
   <data name="Global_Button_Cancel" xml:space="preserve">
-    <value>キャンセル</value>
+    <value>Annuler</value>
   </data>
   <data name="Global_Button_ExitGame" xml:space="preserve">
-    <value>ゲーム終了</value>
+    <value>Quitter le jeu</value>
   </data>
   <data name="MainMenu_Button_Gallery" xml:space="preserve">
-    <value>ギャラリー</value>
+    <value>Galerie</value>
   </data>
   <data name="Global_Button_Settings" xml:space="preserve">
-    <value>設定</value>
+    <value>Paramètres</value>
   </data>
   <data name="Global_Button_Send" xml:space="preserve">
-    <value>送信</value>
+    <value>Envoyer</value>
   </data>
   <data name="Global_Label_Seconds" xml:space="preserve">
-    <value>秒</value>
+    <value>Secondes</value>
   </data>
   <data name="SelectDifficulty_Button_Normal" xml:space="preserve">
-    <value>普通</value>
+    <value>Normal</value>
   </data>
   <data name="HostLobby_Title_InviteFriends" xml:space="preserve">
-    <value>友達を招待</value>
+    <value>Inviter des amis</value>
   </data>
   <data name="HostLobby_Label_EnterFriendEmail" xml:space="preserve">
-    <value>友達のメールを入力:</value>
+    <value>Entrez l'e-mail de votre ami :</value>
   </data>
   <data name="HostLobby_Button_SendInvitation" xml:space="preserve">
-    <value>招待を送信</value>
+    <value>Envoyer une invitation</value>
   </data>
   <data name="HostLobby_Label_GameCode" xml:space="preserve">
-    <value>ゲームコード:</value>
+    <value>Code du jeu :</value>
   </data>
   <data name="HostLobby_Title_GameSettings" xml:space="preserve">
-    <value>ゲーム設定</value>
+    <value>Paramètres du jeu</value>
   </data>
   <data name="Global_ValidationUsername_Empty" xml:space="preserve">
-    <value>ユーザー名を入力してください</value>
+    <value>Le nom d'utilisateur ne peut pas être vide</value>
   </data>
   <data name="Global_ValidationUsername_TooLong" xml:space="preserve">
-    <value>ユーザー名は30文字以下にしてください</value>
+    <value>Le nom d'utilisateur doit comporter 30 caractères ou moins</value>
   </data>
   <data name="Global_ValidationUsername_InvalidChars" xml:space="preserve">
-    <value>ユーザー名にスペースは使えません。- または _ を使用してください</value>
+    <value>Le nom d'utilisateur ne doit pas contenir d'espaces ; utilisez - ou _ à la place</value>
   </data>
   <data name="Global_ValidationPassword_Empty" xml:space="preserve">
-    <value>パスワードを入力してください</value>
+    <value>Le mot de passe ne peut pas être vide</value>
   </data>
   <data name="Global_ValidationPassword_LengthInvalid" xml:space="preserve">
-    <value>パスワードは8〜20文字である必要があります</value>
+    <value>Le mot de passe doit comporter entre 8 et 20 caractères</value>
   </data>
   <data name="Global_ValidationPassword_MissingUpper" xml:space="preserve">
-    <value>パスワードには少なくとも1つの大文字が必要です</value>
+    <value>Le mot de passe doit contenir au moins une lettre majuscule</value>
   </data>
   <data name="Global_ValidationPassword_MissingLower" xml:space="preserve">
-    <value>パスワードには少なくとも1つの小文字が必要です</value>
+    <value>Le mot de passe doit contenir au moins une lettre minuscule</value>
   </data>
   <data name="Global_ValidationPassword_MissingDigit" xml:space="preserve">
-    <value>パスワードには少なくとも1つの数字が必要です</value>
+    <value>Le mot de passe doit contenir au moins un chiffre</value>
   </data>
   <data name="Global_ValidationEmail_Empty" xml:space="preserve">
-    <value>メールアドレスを入力してください</value>
+    <value>L'e-mail ne peut pas être vide</value>
   </data>
   <data name="Global_ValidationEmail_InvalidFormat" xml:space="preserve">
-    <value>メール形式が無効です。有効なアドレスを入力してください</value>
+    <value>Le format de l'e-mail est invalide. Veuillez entrer une adresse valide</value>
   </data>
   <data name="Global_ValidationCode_Empty" xml:space="preserve">
-    <value>コードを入力してください</value>
+    <value>Le code ne peut pas être vide</value>
   </data>
   <data name="Global_ValidationCode_NotNumeric" xml:space="preserve">
-    <value>コードには数字のみを使用してください</value>
+    <value>Le code ne doit contenir que des chiffres</value>
   </data>
   <data name="Global_ServiceError_Offline" xml:space="preserve">
-    <value>サーバーに接続できません。接続を確認してください</value>
+    <value>Impossible de se connecter au serveur. Veuillez vérifier votre connexion</value>
   </data>
   <data name="Global_ServiceError_NetworkDown" xml:space="preserve">
-    <value>通信エラー。ネットワークが不安定な可能性があります</value>
+    <value>Erreur de communication. Le réseau peut être instable</value>
   </data>
   <data name="Global_ServiceError_Unknown" xml:space="preserve">
-    <value>不明なエラーが発生しました</value>
+    <value>Une erreur inconnue s'est produite</value>
   </data>
   <data name="Global_ValidationCode_LengthInvalid" xml:space="preserve">
-    <value>コードは6文字以下である必要があります</value>
+    <value>Le code ne doit pas dépasser 6 caractères</value>
   </data>
   <data name="Global_Message_Welcome" xml:space="preserve">
-    <value>ようこそ、{0}さん！</value>
+    <value>Bienvenue, {0} !</value>
   </data>
   <data name="Global_Error_InvalidUsername" xml:space="preserve">
-    <value>ユーザー名が無効か、既に使用されています。別の名前を試してください</value>
+    <value>Le nom d'utilisateur n'est pas valide ou est déjà pris. Veuillez en essayer un autre</value>
   </data>
   <data name="Global_Title_Success" xml:space="preserve">
-    <value>成功</value>
+    <value>Succès</value>
   </data>
   <data name="Global_Title_Error" xml:space="preserve">
-    <value>エラー</value>
+    <value>Erreur</value>
   </data>
   <data name="Global_Title_ServerOffline" xml:space="preserve">
-    <value>サーバーオフライン</value>
+    <value>Serveur hors ligne</value>
   </data>
   <data name="Global_Title_NetworkError" xml:space="preserve">
-    <value>ネットワークエラー</value>
+    <value>Erreur réseau</value>
   </data>
   <data name="Global_Title_AppError" xml:space="preserve">
-    <value>アプリケーションエラー</value>
+    <value>Erreur d'application</value>
   </data>
   <data name="Global_Title_NotAvailableFunction" xml:space="preserve">
-    <value>機能は利用できません</value>
+    <value>Fonction non disponible</value>
   </data>
   <data name="Global_Error_GuestsNotAllowed" xml:space="preserve">
-    <value>ゲストはロビーを作成できません。登録またはログインしてください</value>
+    <value>Les invités ne sont pas autorisés à créer des salons. Veuillez vous inscrire ou vous connecter pour accéder à cette fonctionnalité</value>
   </data>
   <data name="Global_Player_GuestSuffix" xml:space="preserve">
-    <value>(ゲスト)</value>
+    <value>(Invité)</value>
   </data>
   <data name="Lobby_Error_GuestChat" xml:space="preserve">
-    <value>ゲストはチャットメッセージを送信できません</value>
+    <value>Les invités ne sont pas autorisés à envoyer des messages de chat</value>
   </data>
   <data name="Lobby_Error_JoinFailed" xml:space="preserve">
-    <value>ロビーへの参加に失敗しました。コードが無効か、満員です</value>
+    <value>Échec de la connexion au salon. Code invalide ou salon complet</value>
   </data>
   <data name="Lobby_Error_SendChatFailed" xml:space="preserve">
-    <value>チャットメッセージの送信に失敗しました</value>
+    <value>Échec de l'envoi du message de chat</value>
   </data>
   <data name="Lobby_Notification_PlayerLeft" xml:space="preserve">
-    <value>{0} が退出しました</value>
+    <value>{0} a quitté le salon</value>
   </data>
   <data name="Lobby_Notification_System" xml:space="preserve">
-    <value>[システム]</value>
+    <value>[Système]</value>
   </data>
   <data name="Lobby_Notification_PlayerJoined" xml:space="preserve">
-    <value>{0} が参加しました</value>
+    <value>{0} a rejoint le salon</value>
   </data>
   <data name="HostLobby_Error_CreateFailed" xml:space="preserve">
-    <value>ロビーの作成に失敗しました</value>
+    <value>Échec de la création du salon</value>
   </data>
   <data name="HostLobby_Error_EmailInvalid" xml:space="preserve">
-    <value>有効なメールアドレスを入力してください</value>
+    <value>Veuillez entrer une adresse e-mail valide</value>
   </data>
   <data name="HostLobby_Message_InviteSent" xml:space="preserve">
-    <value>{0} に招待状を送信しました</value>
+    <value>Invitation envoyée avec succès à {0}</value>
   </data>
   <data name="HostLobby_Error_InviteFailed" xml:space="preserve">
-    <value>招待の送信に失敗しました。後でもう一度試してください</value>
+    <value>Échec de l'envoi de l'invitation. Veuillez réessayer plus tard</value>
   </data>
   <data name="Lobby_Message_CreateSuccess" xml:space="preserve">
-    <value>ロビーが正常に作成されました！</value>
+    <value>Salon créé avec succès !</value>
   </data>
   <data name="Global_Title_LoginSuccess" xml:space="preserve">
-    <value>ログイン成功</value>
+    <value>Connexion réussie</value>
   </data>
   <data name="Global_Title_LoginFailed" xml:space="preserve">
-    <value>ログイン失敗</value>
+    <value>Échec de la connexion</value>
   </data>
   <data name="Global_Error_InvalidCredentials" xml:space="preserve">
-    <value>メールアドレスまたはパスワードが無効です</value>
+    <value>E-mail ou mot de passe invalide</value>
   </data>
   <data name="RegisterAccount_Message_Success" xml:space="preserve">
-    <value>登録成功！確認コードをメールに送信しました</value>
+    <value>Inscription réussie ! Un code de vérification a été envoyé à votre e-mail</value>
   </data>
   <data name="RegisterAccount_Message_Failed" xml:space="preserve">
-    <value>登録に失敗しました。メールアドレスが既に使用されている可能性があります</value>
+    <value>L'inscription a échoué. L'e-mail est peut-être déjà utilisé</value>
   </data>
   <data name="VerifyCode_Message_Success" xml:space="preserve">
-    <value>アカウントが正常に確認されました！</value>
+    <value>Votre compte a été vérifié avec succès !</value>
   </data>
   <data name="Global_Error_CodeInvalid" xml:space="preserve">
-    <value>確認に失敗しました。コードを確認して再試行してください</value>
+    <value>La vérification a échoué. Veuillez vérifier le code et réessayer</value>
   </data>
   <data name="Global_Error_CodeExpired" xml:space="preserve">
-    <value>確認コードの有効期限が切れました。新しいコードをリクエストしてください</value>
+    <value>Votre code de vérification a expiré. Veuillez en demander un nouveau</value>
   </data>
   <data name="Global_Error_EmailInUse" xml:space="preserve">
-    <value>このメールアドレスは既に使用されています</value>
+    <value>Cette adresse e-mail est déjà utilisée</value>
   </data>
   <data name="Global_Error_EmailSendFailed" xml:space="preserve">
-    <value>確認メールの送信に失敗しました</value>
+    <value>Échec de l'envoi de l'e-mail de vérification</value>
   </data>
   <data name="Global_Error_RegistrationNotFound" xml:space="preserve">
-    <value>このメールアドレスの登録リクエストが見つかりません</value>
+    <value>Aucune demande d'inscription n'a été trouvée pour cet e-mail</value>
   </data>
   <data name="Global_Error_InvalidToken" xml:space="preserve">
-    <value>セッションが無効か、期限切れです。再度ログインしてください</value>
+    <value>Votre session est invalide ou a expiré. Veuillez vous reconnecter</value>
   </data>
   <data name="Global_Error_ImageInvalid" xml:space="preserve">
-    <value>画像形式が無効です</value>
+    <value>Le format de l'image n'est pas valide</value>
   </data>
   <data name="Global_Error_UserNotFound" xml:space="preserve">
-    <value>ユーザーが見つかりません</value>
+    <value>Utilisateur non trouvé</value>
   </data>
   <data name="Global_Error_PasswordInvalid" xml:space="preserve">
-    <value>パスワードの形式が無効です</value>
+    <value>Le mot de passe n'a pas un format valide</value>
   </data>
   <data name="SetupProfile_Dialog_Title" xml:space="preserve">
-    <value>プロフィール画像を選択</value>
+    <value>Sélectionner une image de profil</value>
   </data>
   <data name="SetupProfile_Dialog_Filter" xml:space="preserve">
-    <value>画像ファイル|*.jpg;*.jpeg;*.png;*.bmp</value>
+    <value>Fichiers image|*.jpg;*.jpeg;*.png;*.bmp</value>
   </data>
   <data name="SetupProfile_Error_ImageLoad" xml:space="preserve">
-    <value>画像の読み込みに失敗しました: {0}</value>
+    <value>Échec du chargement de l'image : {0}</value>
   </data>
   <data name="SetupProfile_Message_Success" xml:space="preserve">
-    <value>プロフィールの設定が完了しました！ようこそ</value>
+    <value>Configuration du profil terminée ! Bienvenue</value>
   </data>
   <data name="Verify_Message_CodeResent" xml:space="preserve">
-    <value>コードを再送しました</value>
+    <value>Code transféré</value>
   </data>
   <data name="Settings_Label_Audio" xml:space="preserve">
-    <value>オーディオ</value>
+    <value>Audio</value>
   </data>
   <data name="Settings_Label_General" xml:space="preserve">
-    <value>一般設定</value>
+    <value>Paramètres généraux</value>
   </data>
   <data name="Settings_Label_Language" xml:space="preserve">
-    <value>言語</value>
+    <value>Langue</value>
   </data>
   <data name="Settings_Label_Music" xml:space="preserve">
-    <value>音楽の音量</value>
+    <value>Volume de la musique</value>
   </data>
   <data name="Settings_Label_SFX" xml:space="preserve">
-    <value>効果音の音量</value>
+    <value>Volume des effets sonores</value>
   </data>
   <data name="Settings_Language_EnUS" xml:space="preserve">
-    <value>英語 (US)</value>
+    <value>Anglais (US)</value>
   </data>
   <data name="Settings_Language_EsMX" xml:space="preserve">
-    <value>スペイン語 (MX)</value>
+    <value>Espagnol (MX)</value>
   </data>
   <data name="Global_Title_LoginAsGuestSuccess" xml:space="preserve">
-    <value>ゲストとしてログインしました</value>
+    <value>Connecté en tant qu'invité</value>
   </data>
   <data name="Global_Error_UsernameInUse" xml:space="preserve">
-    <value>そのユーザー名は既に使用されています。別の名前を選択してください</value>
+    <value>Ce nom d'utilisateur est déjà utilisé. Veuillez en choisir un autre</value>
   </data>
   <data name="Global_Title_Warning" xml:space="preserve">
-    <value>警告</value>
+    <value>Avertissement</value>
   </data>
   <data name="Global_Title_Information" xml:space="preserve">
-    <value>情報</value>
+    <value>Information</value>
   </data>
   <data name="Singleplayer_Label_TimeOver" xml:space="preserve">
-    <value>次はもっと速く挑戦しよう！</value>
+    <value>Essayez plus vite la prochaine fois</value>
   </data>
   <data name="Singleplayer_Title_TimeOver" xml:space="preserve">
-    <value>時間切れ！ :(</value>
+    <value>Temps écoulé ! :(</value>
   </data>
   <data name="Singleplayer_Title_Won" xml:space="preserve">
-    <value>全ペア発見！やったね！ :D</value>
+    <value>Toutes les paires trouvées ! :D</value>
   </data>
   <data name="Global_Label_TimerLimit" xml:space="preserve">
-    <value>制限時間:</value>
+    <value>Limite de temps :</value>
   </data>
   <data name="Global_Title_ExitGame" xml:space="preserve">
-    <value>ゲーム終了</value>
+    <value>Quitter le jeu</value>
   </data>
   <data name="Global_Message_ExitGame" xml:space="preserve">
-    <value>ゲームを終了しますか？</value>
+    <value>Voulez-vous quitter le jeu ?</value>
   </data>
   <data name="EditProfile_Label_EditProfile" xml:space="preserve">
-    <value>プロフィール編集</value>
+    <value>Modifier le profil</value>
   </data>
   <data name="EditProfile_Button_UpdatePassword" xml:space="preserve">
-    <value>パスワード更新</value>
+    <value>Mettre à jour le mot de passe</value>
   </data>
   <data name="EditProfile_Button_UpdateUsername" xml:space="preserve">
-    <value>ユーザー名更新</value>
+    <value>Mettre à jour le nom d'utilisateur</value>
   </data>
   <data name="Friends_Label_Friends" xml:space="preserve">
-    <value>友達</value>
+    <value>Amis</value>
   </data>
   <data name="Friends_Label_MyFriends" xml:space="preserve">
-    <value>私の友達</value>
+    <value>Mes amis</value>
   </data>
   <data name="Friends_Label_Requests" xml:space="preserve">
-    <value>友達リクエスト</value>
+    <value>Demandes d'amis</value>
   </data>
   <data name="Global_Label_Avatar" xml:space="preserve">
-    <value>アバター</value>
+    <value>Avatar</value>
   </data>
   <data name="Global_Label_Username" xml:space="preserve">
-    <value>ユーザー名</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="Global_Label_Status" xml:space="preserve">
-    <value>ステータス</value>
+    <value>Statut</value>
   </data>
   <data name="Friends_Label_AddFriend" xml:space="preserve">
-    <value>友達追加</value>
+    <value>Ajouter un ami</value>
   </data>
   <data name="Friends_Label_EnterUsername" xml:space="preserve">
-    <value>友達のユーザー名を入力:</value>
+    <value>Entrez le nom d'utilisateur de votre ami :</value>
   </data>
   <data name="Friends_Label_PendingRequests" xml:space="preserve">
-    <value>保留中のリクエスト</value>
+    <value>Demandes en attente</value>
   </data>
   <data name="Friends_Button_SendRequest" xml:space="preserve">
-    <value>リクエスト送信</value>
+    <value>Envoyer une demande</value>
   </data>
   <data name="Global_Button_Reject" xml:space="preserve">
-    <value>拒否</value>
+    <value>Rejeter</value>
   </data>
   <data name="Global_Button_LogOut" xml:space="preserve">
-    <value>セッション終了</value>
+    <value>Déconnexion</value>
   </data>
   <data name="Global_Message_CloseSession" xml:space="preserve">
-    <value>アカウントセッションを終了しますか？</value>
+    <value>Voulez-vous terminer la session du compte ?</value>
   </data>
   <data name="PlayerProfile_Label_Name" xml:space="preserve">
-    <value>名前:</value>
+    <value>Nom :</value>
   </data>
   <data name="PlayerProfile_Label_Date" xml:space="preserve">
-    <value>発行日:</value>
+    <value>Date d'émission :</value>
   </data>
   <data name="PlayerProfile_Label_Email" xml:space="preserve">
-    <value>メール:</value>
+    <value>E-mail :</value>
   </data>
   <data name="PlayerProfile_Label_Social" xml:space="preserve">
-    <value>ソーシャルネットワーク:</value>
+    <value>Réseaux sociaux :</value>
   </data>
   <data name="PlayerProfile_Button_Friends" xml:space="preserve">
-    <value>友達</value>
+    <value>Amis</value>
   </data>
   <data name="PlayerProfile_Button_Statistics" xml:space="preserve">
-    <value>統計</value>
+    <value>Statistiques</value>
   </data>
   <data name="Global_Button_Update" xml:space="preserve">
-    <value>更新</value>
+    <value>Mettre à jour</value>
   </data>
   <data name="Global_Button_Remove" xml:space="preserve">
-    <value>削除</value>
+    <value>Supprimer</value>
   </data>
   <data name="StatsHistory_Title_StatsHistory" xml:space="preserve">
-    <value>対戦履歴</value>
+    <value>Historique des matchs</value>
   </data>
   <data name="StatsHistory_Label_Date" xml:space="preserve">
-    <value>日付</value>
+    <value>Date</value>
   </data>
   <data name="StatsHistory_Label_Winner" xml:space="preserve">
-    <value>勝者</value>
+    <value>Gagnant</value>
   </data>
   <data name="StatsHistory_Label_Score" xml:space="preserve">
-    <value>スコア</value>
+    <value>Score</value>
   </data>
   <data name="Global_Button_Report" xml:space="preserve">
-    <value>通報</value>
+    <value>Signaler</value>
   </data>
   <data name="EditProfile_Label_NewUsername" xml:space="preserve">
-    <value>新しいユーザー名:</value>
+    <value>Nouveau nom d'utilisateur :</value>
   </data>
   <data name="EditProfile_Label_NewPassword" xml:space="preserve">
-    <value>新しいパスワード:</value>
+    <value>Nouveau mot de passe :</value>
   </data>
   <data name="EditProfile_Label_ActualPassword" xml:space="preserve">
-    <value>現在のパスワード:</value>
+    <value>Mot de passe actuel :</value>
   </data>
   <data name="Global_Button_Close" xml:space="preserve">
-    <value>閉じる</value>
+    <value>Fermer</value>
   </data>
   <data name="Global_Title_MatchOver" xml:space="preserve">
-    <value>試合終了</value>
+    <value>Match terminé</value>
   </data>
   <data name="MatchSummary_Label_Player" xml:space="preserve">
-    <value>プレイヤー: </value>
+    <value>Joueur :</value>
   </data>
   <data name="RegisterAccount_Title_LinkAccount" xml:space="preserve">
-    <value>アカウント連携</value>
+    <value>Lier le compte</value>
   </data>
   <data name="InviteFriendDialog_Message_EnterEmail" xml:space="preserve">
-    <value>メールアドレスを入力してください</value>
+    <value>Veuillez entrer un e-mail</value>
   </data>
   <data name="InviteFriendDialog_Title_InviteFriend" xml:space="preserve">
-    <value>友達を招待</value>
+    <value>Inviter un ami</value>
   </data>
   <data name="InviteFriendDialog_Label_EnterEmail" xml:space="preserve">
-    <value>友達のメールを入力:</value>
+    <value>Entrez l'e-mail de votre ami :</value>
   </data>
   <data name="ReportUserDialog_Title_Report" xml:space="preserve">
-    <value>プレイヤーを通報</value>
+    <value>Signaler un joueur</value>
   </data>
   <data name="ReportUserDialog_Message_Report" xml:space="preserve">
-    <value>このプレイヤーを悪質な行為で通報しますか？</value>
+    <value>Êtes-vous sûr de vouloir signaler ce joueur pour mauvais comportement ?</value>
   </data>
   <data name="VerifyCode_Message_GuestSuccess" xml:space="preserve">
-    <value>アカウントが正常に確認されました！新しいアカウントでログインしてください :)</value>
+    <value>Compte vérifié avec succès ! Vous devez vous connecter avec votre nouveau compte :)</value>
   </data>
   <data name="InviteFriendDialog_Title_SubjectEmail" xml:space="preserve">
-    <value>メモリーゲームに参加しよう！</value>
+    <value>Rejoins ma partie de Memory Game !</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>やあ！一緒にゲームをしよう :D ロビーコードはこちら:</value>
+    <value>Hé l'ami, rejoins ma partie pour qu'on puisse jouer :D Le code du salon est :</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
-    <value>既定のメールアプリが見つかりませんでした :(</value>
+    <value>Aucune application de messagerie par défaut n'a été trouvée sur le système :(</value>
   </data>
   <data name="ReportUserDialog_Error_AutoReport" xml:space="preserve">
-    <value>自分自身を通報することはできません</value>
+    <value>Vous ne pouvez pas vous signaler vous-même</value>
   </data>
   <data name="ReportUserDialog_Title_ReportSuccess" xml:space="preserve">
-    <value>通報送信完了</value>
+    <value>Signalement envoyé</value>
   </data>
   <data name="ReportUserDialog_Message_ReportSuccess" xml:space="preserve">
-    <value>通報が完了しました。管理者が内容を確認します :)</value>
+    <value>Utilisateur signalé avec succès. Les administrateurs examineront le cas :)</value>
   </data>
   <data name="MatchSummary_Label_Win" xml:space="preserve">
-    <value>あなたの勝ち！ :D</value>
+    <value>Vous avez gagné ! :D</value>
   </data>
   <data name="MatchSummary_Label_Summary" xml:space="preserve">
-    <value>概要: </value>
+    <value>Résumé :</value>
   </data>
   <data name="MatchSummary_Label_Lost" xml:space="preserve">
-    <value>の勝ち</value>
+    <value>Gagné</value>
   </data>
   <data name="MatchSummary_Label_TimeRemaining" xml:space="preserve">
-    <value>残り時間:</value>
+    <value>Temps restant :</value>
   </data>
   <data name="Social_Error_SelfAdd" xml:space="preserve">
-    <value>自分自身を追加することはできません</value>
+    <value>Vous ne pouvez pas vous ajouter vous-même</value>
   </data>
   <data name="Social_Error_AlreadyFriends" xml:space="preserve">
-    <value>既に友達です :&gt;</value>
+    <value>Vous êtes déjà amis :&gt;</value>
   </data>
   <data name="Social_Error_RequestExists" xml:space="preserve">
-    <value>友達リクエストは既に送信済みです</value>
+    <value>Demande d'ami déjà en attente</value>
   </data>
   <data name="FriendsMenu_Label_PendingRequests" xml:space="preserve">
-    <value>友達リクエストが来ています</value>
+    <value>Veut être votre ami</value>
   </data>
   <data name="Global_Label_ConnectionFailed" xml:space="preserve">
-    <value>接続失敗</value>
+    <value>Connexion échouée</value>
   </data>
   <data name="Friends_Error_RemoveFriend" xml:space="preserve">
-    <value>友達の削除に失敗しました :( もう一度試してください</value>
+    <value>Impossible de supprimer l'ami :( Veuillez réessayer</value>
   </data>
   <data name="Global_Label_Online" xml:space="preserve">
-    <value>オンライン</value>
+    <value>En ligne</value>
   </data>
   <data name="Global_Label_Offline" xml:space="preserve">
-    <value>オフライン</value>
+    <value>Hors ligne</value>
   </data>
   <data name="Friends_Error_SendRequest" xml:space="preserve">
-    <value>リクエストを送信できませんでした。もう一度試してください</value>
+    <value>La demande n'a pas pu être envoyée. Veuillez réessayer</value>
   </data>
   <data name="Friends_Label_SuccessRequest" xml:space="preserve">
-    <value>{0} に友達リクエストを送信しました</value>
+    <value>Demande d'ami envoyée à {0}</value>
   </data>
   <data name="Global_Title_Confirm" xml:space="preserve">
-    <value>確認</value>
+    <value>Confirmer</value>
   </data>
   <data name="Friends_Message_RemoveFriend" xml:space="preserve">
-    <value>本当に {0} を削除しますか？</value>
+    <value>Êtes-vous sûr de vouloir supprimer {0} ?</value>
   </data>
   <data name="Global_Label_Confirm" xml:space="preserve">
-    <value>確認</value>
+    <value>Confirmer</value>
   </data>
   <data name="Global_Label_Name" xml:space="preserve">
-    <value>私の名前:</value>
+    <value>Mon prénom :</value>
   </data>
   <data name="Global_Label_LastName" xml:space="preserve">
-    <value>私の姓:</value>
+    <value>Mon nom de famille :</value>
   </data>
   <data name="EditProfile_Label_UpdatePersonalnfo" xml:space="preserve">
-    <value>個人情報の更新</value>
+    <value>Mettre à jour les informations personnelles</value>
   </data>
   <data name="EditProfile_Label_AvatarUpdated" xml:space="preserve">
-    <value>アバターが更新されました</value>
+    <value>Votre avatar a été mis à jour</value>
   </data>
   <data name="EditProfile_Label_ErrorPasswordFields" xml:space="preserve">
-    <value>更新するには全てのパスワードフィールドに入力してください</value>
+    <value>Veuillez remplir tous les champs de mot de passe pour mettre à jour</value>
   </data>
   <data name="EditProfile_Label_ErrorPasswordUpdate" xml:space="preserve">
-    <value>パスワードの更新に失敗しました。現在のパスワードを確認してください</value>
+    <value>Échec de la mise à jour du mot de passe. Vérifiez votre mot de passe actuel</value>
   </data>
   <data name="EditProfile_Label_ErrorUsernameEmpty" xml:space="preserve">
-    <value>ユーザー名を入力してください</value>
+    <value>Le nom d'utilisateur ne peut pas être vide</value>
   </data>
   <data name="EditProfile_Label_ErrorSameUsername" xml:space="preserve">
-    <value>新しいユーザー名は現在と同じです</value>
+    <value>Le nouveau nom d'utilisateur est le même que l'actuel</value>
   </data>
   <data name="EditProfile_Label_SuccesUpdateUsername" xml:space="preserve">
-    <value>ユーザー名が更新されました。セキュリティ上の理由から、再度ログインが必要です</value>
+    <value>Nom d'utilisateur mis à jour avec succès. Pour des raisons de sécurité, vous devez vous reconnecter</value>
   </data>
   <data name="EditProfile_Label_SuccesUpdateInfo" xml:space="preserve">
-    <value>情報が更新されました :D</value>
+    <value>Informations mises à jour :D</value>
   </data>
   <data name="EditProfile_Label_PasswordUpdated" xml:space="preserve">
-    <value>パスワードが更新されました</value>
+    <value>Mot de passe mis à jour</value>
   </data>
   <data name="Global_Label_NoRegister" xml:space="preserve">
-    <value>未登録</value>
+    <value>Pas d'inscription</value>
   </data>
   <data name="MatchHistory_Label_ErrorHistory" xml:space="preserve">
-    <value>対戦履歴を読み込めませんでした</value>
+    <value>Impossible de charger l'historique des matchs</value>
   </data>
   <data name="Global_Error_ImageEmpty" xml:space="preserve">
-    <value>画像データが空です</value>
+    <value>Les données de l'image sont vides</value>
   </data>
   <data name="Global_Error_ImageTooLarge" xml:space="preserve">
-    <value>画像が大きすぎます :/</value>
+    <value>Image trop grande :/</value>
   </data>
   <data name="PlayerProfile_Message_NotAvaible" xml:space="preserve">
-    <value>やあ {0}！ 友達、統計、プロフィールにアクセスするには、メールアドレスでアカウント登録が必要です</value>
+    <value>Bonjour {0} ! Pour accéder à vos amis, statistiques et profil, vous devez enregistrer votre compte avec une adresse e-mail</value>
   </data>
   <data name="Global_Label_RegisteredEmail" xml:space="preserve">
-    <value>登録済みメール</value>
+    <value>E-mail enregistré</value>
   </data>
   <data name="Lobby_Label_GameCode" xml:space="preserve">
-    <value>ゲームコード:</value>
+    <value>Code du jeu :</value>
   </data>
   <data name="Lobby_Button_Invite" xml:space="preserve">
-    <value>友達を招待</value>
+    <value>Inviter un ami</value>
   </data>
   <data name="Global_Error_UserAlreadyLoggedIn" xml:space="preserve">
-    <value>メールアドレスまたはパスワードが無効です</value>
+    <value>E-mail ou mot de passe invalide</value>
   </data>
   <data name="Global_Error_SessionExpired" xml:space="preserve">
-    <value>セッションが終了しました</value>
+    <value>La session a expiré</value>
   </data>
   <data name="Global_Error_FatalCrash" xml:space="preserve">
-    <value>致命的なエラーが発生しました。アプリケーションを終了する必要があります。</value>
+    <value>Une erreur critique s'est produite. L'application doit fermer.</value>
   </data>
   <data name="Global_Error_AccessDenied" xml:space="preserve">
-    <value>アクセスが拒否されました。この操作を実行する権限がありません。</value>
+    <value>Accès refusé. Vous n'avez pas la permission d'effectuer cette action.</value>
   </data>
   <data name="Global_FontName" xml:space="preserve">
-    <value>HachiMaruPop-Regular.ttf #Hachi Maru Pop</value>
+    <value>Pangolin-Regular.ttf #Pangolin</value>
   </data>
   <data name="Global_Button_Leave" xml:space="preserve">
-    <value>離れる</value>
+    <value>Quitter</value>
   </data>
   <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
-    <value>友達のゲームルームから退出しますか?</value>
+    <value>Voulez-vous quitter la salle de jeu de vos amis ?</value>
   </data>
   <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
-    <value>ゲームルームから退出しますか？
-ルーム内にまだプレイヤーが残っている場合は、解散されます</value>
+    <value>Voulez-vous quitter la salle de jeu ?</value>
   </data>
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
-    <value>ロビーを出る</value>
-  </data>
-  <data name="Global_Button_Gallery" xml:space="preserve">
-    <value>ギャラリー</value>
-  </data>
-  <data name="Global_Error_ConnectionLost" xml:space="preserve">
-    <value>サーバーへの接続が失われました。ログイン画面に戻ります。</value>
-  </data>
-  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
-    <value>ユーザー名は30文字を超えることはできません。</value>
-  </data>
-  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
-    <value>ユーザー名に無効な文字が含まれています。</value>
-  </data>
-  <data name="Global_Error_PasswordLength" xml:space="preserve">
-    <value>パスワードは 8 〜 100 文字にする必要があります。</value>
-  </data>
-  <data name="Global_Error_PasswordUpper" xml:space="preserve">
-    <value>パスワードには少なくとも 1 つの大文字を含める必要があります。</value>
-  </data>
-  <data name="Global_Error_PasswordLower" xml:space="preserve">
-    <value>パスワードには少なくとも 1 つの小文字を含める必要があります。</value>
-  </data>
-  <data name="Global_Error_PasswordDigit" xml:space="preserve">
-    <value>パスワードには少なくとも 1 つの数字を含める必要があります。</value>
-  </data>
-  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
-    <value>ユーザー名はすでに使用されています。</value>
-  </data>
-  <data name="Global_Error_GenericValidation" xml:space="preserve">
-    <value>入力形式が無効です。</value>
-  </data>
-  <data name="Global_Error_EmptyFields" xml:space="preserve">
-    <value>必須フィールドは空欄にできません。</value>
-  </data>
-  <data name="Gallery_Title" xml:space="preserve">
-    <value>カードギャラリー</value>
-  </data>
-  <data name="Gallery_Collection" xml:space="preserve">
-    <value>手紙集</value>
-  </data>
-  <data name="Gallery_Back" xml:space="preserve">
-    <value>戻る</value>
-  </data>
-  <data name="Gallery_CloseZoom" xml:space="preserve">
-    <value>クリックして閉じます</value>
-  </data>
-  <data name="Gallery_Category_Color" xml:space="preserve">
-    <value>見る。色</value>
-  </data>
-  <data name="Gallery_Category_Normal" xml:space="preserve">
-    <value>「通常」を参照</value>
-  </data>
-  <data name="Gallery_Error_Load" xml:space="preserve">
-    <value>画像を読み込めませんでした: {0}</value>
+    <value>Quitter le salon</value>
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
-    <value>アバター変更</value>
+    <value>Changer d'avatar</value>
+  </data>
+	<data name="Gallery_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+	<data name="Gallery_Category_Color" xml:space="preserve">
+    <value>Ver. Couleur</value>
+  </data>
+	<data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>Ver. Normale</value>
+  </data>
+	<data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>Cliquer pour fermer</value>
+  </data>
+	<data name="Gallery_Collection" xml:space="preserve">
+    <value>Collection de cartes</value>
+  </data>
+	<data name="Gallery_Error_Load" xml:space="preserve">
+    <value>Impossible de charger l'image : {0}</value>
+  </data>
+	<data name="Gallery_Title" xml:space="preserve">
+    <value>Galerie de cartes</value>
+  </data>
+	<data name="Global_Button_Gallery" xml:space="preserve">
+    <value>Galerie</value>
+  </data>
+	<data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>Connexion au serveur perdue. Retour à l'écran de connexion.</value>
+  </data>
+	<data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>Les champs obligatoires ne peuvent pas être vides.</value>
+  </data>
+	<data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>Format d'entrée invalide.</value>
+  </data>
+	<data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un chiffre.</value>
+  </data>
+	<data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>Le mot de passe doit contenir entre 8 et 100 caractères.</value>
+  </data>
+	<data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre minuscule.</value>
+  </data>
+	<data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un symbole.</value>
+  </data>
+	<data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre majuscule.</value>
+  </data>
+	<data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>Le nom d'utilisateur contient des caractères invalides.</value>
+  </data>
+	<data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>Le nom d'utilisateur ne peut pas dépasser 30 caractères.</value>
   </data>
 </root>

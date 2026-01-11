@@ -486,9 +486,6 @@
   <data name="EditProfile_Label_EditProfile" xml:space="preserve">
     <value>Editar Perfil</value>
   </data>
-  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
-    <value>Cambiar Avatar</value>
-  </data>
   <data name="EditProfile_Button_UpdatePassword" xml:space="preserve">
     <value>Actualizar Contraseña</value>
   </data>
@@ -821,5 +818,8 @@ Por favor inténtalo de nuevo</value>
   </data>
   <data name="Gallery_Error_Load" xml:space="preserve">
     <value>No se pudo cargar la imagen: {0}</value>
+  </data>
+  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
+    <value>Cambiar Avatar</value>
   </data>
 </root>

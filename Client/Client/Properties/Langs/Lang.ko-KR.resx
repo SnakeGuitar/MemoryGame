@@ -486,9 +486,6 @@
   <data name="EditProfile_Label_EditProfile" xml:space="preserve">
     <value>프로필 편집</value>
   </data>
-  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
-    <value>아바타 변경</value>
-  </data>
   <data name="EditProfile_Button_UpdatePassword" xml:space="preserve">
     <value>비밀번호 업데이트</value>
   </data>
@@ -819,5 +816,8 @@
   </data>
   <data name="Gallery_Error_Load" xml:space="preserve">
     <value>이미지를 로드할 수 없습니다: {0}</value>
+  </data>
+  <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
+    <value>아바타 변경</value>
   </data>
 </root>
