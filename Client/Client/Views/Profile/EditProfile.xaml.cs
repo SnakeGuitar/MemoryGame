@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
+using static Client.Helpers.ValidationHelper;
 
 namespace Client.Views.Profile
 {
@@ -79,6 +80,52 @@ namespace Client.Views.Profile
             }
         }
 
+        private bool IsInputValid(ValidationCode code)
+        {
+            if (code == ValidationCode.Success) return true;
+
+            string message = string.Empty;
+
+            switch (code)
+            {
+                case ValidationCode.UsernameEmpty:
+                    message = Lang.EditProfile_Label_ErrorUsernameEmpty;
+                    break;
+                case ValidationCode.UsernameTooLong:
+                    message = Lang.Global_Error_UsernameTooLong ?? "Username is too long.";
+                    break;
+                case ValidationCode.UsernameInvalidChars:
+                    message = Lang.Global_Error_UsernameInvalidChars ?? "Username contains invalid characters.";
+                    break;
+
+                case ValidationCode.PasswordEmpty:
+                    message = Lang.EditProfile_Label_ErrorPasswordFields;
+                    break;
+                case ValidationCode.PasswordLengthInvalid:
+                    message = Lang.Global_Error_PasswordLength ?? "Password must be between 8 and 100 characters.";
+                    break;
+                case ValidationCode.PasswordMissingUpper:
+                    message = Lang.Global_Error_PasswordUpper ?? "Password must contain an uppercase letter.";
+                    break;
+                case ValidationCode.PasswordMissingLower:
+                    message = Lang.Global_Error_PasswordLower ?? "Password must contain a lowercase letter.";
+                    break;
+                case ValidationCode.PasswordMissingDigit:
+                    message = Lang.Global_Error_PasswordDigit ?? "Password must contain a digit.";
+                    break;
+                case ValidationCode.PasswordMissingSymbol:
+                    message = Lang.Global_Error_PasswordSymbol ?? "Password must contain a symbol.";
+                    break;
+
+                default:
+                    message = Lang.Global_Error_GenericValidation ?? "Invalid input.";
+                    break;
+            }
+
+            ShowError(Lang.Global_Title_Error, message);
+            return false;
+        }
+
         private async void ButtonChangeAvatar_Click(object sender, RoutedEventArgs e)
         {
             var avatarDialog = NavigationHelper.GetOpenFileDialog(
@@ -128,10 +175,14 @@ namespace Client.Views.Profile
             string currentPass = PasswordBoxCurrent.Password;
             string newPass = PasswordBoxNew.Password;
 
-            if (string.IsNullOrWhiteSpace(currentPass) || string.IsNullOrWhiteSpace(newPass))
+            if (string.IsNullOrWhiteSpace(currentPass))
             {
-                new CustomMessageBox(Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields,
-                    this, MessageBoxType.Warning).ShowDialog();
+                ShowError(Lang.Global_Title_Warning, Lang.EditProfile_Label_ErrorPasswordFields);
+                return;
+            }
+
+            if (!IsInputValid(ValidatePassword(newPass)))
+            {
                 return;
             }
 
@@ -159,9 +210,8 @@ namespace Client.Views.Profile
         {
             string newUsername = TextBoxNewUsername.Text.Trim();
 
-            if (string.IsNullOrEmpty(newUsername))
+            if (!IsInputValid(ValidateUsername(newUsername)))
             {
-                ShowError(Lang.Global_Title_Error, Lang.EditProfile_Label_ErrorUsernameEmpty);
                 return;
             }
 
@@ -221,8 +271,13 @@ namespace Client.Views.Profile
             string name = TextBoxName.Text.Trim();
             string lastName = TextBoxLastName.Text.Trim();
 
-            var button = sender as Button;
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(lastName))
+            {
+                ShowError(Lang.Global_Title_Error, Lang.Global_Error_EmptyFields ?? "Name fields cannot be empty.");
+                return;
+            }
 
+            var button = sender as Button;
             if (button != null)
             {
                 button.IsEnabled = false;
@@ -341,10 +396,9 @@ namespace Client.Views.Profile
                     };
 
                     SocialNetworksList.Add(newSocial);
-
                     UserSession.SocialNetworks.Add(newSocial);
 
-                    new CustomMessageBox(Lang.Global_Title_Success, ":3" ,this, MessageBoxType.Success).ShowDialog();
+                    new CustomMessageBox(Lang.Global_Title_Success, "(˶ˆᗜˆ˵)", this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {
@@ -365,17 +419,14 @@ namespace Client.Views.Profile
         {
             NavigationHelper.NavigateTo(this, this.Owner ?? new PlayerProfile());
         }
-
         private void ShowError(string title, string message)
         {
-            var msgBox = new CustomMessageBox(title, message, this, MessageBoxType.Error);
-            msgBox.ShowDialog();
+            new CustomMessageBox(title, message, this, MessageBoxType.Error).ShowDialog();
         }
 
         private void ShowSuccess(string title, string message)
         {
-            var msgBox = new CustomMessageBox(title, message, this, MessageBoxType.Success);
-            msgBox.ShowDialog();
+            new CustomMessageBox(title, message, this, MessageBoxType.Success).ShowDialog();
         }
     }
 }

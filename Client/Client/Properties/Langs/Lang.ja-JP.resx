@@ -772,4 +772,52 @@
   <data name="Global_Error_ConnectionLost" xml:space="preserve">
     <value>サーバーへの接続が失われました。ログイン画面に戻ります。</value>
   </data>
+  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>ユーザー名は30文字を超えることはできません。</value>
+  </data>
+  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>ユーザー名に無効な文字が含まれています。</value>
+  </data>
+  <data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>パスワードは 8 〜 100 文字にする必要があります。</value>
+  </data>
+  <data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>パスワードには少なくとも 1 つの大文字を含める必要があります。</value>
+  </data>
+  <data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>パスワードには少なくとも 1 つの小文字を含める必要があります。</value>
+  </data>
+  <data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>パスワードには少なくとも 1 つの数字を含める必要があります。</value>
+  </data>
+  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>ユーザー名はすでに使用されています。</value>
+  </data>
+  <data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>入力形式が無効です。</value>
+  </data>
+  <data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>必須フィールドは空欄にできません。</value>
+  </data>
+  <data name="Gallery_Title" xml:space="preserve">
+    <value>カードギャラリー</value>
+  </data>
+  <data name="Gallery_Collection" xml:space="preserve">
+    <value>手紙集</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+  <data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>クリックして閉じます</value>
+  </data>
+  <data name="Gallery_Category_Color" xml:space="preserve">
+    <value>見る。色</value>
+  </data>
+  <data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>「通常」を参照</value>
+  </data>
+  <data name="Gallery_Error_Load" xml:space="preserve">
+    <value>画像を読み込めませんでした: {0}</value>
+  </data>
 </root>

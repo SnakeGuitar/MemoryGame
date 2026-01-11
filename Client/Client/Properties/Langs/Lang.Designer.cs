@@ -313,6 +313,69 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back.
+        /// </summary>
+        public static string Gallery_Back {
+            get {
+                return ResourceManager.GetString("Gallery_Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Ver..
+        /// </summary>
+        public static string Gallery_Category_Color {
+            get {
+                return ResourceManager.GetString("Gallery_Category_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal Ver..
+        /// </summary>
+        public static string Gallery_Category_Normal {
+            get {
+                return ResourceManager.GetString("Gallery_Category_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to close.
+        /// </summary>
+        public static string Gallery_CloseZoom {
+            get {
+                return ResourceManager.GetString("Gallery_CloseZoom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card Collection.
+        /// </summary>
+        public static string Gallery_Collection {
+            get {
+                return ResourceManager.GetString("Gallery_Collection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not load image: {0}.
+        /// </summary>
+        public static string Gallery_Error_Load {
+            get {
+                return ResourceManager.GetString("Gallery_Error_Load", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card Gallery.
+        /// </summary>
+        public static string Gallery_Title {
+            get {
+                return ResourceManager.GetString("Gallery_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accept.
         /// </summary>
         public static string Global_Button_Accept {
@@ -363,6 +426,15 @@ namespace Client.Properties.Langs {
         public static string Global_Button_ExitGame {
             get {
                 return ResourceManager.GetString("Global_Button_ExitGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gallery.
+        /// </summary>
+        public static string Global_Button_Gallery {
+            get {
+                return ResourceManager.GetString("Global_Button_Gallery", resourceCulture);
             }
         }
         
@@ -547,6 +619,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection to server lost. Returning to login screen..
+        /// </summary>
+        public static string Global_Error_ConnectionLost {
+            get {
+                return ResourceManager.GetString("Global_Error_ConnectionLost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This email address is already in use.
         /// </summary>
         public static string Global_Error_EmailInUse {
@@ -565,11 +646,29 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Required fields cannot be empty..
+        /// </summary>
+        public static string Global_Error_EmptyFields {
+            get {
+                return ResourceManager.GetString("Global_Error_EmptyFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A critical error occurred. The application must close..
         /// </summary>
         public static string Global_Error_FatalCrash {
             get {
                 return ResourceManager.GetString("Global_Error_FatalCrash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid input format..
+        /// </summary>
+        public static string Global_Error_GenericValidation {
+            get {
+                return ResourceManager.GetString("Global_Error_GenericValidation", resourceCulture);
             }
         }
         
@@ -637,11 +736,56 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one digit..
+        /// </summary>
+        public static string Global_Error_PasswordDigit {
+            get {
+                return ResourceManager.GetString("Global_Error_PasswordDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password does not have a valid format.
         /// </summary>
         public static string Global_Error_PasswordInvalid {
             get {
                 return ResourceManager.GetString("Global_Error_PasswordInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be between 8 and 100 characters..
+        /// </summary>
+        public static string Global_Error_PasswordLength {
+            get {
+                return ResourceManager.GetString("Global_Error_PasswordLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one lowercase letter..
+        /// </summary>
+        public static string Global_Error_PasswordLower {
+            get {
+                return ResourceManager.GetString("Global_Error_PasswordLower", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The username is already in use..
+        /// </summary>
+        public static string Global_Error_PasswordSymbol {
+            get {
+                return ResourceManager.GetString("Global_Error_PasswordSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one uppercase letter..
+        /// </summary>
+        public static string Global_Error_PasswordUpper {
+            get {
+                return ResourceManager.GetString("Global_Error_PasswordUpper", resourceCulture);
             }
         }
         
@@ -678,6 +822,24 @@ namespace Client.Properties.Langs {
         public static string Global_Error_UsernameInUse {
             get {
                 return ResourceManager.GetString("Global_Error_UsernameInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username contains invalid characters..
+        /// </summary>
+        public static string Global_Error_UsernameInvalidChars {
+            get {
+                return ResourceManager.GetString("Global_Error_UsernameInvalidChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username cannot exceed 30 characters..
+        /// </summary>
+        public static string Global_Error_UsernameTooLong {
+            get {
+                return ResourceManager.GetString("Global_Error_UsernameTooLong", resourceCulture);
             }
         }
         

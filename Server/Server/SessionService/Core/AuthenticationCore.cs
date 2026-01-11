@@ -276,6 +276,7 @@ namespace Server.SessionService.Core
                 using (var db = _dbFactory.Create())
                 {
                     var user = db.user.FirstOrDefault(u => u.email == email);
+
                     if (user == null)
                     {
                         _logger.LogInfo($"Invalid login attempt for non-existent email: {email}");
@@ -289,35 +290,28 @@ namespace Server.SessionService.Core
                         System.Threading.Thread.Sleep(100);
                         return new LoginResponse { Success = false, MessageKey = "Global_Error_InvalidCredentials" };
                     }
-
-                    if (_sessionManager.IsUserOnline(email))
-                    {
-                        _logger.LogWarn($"Login blocked for {email}: User already playing/online.");
-                        return new LoginResponse
-                        {
-                            Success = false,
-                            MessageKey = "Global_Error_UserAlreadyLoggedIn"
-                        };
-                    }
-
                     if (user.penaltyId != null && user.penalty != null)
                     {
                         if (user.penalty.duration > DateTime.UtcNow)
                         {
-                            _logger.LogInfo($"Login attempt blocked due to active penalty for email: {email}");
-                            return new LoginResponse
-                            {
-                                Success = false,
-                                MessageKey = "Global_Error_AccountPenalized"
-                            };
+                            _logger.LogInfo($"Login blocked due to penalty: {email}");
+                            return new LoginResponse { Success = false, MessageKey = "Global_Error_AccountPenalized" };
                         }
                         else
                         {
                             user.penaltyId = null;
                             user.penalty = null;
                             db.SaveChanges();
-                            _logger.LogInfo($"Expired penalty cleared for email: {email}");
+                            _logger.LogInfo($"Expired penalty cleared for: {email}");
                         }
+                    }
+
+                    var zombieSession = db.userSession.FirstOrDefault(s => s.userId == user.userId);
+                    if (zombieSession != null)
+                    {
+                        _logger.LogInfo($"Overwriting zombie/active session for user {user.userId} ({email}).");
+                        db.userSession.Remove(zombieSession);
+                        db.SaveChanges();
                     }
 
                     string token = _sessionManager.CreateSessionToken(user.userId);
@@ -349,12 +343,12 @@ namespace Server.SessionService.Core
             }
             catch (EntityException ex)
             {
-                _logger.LogError($"Login Database Error for email {email}: {ex.Message}");
+                _logger.LogError($"Login Database Error for {email}: {ex.Message}");
                 return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Database" };
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Login Error for email {email}: {ex.Message}");
+                _logger.LogError($"Login Error for {email}: {ex.Message}");
                 return new LoginResponse { Success = false, MessageKey = "Global_ServiceError_Unknown" };
             }
         }
@@ -441,10 +435,16 @@ namespace Server.SessionService.Core
 
                     if (guestUser != null)
                     {
+                        var sessions = db.userSession.Where(s => s.userId == guestUser.userId);
+                        db.userSession.RemoveRange(sessions);
+
+                        var history = db.matchHistory.Where(mh => mh.userId == guestUser.userId);
+                        db.matchHistory.RemoveRange(history);
+
                         db.user.Remove(guestUser);
                         db.SaveChanges();
 
-                        _logger.LogInfo($"Guest user with userId: {userId.Value} logged out and removed.");
+                        _logger.LogInfo($"Guest user with userId: {userId.Value} logged out and data cleaned successfully.");
                     }
                 }
             }

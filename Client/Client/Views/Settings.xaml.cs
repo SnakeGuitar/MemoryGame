@@ -74,9 +74,26 @@ namespace Client.Views
 
         private void RefreshWindow()
         {
-            var newSettingsWindow = new Settings(true);
-            newSettingsWindow.Owner = this.Owner;
-            NavigationHelper.NavigateTo(this, newSettingsWindow);
+            var oldMode = Application.Current.ShutdownMode;
+            Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            try
+            {
+                var newSettingsWindow = new Settings(true);
+                newSettingsWindow.Owner = this.Owner;
+                newSettingsWindow.Show();
+
+                if (Application.Current.MainWindow == this)
+                {
+                    Application.Current.MainWindow = newSettingsWindow;
+                }
+
+                this.Close();
+            }
+            finally 
+            {
+                Application.Current.ShutdownMode = oldMode;
+            }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)

@@ -165,7 +165,7 @@ namespace Server.LobbyService.Core
             }
 
             var players = lobby.Clients.Values.ToList();
-            var gameManager = new GameManager(players, settings);
+            var gameManager = new GameManager(players, settings, _logger);
 
             if (_games.TryAdd(gameCode, gameManager))
             {

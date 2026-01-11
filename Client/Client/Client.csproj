@@ -67,6 +67,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Core\ServerConnectionMonitor.cs" />
     <Compile Include="Helpers\ClientHelper.cs" />
     <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
@@ -105,6 +106,9 @@
     <Compile Include="Helpers\ValidationHelper.cs" />
     <Compile Include="Models\LanguageOption.cs" />
     <Compile Include="ViewModels\Card.cs" />
+    <Compile Include="Views\CardGallery.xaml.cs">
+      <DependentUpon>CardGallery.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\ConfirmationMessageBox.xaml.cs">
       <DependentUpon>ConfirmationMessageBox.xaml</DependentUpon>
     </Compile>
@@ -178,6 +182,10 @@
       <DependentUpon>TitleScreen.xaml</DependentUpon>
     </Compile>
     <Page Include="Themes\MainTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CardGallery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -425,7 +433,6 @@
   <ItemGroup>
     <None Include="Connected Services\GameLobbyServiceReference\item.disco" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\africa.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Color\ana.png" />
@@ -441,6 +448,13 @@
     <Resource Include="Resources\Images\Cards\Fronts\Color\sara.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Cards\Backs\default.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\africa.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\ana.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\ari.png" />
@@ -453,12 +467,6 @@
     <Resource Include="Resources\Images\Cards\Fronts\Normal\paul.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\saddy.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\sara.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Cards\Backs\default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

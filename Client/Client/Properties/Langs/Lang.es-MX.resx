@@ -774,4 +774,52 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Error_ConnectionLost" xml:space="preserve">
     <value>Conexión perdida. Regresando al inicio de sesión.</value>
   </data>
+  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>El usuario no puede exceder 30 caracteres.</value>
+  </data>
+  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>El usuario contiene caracteres inválidos.</value>
+  </data>
+  <data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>La contraseña debe tener entre 8 y 100 caracteres.</value>
+  </data>
+  <data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>La contraseña debe tener al menos una mayúscula.</value>
+  </data>
+  <data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>La contraseña debe tener al menos una minúscula.</value>
+  </data>
+  <data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>La contraseña debe tener al menos un número.</value>
+  </data>
+  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>La contraseña debe tener al menos un símbolo.</value>
+  </data>
+  <data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>Formato de entrada inválido.</value>
+  </data>
+  <data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>Los campos requeridos no pueden estar vacíos.</value>
+  </data>
+  <data name="Gallery_Title" xml:space="preserve">
+    <value>Galería de Cartas</value>
+  </data>
+  <data name="Gallery_Collection" xml:space="preserve">
+    <value>Colección de Cartas</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>Volver</value>
+  </data>
+  <data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>Clic para cerrar</value>
+  </data>
+  <data name="Gallery_Category_Color" xml:space="preserve">
+    <value>Ver. Color</value>
+  </data>
+  <data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>Ver. Normal</value>
+  </data>
+  <data name="Gallery_Error_Load" xml:space="preserve">
+    <value>No se pudo cargar la imagen: {0}</value>
+  </data>
 </root>

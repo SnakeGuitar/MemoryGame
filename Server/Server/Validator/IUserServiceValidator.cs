@@ -16,7 +16,7 @@ namespace Server.Validator
     }
     public class UserServiceValidator : IUserServiceValidator
     {
-        private const int MAX_EMAIL_LENGTH = 50;
+        private const int MAX_EMAIL_LENGTH = 255;
         private const int MIN_PASSWORD_LENGTH = 8;
         private const int MAX_PASSWORD_LENGTH = 100;
         private const int MIN_USERNAME_LENGTH = 3;
@@ -24,7 +24,7 @@ namespace Server.Validator
 
         private static readonly Regex EmailRegex = new Regex(
             @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            RegexOptions.Compiled | RegexOptions.IgnoreCase); // RFC 5322 REGEX
 
         public bool IsValidEmail(string email)
         {

@@ -772,4 +772,52 @@
   <data name="Global_Error_ConnectionLost" xml:space="preserve">
     <value>服务器连接断开，返回登录界面。</value>
   </data>
+  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>用户输入的字符数不能超过30个。</value>
+  </data>
+  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>用户名包含无效字符。</value>
+  </data>
+  <data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>密码长度必须介于 8 到 100 个字符之间。</value>
+  </data>
+  <data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>密码必须至少包含一个大写字母。</value>
+  </data>
+  <data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>密码必须至少包含一个小写字母。</value>
+  </data>
+  <data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>密码必须至少包含一个数字。</value>
+  </data>
+  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>密码必须至少包含一个符号。</value>
+  </data>
+  <data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>输入格式无效。</value>
+  </data>
+  <data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>必填字段不能为空。</value>
+  </data>
+  <data name="Gallery_Title" xml:space="preserve">
+    <value>卡片库</value>
+  </data>
+  <data name="Gallery_Collection" xml:space="preserve">
+    <value>信件收集</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>Clic para cerrar</value>
+  </data>
+  <data name="Gallery_Category_Color" xml:space="preserve">
+    <value>看。颜色</value>
+  </data>
+  <data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>见正常</value>
+  </data>
+  <data name="Gallery_Error_Load" xml:space="preserve">
+    <value>图片加载失败：{0}</value>
+  </data>
 </root>

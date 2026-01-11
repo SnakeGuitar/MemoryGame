@@ -1,4 +1,5 @@
 ﻿using Client.Helpers;
+using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Session;
 using System;
@@ -66,6 +67,31 @@ namespace Client.Core
             return new LoginResponse { Success = false, MessageKey = "Global_Error_ConnectionLost" };
         }
 
+        public async Task LogoutAsync(string token)
+        {
+            if (EnsureConnection())
+            {
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        if (UserSession.IsGuest)
+                        {
+                            Client.LogoutGuest(token);
+                        }
+                        else
+                        {
+                            Client.Logout(token);
+                        }
+                    });
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Logout Error] {ex.Message}");
+                }
+            }
+        }
+
         public async Task<LoginResponse> RenewSessionAsync(string token)
         {
             if (EnsureConnection())
@@ -92,30 +118,40 @@ namespace Client.Core
 
         public void ForceLogout(string reason)
         {
+            if (Application.Current == null)
+            {
+                return;
+            }
+
             Application.Current.Dispatcher.Invoke(() =>
             {
-                if (Application.Current.MainWindow is Login)
+                try
                 {
-                    return;
+                    var loginWindow = new Login();
+                    var oldWindow = Application.Current.MainWindow;
+
+                    Application.Current.MainWindow = loginWindow;
+                    loginWindow.Show();
+
+                    if (oldWindow != null && oldWindow != loginWindow)
+                    {
+                        oldWindow.Close();
+                    }
+
+                    UserSession.EndSession();
+
+                    reason = Lang.Global_Error_SessionExpired;
+
+                    new Views.Controls.CustomMessageBox(
+                        Lang.Global_Title_Error,
+                        reason,
+                        loginWindow,
+                        Views.Controls.CustomMessageBox.MessageBoxType.Error
+                    ).ShowDialog();
                 }
-
-                MessageBox.Show(
-                    $"You have been disconnected: {reason}",
-                    "Session Ended",
-                    MessageBoxButton.OK, MessageBoxImage.Warning);
-
-                UserSession.EndSession();
-
-                if (Application.Current.MainWindow != null)
+                catch (Exception ex)
                 {
-                    NavigationHelper.NavigateTo(Application.Current.MainWindow, new Login());
-                }
-                else
-                {
-                    // Manual window opening or fallback reasons
-                    var login = new Login();
-                    Application.Current.MainWindow = login;
-                    login.Show();
+                    System.Diagnostics.Debug.WriteLine($"[ForceLogout] Error: {ex.Message}");
                 }
             });
         }

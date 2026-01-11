@@ -1,5 +1,6 @@
 ﻿using Server.GameService.Core;
 using Server.LobbyService;
+using Server.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,20 +26,23 @@ namespace Server.GameService
         private GameDeck.GameCard _firstFlippedCard;
         private bool _isProcessingMismatch;
 
+        private readonly ILoggerManager _logger;
+
         #endregion
 
         public bool IsGameInProgress { get; private set; }
 
         public event Action<string, Dictionary<string, int>> GameEnded;
 
-        public GameManager(List<LobbyClient> players, GameSettings settings)
+        public GameManager(List<LobbyClient> players, GameSettings settings, ILoggerManager logger)
         {
             _players = players;
             _settings = SanitizeSettings(settings);
             _scores = players.ToDictionary(p => p.Id, p => 0);
+            _logger = logger;
 
             _deck = new GameDeck(_settings.CardCount);
-            _notifier = new GameNotifier(_players);
+            _notifier = new GameNotifier(_players, _logger);
 
             _turnTimer = new GameTurnTimer(_settings.TurnTimeSeconds, OnTurnTimeout);
         }
@@ -241,6 +245,12 @@ namespace Server.GameService
             {
                 s.CardCount = 16;
             }
+
+            if (s.CardCount > 40)
+            {
+                s.CardCount = 40;
+            }
+
             if (s.TurnTimeSeconds < 5)
             {
                 s.TurnTimeSeconds = 5;

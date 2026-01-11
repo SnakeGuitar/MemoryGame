@@ -152,6 +152,7 @@
     <Compile Include="Shared\IMailSender.cs" />
     <Compile Include="Shared\INotificationService.cs" />
     <Compile Include="Shared\ISecurityService.cs" />
+    <Compile Include="Shared\ServerExceptionManager.cs" />
     <Compile Include="socialNetwork.cs">
       <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>

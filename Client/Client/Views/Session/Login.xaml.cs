@@ -53,6 +53,7 @@ namespace Client.Views.Session
             }
 
             ButtonAcceptLogin.IsEnabled = false;
+            Mouse.OverrideCursor = Cursors.Wait;
 
             try
             {
@@ -71,20 +72,21 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    string errorMessage = (response.MessageKey == ServerKeys.UserAlreadyLoggedIn)
-                        ? Lang.Global_Error_InvalidCredentials
-                        : GetString(response.MessageKey);
+                    string errorMessage = GetString(response.MessageKey);
 
                     new CustomMessageBox(
                         Lang.Global_Title_LoginFailed, errorMessage,
                         this, MessageBoxType.Error).ShowDialog();
-
-                    ButtonAcceptLogin.IsEnabled = true;
                 }
             }
             catch (Exception ex)
             {
                 ExceptionManager.Handle(ex, this, () => ButtonAcceptLogin.IsEnabled = true);
+            }
+            finally
+            {
+                ButtonAcceptLogin.IsEnabled = true;
+                Mouse.OverrideCursor = null;
             }
         }
 

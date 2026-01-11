@@ -60,6 +60,11 @@ namespace Client.Views
             NavigationHelper.NavigateTo(this, new Settings());
         }
 
+        private void ButtonGallery_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationHelper.NavigateTo(this, new CardGallery());
+        }
+
         private void ButtonProfile_Click(object sender, RoutedEventArgs e)
         {
             if (UserSession.IsGuest)
@@ -80,7 +85,7 @@ namespace Client.Views
             NavigationHelper.NavigateTo(this, new RegisterAccount(isGuestRegister: true));
         }
 
-        private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
+        private async void ButtonExitGame_Click(object sender, RoutedEventArgs e)
         {
             var confirmationBox = new ConfirmationMessageBox(
                 Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
@@ -88,7 +93,13 @@ namespace Client.Views
 
             if (confirmationBox.ShowDialog() == true)
             {
-                PerformLogout();
+                if (sender is FrameworkElement btn)
+                {
+                    btn.IsEnabled = false;
+                }
+
+                await PerformLogoutAsync();
+
                 NavigationHelper.ExitApplication();
             }
         }
@@ -120,33 +131,16 @@ namespace Client.Views
             _ = LoadAvatarAsync();
         }
 
-        private static void PerformLogout()
+        private async Task PerformLogoutAsync()
         {
-            if (UserSession.IsGuest)
+            string token = UserSession.SessionToken;
+
+            if (!string.IsNullOrEmpty(token))
             {
-                try
-                {
-                    UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[MainMenu] Error on LogoutGuest: {ex.Message}");
-                }
+                await UserServiceManager.Instance.LogoutAsync(token);
             }
-            else
-            {
-                try
-                {
-                    if (UserServiceManager.Instance.Client.State == CommunicationState.Opened)
-                    {
-                        UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"[MainMenu] Error closing session: {ex.Message}");
-                }
-            }
+
+            UserSession.EndSession();
         }
 
         #endregion
@@ -205,7 +199,7 @@ namespace Client.Views
 
             if (Application.Current.MainWindow == this)
             {
-                PerformLogout();
+                _ = PerformLogoutAsync();
             }
             base.OnClosed(e);
         }

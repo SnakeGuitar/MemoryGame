@@ -1,21 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Client.Helpers
 {
     public static class ValidationHelper
     {
+        private const int MAX_EMAIL_LENGTH = 255;
+        private const int MIN_PASSWORD_LENGTH = 8;
+        private const int MAX_PASSWORD_LENGTH = 100;
+        private const int MIN_USERNAME_LENGTH = 3;
+        private const int MAX_USERNAME_LENGTH = 30;
+
+        private static readonly Regex EmailRegex = new Regex(
+            @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase); // RFC 5322 REGEX
         public static ValidationCode ValidateUsername(string username)
         {
+
             if (string.IsNullOrEmpty(username))
             {
                 return ValidationCode.UsernameEmpty;
             }
 
-            if (username.Length > 30)
+            if (username.Length < MIN_USERNAME_LENGTH || username.Length > MAX_USERNAME_LENGTH)
             {
                 return ValidationCode.UsernameTooLong;
             }
@@ -35,7 +47,7 @@ namespace Client.Helpers
                 return ValidationCode.PasswordEmpty;
             }
 
-            if (password.Length < 8 || password.Length > 20)
+            if (password.Length < MIN_PASSWORD_LENGTH || password.Length > MAX_PASSWORD_LENGTH)
             {
                 return ValidationCode.PasswordLengthInvalid;
             }
@@ -45,7 +57,6 @@ namespace Client.Helpers
                 return ValidationCode.PasswordMissingUpper;
             }
                 
-
             if (!password.Any(char.IsLower))
             {
                 return ValidationCode.PasswordMissingLower;
@@ -54,6 +65,11 @@ namespace Client.Helpers
             if (!password.Any(char.IsDigit))
             {
                 return ValidationCode.PasswordMissingDigit;
+            }
+
+            if (password.All(ch => char.IsLetterOrDigit(ch)))
+            {
+                return ValidationCode.PasswordMissingSymbol;
             }
 
             return ValidationCode.Success;
@@ -65,8 +81,13 @@ namespace Client.Helpers
             {
                 return ValidationCode.EmailEmpty;
             }
-                
-            if (!email.Contains("@") || !email.Contains("."))
+
+            if (email.Length > MAX_EMAIL_LENGTH)
+            {
+                return ValidationCode.EmailTooLong;
+            }
+
+            if (!EmailRegex.IsMatch(email))
             {
                 return ValidationCode.EmailInvalidFormat;
             }
@@ -104,9 +125,11 @@ namespace Client.Helpers
             PasswordMissingUpper,
             PasswordMissingLower,
             PasswordMissingDigit,
+            PasswordMissingSymbol,
 
             EmailEmpty,
             EmailInvalidFormat,
+            EmailTooLong,
 
             CodeEmpty,
             CodeLengthInvalid,

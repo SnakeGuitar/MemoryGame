@@ -1,4 +1,5 @@
 ﻿using Server.LobbyService;
+using Server.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ namespace Server.GameService.Core
     public class GameNotifier
     {
         private readonly List<LobbyClient> _players;
+        private readonly ILoggerManager _logger;
 
-        public GameNotifier(List<LobbyClient> players)
+        public GameNotifier(List<LobbyClient> players, ILoggerManager logger)
         {
             _players = players;
+            _logger = logger ?? new Logger(typeof(GameNotifier));
         }
 
         public void NotifyGameStarted(List<CardInfo> board)
@@ -70,7 +73,7 @@ namespace Server.GameService.Core
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Game broadcast error to {player.Name}: {ex.Message}");
+                        _logger.LogError($"Game broadcast error to {player.Name}: {ex.Message}");
                     }
                 });
             }

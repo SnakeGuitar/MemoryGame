@@ -72,9 +72,15 @@
                         Style="{StaticResource MenuButtonStyle}"
                         Click="ButtonSettings_Click"/>
 
+                <Button Content="{x:Static language:Lang.Global_Button_Gallery}"
+                        Style="{StaticResource MenuButtonStyle}"
+                        Click="ButtonGallery_Click"/>
+
                 <Button Content="{x:Static language:Lang.Global_Button_ExitGame}" 
                         Style="{StaticResource ExitButtonStyle}"
                         Click="ButtonExitGame_Click"/>
+                
+                
             </StackPanel>
         </Border>
     </Grid>

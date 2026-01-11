@@ -19,6 +19,18 @@ namespace Server.Validator
                 return false;
             }
 
+            if (imageData.Length > 4)
+            {
+                bool isJpg = imageData[0] == 0xFF && imageData[1] == 0xD8; 
+                bool isPng = imageData[0] == 0x89 && imageData[1] == 0x50 && imageData[2] == 0x4E && imageData[3] == 0x47;
+                bool isBmp = imageData[0] == 0x42 && imageData[1] == 0x4D;
+
+                if (!isJpg && !isPng && !isBmp)
+                {
+                    return false;
+                }
+            }
+
             try
             {
                 using (var stream = new System.IO.MemoryStream(imageData))

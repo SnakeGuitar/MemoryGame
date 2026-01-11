@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Client.Core
 {
@@ -17,9 +18,13 @@ namespace Client.Core
 
         public GameLobbyServiceClient Client { get; private set; }
 
+        private ServerConnectionMonitor _connectionMonitor;
+
         #endregion
 
         #region Events
+
+        public event Action ServerConnectionLost;
 
         public event Action<string, string, bool> ChatMessageReceived;
         public event Action<string, bool> PlayerJoined;
@@ -43,8 +48,50 @@ namespace Client.Core
 
         private void InitializeClient()
         {
-            InstanceContext context = new InstanceContext(this);
-            Client = new GameLobbyServiceClient(context);
+            try
+            {
+                if (Client != null)
+                {
+                    try
+                    {
+                        Client.Close();
+                    }
+                    catch
+                    {
+                        Client.Abort();
+                    }
+
+                    _connectionMonitor?.Stop();
+                }
+                InstanceContext context = new InstanceContext(this);
+                Client = new GameLobbyServiceClient(context);
+                Client.Open();
+
+                if (Client.InnerChannel != null)
+                {
+                    Client.InnerChannel.Faulted += (s, e) => NotifyDisconnect();
+                }
+
+                _connectionMonitor = new ServerConnectionMonitor(() =>
+                {
+                    return Client != null && Client.State == CommunicationState.Opened;
+                });
+
+                _connectionMonitor.ConnectionLost += NotifyDisconnect;
+                _connectionMonitor.Start();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[GameServiceManager] Init Failed: {ex.Message}");
+            }
+        }
+
+        private void NotifyDisconnect()
+        {
+            Application.Current?.Dispatcher?.Invoke(() =>
+            {
+                ServerConnectionLost?.Invoke();
+            });
         }
 
         /// <summary>
