@@ -120,7 +120,7 @@ namespace Client.Views
             _ = LoadAvatarAsync();
         }
 
-        private void PerformLogout()
+        private static void PerformLogout()
         {
             if (UserSession.IsGuest)
             {

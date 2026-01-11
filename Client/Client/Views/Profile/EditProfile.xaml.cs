@@ -260,40 +260,58 @@ namespace Client.Views.Profile
 
         private async void ButtonRemoveSocial_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is int socialId)
+            if (!(sender is Button button) || !(button.Tag is int socialId))
             {
-                if (socialId <= 0)
-                {
-                    var item = SocialNetworksList.FirstOrDefault(s => s.SocialNetworkId == socialId);
-                    if (item != null) SocialNetworksList.Remove(item);
-                    return;
-                }
-                try
-                {
-                    var response = await UserServiceManager.Instance.Client.RemoveSocialNetworkAsync(UserSession.SessionToken, socialId);
+                return;
+            }
 
-                    if (response.Success)
-                    {
-                        var itemToRemove = SocialNetworksList.FirstOrDefault(s => s.SocialNetworkId == socialId);
-                        if (itemToRemove != null)
-                        {
-                            SocialNetworksList.Remove(itemToRemove);
-                        }
-                        var sessionItem = UserSession.SocialNetworks.FirstOrDefault(s => s.SocialNetworkId == socialId);
-                        if (sessionItem != null)
-                        {
-                            UserSession.SocialNetworks.Remove(sessionItem);
-                        }
-                    }
-                    else
-                    {
-                        ShowError(Lang.Global_Title_Error, GetString(response.MessageKey));
-                    }
-                }
-                catch (Exception ex)
+            if (socialId <= 0)
+            {
+                RemoveFromUiList(socialId);
+                return;
+            }
+
+            await RemoveRemoteSocialNetworkAsync(socialId);
+        }
+
+        private async Task RemoveRemoteSocialNetworkAsync(int socialId)
+        {
+            try
+            {
+                var response = await UserServiceManager.Instance.Client.RemoveSocialNetworkAsync(UserSession.SessionToken, socialId);
+
+                if (response.Success)
                 {
-                    ExceptionManager.Handle(ex, this);
+                    RemoveFromUiList(socialId);
+                    RemoveFromSession(socialId);
                 }
+                else
+                {
+                    string errorMessage = GetString(response.MessageKey);
+                    ShowError(Lang.Global_Title_Error, errorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Handle(ex, this);
+            }
+        }
+
+        private void RemoveFromUiList(int socialId)
+        {
+            var item = SocialNetworksList.FirstOrDefault(s => s.SocialNetworkId == socialId);
+            if (item != null)
+            {
+                SocialNetworksList.Remove(item);
+            }
+        }
+
+        private static void RemoveFromSession(int socialId)
+        {
+            var sessionItem = UserSession.SocialNetworks.FirstOrDefault(s => s.SocialNetworkId == socialId);
+            if (sessionItem != null)
+            {
+                UserSession.SocialNetworks.Remove(sessionItem);
             }
         }
 
@@ -345,7 +363,7 @@ namespace Client.Views.Profile
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new PlayerProfile());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new PlayerProfile());
         }
 
         private void ShowError(string title, string message)

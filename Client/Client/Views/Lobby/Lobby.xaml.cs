@@ -206,7 +206,7 @@ namespace Client.Views.Lobby
 
         private void GoBackToMenu()
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MultiplayerMenu());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MultiplayerMenu());
         }
 
         #endregion

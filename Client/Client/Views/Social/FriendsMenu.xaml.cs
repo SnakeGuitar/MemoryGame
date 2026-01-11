@@ -180,7 +180,7 @@ namespace Client.Views.Social
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MainMenu());
         }
 
         public class FriendDisplay

@@ -40,6 +40,7 @@ namespace Client.Views.Profile
         private void LoadData()
         {
             string fullName = $"{UserSession.Name} {UserSession.LastName}".Trim();
+            string formatDate = "MMMM dd yyyy";
 
             if (string.IsNullOrEmpty(fullName))
             {
@@ -52,7 +53,7 @@ namespace Client.Views.Profile
 
             TextBlockUsername.Text = UserSession.Username;
             TextEmail.Text = UserSession.Email;
-            TextDate.Text = UserSession.RegistrationDate.ToString("MMMM dd yyyy");
+            TextDate.Text = UserSession.RegistrationDate.ToString(formatDate);
             ItemsControlSocialNetworks.ItemsSource = UserSession.SocialNetworks;
         }
 
@@ -80,7 +81,10 @@ namespace Client.Views.Profile
                         UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
                     }
                 }
-                catch (Exception) { }
+                catch (Exception ex) 
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Logout Error]: {ex}");
+                }
 
                 UserSession.EndSession();
                 NavigationHelper.NavigateTo(this, new TitleScreen());
@@ -99,7 +103,7 @@ namespace Client.Views.Profile
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new MainMenu());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MainMenu());
         }
 
         private void OnProfileUpdated()

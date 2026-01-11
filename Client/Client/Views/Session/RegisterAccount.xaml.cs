@@ -68,7 +68,7 @@ namespace Client.Views.Session
 
                 if (response.Success)
                 {
-                    var messageBox = new CustomMessageBox(
+                    new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
                         this, MessageBoxType.Success).ShowDialog();
 
@@ -77,7 +77,8 @@ namespace Client.Views.Session
                 else
                 {
                     string errorMessage = GetString(response.MessageKey);
-                    var messageBox = new CustomMessageBox(
+
+                    new CustomMessageBox(
                         Lang.Global_Title_Error, errorMessage,
                         this, MessageBoxType.Error).ShowDialog();
 
@@ -92,7 +93,7 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner as Window ?? new TitleScreen());
+            NavigationHelper.NavigateTo(this, this.Owner ?? new TitleScreen());
         }
     }
 }
