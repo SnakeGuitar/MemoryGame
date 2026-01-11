@@ -766,4 +766,10 @@
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>ロビーを出る</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>ギャラリー</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>サーバーへの接続が失われました。ログイン画面に戻ります。</value>
+  </data>
 </root>

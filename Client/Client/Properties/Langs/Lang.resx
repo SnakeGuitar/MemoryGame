@@ -766,4 +766,10 @@ You need to log in with your new account :)</value>
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>Leave lobby</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>Connection to server lost. Returning to login screen.</value>
+  </data>
 </root>

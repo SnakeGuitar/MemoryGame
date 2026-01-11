@@ -766,4 +766,10 @@
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>离开大厅</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>画廊</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>服务器连接断开，返回登录界面。</value>
+  </data>
 </root>

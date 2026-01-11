@@ -766,4 +766,10 @@
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>로비에서 나가기</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>갱도</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>서버 연결이 끊어졌습니다. 로그인 화면으로 돌아갑니다.</value>
+  </data>
 </root>

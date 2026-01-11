@@ -768,4 +768,10 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>Salir de la sala</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>Galería</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>Conexión perdida. Regresando al inicio de sesión.</value>
+  </data>
 </root>
