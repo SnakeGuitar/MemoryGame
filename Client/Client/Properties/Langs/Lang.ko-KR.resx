@@ -613,7 +613,7 @@
     <value>메모리 게임에 초대합니다!</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>안녕! 같이 게임 한 판 하자 :D 로비 코드는:</value>
+    <value>안녕! 같이 게임 한 판 하자 :D 로비 코드는: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>기본 메일 애플리케이션을 찾을 수 없습니다 :(</value>
@@ -819,5 +819,11 @@
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>아바타 변경</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>초대가 성공적으로 전송되었습니다!</value>
+  </data>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>사용자 이름은 최소 3자 이상이어야 합니다.</value>
   </data>
 </root>

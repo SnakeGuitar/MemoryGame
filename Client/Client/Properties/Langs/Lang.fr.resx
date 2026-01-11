@@ -613,7 +613,7 @@
     <value>Rejoins ma partie de Memory Game !</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>Hé l'ami, rejoins ma partie pour qu'on puisse jouer :D Le code du salon est :</value>
+    <value>Hé l'ami, rejoins ma partie pour qu'on puisse jouer :D Le code du salon est : {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>Aucune application de messagerie par défaut n'a été trouvée sur le système :(</value>
@@ -762,61 +762,67 @@
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>Quitter le salon</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>Galerie</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>Connexion au serveur perdue. Retour à l'écran de connexion.</value>
+  </data>
+  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>Le nom d'utilisateur ne peut pas dépasser 30 caractères.</value>
+  </data>
+  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>Le nom d'utilisateur contient des caractères invalides.</value>
+  </data>
+  <data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>Le mot de passe doit contenir entre 8 et 100 caractères.</value>
+  </data>
+  <data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre majuscule.</value>
+  </data>
+  <data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins une lettre minuscule.</value>
+  </data>
+  <data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un chiffre.</value>
+  </data>
+  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>Le mot de passe doit contenir au moins un symbole.</value>
+  </data>
+  <data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>Format d'entrée invalide.</value>
+  </data>
+  <data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>Les champs obligatoires ne peuvent pas être vides.</value>
+  </data>
+  <data name="Gallery_Title" xml:space="preserve">
+    <value>Galerie de cartes</value>
+  </data>
+  <data name="Gallery_Collection" xml:space="preserve">
+    <value>Collection de cartes</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>Retour</value>
+  </data>
+  <data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>Cliquer pour fermer</value>
+  </data>
+  <data name="Gallery_Category_Color" xml:space="preserve">
+    <value>Ver. Couleur</value>
+  </data>
+  <data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>Ver. Normale</value>
+  </data>
+  <data name="Gallery_Error_Load" xml:space="preserve">
+    <value>Impossible de charger l'image : {0}</value>
+  </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>Changer d'avatar</value>
   </data>
-	<data name="Gallery_Back" xml:space="preserve">
-    <value>Retour</value>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>Invitation envoyée avec succès !</value>
   </data>
-	<data name="Gallery_Category_Color" xml:space="preserve">
-    <value>Ver. Couleur</value>
-  </data>
-	<data name="Gallery_Category_Normal" xml:space="preserve">
-    <value>Ver. Normale</value>
-  </data>
-	<data name="Gallery_CloseZoom" xml:space="preserve">
-    <value>Cliquer pour fermer</value>
-  </data>
-	<data name="Gallery_Collection" xml:space="preserve">
-    <value>Collection de cartes</value>
-  </data>
-	<data name="Gallery_Error_Load" xml:space="preserve">
-    <value>Impossible de charger l'image : {0}</value>
-  </data>
-	<data name="Gallery_Title" xml:space="preserve">
-    <value>Galerie de cartes</value>
-  </data>
-	<data name="Global_Button_Gallery" xml:space="preserve">
-    <value>Galerie</value>
-  </data>
-	<data name="Global_Error_ConnectionLost" xml:space="preserve">
-    <value>Connexion au serveur perdue. Retour à l'écran de connexion.</value>
-  </data>
-	<data name="Global_Error_EmptyFields" xml:space="preserve">
-    <value>Les champs obligatoires ne peuvent pas être vides.</value>
-  </data>
-	<data name="Global_Error_GenericValidation" xml:space="preserve">
-    <value>Format d'entrée invalide.</value>
-  </data>
-	<data name="Global_Error_PasswordDigit" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins un chiffre.</value>
-  </data>
-	<data name="Global_Error_PasswordLength" xml:space="preserve">
-    <value>Le mot de passe doit contenir entre 8 et 100 caractères.</value>
-  </data>
-	<data name="Global_Error_PasswordLower" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins une lettre minuscule.</value>
-  </data>
-	<data name="Global_Error_PasswordSymbol" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins un symbole.</value>
-  </data>
-	<data name="Global_Error_PasswordUpper" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins une lettre majuscule.</value>
-  </data>
-	<data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
-    <value>Le nom d'utilisateur contient des caractères invalides.</value>
-  </data>
-	<data name="Global_Error_UsernameTooLong" xml:space="preserve">
-    <value>Le nom d'utilisateur ne peut pas dépasser 30 caractères.</value>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>Le nom d'utilisateur doit comporter au moins 3 caractères</value>
   </data>
 </root>

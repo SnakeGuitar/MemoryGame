@@ -613,7 +613,7 @@
     <value>加入我的记忆游戏比赛！</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>嘿朋友，加入我的游戏一起玩吧 :D 大厅代码是:</value>
+    <value>嘿朋友，加入我的游戏一起玩吧 :D 大厅代码是: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>系统上未找到默认邮件应用程序 :(</value>
@@ -819,5 +819,11 @@
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>更改头像</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>邀请已成功发送！</value>
+  </data>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>用户名长度必须至少为3个字符</value>
   </data>
 </root>

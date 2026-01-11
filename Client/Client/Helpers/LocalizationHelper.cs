@@ -164,6 +164,9 @@ namespace Client.Helpers
                 case ValidationHelper.ValidationCode.UsernameEmpty:
                     return Lang.Global_ValidationUsername_Empty;
 
+                case ValidationHelper.ValidationCode.UsernameTooSmall:
+                    return Lang.Global_ValidationUsername_TooSmall;
+
                 case ValidationHelper.ValidationCode.UsernameTooLong:
                     return Lang.Global_ValidationUsername_TooLong;
 

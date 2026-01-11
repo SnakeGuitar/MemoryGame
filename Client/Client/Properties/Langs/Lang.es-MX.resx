@@ -614,8 +614,7 @@
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
     <value>Holaaa amiguito, entra a mi partida para que juguemos :D.
-El código de la sala es:
-</value>
+El código de la sala es: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>No se encontró una aplicación de correo predeterminada instalada en el sistema :(</value>
@@ -760,7 +759,7 @@ Por favor inténtalo de nuevo</value>
     <value>Quieres abandonarnos unu?</value>
   </data>
   <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
-    <value>Quieres salir de la sala? Si hay jugadores en ella, será disuelta.</value>
+    <value>¿Quieres salir de la sala? Si hay jugadores en ella, será disuelta.</value>
   </data>
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>Salir de la sala</value>
@@ -821,5 +820,11 @@ Por favor inténtalo de nuevo</value>
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>Cambiar Avatar</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>¡Invitación enviada con éxito!</value>
+  </data>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>El usuario debe tener al menos 3 caracteres</value>
   </data>
 </root>

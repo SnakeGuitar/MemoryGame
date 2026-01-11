@@ -613,7 +613,7 @@
     <value>メモリーゲームに参加しよう！</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>やあ！一緒にゲームをしよう :D ロビーコードはこちら:</value>
+    <value>やあ！一緒にゲームをしよう :D ロビーコードはこちら: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>既定のメールアプリが見つかりませんでした :(</value>
@@ -819,5 +819,11 @@
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>アバター変更</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>招待状の送信に成功しました！</value>
+  </data>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>ユーザー名は3文字以上である必要があります。</value>
   </data>
 </root>

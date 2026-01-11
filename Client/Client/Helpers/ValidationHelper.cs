@@ -17,8 +17,9 @@ namespace Client.Helpers
         private const int MAX_USERNAME_LENGTH = 30;
 
         private static readonly Regex EmailRegex = new Regex(
-            @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase); // RFC 5322 REGEX
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase,
+                TimeSpan.FromMilliseconds(250)); // RFC 5322 REGEX
         public static ValidationCode ValidateUsername(string username)
         {
 
@@ -27,7 +28,12 @@ namespace Client.Helpers
                 return ValidationCode.UsernameEmpty;
             }
 
-            if (username.Length < MIN_USERNAME_LENGTH || username.Length > MAX_USERNAME_LENGTH)
+            if (username.Length < MIN_USERNAME_LENGTH)
+            {
+                return ValidationCode.UsernameTooSmall;
+            }
+
+            if (username.Length > MAX_USERNAME_LENGTH)
             {
                 return ValidationCode.UsernameTooLong;
             }
@@ -117,6 +123,7 @@ namespace Client.Helpers
             Success,
 
             UsernameEmpty,
+            UsernameTooSmall,
             UsernameTooLong,
             UsernameInvalidChars,
 

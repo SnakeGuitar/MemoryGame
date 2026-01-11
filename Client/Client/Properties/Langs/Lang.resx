@@ -614,7 +614,7 @@ You need to log in with your new account :)</value>
     <value>Join my Memory Game Match!</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>Heeey budy, join my game so we can play :D The Lobby code is:</value>
+    <value>Heeey budy, join my game so we can play :D The Lobby code is: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>No default mail application was found installed on the system :(</value>
@@ -819,5 +819,11 @@ You need to log in with your new account :)</value>
   </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>Change Avatar</value>
+  </data>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>Invitation sent successfully!</value>
+  </data>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>Username must be at least 3 characters</value>
   </data>
 </root>

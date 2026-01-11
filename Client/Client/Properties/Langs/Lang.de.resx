@@ -613,7 +613,7 @@
     <value>Junte-se à minha partida de Memory Game!</value>
   </data>
   <data name="InviteFriendDialog_Message_BodyEmail" xml:space="preserve">
-    <value>Ei amigo, entre no meu jogo para podermos jogar :D O código da sala é:</value>
+    <value>Ei amigo, entre no meu jogo para podermos jogar :D O código da sala é: {0}</value>
   </data>
   <data name="InviteFriendDialog_Label_ErrorAppEmail" xml:space="preserve">
     <value>Nenhum aplicativo de e-mail padrão foi encontrado instalado no sistema :(</value>
@@ -762,61 +762,67 @@
   <data name="Global_Title_LeaveLobby" xml:space="preserve">
     <value>Sair da Sala</value>
   </data>
+  <data name="Global_Button_Gallery" xml:space="preserve">
+    <value>Galerie</value>
+  </data>
+  <data name="Global_Error_ConnectionLost" xml:space="preserve">
+    <value>Verbindung zum Server unterbrochen. Zurück zum Anmeldebildschirm.</value>
+  </data>
+  <data name="Global_Error_UsernameTooLong" xml:space="preserve">
+    <value>Benutzername darf 30 Zeichen nicht überschreiten.</value>
+  </data>
+  <data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
+    <value>Benutzername enthält ungültige Zeichen.</value>
+  </data>
+  <data name="Global_Error_PasswordLength" xml:space="preserve">
+    <value>Das Passwort muss zwischen 8 und 100 Zeichen lang sein.</value>
+  </data>
+  <data name="Global_Error_PasswordUpper" xml:space="preserve">
+    <value>Das Passwort muss mindestens einen Großbuchstaben enthalten.</value>
+  </data>
+  <data name="Global_Error_PasswordLower" xml:space="preserve">
+    <value>Das Passwort muss mindestens einen Kleinbuchstaben enthalten.</value>
+  </data>
+  <data name="Global_Error_PasswordDigit" xml:space="preserve">
+    <value>Das Passwort muss mindestens eine Ziffer enthalten.</value>
+  </data>
+  <data name="Global_Error_PasswordSymbol" xml:space="preserve">
+    <value>Das Passwort muss mindestens ein Symbol enthalten.</value>
+  </data>
+  <data name="Global_Error_GenericValidation" xml:space="preserve">
+    <value>Ungültiges Eingabeformat.</value>
+  </data>
+  <data name="Global_Error_EmptyFields" xml:space="preserve">
+    <value>Pflichtfelder dürfen nicht leer sein.</value>
+  </data>
+  <data name="Gallery_Title" xml:space="preserve">
+    <value>Kartengalerie</value>
+  </data>
+  <data name="Gallery_Collection" xml:space="preserve">
+    <value>Kartensammlung</value>
+  </data>
+  <data name="Gallery_Back" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Gallery_CloseZoom" xml:space="preserve">
+    <value>Zum Schließen klicken</value>
+  </data>
+  <data name="Gallery_Category_Color" xml:space="preserve">
+    <value>Farbversion</value>
+  </data>
+  <data name="Gallery_Category_Normal" xml:space="preserve">
+    <value>Normale Version</value>
+  </data>
+  <data name="Gallery_Error_Load" xml:space="preserve">
+    <value>Bild konnte nicht geladen werden: {0}</value>
+  </data>
   <data name="EditProfile_Button_ChangeAvatar" xml:space="preserve">
     <value>Alterar Avatar</value>
   </data>
-	<data name="Gallery_Back" xml:space="preserve">
-    <value>Zurück</value>
+  <data name="InviteFriendDialog_Message_EmailSentSuccess" xml:space="preserve">
+    <value>Einladung erfolgreich gesendet!</value>
   </data>
-	<data name="Gallery_Category_Color" xml:space="preserve">
-    <value>Farbversion</value>
-  </data>
-	<data name="Gallery_Category_Normal" xml:space="preserve">
-    <value>Normale Version</value>
-  </data>
-	<data name="Gallery_CloseZoom" xml:space="preserve">
-    <value>Zum Schließen klicken</value>
-  </data>
-	<data name="Gallery_Collection" xml:space="preserve">
-    <value>Kartensammlung</value>
-  </data>
-	<data name="Gallery_Error_Load" xml:space="preserve">
-    <value>Bild konnte nicht geladen werden: {0}</value>
-  </data>
-	<data name="Gallery_Title" xml:space="preserve">
-    <value>Kartengalerie</value>
-  </data>
-	<data name="Global_Button_Gallery" xml:space="preserve">
-    <value>Galerie</value>
-  </data>
-	<data name="Global_Error_ConnectionLost" xml:space="preserve">
-    <value>Verbindung zum Server unterbrochen. Zurück zum Anmeldebildschirm.</value>
-  </data>
-	<data name="Global_Error_EmptyFields" xml:space="preserve">
-    <value>Pflichtfelder dürfen nicht leer sein.</value>
-  </data>
-	<data name="Global_Error_GenericValidation" xml:space="preserve">
-    <value>Ungültiges Eingabeformat.</value>
-  </data>
-	<data name="Global_Error_PasswordDigit" xml:space="preserve">
-    <value>Das Passwort muss mindestens eine Ziffer enthalten.</value>
-  </data>
-	<data name="Global_Error_PasswordLength" xml:space="preserve">
-    <value>Das Passwort muss zwischen 8 und 100 Zeichen lang sein.</value>
-  </data>
-	<data name="Global_Error_PasswordLower" xml:space="preserve">
-    <value>Das Passwort muss mindestens einen Kleinbuchstaben enthalten.</value>
-  </data>
-	<data name="Global_Error_PasswordSymbol" xml:space="preserve">
-    <value>Das Passwort muss mindestens ein Symbol enthalten.</value>
-  </data>
-	<data name="Global_Error_PasswordUpper" xml:space="preserve">
-    <value>Das Passwort muss mindestens einen Großbuchstaben enthalten.</value>
-  </data>
-	<data name="Global_Error_UsernameInvalidChars" xml:space="preserve">
-    <value>Benutzername enthält ungültige Zeichen.</value>
-  </data>
-	<data name="Global_Error_UsernameTooLong" xml:space="preserve">
-    <value>Benutzername darf 30 Zeichen nicht überschreiten.</value>
+  <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
+    <value>Der Benutzername muss mindestens 3 Zeichen lang sein</value>
   </data>
 </root>

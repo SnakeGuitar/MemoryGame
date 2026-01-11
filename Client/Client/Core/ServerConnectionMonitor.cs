@@ -5,7 +5,7 @@ namespace Client.Core
 {
     public class ServerConnectionMonitor
     {
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
         private readonly Func<bool> _checkConnectionStatus;
 
         public event Action ConnectionLost;
