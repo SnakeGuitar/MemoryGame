@@ -4,7 +4,7 @@
     <wsp:ExactlyOne>
       <wsp:All>
         <wsrm:RMAssertion xmlns:wsrm="http://schemas.xmlsoap.org/ws/2005/02/rm/policy">
-          <wsrm:InactivityTimeout Milliseconds="1800000" />
+          <wsrm:InactivityTimeout Milliseconds="600000" />
           <wsrm:AcknowledgementInterval Milliseconds="200" />
         </wsrm:RMAssertion>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
@@ -61,6 +61,12 @@
   </wsdl:message>
   <wsdl:message name="IGameLobbyService_VoteToKick_OutputMessage">
     <wsdl:part name="parameters" element="tns:VoteToKickResponse" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_SendInvitationEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendInvitationEmail" />
+  </wsdl:message>
+  <wsdl:message name="IGameLobbyService_SendInvitationEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendInvitationEmailResponse" />
   </wsdl:message>
   <wsdl:message name="IGameLobbyService_ReceiveChatMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveChatMessage" />
@@ -126,6 +132,10 @@
     <wsdl:operation name="VoteToKick">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/VoteToKick" message="tns:IGameLobbyService_VoteToKick_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/VoteToKickResponse" message="tns:IGameLobbyService_VoteToKick_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendInvitationEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/SendInvitationEmail" message="tns:IGameLobbyService_SendInvitationEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/SendInvitationEmailResponse" message="tns:IGameLobbyService_SendInvitationEmail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ReceiveChatMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/ReceiveChatMessage" message="tns:IGameLobbyService_ReceiveChatMessage_OutputCallbackMessage" />
@@ -223,6 +233,15 @@
     </wsdl:operation>
     <wsdl:operation name="VoteToKick">
       <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/VoteToKick" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendInvitationEmail">
+      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/SendInvitationEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

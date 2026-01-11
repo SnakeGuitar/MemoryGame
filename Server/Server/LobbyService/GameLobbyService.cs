@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace Server.LobbyService
 {
@@ -370,6 +371,33 @@ namespace Server.LobbyService
             return userId.HasValue ? _securityService.GetUsernameById(userId.Value) : null;
         }
 
-        
+        public bool SendInvitationEmail(string targetEmail, string subject, string body)
+        {
+            return ServerExceptionManager.SafeExecute(() =>
+            {
+                if (string.IsNullOrWhiteSpace(targetEmail) ||
+                    string.IsNullOrWhiteSpace(subject) ||
+                    string.IsNullOrWhiteSpace(body))
+                {
+                    _logger.LogWarn("Invalid email parameters for invitation email.");
+                    return false;
+                }
+
+                MailMessage message = new MailMessage();
+
+                string senderEmail = System.Configuration.ConfigurationManager.AppSettings["EmailSender"];
+                message.From = new MailAddress(senderEmail);
+
+                message.To.Add(targetEmail);
+                message.Subject = subject;
+                message.Body = body;
+                message.IsBodyHtml = false;
+                IMailSender mailSender = new MailWrapper();
+                mailSender.Send(message);
+
+                _logger.LogInfo($"Email sent to {targetEmail}. Subject: {subject}");
+                return true;
+            }, _logger, nameof(SendInvitationEmail));
+        }
     }
 }

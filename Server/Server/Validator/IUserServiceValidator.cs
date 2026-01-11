@@ -23,8 +23,9 @@ namespace Server.Validator
         private const int MAX_USERNAME_LENGTH = 30;
 
         private static readonly Regex EmailRegex = new Regex(
-            @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase); // RFC 5322 REGEX
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase,
+                TimeSpan.FromMilliseconds(250)); // RFC 5322 REGEX
 
         public bool IsValidEmail(string email)
         {

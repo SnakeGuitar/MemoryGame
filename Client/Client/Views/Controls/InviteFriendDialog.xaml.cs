@@ -1,6 +1,8 @@
-﻿using Client.Properties.Langs;
+﻿using Client.Core;
+using Client.Properties.Langs;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static Client.Views.Controls.CustomMessageBox;
@@ -29,29 +31,38 @@ namespace Client.Views.Controls
                 return;
             }
 
-            SendEmail(email);
+            _ = SendEmail(email);
             this.Close();
         }
 
-        private void SendEmail(string targetEmail)
+        private async Task SendEmail(string targetEmail)
         {
             try
             {
                 string subject = Lang.InviteFriendDialog_Title_SubjectEmail;
-                string body = Lang.InviteFriendDialog_Message_BodyEmail + $"{_lobbyCode}";
-                string mailtoUri = $"mailto:{targetEmail}?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}";
-                Process.Start(new ProcessStartInfo(mailtoUri) { UseShellExecute = true });
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                new CustomMessageBox(
-                    Lang.Global_Title_Error,
-                    Lang.InviteFriendDialog_Label_ErrorAppEmail,
-                    this, MessageBoxType.Error).ShowDialog();
+                string body = string.Format(Lang.InviteFriendDialog_Message_BodyEmail, _lobbyCode);
+                bool sent = await GameServiceManager.Instance.Client
+                    .SendInvitationEmailAsync(targetEmail, subject, body);
+
+                if (sent)
+                {
+                    new CustomMessageBox(
+                        Lang.Global_Title_Success,
+                        Lang.InviteFriendDialog_Message_EmailSentSuccess,
+                        this, MessageBoxType.Success).ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    new CustomMessageBox(
+                        Lang.Global_Title_Error,
+                        Lang.InviteFriendDialog_Label_ErrorAppEmail,
+                        this, MessageBoxType.Error).ShowDialog();
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"[SendEmail Error]: {ex.Message}");
+                Debug.WriteLine(ex);
                 new CustomMessageBox(
                     Lang.Global_Title_Error,
                     Lang.Global_ServiceError_Unknown,

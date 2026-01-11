@@ -20,5 +20,7 @@ namespace Server.LobbyService
         void FlipCard(int cardIndex);
         [OperationContract]
         void VoteToKick(string targetUsername);
+        [OperationContract]
+        bool SendInvitationEmail(string targetEmail, string subject, string body);
     }
 }
