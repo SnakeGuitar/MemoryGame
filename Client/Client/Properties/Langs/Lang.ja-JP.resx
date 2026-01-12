@@ -826,4 +826,25 @@
   <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
     <value>ユーザー名は3文字以上である必要があります。</value>
   </data>
+  <data name="Global_Title_LeaveGame" xml:space="preserve">
+    <value>ゲームを退出</value>
+  </data>
+  <data name="Global_Button_Confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="Global_Message_LeaveGame" xml:space="preserve">
+    <value>現在のゲームを退出してもよろしいですか？</value>
+  </data>
+  <data name="Lobby_Message_WaitingPlayers" xml:space="preserve">
+    <value>他のプレイヤーの参加を待っています...</value>
+  </data>
+  <data name="Global_Label_CannotStart" xml:space="preserve">
+    <value>開始できません</value>
+  </data>
+  <data name="Chat_Message_LeftLobby" xml:space="preserve">
+    <value>{0} がロビーから退出しました :C</value>
+  </data>
+  <data name="Global_Label_System" xml:space="preserve">
+    <value>システム</value>
+  </data>
 </root>

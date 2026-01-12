@@ -826,4 +826,25 @@
   <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
     <value>사용자 이름은 최소 3자 이상이어야 합니다.</value>
   </data>
+  <data name="Global_Title_LeaveGame" xml:space="preserve">
+    <value>게임 나가기</value>
+  </data>
+  <data name="Global_Button_Confirm" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="Global_Message_LeaveGame" xml:space="preserve">
+    <value>현재 게임에서 나가시겠습니까?</value>
+  </data>
+  <data name="Lobby_Message_WaitingPlayers" xml:space="preserve">
+    <value>더 많은 플레이어가 참여하기를 기다리는 중...</value>
+  </data>
+  <data name="Global_Label_CannotStart" xml:space="preserve">
+    <value>시작할 수 없음</value>
+  </data>
+  <data name="Chat_Message_LeftLobby" xml:space="preserve">
+    <value>{0}님이 로비를 떠났습니다 :C</value>
+  </data>
+  <data name="Global_Label_System" xml:space="preserve">
+    <value>시스템</value>
+  </data>
 </root>

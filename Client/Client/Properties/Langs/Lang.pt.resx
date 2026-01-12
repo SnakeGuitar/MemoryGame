@@ -825,4 +825,25 @@
   <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
     <value>O usuário deve ter pelo menos 3 caracteres</value>
   </data>
+  <data name="Global_Title_LeaveGame" xml:space="preserve">
+    <value>Sair do jogo</value>
+  </data>
+  <data name="Global_Button_Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Global_Message_LeaveGame" xml:space="preserve">
+    <value>Tem certeza de que deseja sair do jogo atual?</value>
+  </data>
+  <data name="Lobby_Message_WaitingPlayers" xml:space="preserve">
+    <value>Aguardando mais jogadores entrarem...</value>
+  </data>
+  <data name="Global_Label_CannotStart" xml:space="preserve">
+    <value>Não é possível iniciar</value>
+  </data>
+  <data name="Chat_Message_LeftLobby" xml:space="preserve">
+    <value>{0} saiu do lobby :C</value>
+  </data>
+  <data name="Global_Label_System" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
 </root>
