@@ -850,4 +850,7 @@
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>현재 트랙</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>전체 화면 모드</value>
+  </data>
 </root>

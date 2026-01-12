@@ -61,6 +61,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} left the lobby :C.
+        /// </summary>
+        public static string Chat_Message_LeftLobby {
+            get {
+                return ResourceManager.GetString("Chat_Message_LeftLobby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Avatar.
         /// </summary>
         public static string EditProfile_Button_ChangeAvatar {
@@ -408,6 +417,15 @@ namespace Client.Properties.Langs {
         public static string Global_Button_Close {
             get {
                 return ResourceManager.GetString("Global_Button_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Global_Button_Confirm {
+            get {
+                return ResourceManager.GetString("Global_Button_Confirm", resourceCulture);
             }
         }
         
@@ -871,6 +889,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot Start.
+        /// </summary>
+        public static string Global_Label_CannotStart {
+            get {
+                return ResourceManager.GetString("Global_Label_CannotStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cards.
         /// </summary>
         public static string Global_Label_Cards {
@@ -1033,6 +1060,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string Global_Label_System {
+            get {
+                return ResourceManager.GetString("Global_Label_System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timer:.
         /// </summary>
         public static string Global_Label_Time {
@@ -1074,6 +1110,15 @@ namespace Client.Properties.Langs {
         public static string Global_Message_ExitGame {
             get {
                 return ResourceManager.GetString("Global_Message_ExitGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to leave the current game?.
+        /// </summary>
+        public static string Global_Message_LeaveGame {
+            get {
+                return ResourceManager.GetString("Global_Message_LeaveGame", resourceCulture);
             }
         }
         
@@ -1182,6 +1227,15 @@ namespace Client.Properties.Langs {
         public static string Global_Title_Information {
             get {
                 return ResourceManager.GetString("Global_Title_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave the game.
+        /// </summary>
+        public static string Global_Title_LeaveGame {
+            get {
+                return ResourceManager.GetString("Global_Title_LeaveGame", resourceCulture);
             }
         }
         
@@ -1672,6 +1726,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waiting for more players to join....
+        /// </summary>
+        public static string Lobby_Message_WaitingPlayers {
+            get {
+                return ResourceManager.GetString("Lobby_Message_WaitingPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} has joined the lobby.
         /// </summary>
         public static string Lobby_Notification_PlayerJoined {
@@ -1938,6 +2001,24 @@ namespace Client.Properties.Langs {
         public static string Settings_Label_Audio {
             get {
                 return ResourceManager.GetString("Settings_Label_Audio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current track.
+        /// </summary>
+        public static string Settings_Label_CurrentTrack {
+            get {
+                return ResourceManager.GetString("Settings_Label_CurrentTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fullscreen mode.
+        /// </summary>
+        public static string Settings_Label_Fullscreen {
+            get {
+                return ResourceManager.GetString("Settings_Label_Fullscreen", resourceCulture);
             }
         }
         

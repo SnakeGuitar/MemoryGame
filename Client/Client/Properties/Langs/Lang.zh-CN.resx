@@ -850,4 +850,7 @@
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>当前曲目</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>全屏模式</value>
+  </data>
 </root>

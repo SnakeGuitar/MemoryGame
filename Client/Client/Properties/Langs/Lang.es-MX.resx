@@ -851,4 +851,7 @@ Por favor inténtalo de nuevo</value>
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>Canción actual</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>Pantalla completa</value>
+  </data>
 </root>

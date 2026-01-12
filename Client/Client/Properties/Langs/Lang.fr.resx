@@ -849,4 +849,7 @@
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>Piste actuelle</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>Mode plein écran</value>
+  </data>
 </root>

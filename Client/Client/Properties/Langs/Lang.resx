@@ -850,4 +850,7 @@ You need to log in with your new account :)</value>
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>Current track</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>Fullscreen mode</value>
+  </data>
 </root>

@@ -849,4 +849,7 @@
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>Faixa atual</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>Modo de tela cheia</value>
+  </data>
 </root>

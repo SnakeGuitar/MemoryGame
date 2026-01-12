@@ -36,6 +36,12 @@ namespace Client.Views
                 ComboBoxLanguage.ToolTip = "Language cannot be changed during an active game.";
             }
             ConfigureAudioControls();
+
+            CheckBoxFullscreen.Checked -= CheckBoxFullscreen_Changed;
+            CheckBoxFullscreen.Unchecked -= CheckBoxFullscreen_Changed;
+            CheckBoxFullscreen.IsChecked = Properties.Settings.Default.IsFullscreen;
+            CheckBoxFullscreen.Checked += CheckBoxFullscreen_Changed;
+            CheckBoxFullscreen.Unchecked += CheckBoxFullscreen_Changed;
         }
 
         private void LoadLanguages()
@@ -190,6 +196,25 @@ namespace Client.Views
                 ComboBoxSongs.SelectedIndex = newIndex;
                 ComboBoxSongs.SelectionChanged += ComboBoxSongs_SelectionChanged;
             });
+        }
+
+        #endregion
+
+        #region Fullscreen
+
+        private void CheckBoxFullscreen_Changed(object sender, RoutedEventArgs e)
+        {
+            bool isFull = CheckBoxFullscreen.IsChecked == true;
+
+            Properties.Settings.Default.IsFullscreen = isFull;
+            Properties.Settings.Default.Save();
+
+            WindowHelper.SetWindowMode(this, isFull);
+
+            if (this.Owner != null)
+            {
+                WindowHelper.SetWindowMode(this.Owner, isFull);
+            }
         }
 
         #endregion

@@ -109,6 +109,8 @@ namespace Client
         {
             if (sender is Window window)
             {
+                WindowHelper.ApplySavedSetting(window);
+
                 window.Closed -= OnWindowClosed;
                 window.Closed += OnWindowClosed;
             }

@@ -849,4 +849,7 @@
   <data name="Settings_Label_CurrentTrack" xml:space="preserve">
     <value>Aktueller Titel</value>
   </data>
+  <data name="Settings_Label_Fullscreen" xml:space="preserve">
+    <value>Vollbildmodus</value>
+  </data>
 </root>

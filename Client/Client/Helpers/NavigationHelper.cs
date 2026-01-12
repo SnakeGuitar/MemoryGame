@@ -29,6 +29,7 @@ namespace Client.Helpers
                 nextWindow.Left = currentWindow.Left;
             }
 
+            WindowHelper.ApplySavedSetting(nextWindow);
             nextWindow.Show();
             Application.Current.MainWindow = nextWindow;
 

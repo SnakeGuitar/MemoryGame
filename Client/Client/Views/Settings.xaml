@@ -84,6 +84,14 @@
                                       DisplayMemberPath="DisplayCultureName"
                                       SelectedValuePath="CultureCode">
                             </ComboBox>
+
+                            <CheckBox x:Name="CheckBoxFullscreen"
+                                      Style="{StaticResource FormCheckBoxStyle}"
+                                      Content="{x:Static language:Lang.Settings_Label_Fullscreen}"
+                                      Margin="0,15,0,0"
+                                      FontSize="16"
+                                      Checked="CheckBoxFullscreen_Changed"
+                                      Unchecked="CheckBoxFullscreen_Changed"/>
                         </StackPanel>
                     </Border>
 
