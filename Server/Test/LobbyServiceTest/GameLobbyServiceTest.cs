@@ -71,30 +71,42 @@ namespace Test.LobbyServiceTest
         {
             string validCode = "123456";
             string guestName = "Guest1";
+            string hostToken = "HostToken";
 
             _mockValidator.Setup(v => v.IsValidGameCode(validCode)).Returns(true);
+            _mockSession.Setup(s => s.GetUserIdFromToken(hostToken)).Returns(1); // ID del Host
+            _mockSecurity.Setup(s => s.GetUsernameById(1)).Returns("HostUser");
+
+            _service.CreateLobby(hostToken, validCode, true);
+
             _mockValidator.Setup(v => v.IsValidGuestName(guestName)).Returns(true);
 
-            bool result = _service.JoinLobby("any_token", validCode, true, guestName);
+            bool result = _service.JoinLobby("any_guest_token", validCode, true, guestName);
 
-            Assert.IsTrue(result);
+            Assert.IsTrue(result, "Debería retornar true al unirse a una sala existente.");
         }
 
         [TestMethod]
         public void JoinLobby_ValidUser_ReturnsTrue()
         {
             string validCode = "123456";
-            string token = "valid_token";
-            int userId = 10;
-            string username = "GamerPro";
+            string hostToken = "HostToken";
+            string playerToken = "PlayerToken";
+            int playerId = 10;
+            string playerUsername = "GamerPro";
 
             _mockValidator.Setup(v => v.IsValidGameCode(validCode)).Returns(true);
-            _mockSession.Setup(s => s.GetUserIdFromToken(token)).Returns(userId);
-            _mockSecurity.Setup(sec => sec.GetUsernameById(userId)).Returns(username);
+            _mockSession.Setup(s => s.GetUserIdFromToken(hostToken)).Returns(1);
+            _mockSecurity.Setup(s => s.GetUsernameById(1)).Returns("HostUser");
 
-            bool result = _service.JoinLobby(token, validCode, false);
+            _service.CreateLobby(hostToken, validCode, true);
 
-            Assert.IsTrue(result);
+            _mockSession.Setup(s => s.GetUserIdFromToken(playerToken)).Returns(playerId);
+            _mockSecurity.Setup(sec => sec.GetUsernameById(playerId)).Returns(playerUsername);
+
+            bool result = _service.JoinLobby(playerToken, validCode, false);
+
+            Assert.IsTrue(result, "Debería retornar true al unirse un usuario registrado.");
         }
 
         [TestMethod]

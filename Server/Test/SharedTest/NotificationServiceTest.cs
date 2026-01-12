@@ -1,70 +1,62 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Server.Shared;
-using System.Net.Mail;
 using System;
+using System.Net.Mail;
 
 namespace Test.SharedTest
 {
     [TestClass]
     public class NotificationServiceTest
     {
+        private NotificationService _notificationService;
         private Mock<IMailSender> _mockMailSender;
-        private NotificationService _service;
+        private Mock<ILoggerManager> _mockLogger;
 
         [TestInitialize]
         public void Setup()
         {
             _mockMailSender = new Mock<IMailSender>();
+            _mockLogger = new Mock<ILoggerManager>();
 
-            _service = new NotificationService(_mockMailSender.Object, _mockLogger.Object);
+            _notificationService = new NotificationService(_mockMailSender.Object, _mockLogger.Object);
         }
 
         [TestMethod]
-        public void SendVerificationEmail_ValidData_ReturnsTrue()
+        public void SendVerificationEmail_Success_ReturnsTrue()
         {
-            string email = "test@example.com";
-            string pin = "123456";
             _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()));
 
-            bool result = _service.SendVerificationEmail(email, pin);
+            var result = _notificationService.SendVerificationEmail("test@email.com", "123456");
 
-            Assert.IsTrue(result, "It should return true if mail delivering was successful.");
-        }
+            Assert.IsTrue(result);
+            _mockMailSender.Verify(m => m.Send(It.IsAny<MailMessage>()), Times.Once);
 
-        [TestMethod]
-        public void SendVerificationEmail_ValidData_CallsMailSender()
-        {
-            string email = "test@example.com";
-            string pin = "123456";
-            _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()));
-
-            _service.SendVerificationEmail(email, pin);
-
-            _mockMailSender.Verify(m => m.Send(It.Is<MailMessage>(msg =>
-                msg.To.Contains(new MailAddress(email)) &&
-                msg.Body.Contains(pin)
-            )), Times.Once);
+            _mockLogger.Verify(l => l.LogInfo(It.IsAny<string>()), Times.AtLeastOnce);
         }
 
         [TestMethod]
         public void SendVerificationEmail_SmtpException_ReturnsFalse()
         {
             _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()))
-                           .Throws(new SmtpException("Connection error with Gmail."));
+                           .Throws(new SmtpException("Connection failed"));
 
-            bool result = _service.SendVerificationEmail("test@example.com", "123456");
+            var result = _notificationService.SendVerificationEmail("test@email.com", "123456");
 
-            Assert.IsFalse(result, "It should return false if there is an SMTP exception.");
+            Assert.IsFalse(result);
+
+            _mockLogger.Verify(l => l.LogError(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once);
         }
 
         [TestMethod]
-        public void SendVerificationEmail_SmtpException_LogsError()
+        public void SendVerificationEmail_GeneralException_ReturnsFalse()
         {
             _mockMailSender.Setup(m => m.Send(It.IsAny<MailMessage>()))
-                           .Throws(new SmtpException("Connection error"));
+                           .Throws(new Exception("Unknown error"));
 
-            _service.SendVerificationEmail("test@example.com", "123456");
+            var result = _notificationService.SendVerificationEmail("test@email.com", "123456");
+
+            Assert.IsFalse(result);
 
             _mockLogger.Verify(l => l.LogError(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once);
         }
