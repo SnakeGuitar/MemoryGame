@@ -846,4 +846,7 @@
   <data name="Global_Label_System" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="Settings_Label_CurrentTrack" xml:space="preserve">
+    <value>Aktueller Titel</value>
+  </data>
 </root>

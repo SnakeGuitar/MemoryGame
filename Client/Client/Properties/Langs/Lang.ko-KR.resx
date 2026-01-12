@@ -847,4 +847,7 @@
   <data name="Global_Label_System" xml:space="preserve">
     <value>시스템</value>
   </data>
+  <data name="Settings_Label_CurrentTrack" xml:space="preserve">
+    <value>현재 트랙</value>
+  </data>
 </root>

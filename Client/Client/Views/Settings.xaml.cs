@@ -35,6 +35,7 @@ namespace Client.Views
                 ComboBoxLanguage.IsEnabled = false;
                 ComboBoxLanguage.ToolTip = "Language cannot be changed during an active game.";
             }
+            ConfigureAudioControls();
         }
 
         private void LoadLanguages()
@@ -134,5 +135,63 @@ namespace Client.Views
                 NavigationHelper.NavigateTo(this, this.Owner ?? windowToOpen);
             }
         }
+
+        #region Audio Logic
+
+        private void ConfigureAudioControls()
+        {
+            if (MusicManager.Instance != null)
+            {
+                MusicSlider.ValueChanged -= MusicSlider_ValueChanged;
+                MusicSlider.Value = MusicManager.Instance.Volume * 100;
+                MusicSlider.ValueChanged += MusicSlider_ValueChanged;
+                LoadSongList();
+            }
+        }
+
+        private void LoadSongList()
+        {
+            ComboBoxSongs.SelectionChanged -= ComboBoxSongs_SelectionChanged;
+
+            var tracks = MusicManager.Instance.GetTrackList();
+            ComboBoxSongs.ItemsSource = tracks;
+
+            if (tracks.Count > 0)
+            {
+                ComboBoxSongs.SelectedIndex = MusicManager.Instance.CurrentIndex;
+            }
+
+            ComboBoxSongs.SelectionChanged += ComboBoxSongs_SelectionChanged;
+
+            MusicManager.Instance.TrackChanged += OnTrackChangedAuto;
+        }
+
+        private void MusicSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (MusicManager.Instance != null)
+            {
+                MusicManager.Instance.Volume = MusicSlider.Value / 100.0;
+            }
+        }
+
+        private void ComboBoxSongs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxSongs.SelectedIndex >= 0)
+            {
+                MusicManager.Instance.PlayTrackIndex(ComboBoxSongs.SelectedIndex);
+            }
+        }
+
+        private void OnTrackChangedAuto(int newIndex)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                ComboBoxSongs.SelectionChanged -= ComboBoxSongs_SelectionChanged;
+                ComboBoxSongs.SelectedIndex = newIndex;
+                ComboBoxSongs.SelectionChanged += ComboBoxSongs_SelectionChanged;
+            });
+        }
+
+        #endregion
     }
 }

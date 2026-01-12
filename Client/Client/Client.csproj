@@ -67,6 +67,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Core\MusicManager.cs" />
     <Compile Include="Core\ServerConnectionMonitor.cs" />
     <Compile Include="Helpers\ClientHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
@@ -469,6 +470,20 @@
     <Resource Include="Resources\Images\Cards\Fronts\Normal\paul.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\saddy.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\sara.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Music\Here%27s Where the Story Ends.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\Octopus Daughter.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\スマイリーを探して.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Music\波間にKISS.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

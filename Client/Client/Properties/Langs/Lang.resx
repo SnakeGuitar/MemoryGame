@@ -847,4 +847,7 @@ You need to log in with your new account :)</value>
   <data name="Global_Label_System" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="Settings_Label_CurrentTrack" xml:space="preserve">
+    <value>Current track</value>
+  </data>
 </root>

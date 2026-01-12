@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,6 +45,8 @@ namespace Client
             EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
             GameServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
             UserServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
+
+            InitializeBackgroundMusic();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -140,6 +143,39 @@ namespace Client
             if (e.ExceptionObject is Exception ex)
             {
                 ExceptionManager.Handle(ex, null, null, isFatal: true);
+            }
+        }
+
+        #endregion
+
+        #region Music
+
+        private void InitializeBackgroundMusic()
+        {
+            try
+            {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string musicPath = Path.Combine(baseDir, "Resources", "Music");
+
+                if (Directory.Exists(musicPath))
+                {
+                    var songs = new List<string>(Directory.GetFiles(musicPath, "*.*"));
+                    songs = songs.FindAll(s => s.EndsWith(".mp3") || s.EndsWith(".wav"));
+
+                    if (songs.Count > 0)
+                    {
+                        MusicManager.Instance.Initialize(songs, shuffle: true);
+                        MusicManager.Instance.Volume = 0.5;
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(musicPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading music: {ex.Message}");
             }
         }
 

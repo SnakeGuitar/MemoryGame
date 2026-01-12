@@ -19,7 +19,7 @@ namespace Client.Views.Controls
             _lobbyCode = lobbyCode;
         }
 
-        private async void ButtonSend_ClickAsync(object sender, RoutedEventArgs e)
+        private async void ButtonSend_Click(object sender, RoutedEventArgs e)
         {
             string email = TextBoxEmail.Text.Trim();
             if (string.IsNullOrEmpty(email))

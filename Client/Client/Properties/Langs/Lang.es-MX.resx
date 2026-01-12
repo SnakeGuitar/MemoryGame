@@ -848,4 +848,7 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Label_System" xml:space="preserve">
     <value>Sistema</value>
   </data>
+  <data name="Settings_Label_CurrentTrack" xml:space="preserve">
+    <value>Canción actual</value>
+  </data>
 </root>
