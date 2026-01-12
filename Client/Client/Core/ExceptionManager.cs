@@ -146,21 +146,25 @@ namespace Client.Core
             catch (FaultException ex)
             {
                 Handle(ex);
+                onFailed?.Invoke();
                 return false;
             }
             catch (CommunicationException ex)
             {
                 Handle(ex);
+                onFailed?.Invoke();
                 return false;
             }
             catch (TimeoutException ex)
             {
                 Handle(ex);
+                onFailed?.Invoke();
                 return false;
             }
             catch (Exception ex)
             {
                 Handle(ex);
+                onFailed?.Invoke();
                 return false;
             }
         }
