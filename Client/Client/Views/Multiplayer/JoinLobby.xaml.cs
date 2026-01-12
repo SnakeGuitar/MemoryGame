@@ -1,5 +1,8 @@
-﻿using Client.Helpers;
+﻿using Client.Core;
+using Client.GameLobbyServiceReference;
+using Client.Helpers;
 using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +20,39 @@ namespace Client.Views.Multiplayer
         public JoinLobby()
         {
             InitializeComponent();
+        }
+
+        private async void LoadPublicMatches()
+        {
+            try
+            {
+                var lobbies = await GameServiceManager.Instance.GetPublicLobbiesAsync();
+                ListBoxPublicLobbies.ItemsSource = lobbies;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading lobbies: {ex.Message}");
+            }
+        }
+
+        private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            LoadPublicMatches();
+        }
+
+        private void ListBoxPublicLobbies_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ListBoxPublicLobbies.SelectedItem is LobbySummaryDTO selectedLobby)
+            {
+                if (selectedLobby.IsFull)
+                {
+                    MessageBox.Show("The lobby is full.", "Notice");
+                    return;
+                }
+
+                TextBoxLobbyCode.Text = selectedLobby.GameCode;
+                ButtonAcceptCode_Click(sender, e);
+            }
         }
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)

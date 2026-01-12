@@ -2,6 +2,7 @@
 using Server.Shared;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Server.LobbyService.Core
@@ -199,6 +200,11 @@ namespace Server.LobbyService.Core
             var lobby = GetLobbyBySession(sessionId);
             _logger.LogInfo($"Retrieving player ID for session {sessionId}.");
             return lobby?.Clients.Values.FirstOrDefault(c => c.SessionId == sessionId)?.Id;
+        }
+
+        public IEnumerable<Lobby> GetAllLobbies()
+        {
+            return _lobbies.Values;
         }
     }
 }

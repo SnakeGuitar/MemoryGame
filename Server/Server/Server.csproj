@@ -110,6 +110,7 @@
     <Compile Include="LobbyService\ILobbyCallbackProvider.cs" />
     <Compile Include="LobbyService\LobbyClient.cs" />
     <Compile Include="LobbyService\LobbyPlayerInfo.cs" />
+    <Compile Include="LobbyService\LobbySummaryDTO.cs" />
     <Compile Include="match.cs">
       <DependentUpon>MemoryGame.tt</DependentUpon>
     </Compile>

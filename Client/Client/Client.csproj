@@ -343,6 +343,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Connected Services\GameLobbyServiceReference\Client.GameLobbyServiceReference.LobbySummaryDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\GameLobbyServiceReference\GameLobbyService.wsdl" />
     <None Include="Connected Services\GameLobbyServiceReference\item.xsd">
       <SubType>Designer</SubType>

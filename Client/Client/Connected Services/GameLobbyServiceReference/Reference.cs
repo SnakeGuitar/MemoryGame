@@ -76,6 +76,83 @@ namespace Client.GameLobbyServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbySummaryDTO", Namespace="http://schemas.datacontract.org/2004/07/Server.LobbyService")]
+    [System.SerializableAttribute()]
+    public partial class LobbySummaryDTO : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CurrentPlayersField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string GameCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsFullField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CurrentPlayers {
+            get {
+                return this.CurrentPlayersField;
+            }
+            set {
+                if ((this.CurrentPlayersField.Equals(value) != true)) {
+                    this.CurrentPlayersField = value;
+                    this.RaisePropertyChanged("CurrentPlayers");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string GameCode {
+            get {
+                return this.GameCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.GameCodeField, value) != true)) {
+                    this.GameCodeField = value;
+                    this.RaisePropertyChanged("GameCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsFull {
+            get {
+                return this.IsFullField;
+            }
+            set {
+                if ((this.IsFullField.Equals(value) != true)) {
+                    this.IsFullField = value;
+                    this.RaisePropertyChanged("IsFull");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LobbyPlayerInfo", Namespace="http://schemas.datacontract.org/2004/07/Server.LobbyService")]
     [System.SerializableAttribute()]
     public partial class LobbyPlayerInfo : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -245,10 +322,10 @@ namespace Client.GameLobbyServiceReference {
         System.Threading.Tasks.Task<bool> JoinLobbyAsync(string token, string gameCode, bool isGuest, string guestName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/CreateLobby", ReplyAction="http://tempuri.org/IGameLobbyService/CreateLobbyResponse")]
-        bool CreateLobby(string token, string gameCode);
+        bool CreateLobby(string token, string gameCode, bool isPublic);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/CreateLobby", ReplyAction="http://tempuri.org/IGameLobbyService/CreateLobbyResponse")]
-        System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode);
+        System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode, bool isPublic);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/LeaveLobby", ReplyAction="http://tempuri.org/IGameLobbyService/LeaveLobbyResponse")]
         void LeaveLobby();
@@ -285,6 +362,12 @@ namespace Client.GameLobbyServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/SendInvitationEmail", ReplyAction="http://tempuri.org/IGameLobbyService/SendInvitationEmailResponse")]
         System.Threading.Tasks.Task<bool> SendInvitationEmailAsync(string targetEmail, string subject, string body);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/IGameLobbyService/GetPublicLobbiesResponse")]
+        Client.GameLobbyServiceReference.LobbySummaryDTO[] GetPublicLobbies();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IGameLobbyService/GetPublicLobbies", ReplyAction="http://tempuri.org/IGameLobbyService/GetPublicLobbiesResponse")]
+        System.Threading.Tasks.Task<Client.GameLobbyServiceReference.LobbySummaryDTO[]> GetPublicLobbiesAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -371,12 +454,12 @@ namespace Client.GameLobbyServiceReference {
             return base.Channel.JoinLobbyAsync(token, gameCode, isGuest, guestName);
         }
         
-        public bool CreateLobby(string token, string gameCode) {
-            return base.Channel.CreateLobby(token, gameCode);
+        public bool CreateLobby(string token, string gameCode, bool isPublic) {
+            return base.Channel.CreateLobby(token, gameCode, isPublic);
         }
         
-        public System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode) {
-            return base.Channel.CreateLobbyAsync(token, gameCode);
+        public System.Threading.Tasks.Task<bool> CreateLobbyAsync(string token, string gameCode, bool isPublic) {
+            return base.Channel.CreateLobbyAsync(token, gameCode, isPublic);
         }
         
         public void LeaveLobby() {
@@ -425,6 +508,14 @@ namespace Client.GameLobbyServiceReference {
         
         public System.Threading.Tasks.Task<bool> SendInvitationEmailAsync(string targetEmail, string subject, string body) {
             return base.Channel.SendInvitationEmailAsync(targetEmail, subject, body);
+        }
+        
+        public Client.GameLobbyServiceReference.LobbySummaryDTO[] GetPublicLobbies() {
+            return base.Channel.GetPublicLobbies();
+        }
+        
+        public System.Threading.Tasks.Task<Client.GameLobbyServiceReference.LobbySummaryDTO[]> GetPublicLobbiesAsync() {
+            return base.Channel.GetPublicLobbiesAsync();
         }
     }
 }

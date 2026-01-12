@@ -93,7 +93,7 @@ namespace Server.LobbyService
             }, _logger, nameof(JoinLobby));
         }
 
-        public bool CreateLobby(string token, string gameCode)
+        public bool CreateLobby(string token, string gameCode, bool isPublic)
         {
             return ServerExceptionManager.SafeExecute(() =>
             {
@@ -110,6 +110,7 @@ namespace Server.LobbyService
 
                 if (_stateManager.TryCreateLobby(gameCode, client, out var lobby))
                 {
+                    lobby.IsPublic = isPublic;
                     _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
                     SubscribeToDisconnect(client.Callback, client.SessionId);
                     return true;
@@ -403,6 +404,26 @@ namespace Server.LobbyService
                 _logger.LogInfo($"Email sent to {targetEmail}. Subject: {subject}");
                 return true;
             }, _logger, nameof(SendInvitationEmail));
+        }
+
+        public List<LobbySummaryDTO> GetPublicLobbies()
+        {
+            return ServerExceptionManager.SafeExecute(() =>
+            {
+                var allLobbies = _stateManager.GetAllLobbies();
+
+                var publicLobbies = allLobbies
+                    .Where(lobby => lobby.IsPublic && !_stateManager.IsGameStarted(lobby.GameCode))
+                    .Select(lobby => new LobbySummaryDTO
+                    {
+                        GameCode = lobby.GameCode,
+                        CurrentPlayers = lobby.Clients.Count,
+                        IsFull = lobby.Clients.Count >= 4
+                    })
+                    .ToList();
+
+                return publicLobbies;
+            }, _logger, nameof(GetPublicLobbies));
         }
     }
 }

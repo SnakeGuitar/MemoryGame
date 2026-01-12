@@ -34,6 +34,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="token" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="gameCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="isPublic" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -118,6 +119,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetPublicLobbies">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPublicLobbiesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Server.LobbyService" minOccurs="0" name="GetPublicLobbiesResult" nillable="true" type="q2:ArrayOfLobbySummaryDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ReceiveChatMessage">
     <xs:complexType>
       <xs:sequence>
@@ -145,14 +158,14 @@
   <xs:element name="UpdatePlayerList">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Server.LobbyService" minOccurs="0" name="players" nillable="true" type="q2:ArrayOfLobbyPlayerInfo" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Server.LobbyService" minOccurs="0" name="players" nillable="true" type="q3:ArrayOfLobbyPlayerInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="GameStarted">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Server.GameService" minOccurs="0" name="gameBoard" nillable="true" type="q3:ArrayOfCardInfo" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Server.GameService" minOccurs="0" name="gameBoard" nillable="true" type="q4:ArrayOfCardInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

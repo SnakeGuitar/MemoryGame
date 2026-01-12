@@ -1,4 +1,5 @@
 ﻿using Server.GameService;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace Server.LobbyService
@@ -11,7 +12,7 @@ namespace Server.LobbyService
         [OperationContract]
         bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null);
         [OperationContract]
-        bool CreateLobby(string token, string gameCode);
+        bool CreateLobby(string token, string gameCode, bool isPublic);
         [OperationContract]
         void LeaveLobby();
         [OperationContract]
@@ -24,5 +25,7 @@ namespace Server.LobbyService
         void VoteToKick(string targetUsername);
         [OperationContract]
         bool SendInvitationEmail(string targetEmail, string subject, string body);
+        [OperationContract]
+        List<LobbySummaryDTO> GetPublicLobbies();
     }
 }

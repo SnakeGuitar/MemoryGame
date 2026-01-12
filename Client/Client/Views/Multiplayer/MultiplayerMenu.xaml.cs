@@ -1,9 +1,12 @@
 ﻿using Client.Core;
+using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Views.Controls;
 using Client.Views.Lobby;
+using System;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Multiplayer
@@ -24,7 +27,7 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        private void ButtonCreateLobby_Click(object sender, RoutedEventArgs e)
+        private async void ButtonCreateLobby_Click(object sender, RoutedEventArgs e)
         {
             if (UserSession.IsGuest)
             {
@@ -35,7 +38,35 @@ namespace Client.Views.Multiplayer
                 return;
             }
 
-            NavigationHelper.NavigateTo(this, new HostLobby());
+            try
+            {
+                var hostLobby = new HostLobby();
+                string generatedCode = hostLobby.LabelGameCode.Content?.ToString();
+
+                if (string.IsNullOrEmpty(generatedCode))
+                {
+                    MessageBox.Show("Internal error: Lobby code couldn't be created.");
+                    return;
+                }
+
+                bool isPublic = checkBoxIsPublic.IsChecked == true;
+                bool created = await GameServiceManager.Instance.CreateLobbyAsync(UserSession.SessionToken, generatedCode, isPublic);
+
+                if (created)
+                {
+                    hostLobby.IsLobbyPreRegistered = true;
+                    NavigationHelper.NavigateTo(this, hostLobby);
+                }
+                else
+                {
+                    MessageBox.Show("Error registering the lobby. Please try again.");
+                    hostLobby.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Connection error: {ex.Message}");
+            }
         }
 
         private void ButtonJoinLobby_Click(object sender, RoutedEventArgs e)

@@ -177,14 +177,14 @@ namespace Client.Core
 
         #region Lobby Wrappers
 
-        public async Task<bool> CreateLobbyAsync(string token, string matchCode)
+        public async Task<bool> CreateLobbyAsync(string token, string matchCode, bool isPublic)
         {
             if (EnsureConnection())
             {
                 _connectionMonitor?.Stop();
                 try
                 {
-                    return await Client.CreateLobbyAsync(token, matchCode);
+                    return await Client.CreateLobbyAsync(token, matchCode, isPublic);
                 }
                 catch (Exception ex)
                 {
@@ -197,6 +197,23 @@ namespace Client.Core
                 }
             }
             return false;
+        }
+
+        public async Task<LobbySummaryDTO[]> GetPublicLobbiesAsync()
+        {
+            if (EnsureConnection())
+            {
+                try
+                {
+                    return await Client.GetPublicLobbiesAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[GetPublicLobbies] Error: {ex.Message}");
+                    return Array.Empty<LobbySummaryDTO>();
+                }
+            }
+            return Array.Empty<LobbySummaryDTO>();
         }
 
         public async Task<bool> JoinLobbyAsync(string token, string matchCode, bool isGuest, string guestUsername)

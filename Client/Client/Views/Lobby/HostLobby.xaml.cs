@@ -31,6 +31,12 @@ namespace Client.Views.Lobby
 
         #endregion
 
+        #region Public Properties
+
+        public bool IsLobbyPreRegistered { get; set; } = false;
+
+        #endregion
+
         public HostLobby()
         {
             InitializeComponent();
@@ -78,8 +84,18 @@ namespace Client.Views.Lobby
         {
             try
             {
-                bool success = await GameServiceManager.Instance.CreateLobbyAsync(
-                    UserSession.SessionToken, _lobbyCode);
+                bool success = false;
+
+                if (IsLobbyPreRegistered)
+                {
+                    success = true;
+                    Debug.WriteLine("[HostLobby] Lobby pre-registered. Skipping creation.");
+                }
+                else
+                {
+                    success = await GameServiceManager.Instance.CreateLobbyAsync(
+                        UserSession.SessionToken, _lobbyCode, false);
+                }
 
                 if (success)
                 {
@@ -92,7 +108,10 @@ namespace Client.Views.Lobby
                         UpdatePlayerUI();
                     }
 
-                    new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess, this, MessageBoxType.Success).ShowDialog();
+                    if (!IsLobbyPreRegistered)
+                    {
+                        new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess, this, MessageBoxType.Success).ShowDialog();
+                    }
                 }
                 else
                 {
@@ -206,7 +225,7 @@ namespace Client.Views.Lobby
                     ButtonStart.IsEnabled = false;
                 }
 
-                GameServiceManager.Instance.Client.StartGame(settings);
+                GameServiceManager.Instance.StartGameSafe(settings);
             }
             catch (Exception ex)
             {
