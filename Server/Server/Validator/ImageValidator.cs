@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 
 namespace Server.Validator
@@ -33,16 +34,12 @@ namespace Server.Validator
 
             try
             {
-                using (var stream = new System.IO.MemoryStream(imageData))
+                using (var ms = new MemoryStream(imageData))
                 {
-                    var image = Image.FromStream(stream);
-                    if (image.Width > 4096 || image.Height > 4096)
+                    using (var img = System.Drawing.Image.FromStream(ms))
                     {
-                        return false;
+                        return img.Width > 0 && img.Height > 0;
                     }
-                    return image.RawFormat.Equals(ImageFormat.Jpeg) ||
-                           image.RawFormat.Equals(ImageFormat.Png) ||
-                           image.RawFormat.Equals(ImageFormat.Bmp);
                 }
             }
             catch

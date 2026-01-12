@@ -306,11 +306,18 @@ namespace Client.Core
                         if (UserSession.IsGuest) Client.LogoutGuest(token);
                         else Client.Logout(token);
                     }
-                    catch {}
+                    catch 
+                    {
+                        // Intentional: Fire-and-forget strategy. 
+                        // We suppress exceptions here to ensure the local logout process 
+                        // completes even if the server is unreachable.
+                    }
                 });
             }
             catch
-            {}
+            {
+                // Intentional: Suppress any task scheduling errors during logout.
+            }
         }
 
         public async Task<byte[]> GetUserAvatarAsync(string email)
@@ -482,9 +489,16 @@ namespace Client.Core
         {
             if (EnsureConnection())
             {
-                return await Client.RenewSessionAsync(token);
+                try
+                {
+                    return await Client.RenewSessionAsync(token);
+                }
+                catch (Exception)
+                {
+                    return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
             }
-            return new LoginResponse { Success = false };
+            return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
         }
 
         private bool EnsureConnection()
@@ -495,6 +509,12 @@ namespace Client.Core
             {
                 InitializeClient();
             }
+
+            if (Client == null)
+            {
+                return false;
+            }
+
             return Client.State == CommunicationState.Opened || Client.State == CommunicationState.Created;
         }
 

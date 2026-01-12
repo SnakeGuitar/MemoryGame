@@ -342,6 +342,11 @@ namespace Client.Core
             {
                 InitializeClient();
             }
+
+            if (Client == null)
+            {
+                return false;
+            }
             return Client.State == CommunicationState.Opened;
         }
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Client.Models
 {
-    internal static class DifficultyPresets
+    public static class DifficultyPresets
     {
         public static GameConfiguration Easy => new GameConfiguration
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Client.Core
 {
-    internal static class UserSession
+    public static class UserSession
     {
         public static string SessionToken { get; set; }
         public static int UserId { get; private set; }
