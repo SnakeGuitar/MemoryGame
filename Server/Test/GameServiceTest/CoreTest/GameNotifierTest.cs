@@ -5,7 +5,7 @@ using Server.GameService.Core;
 using Server.LobbyService;
 using Server.Shared;
 using System.Collections.Generic;
-using System.Threading; // Necesario para Thread.Sleep
+using System.Threading;
 
 namespace Test.GameServiceTest.CoreTest
 {
