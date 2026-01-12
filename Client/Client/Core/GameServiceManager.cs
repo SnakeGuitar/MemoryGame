@@ -1,10 +1,12 @@
 ﻿using Client.GameLobbyServiceReference;
+using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Core
 {
@@ -18,7 +20,6 @@ namespace Client.Core
 
         public GameLobbyServiceClient Client { get; private set; }
 
-        private ServerConnectionMonitor _connectionMonitor;
 
         #endregion
 
@@ -31,7 +32,6 @@ namespace Client.Core
         public event Action<string> PlayerLeft;
         public event Action<LobbyPlayerInfo[]> PlayerListUpdated;
         public event Action<List<CardInfo>> GameStarted;
-
         public event Action<string, int> TurnUpdated;
         public event Action<int, string> CardShown;
         public event Action<int, int> CardsHidden;
@@ -52,64 +52,27 @@ namespace Client.Core
             {
                 if (Client != null)
                 {
-                    try
-                    {
-                        Client.Close();
-                    }
-                    catch
-                    {
-                        Client.Abort();
-                    }
+                    try { Client.Close(); } catch { Client.Abort(); }
                 }
-                _connectionMonitor?.Stop();
 
                 InstanceContext context = new InstanceContext(this);
                 Client = new GameLobbyServiceClient(context);
-
                 Client.Open();
-
-                if (Client.InnerChannel != null)
-                {
-                    Client.InnerChannel.Faulted += (s, e) => NotifyDisconnect();
-                }
-
-                _connectionMonitor = new ServerConnectionMonitor(async () =>
-                {
-                    try
-                    {
-                        if (Client == null ||
-                            Client.State == CommunicationState.Closed ||
-                            Client.State == CommunicationState.Faulted)
-                        {
-                            return false;
-                        }
-
-                        await Client.PingAsync();
-                        
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-                });
-
-                _connectionMonitor.ConnectionLost += NotifyDisconnect;
-                _connectionMonitor.Start();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"[GameServiceManager] Init Failed: {ex.Message}");
-                NotifyDisconnect();
             }
         }
 
-        private void NotifyDisconnect()
+        private void EnsureConnection()
         {
-            Application.Current?.Dispatcher?.Invoke(() =>
+            if (Client == null ||
+                Client.State == CommunicationState.Closed ||
+                Client.State == CommunicationState.Faulted)
             {
-                ServerConnectionLost?.Invoke();
-            });
+                InitializeClient();
+            }
         }
 
         #region IGameLobbyServiceCallback Implementation
@@ -179,125 +142,46 @@ namespace Client.Core
 
         public async Task<bool> CreateLobbyAsync(string token, string matchCode, bool isPublic)
         {
-            if (EnsureConnection())
-            {
-                _connectionMonitor?.Stop();
-                try
-                {
-                    return await Client.CreateLobbyAsync(token, matchCode, isPublic);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[CreateLobby] Error: {ex.Message}");
-                    return false;
-                }
-                finally 
-                { 
-                    _connectionMonitor?.Start(); 
-                }
-            }
-            return false;
+            EnsureConnection();
+            return await Client.CreateLobbyAsync(token, matchCode, isPublic);
         }
 
         public async Task<LobbySummaryDTO[]> GetPublicLobbiesAsync()
         {
-            if (EnsureConnection())
-            {
-                try
-                {
-                    return await Client.GetPublicLobbiesAsync();
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[GetPublicLobbies] Error: {ex.Message}");
-                    return Array.Empty<LobbySummaryDTO>();
-                }
-            }
-            return Array.Empty<LobbySummaryDTO>();
+            EnsureConnection();
+            return await Client.GetPublicLobbiesAsync();
         }
 
         public async Task<bool> JoinLobbyAsync(string token, string matchCode, bool isGuest, string guestUsername)
         {
-            if (EnsureConnection())
-            {
-                _connectionMonitor?.Stop();
-                try
-                {
-                    return await Client.JoinLobbyAsync(token, matchCode, isGuest, guestUsername);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[JoinLobby] Error: {ex.Message}");
-                    return false;
-                }
-                finally 
-                { 
-                    _connectionMonitor?.Start(); 
-                }
-            }
-            return false;
+            EnsureConnection();
+            return await Client.JoinLobbyAsync(token, matchCode, isGuest, guestUsername);
         }
 
         public async Task LeaveLobbyAsync()
         {
             if (Client != null && Client.State == CommunicationState.Opened)
             {
-                _connectionMonitor?.Stop();
                 try
                 {
                     await Client.LeaveLobbyAsync();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    System.Diagnostics.Debug.WriteLine($"[LeaveLobby] Ignored Error: {ex.Message}");
-                }
-                finally 
-                { 
-                    _connectionMonitor?.Start(); 
                 }
             }
         }
 
         public void StartGameSafe(GameSettings settings)
         {
-            if (EnsureConnection())
-            {
-                _connectionMonitor?.Stop();
-                try
-                {
-                    Client.StartGame(settings);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[StartGame] Error: {ex.Message}");
-                }
-                finally 
-                { 
-                    _connectionMonitor?.Start(); 
-                }
-            }
+            EnsureConnection();
+            Client.StartGame(settings);
         }
 
         public async Task<bool> SendInvitationEmailAsync(string targetEmail, string subject, string body)
         {
-            if (EnsureConnection())
-            {
-                _connectionMonitor?.Stop();
-                try
-                {
-                    return await Client.SendInvitationEmailAsync(targetEmail, subject, body);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[Email Error] {ex.Message}");
-                    return false;
-                }
-                finally
-                {
-                    _connectionMonitor?.Start();
-                }
-            }
-            return false;
+            EnsureConnection();
+            return await Client.SendInvitationEmailAsync(targetEmail, subject, body);
         }
 
         #endregion
@@ -306,65 +190,22 @@ namespace Client.Core
 
         public async Task FlipCardAsync(int cardIndex)
         {
-            if (EnsureConnection())
-            {
-                try
-                {
-                    await Client.FlipCardAsync(cardIndex);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[FlipCard] Error: {ex.Message}");
-                }
-            }
+            EnsureConnection();
+            await Client.FlipCardAsync(cardIndex);
         }
 
         public async Task SendChatMessageAsync(string message)
         {
-            if (EnsureConnection())
-            {
-                try
-                {
-                    await Client.SendChatMessageAsync(message);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[Chat] Error: {ex.Message}");
-                }
-            }
+            EnsureConnection();
+            await Client.SendChatMessageAsync(message);
         }
 
         public async Task VoteToKickAsync(string playerToKick)
         {
-            if (EnsureConnection())
-            {
-                try
-                {
-                    await Client.VoteToKickAsync(playerToKick);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[VoteKick] Error: {ex.Message}");
-                }
-            }
+            EnsureConnection();
+            await Client.VoteToKickAsync(playerToKick);
         }
 
         #endregion
-
-        private bool EnsureConnection()
-        {
-            if (Client == null ||
-                Client.State == CommunicationState.Closed ||
-                Client.State == CommunicationState.Faulted)
-            {
-                InitializeClient();
-            }
-
-            if (Client == null)
-            {
-                return false;
-            }
-            return Client.State == CommunicationState.Opened;
-        }
     }
 }
