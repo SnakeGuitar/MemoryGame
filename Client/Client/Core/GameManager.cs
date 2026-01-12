@@ -70,7 +70,7 @@ namespace Client.Core
             }
             catch (Exception ex)
             {
-                StopGame();
+                _gameTimer.Stop();
                 System.Diagnostics.Debug.WriteLine($"[GAME MANAGER] Timer error: {ex.Message}");
             }
         }
