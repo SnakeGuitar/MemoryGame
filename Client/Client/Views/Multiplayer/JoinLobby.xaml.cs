@@ -1,6 +1,8 @@
 ﻿using Client.Core;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
+using Client.Properties.Langs;
+using Client.Views.Controls;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -8,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
+using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Multiplayer
 {
@@ -46,7 +49,7 @@ namespace Client.Views.Multiplayer
             {
                 if (selectedLobby.IsFull)
                 {
-                    MessageBox.Show("The lobby is full.", "Notice");
+                    new CustomMessageBox(Lang.Global_Title_Information, Lang.Lobby_Error_JoinFailed, this, MessageBoxType.Information).ShowDialog();
                     return;
                 }
 

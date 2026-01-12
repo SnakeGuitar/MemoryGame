@@ -45,7 +45,7 @@ namespace Client.Views.Multiplayer
 
                 if (string.IsNullOrEmpty(generatedCode))
                 {
-                    MessageBox.Show("Internal error: Lobby code couldn't be created.");
+                    new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_CodeGenerationFailed, this, MessageBoxType.Error).ShowDialog();
                     return;
                 }
 
@@ -59,13 +59,17 @@ namespace Client.Views.Multiplayer
                 }
                 else
                 {
-                    MessageBox.Show("Error registering the lobby. Please try again.");
+                    new CustomMessageBox(Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed, this, MessageBoxType.Error).ShowDialog();
                     hostLobby.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Connection error: {ex.Message}");
+                string errorMessage = LocalizationHelper.GetString(ex);
+
+                new CustomMessageBox(
+                    Lang.Global_Title_LoginFailed, errorMessage,
+                    this, MessageBoxType.Error).ShowDialog();
             }
         }
 

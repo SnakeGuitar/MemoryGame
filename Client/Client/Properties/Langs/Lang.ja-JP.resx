@@ -853,4 +853,28 @@
   <data name="Settings_Label_Fullscreen" xml:space="preserve">
     <value>全画面モード</value>
   </data>
+	<data name="JoinLobby_Label_PublicGames" xml:space="preserve">
+  <value>パブリックゲーム</value>
+</data>
+	<data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
+  <value>待合室</value>
+</data>
+	<data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
+  <value>* ダブルクリックで参加</value>
+</data>
+	<data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
+  <value>新しいゲームを作成</value>
+</data>
+	<data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
+  <value>ゲームコードは自動的に生成されます。</value>
+</data>
+	<data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
+  <value>公開</value>
+</data>
+	<data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
+  <value>ゲームに参加</value>
+</data>
+	<data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
+  <value>内部エラー：ロビーコードを作成できませんでした。</value>
+</data>
 </root>

@@ -3,103 +3,180 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Client.Views.Multiplayer"
-        mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
-        Title="JoinLobby" 
+        mc:Ignorable="d"
+        Title="Join Lobby" 
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
-        <Viewbox Stretch="Uniform" MaxWidth="1200" MaxHeight="1400">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="550" Margin="0,0,0,50">
 
-                <Label Content="{x:Static language:Lang.Global_Button_Join}" 
-                       Style="{StaticResource TitleLabelStyle}" Margin="0,0,0,10"/>
+        <Viewbox Stretch="Uniform">
 
-                <Border Background="{StaticResource AccentColor}" CornerRadius="15" Padding="25">
+            <Grid Width="1450" Height="900">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" 
+                       Content="{x:Static language:Lang.Global_Button_Join}" 
+                       Style="{StaticResource TitleLabelStyle}" 
+                       FontSize="60"
+                       Margin="0,40,0,30"/>
+
+                <Border Grid.Row="1" 
+                        Background="{StaticResource PrimaryTextColor}" 
+                        CornerRadius="20" 
+                        BorderBrush="{StaticResource AccentColor}" 
+                        BorderThickness="4"
+                        Width="700" 
+                        HorizontalAlignment="Center" VerticalAlignment="Top"
+                        Padding="40">
+
                     <StackPanel>
+                        <TextBlock Text="{x:Static language:Lang.HostLobby_Label_GameCode}" 
+                                   Foreground="{StaticResource AccentForegroundColor}" 
+                                   FontFamily="{StaticResource BodyFont}" HorizontalAlignment="Left"
+                                   FontWeight="Bold" FontSize="20" Opacity="0.8" 
+                                   Margin="95,0,0,10"/>
 
-                        <TextBlock Text="GAME CODE" Foreground="White" FontWeight="Bold" FontSize="12" Opacity="0.8" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="TextBoxLobbyCode" 
+                                     Grid.Column="0" 
+                                     Style="{StaticResource CodeTextBoxStyle}" 
+                                     Height="60" FontSize="30" 
+                                     MaxLength="6" 
+                                     Margin="0,0,20,0" 
+                                     VerticalContentAlignment="Center"/>
+
+                            <Button Grid.Column="1" 
+                                    Content="{x:Static language:Lang.Global_Button_Join}" 
+                                    Style="{StaticResource PrimaryLobbyButtonStyle}" 
+                                    Width="160" Height="60" FontSize="24"
+                                    Click="ButtonAcceptCode_Click"/>
+                        </Grid>
+
+                        <Label x:Name="LabelCodeError" 
+                               Style="{StaticResource RegisterErrorLabelStyle}" 
+                               FontSize="18"
+                               Content="" 
+                               Margin="0,-5,0,20"/>
+
+                        <Separator Background="{StaticResource AccentColor}" Opacity="0.3" Margin="0,10,0,20"/>
+
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="TextBoxLobbyCode" Grid.Column="0" Style="{StaticResource CodeTextBoxStyle}" Height="40" Margin="0,0,10,0" MaxLength="6" FontSize="18" VerticalContentAlignment="Center"/>
-                            <Button Grid.Column="1" Content="Join" Style="{StaticResource FormPrimaryButtonStyle}" Width="100" Height="40" Click="ButtonAcceptCode_Click" Margin="0"/>
-                        </Grid>
-                        <Label x:Name="LabelCodeError" Style="{StaticResource RegisterErrorLabelStyle}" Content="" Margin="0,-10,0,5"/>
 
-                        <Separator Background="White" Opacity="0.3" Margin="0,10,0,10"/>
+                            <TextBlock Text="{x:Static language:Lang.JoinLobby_Label_PublicGames}" 
+                                       Foreground="{StaticResource AccentForegroundColor}" 
+                                       FontFamily="{StaticResource BodyFont}"
+                                       FontWeight="Bold" FontSize="25" Opacity="0.8" 
+                                       VerticalAlignment="Center"/>
 
-                        <Grid Margin="0,0,0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="PUBLC GAMES" Foreground="White" FontWeight="Bold" FontSize="12" Opacity="0.8" VerticalAlignment="Center"/>
-                            <Button Content="↻ Update" Click="ButtonRefresh_Click" Background="Transparent" BorderBrush="White" Foreground="White" FontSize="11" Padding="5,2" Cursor="Hand"/>
+                            <Button Content="{x:Static language:Lang.Global_Button_Update}" 
+                                    Click="ButtonRefresh_Click" HorizontalAlignment="Right"
+                                    Style="{StaticResource MenuExitLobbyButtonStyle}"
+                                    Width="150" Height="40" FontSize="20" Padding="20,0"
+                                    Cursor="Hand"/>
                         </Grid>
 
-                        <ListBox x:Name="ListBoxPublicLobbies" 
-                                 Height="180" 
-                                 Background="Transparent" 
-                                 BorderThickness="0" 
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                                 MouseDoubleClick="ListBoxPublicLobbies_MouseDoubleClick">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                    <Setter Property="Margin" Value="0,0,0,8"/>
-                                    <Setter Property="Cursor" Value="Hand"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListBoxItem">
-                                                <Border x:Name="border" Background="#F0F0F0" CornerRadius="8" Padding="10">
-                                                    <ContentPresenter/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="White"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="border" Property="Background" Value="#FFD1E6"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Border Grid.Column="0" Width="30" Height="30" Background="{StaticResource AccentColor}" CornerRadius="15" Margin="0,0,10,0">
-                                            <TextBlock Text="#" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
-                                        </Border>
-                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding GameCode}" FontWeight="Bold" FontSize="16" Foreground="#36454F"/>
-                                            <TextBlock Text="Sala de Espera" FontSize="10" Foreground="Gray"/>
-                                        </StackPanel>
-                                        <Border Grid.Column="2" BorderBrush="#36454F" BorderThickness="1" CornerRadius="5" Padding="5,2" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding CurrentPlayers, StringFormat={}{0}/4}" FontWeight="Bold" Foreground="#36454F"/>
-                                        </Border>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <TextBlock Text="* Double click to join" Foreground="White" Opacity="0.6" FontSize="10" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <Border BorderBrush="{StaticResource AccentColor}" BorderThickness="1" CornerRadius="10" Background="#10000000">
+                            <ListBox x:Name="ListBoxPublicLobbies" 
+                                     Height="250" 
+                                     Background="Transparent" 
+                                     BorderThickness="0" 
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                     MouseDoubleClick="ListBoxPublicLobbies_MouseDoubleClick">
+
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="Margin" Value="5"/>
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <Border x:Name="border" Background="{StaticResource BackgroundColor}" CornerRadius="8" Padding="15" BorderBrush="Transparent" BorderThickness="2">
+                                                        <ContentPresenter/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentColor}"/>
+                                                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentColor}"/>
+                                                            <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Grid.Column="0" Width="40" Height="40" Background="{StaticResource AccentColor}" CornerRadius="20" Margin="0,0,15,0">
+                                                <TextBlock Text="#" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding GameCode}" 
+                                                           FontFamily="{StaticResource BodyFont}"
+                                                           FontWeight="Bold" FontSize="22"/>
+
+                                                <TextBlock Text="{x:Static language:Lang.JoinLobby_Label_WaitingRoom}" 
+                                                           FontFamily="{StaticResource BodyFont}"
+                                                           FontSize="14" Opacity="0.6"/>
+                                            </StackPanel>
+
+                                            <Border Grid.Column="2" BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=Foreground}" BorderThickness="1" CornerRadius="5" Padding="10,5" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding CurrentPlayers, StringFormat={}{0}/4}" 
+                                                           FontFamily="{StaticResource BodyFont}"
+                                                           FontWeight="Bold" FontSize="18"/>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+
+                        <TextBlock Text="{x:Static language:Lang.JoinLobby_Label_DoubleClickInfo}" 
+                                   Foreground="{StaticResource AccentForegroundColor}" 
+                                   FontFamily="{StaticResource BodyFont}"
+                                   Opacity="0.6" FontSize="16" 
+                                   HorizontalAlignment="Center" Margin="0,15,0,0"/>
 
                     </StackPanel>
                 </Border>
-                <Button Content="{x:Static language:Lang.Global_Button_Back}" Style="{StaticResource SecondaryButtonStyle}" HorizontalAlignment="Center" Margin="0,20,0,0" Click="ButtonBackToMainMenu_Click" />
-            </StackPanel>
+
+                <Button Grid.Row="2" 
+                        Content="{x:Static language:Lang.Global_Button_Back}" 
+                        Style="{StaticResource SecondaryButtonStyle}" 
+                        HorizontalAlignment="Center" 
+                        Width="200" Height="60" FontSize="24"
+                        Margin="0,30,0,40" 
+                        Click="ButtonBackToMainMenu_Click"/>
+            </Grid>
         </Viewbox>
     </Grid>
 </Window>

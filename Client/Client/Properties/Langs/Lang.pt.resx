@@ -852,4 +852,28 @@
   <data name="Settings_Label_Fullscreen" xml:space="preserve">
     <value>Modo de tela cheia</value>
   </data>
+	<data name="JoinLobby_Label_PublicGames" xml:space="preserve">
+  <value>JOGOS PÚBLICOS</value>
+</data>
+	<data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
+  <value>Sala de Espera</value>
+</data>
+	<data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
+  <value>* Duplo clique para entrar</value>
+</data>
+	<data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
+  <value>Criar Novo Jogo</value>
+</data>
+	<data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
+  <value>O código do jogo será gerado automaticamente.</value>
+</data>
+	<data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
+  <value>Público</value>
+</data>
+	<data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
+  <value>Entrar no Jogo</value>
+</data>
+	<data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
+  <value>Erro interno: Não foi possível criar o código da sala.</value>
+</data>
 </root>

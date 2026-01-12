@@ -852,4 +852,28 @@
   <data name="Settings_Label_Fullscreen" xml:space="preserve">
     <value>Mode plein écran</value>
   </data>
+	<data name="JoinLobby_Label_PublicGames" xml:space="preserve">
+  <value>Parties Publiques</value>
+</data>
+	<data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
+  <value>Salle d'attente</value>
+</data>
+	<data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
+  <value>* Double-cliquez pour rejoindre</value>
+</data>
+	<data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
+  <value>Créer une nouvelle partie</value>
+</data>
+	<data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
+  <value>Le code de la partie sera généré automatiquement.</value>
+</data>
+	<data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
+  <value>Publique</value>
+</data>
+	<data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
+  <value>Rejoindre une partie</value>
+</data>
+<data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
+  <value>Erreur interne : Impossible de créer le code de la salle.</value>
+</data>
 </root>
