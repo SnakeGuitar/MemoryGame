@@ -98,7 +98,18 @@ namespace Client.Views.Session
 
         private void ButtonBackToTitleScreen_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, this.Owner ?? new TitleScreen());
+            Window windowToOpen;
+
+            if (_isGuestRegister)
+            {
+                windowToOpen = new MainMenu();
+            }
+            else
+            {
+                windowToOpen = new TitleScreen();
+            }
+
+            NavigationHelper.NavigateTo(this, windowToOpen);
         }
     }
 }

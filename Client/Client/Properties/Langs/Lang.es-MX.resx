@@ -756,7 +756,7 @@ Por favor inténtalo de nuevo</value>
     <value>Salir</value>
   </data>
   <data name="Lobby_Message_LeaveLobby" xml:space="preserve">
-    <value>Quieres abandonarnos unu?</value>
+    <value>¿Quieres abandonarnos :c ?</value>
   </data>
   <data name="HostLobby_Message_LeaveLobby" xml:space="preserve">
     <value>¿Quieres salir de la sala? Si hay jugadores en ella, será disuelta.</value>
@@ -826,5 +826,26 @@ Por favor inténtalo de nuevo</value>
   </data>
   <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
     <value>El usuario debe tener al menos 3 caracteres</value>
+  </data>
+  <data name="Global_Title_LeaveGame" xml:space="preserve">
+    <value>Salir de la partida</value>
+  </data>
+  <data name="Global_Button_Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Global_Message_LeaveGame" xml:space="preserve">
+    <value>¿Estás seguro que deseas salir de la partida en curso?</value>
+  </data>
+  <data name="Lobby_Message_WaitingPlayers" xml:space="preserve">
+    <value>Esperando a que se unan más jugadores...</value>
+  </data>
+  <data name="Global_Label_CannotStart" xml:space="preserve">
+    <value>No se puede iniciar</value>
+  </data>
+  <data name="Chat_Message_LeftLobby" xml:space="preserve">
+    <value>{0} salió de la sala :C</value>
+  </data>
+  <data name="Global_Label_System" xml:space="preserve">
+    <value>Sistema</value>
   </data>
 </root>

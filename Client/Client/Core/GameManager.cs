@@ -247,5 +247,13 @@ namespace Client.Core
         {
             _gameTimer?.Stop();
         }
+
+        public void ResumeGame()
+        {
+            if (!IsMultiplayerMode && _timeLeft.TotalSeconds > 0)
+            {
+                _gameTimer.Start();
+            }
+        }
     }
 }

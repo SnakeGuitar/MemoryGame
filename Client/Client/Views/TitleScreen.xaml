@@ -40,8 +40,13 @@
                                 Style="{StaticResource SecondaryButtonStyle}" Width="260"
                                 Click="ButtonSignIn_Click" />
 
-                        <Button Content="{x:Static language:Lang.Global_Button_ExitGame}"
+                        <Button Content="{x:Static language:Lang.Global_Button_Settings}"
                                 Margin="0,30,0,0"
+                                Style="{StaticResource SettingsButtonStyle}"
+                                Click="ButtonSettings_Click" Width="200" Height="50"
+                                FontSize="20"/>
+
+                        <Button Content="{x:Static language:Lang.Global_Button_ExitGame}"
                                 Style="{StaticResource SecondaryButtonStyle}"
                                 Click="ButtonExitGame_Click" Width="200" Height="50"
                                 FontSize="20"/>

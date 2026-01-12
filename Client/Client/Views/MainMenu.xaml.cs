@@ -57,7 +57,8 @@ namespace Client.Views
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.NavigateTo(this, new Settings());
+            var settingsWindow = new Settings(false, false);
+            NavigationHelper.NavigateTo(this, settingsWindow);
         }
 
         private void ButtonGallery_Click(object sender, RoutedEventArgs e)

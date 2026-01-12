@@ -825,4 +825,25 @@
   <data name="Global_ValidationUsername_TooSmall" xml:space="preserve">
     <value>Der Benutzername muss mindestens 3 Zeichen lang sein</value>
   </data>
+  <data name="Global_Title_LeaveGame" xml:space="preserve">
+    <value>Das Spiel verlassen</value>
+  </data>
+  <data name="Global_Button_Confirm" xml:space="preserve">
+    <value>Bestätigen</value>
+  </data>
+  <data name="Global_Message_LeaveGame" xml:space="preserve">
+    <value>Möchten Sie das aktuelle Spiel wirklich verlassen?</value>
+  </data>
+  <data name="Lobby_Message_WaitingPlayers" xml:space="preserve">
+    <value>Warten auf weitere Spieler...</value>
+  </data>
+  <data name="Global_Label_CannotStart" xml:space="preserve">
+    <value>Kann nicht starten</value>
+  </data>
+  <data name="Chat_Message_LeftLobby" xml:space="preserve">
+    <value>{0} hat die Lobby verlassen :C</value>
+  </data>
+  <data name="Global_Label_System" xml:space="preserve">
+    <value>System</value>
+  </data>
 </root>

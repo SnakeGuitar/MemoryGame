@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
+using Client.Core;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,12 +17,24 @@ namespace Client.Views
     {
         private bool _isLoaded = false;
         private bool _languageChanged = false;
+        private bool _isGameActive = false;
 
-        public Settings(bool changeHappened = false)
+        public Settings(bool changeHappened = false, bool isGameActive = false)
         {
             InitializeComponent();
             _languageChanged = changeHappened;
+            _isGameActive |= isGameActive;
             LoadLanguages();
+            ConfigureControls();
+        }
+
+        private void ConfigureControls()
+        {
+            if (_isGameActive)
+            {
+                ComboBoxLanguage.IsEnabled = false;
+                ComboBoxLanguage.ToolTip = "Language cannot be changed during an active game.";
+            }
         }
 
         private void LoadLanguages()
@@ -82,7 +95,7 @@ namespace Client.Views
 
             try
             {
-                var newSettingsWindow = new Settings(true);
+                var newSettingsWindow = new Settings(true, _isGameActive);
                 newSettingsWindow.Owner = this.Owner;
                 newSettingsWindow.Show();
 
@@ -101,13 +114,24 @@ namespace Client.Views
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)
         {
-            if (_languageChanged)
+            Window windowToOpen;
+
+            if (!string.IsNullOrEmpty(UserSession.SessionToken))
             {
-                NavigationHelper.NavigateTo(this, new MainMenu());
+                windowToOpen = new MainMenu();
             }
             else
             {
-                NavigationHelper.NavigateTo(this, this.Owner ?? new MainMenu());
+                windowToOpen = new TitleScreen();
+            }
+
+            if (_languageChanged)
+            {
+                NavigationHelper.NavigateTo(this, windowToOpen);
+            }
+            else
+            {
+                NavigationHelper.NavigateTo(this, this.Owner ?? windowToOpen);
             }
         }
     }

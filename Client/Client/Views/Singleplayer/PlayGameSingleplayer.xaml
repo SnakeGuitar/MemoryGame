@@ -8,65 +8,50 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="PlayGameSingleplayer" 
-        MinHeight="720" MinWidth="1280"
+        MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-
         <Style x:Key="GameBoardStyle" TargetType="ItemsControl">
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding GameRows}" 
-                                     Columns="{Binding GameColumns}"/>
+                        <UniformGrid Rows="{Binding GameRows}" Columns="{Binding GameColumns}"/>
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-
-                        <Grid Margin="3">
+                        <Grid Margin="5">
                             <Viewbox Stretch="Uniform">
-
                                 <Grid Width="200" Height="280">
-
                                     <Button Click="Card_Click" 
                                             DataContext="{Binding}"
                                             Width="200" Height="280"
                                             Background="Transparent" 
                                             BorderThickness="0">
-
                                         <Button.Template>
                                             <ControlTemplate TargetType="Button">
-                                                <Border x:Name="CardBorder"
-                                                        CornerRadius="15"
-                                                        BorderThickness="2"
-                                                        Background="{StaticResource AccentColor}">
-
+                                                <Border x:Name="CardBorder" CornerRadius="15" BorderThickness="2" Background="{StaticResource AccentColor}">
                                                     <Border.Effect>
                                                         <DropShadowEffect Color="Black" Direction="320" ShadowDepth="8" Opacity="0.8" BlurRadius="7"/>
                                                     </Border.Effect>
-
                                                     <Grid>
                                                         <Border x:Name="Img_Back" CornerRadius="13" Background="Transparent">
                                                             <Border.Clip>
                                                                 <RectangleGeometry Rect="0,0,200,280" RadiusX="13" RadiusY="13"/>
                                                             </Border.Clip>
-                                                            <Image Source="/Client;component/Resources/Images/Cards/Backs/default.png" 
-                                                                   Stretch="UniformToFill"/>
+                                                            <Image Source="/Client;component/Resources/Images/Cards/Backs/default.png" Stretch="UniformToFill"/>
                                                         </Border>
-
                                                         <Border x:Name="Img_Front" CornerRadius="13" Visibility="Hidden" Background="Transparent">
                                                             <Border.Clip>
                                                                 <RectangleGeometry Rect="0,0,200,280" RadiusX="13" RadiusY="13"/>
                                                             </Border.Clip>
-                                                            <Image Source="{Binding DisplayImage}" 
-                                                                   Stretch="UniformToFill"/>
+                                                            <Image Source="{Binding DisplayImage}" Stretch="UniformToFill"/>
                                                         </Border>
                                                     </Grid>
                                                 </Border>
-
                                                 <ControlTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding IsFlipped}" Value="True">
                                                         <Setter TargetName="Img_Back" Property="Visibility" Value="Hidden"/>
@@ -88,71 +73,77 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Window.Resources>
 
     <Grid Background="{StaticResource BackgroundColor}">
 
-        <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5.4*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                </Grid.ColumnDefinitions>
+        <Viewbox Stretch="Uniform">
 
-                <Grid Grid.Column="0" Margin="10">
+            <Grid Width="1450" Height="900">
 
-                    <Border Style="{StaticResource BoardContainerStyle}">
-                        <ItemsControl x:Name="GameBoard" 
-                                  Style="{StaticResource GameBoardStyle}"/>
-                    </Border>
-                </Grid>
+                <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20" Padding="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="1" Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <Grid Grid.Column="0" Margin="10">
+                            <Border Style="{StaticResource BoardContainerStyle}">
+                                <ItemsControl x:Name="GameBoard" Style="{StaticResource GameBoardStyle}"/>
+                            </Border>
+                        </Grid>
 
-                    <StackPanel Grid.Row="0" Margin="5" HorizontalAlignment="Stretch">
+                        <Grid Grid.Column="1" Margin="20,10,10,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                        <Border Style="{StaticResource BoardContainerStyle}" Margin="0,0,0,15">
-                            <StackPanel>
-                                <Label Content="{x:Static language:Lang.Global_Label_Time}" 
-                                       Style="{StaticResource GameStatTitleStyle}"/>
+                            <StackPanel Grid.Row="0" Margin="0,20,0,0">
 
-                                <Label x:Name="LabelTimer" Content="00:00" 
-                                   Style="{StaticResource GameStatValueStyle}"/>
+                                <Border Style="{StaticResource BoardContainerStyle}" Margin="0,0,0,30" Padding="20">
+                                    <StackPanel>
+                                        <Label Content="{x:Static language:Lang.Global_Label_Time}" 
+                                               Style="{StaticResource GameStatTitleStyle}" 
+                                               FontSize="30" HorizontalAlignment="Center"/>
+
+                                        <Label x:Name="LabelTimer" Content="00:00" 
+                                               Style="{StaticResource GameStatValueStyle}" 
+                                               FontSize="40" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource BoardContainerStyle}" Padding="20">
+                                    <StackPanel>
+                                        <Label Content="{x:Static language:Lang.Global_Label_Score}" 
+                                               Style="{StaticResource GameStatTitleStyle}" 
+                                               FontSize="30" HorizontalAlignment="Center"/>
+
+                                        <Label x:Name="LabelScore" Content="0" 
+                                               Style="{StaticResource GameStatValueStyle}" 
+                                               FontSize="40" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
-                        </Border>
 
-                        <Border Style="{StaticResource BoardContainerStyle}">
-                            <StackPanel>
-                                <Label Content="{x:Static language:Lang.Global_Label_Score}" 
-                                   Style="{StaticResource GameStatTitleStyle}"/>
+                            <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,20">
 
-                                <Label x:Name="LabelScore" Content="0" 
-                                   Style="{StaticResource GameStatValueStyle}"/>
+                                <Button Content="{x:Static language:Lang.Global_Button_Settings}" 
+                                        Style="{StaticResource GameButtonStyle}"
+                                        Height="70" FontSize="26" Margin="0,0,0,20"
+                                        Click="ButtonSettings_Click"/>
+
+                                <Button Content="{x:Static language:Lang.Global_Button_Leave}" 
+                                        Style="{StaticResource GameButtonStyle}"
+                                        Height="70" FontSize="26"
+                                        Click="ButtonLeaveGame_Click"/>
                             </StackPanel>
-                        </Border>
-
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="2" 
-                            HorizontalAlignment="Stretch">
-
-                        <Button Content="{x:Static language:Lang.Global_Button_Settings}" 
-                            Style="{StaticResource GameButtonStyle}"
-                            Click="ButtonSettings_Click"/>
-
-                        <Button Content="{x:Static language:Lang.Global_Button_Back}" 
-                            Style="{StaticResource GameButtonStyle}"
-                            Click="ButtonBackToSelectDifficulty_Click"/>
-                    </StackPanel>
-
-                </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
             </Grid>
-        </Border>
+        </Viewbox>
     </Grid>
 </Window>

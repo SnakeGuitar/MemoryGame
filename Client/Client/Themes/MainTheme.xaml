@@ -332,6 +332,42 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SettingsButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="Width" Value="125"/>
+
+        <Setter Property="Background" Value="#7F000000"/>
+        <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource AccentForegroundColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="18">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,0,2"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#CCFFFFFF"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderBrush" Value="Black"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentForegroundColor}"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="MenuExitLobbyButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
         <Setter Property="Foreground" Value="{StaticResource AccentForegroundColor}"/>
         <Setter Property="Width" Value="350"/>

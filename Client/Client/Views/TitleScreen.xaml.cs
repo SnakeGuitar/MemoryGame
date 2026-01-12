@@ -30,6 +30,11 @@ namespace Client.Views
             NavigationHelper.NavigateTo(this, new RegisterAccount());
         }
 
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var settingsWindow = new Settings(false, false);
+            NavigationHelper.NavigateTo(this, settingsWindow);
+        }
         private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
         {
             var confirmationBox = new ConfirmationMessageBox(
