@@ -19,7 +19,7 @@ namespace Client.Views.Controls
             _lobbyCode = lobbyCode;
         }
 
-        private void ButtonSend_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSend_ClickAsync(object sender, RoutedEventArgs e)
         {
             string email = TextBoxEmail.Text.Trim();
             if (string.IsNullOrEmpty(email))
@@ -31,8 +31,18 @@ namespace Client.Views.Controls
                 return;
             }
 
-            _ = SendEmail(email);
-            this.Close();
+            ButtonSend.IsEnabled = false;
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            try
+            {
+                await SendEmail(email);
+            }
+            finally
+            {
+                ButtonSend.IsEnabled = true;
+                Mouse.OverrideCursor = null;
+            }
         }
 
         private async Task SendEmail(string targetEmail)
@@ -41,8 +51,7 @@ namespace Client.Views.Controls
             {
                 string subject = Lang.InviteFriendDialog_Title_SubjectEmail;
                 string body = string.Format(Lang.InviteFriendDialog_Message_BodyEmail, _lobbyCode);
-                bool sent = await GameServiceManager.Instance.Client
-                    .SendInvitationEmailAsync(targetEmail, subject, body);
+                bool sent = await GameServiceManager.Instance.SendInvitationEmailAsync(targetEmail, subject, body);
 
                 if (sent)
                 {

@@ -51,7 +51,8 @@
                         Orientation="Horizontal" 
                         HorizontalAlignment="Center">
 
-                    <Button Content="{x:Static language:Lang.Friends_Button_SendRequest}" 
+                    <Button x:Name="ButtonSend" 
+                            Content="{x:Static language:Lang.Friends_Button_SendRequest}" 
                             Grid.Row="2" Style="{StaticResource PrimaryButtonStyle}"
                             Margin="0,20,0,0" Width="200"
                             Click="ButtonSend_Click"/>

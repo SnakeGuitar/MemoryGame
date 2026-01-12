@@ -261,6 +261,28 @@ namespace Client.Core
             }
         }
 
+        public async Task<bool> SendInvitationEmailAsync(string targetEmail, string subject, string body)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.SendInvitationEmailAsync(targetEmail, subject, body);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Email Error] {ex.Message}");
+                    return false;
+                }
+                finally
+                {
+                    _connectionMonitor?.Start();
+                }
+            }
+            return false;
+        }
+
         #endregion
 
         #region Game Action Wrappers
