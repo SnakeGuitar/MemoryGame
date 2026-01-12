@@ -1,7 +1,7 @@
-using Client.Properties.Langs;
-using Client.UserServiceReference;
 using Client.Core;
 using Client.Helpers;
+using Client.Properties.Langs;
+using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
 using System.Windows;
@@ -46,7 +46,7 @@ namespace Client.Views.Session
 
             try
             {
-                LoginResponse response = await UserServiceManager.Instance.Client.LoginAsGuestAsync(username);
+                LoginResponse response = await UserServiceManager.Instance.LoginAsGuestAsync(username);
 
                 if (response.Success)
                 {
@@ -56,6 +56,11 @@ namespace Client.Views.Session
                         Lang.Global_Title_LoginAsGuestSuccess,
                         string.Format(Lang.Global_Message_Welcome, response.User.Username),
                         this, MessageBoxType.Success).ShowDialog();
+
+                    if (string.IsNullOrEmpty(UserSession.SessionToken))
+                    {
+                        return;
+                    }
 
                     NavigationHelper.NavigateTo(this, new MainMenu());
                 }

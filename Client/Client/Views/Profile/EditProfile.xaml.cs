@@ -68,7 +68,7 @@ namespace Client.Views.Profile
         {
             try
             {
-                var bytes = await UserServiceManager.Instance.Client.GetUserAvatarAsync(UserSession.Email);
+                var bytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
                 if (bytes != null && bytes.Length > 0)
                 {
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
@@ -146,7 +146,7 @@ namespace Client.Views.Profile
                         return;
                     }
 
-                    var response = await UserServiceManager.Instance.Client.UpdateUserAvatarAsync(UserSession.SessionToken, resizedBytes);
+                    var response = await UserServiceManager.Instance.UpdateUserAvatarAsync(UserSession.SessionToken, resizedBytes);
 
                     if (response.Success)
                     {
@@ -188,7 +188,7 @@ namespace Client.Views.Profile
 
             try
             {
-                var response = await UserServiceManager.Instance.Client.ChangePasswordAsync(UserSession.SessionToken, currentPass, newPass);
+                var response = await UserServiceManager.Instance.ChangePasswordAsync(UserSession.SessionToken, currentPass, newPass);
                 if (response.Success)
                 {
                     ShowSuccess(Lang.Global_Title_Success, Lang.EditProfile_Label_PasswordUpdated);
@@ -225,7 +225,7 @@ namespace Client.Views.Profile
 
             try
             {
-                var response = await UserServiceManager.Instance.Client.ChangeUsernameAsync(UserSession.SessionToken, newUsername);
+                var response = await UserServiceManager.Instance.ChangeUsernameAsync(UserSession.SessionToken, newUsername);
 
                 if (response.Success)
                 {
@@ -286,7 +286,7 @@ namespace Client.Views.Profile
 
             try
             {
-                var response = await UserServiceManager.Instance.Client.UpdatePersonalInfoAsync(UserSession.SessionToken, name, lastName);
+                var response = await UserServiceManager.Instance.UpdatePersonalInfoAsync(UserSession.SessionToken, name, lastName);
                 if (response.Success)
                 {
                     UserSession.Name = name;
@@ -333,7 +333,7 @@ namespace Client.Views.Profile
         {
             try
             {
-                var response = await UserServiceManager.Instance.Client.RemoveSocialNetworkAsync(UserSession.SessionToken, socialId);
+                var response = await UserServiceManager.Instance.RemoveSocialNetworkAsync(UserSession.SessionToken, socialId);
 
                 if (response.Success)
                 {
@@ -383,7 +383,7 @@ namespace Client.Views.Profile
 
             try
             {
-                var response = await UserServiceManager.Instance.Client.AddSocialNetworkAsync(UserSession.SessionToken, account);
+                var response = await UserServiceManager.Instance.AddSocialNetworkAsync(UserSession.SessionToken, account);
 
                 if (response.Success)
                 {

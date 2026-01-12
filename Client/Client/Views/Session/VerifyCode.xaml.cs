@@ -69,12 +69,12 @@ namespace Client.Views.Session
 
                 if (_isGuestRegister)
                 {
-                    response = await UserServiceManager.Instance.Client.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
+                    response = await UserServiceManager.Instance.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
                     messageSuccess = Lang.VerifyCode_Message_GuestSuccess;
                 }
                 else
                 {
-                    response = await UserServiceManager.Instance.Client.VerifyRegistrationAsync(_email, code);
+                    response = await UserServiceManager.Instance.VerifyRegistrationAsync(_email, code);
                 }
 
                 if (response.Success)
@@ -116,7 +116,7 @@ namespace Client.Views.Session
 
             try
             {
-                ResponseDTO response = await UserServiceManager.Instance.Client.ResendVerificationCodeAsync(_email);
+                ResponseDTO response = await UserServiceManager.Instance.ResendVerificationCodeAsync(_email);
 
                 if (response.Success)
                 {

@@ -78,7 +78,7 @@ namespace Client.Views.Lobby
         {
             try
             {
-                bool success = await GameServiceManager.Instance.Client.CreateLobbyAsync(
+                bool success = await GameServiceManager.Instance.CreateLobbyAsync(
                     UserSession.SessionToken, _lobbyCode);
 
                 if (success)
@@ -270,7 +270,7 @@ namespace Client.Views.Lobby
 
                 try
                 {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
+                    await GameServiceManager.Instance.SendChatMessageAsync(msg);
                 }
                 catch (Exception ex)
                 {
@@ -346,7 +346,7 @@ namespace Client.Views.Lobby
             {
                 try
                 {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    await GameServiceManager.Instance.LeaveLobbyAsync();
                 }
                 catch (Exception ex)
                 {

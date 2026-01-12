@@ -3,6 +3,8 @@ using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Session;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,8 +20,8 @@ namespace Client.Core
         #endregion
 
         public UserServiceClient Client { get; private set; }
-        private ServerConnectionMonitor _connectionMonitor;
 
+        private ServerConnectionMonitor _connectionMonitor;
         public event Action ServerConnectionLost;
 
         private UserServiceManager()
@@ -33,7 +35,14 @@ namespace Client.Core
             {
                 if (Client != null)
                 {
-                    try { Client.Close(); } catch { Client.Abort(); }
+                    try 
+                    { 
+                        Client.Close(); 
+                    } 
+                    catch 
+                    { 
+                        Client.Abort(); 
+                    }
                 }
                 _connectionMonitor?.Stop();
 
@@ -52,7 +61,16 @@ namespace Client.Core
                             return false;
                         }
 
-                        await Client.PingAsync();
+                        var pingTask = Client.PingAsync();
+                        var timeoutTask = Task.Delay(4000);
+                        var completedTask = await Task.WhenAny(pingTask, timeoutTask);
+
+                        if (completedTask == timeoutTask)
+                        {
+                            return false;
+                        }
+
+                        await pingTask;
                         return true;
                     }
                     catch
@@ -68,8 +86,6 @@ namespace Client.Core
                         ServerConnectionLost?.Invoke();
                     });
                 };
-
-                _connectionMonitor.Start();
             }
             catch (Exception ex)
             {
@@ -80,59 +96,386 @@ namespace Client.Core
 
         #region Wrappers
 
+        public async Task<ResponseDTO> StartRegistrationAsync(string email, string password)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.StartRegistrationAsync(email, password);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> InitiateGuestRegistrationAsync(int userId, string email, string password)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.InitiateGuestRegistrationAsync(userId, email, password);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                {
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> VerifyRegistrationAsync(string email, string code)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.VerifyRegistrationAsync(email, code);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> VerifyGuestRegistrationAsync(int userId, string email, string code)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.VerifyGuestRegistrationAsync(userId, email, code);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> ResendVerificationCodeAsync(string email)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.ResendVerificationCodeAsync(email);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<LoginResponse> FinalizeRegistrationAsync(string email, string username, byte[] avatar)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    var result = await Client.FinalizeRegistrationAsync(email, username, avatar);
+
+                    if (result.Success)
+                    {
+                        _connectionMonitor?.Start();
+                    }
+                    return result;
+                }
+                catch (Exception) { return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" }; }
+            }
+            return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<LoginResponse> LoginAsGuestAsync(string username)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+
+                try
+                {
+                    var result = await Client.LoginAsGuestAsync(username);
+
+                    if (result.Success)
+                    {
+                        _connectionMonitor?.Start();
+                    }
+
+                    return result;
+                }
+                catch (Exception)
+                {
+                    return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
+            }
+            return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
         public async Task<LoginResponse> LoginAsync(string email, string password)
         {
-            if (Client == null || Client.State == CommunicationState.Faulted || Client.State == CommunicationState.Closed)
+            if (Client == null || Client.State != CommunicationState.Opened)
             {
                 InitializeClient();
             }
 
-            if (Client.State != CommunicationState.Opened)
+            try
             {
-                return new LoginResponse
+                _connectionMonitor?.Stop();
+
+                var pingTask = Client.PingAsync();
+                var timeoutTask = Task.Delay(4000);
+                if (await Task.WhenAny(pingTask, timeoutTask) == timeoutTask)
                 {
-                    Success = false,
-                    MessageKey = "Global_Error_ServerOffline"
-                };
+                    return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
+                await pingTask;
+            }
+            catch
+            {
+                return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
             }
 
             try
             {
-                return await Client.LoginAsync(email, password);
+                var result = await Client.LoginAsync(email, password);
+
+                if (result.Success)
+                {
+                    _connectionMonitor?.Start();
+                }
+                else
+                {
+                    _connectionMonitor?.Stop();
+                }
+
+                return result;
             }
             catch (Exception)
             {
-                return new LoginResponse
-                {
-                    Success = false,
-                    MessageKey = "Global_Error_ServerOffline"
-                };
+                return new LoginResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
             }
         }
 
         public async Task LogoutAsync(string token)
         {
+            if (Client == null || Client.State != CommunicationState.Opened)
+            {
+                return;
+            }
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        if (UserSession.IsGuest) Client.LogoutGuest(token);
+                        else Client.Logout(token);
+                    }
+                    catch {}
+                });
+            }
+            catch
+            {}
+        }
+
+        public async Task<byte[]> GetUserAvatarAsync(string email)
+        {
             if (EnsureConnection())
             {
+                _connectionMonitor?.Stop();
                 try
                 {
-                    await Task.Run(() =>
-                    {
-                        if (UserSession.IsGuest)
-                        {
-                            Client.LogoutGuest(token);
-                        }
-                        else
-                        {
-                            Client.Logout(token);
-                        }
-                    });
+                    return await Client.GetUserAvatarAsync(email);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[Logout Error] {ex.Message}");
+                    return null;
+                }
+                finally
+                {
+                    _connectionMonitor?.Start();
                 }
             }
+            return null;
+        }
+
+        public async Task<ResponseDTO> UpdateUserAvatarAsync(string token, byte[] avatar)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.UpdateUserAvatarAsync(token, avatar);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> ChangePasswordAsync(string token, string currentPass, string newPass)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.ChangePasswordAsync(token, currentPass, newPass);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> ChangeUsernameAsync(string token, string newUsername)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.ChangeUsernameAsync(token, newUsername);
+                }
+                catch (Exception) { return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; }
+                finally { _connectionMonitor?.Start(); }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<List<MatchHistoryDTO>> GetMatchHistoryAsync(string token)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    var resultArray = await Client.GetMatchHistoryAsync(token);
+                    return resultArray.ToList();
+                }
+                catch (Exception)
+                {
+                    return new List<MatchHistoryDTO>();
+                }
+                finally
+                {
+                    _connectionMonitor?.Start();
+                }
+            }
+            return new List<MatchHistoryDTO>();
+        }
+
+        public async Task<List<FriendDTO>> GetFriendsListAsync(string token)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    var result = await Client.GetFriendsListAsync(token);
+                    return result.ToList();
+                }
+                catch (Exception) 
+                { 
+                    return new List<FriendDTO>(); 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new List<FriendDTO>();
+        }
+
+        public async Task<List<FriendRequestDTO>> GetPendingRequestsAsync(string token)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    var result = await Client.GetPendingRequestsAsync(token);
+                    return result.ToList();
+                }
+                catch (Exception) 
+                { 
+                    return new List<FriendRequestDTO>(); 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new List<FriendRequestDTO>();
+        }
+
+        public async Task<ResponseDTO> UpdatePersonalInfoAsync(string email, string name, string lastName)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.UpdatePersonalInfoAsync(email, name, lastName);
+                }
+                catch (Exception)
+                {
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
+                finally
+                {
+                    _connectionMonitor?.Start();
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
         }
 
         public async Task<LoginResponse> RenewSessionAsync(string token)
@@ -153,6 +496,48 @@ namespace Client.Core
                 InitializeClient();
             }
             return Client.State == CommunicationState.Opened || Client.State == CommunicationState.Created;
+        }
+
+        public async Task<AddSocialNetworkResponse> AddSocialNetworkAsync(string token, string account)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.AddSocialNetworkAsync(token, account);
+                }
+                catch (Exception)
+                {
+                    return new AddSocialNetworkResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new AddSocialNetworkResponse { Success = false, MessageKey = "Global_Error_ServerOffline" };
+        }
+
+        public async Task<ResponseDTO> RemoveSocialNetworkAsync(string token, int socialId)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.RemoveSocialNetworkAsync(token, socialId);
+                }
+                catch (Exception) 
+                { 
+                    return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" }; 
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return new ResponseDTO { Success = false, MessageKey = "Global_Error_ServerOffline" };
         }
 
         #endregion

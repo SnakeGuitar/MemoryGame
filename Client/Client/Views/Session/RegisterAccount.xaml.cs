@@ -58,12 +58,12 @@ namespace Client.Views.Session
 
                 if (_isGuestRegister)
                 {
-                    response = await UserServiceManager.Instance.Client.InitiateGuestRegistrationAsync(
+                    response = await UserServiceManager.Instance.InitiateGuestRegistrationAsync(
                         UserSession.UserId, email, password);
                 }
                 else
                 {
-                    response = await UserServiceManager.Instance.Client.StartRegistrationAsync(email, password);
+                    response = await UserServiceManager.Instance.StartRegistrationAsync(email, password);
                 }
 
                 if (response.Success)
@@ -71,6 +71,11 @@ namespace Client.Views.Session
                     new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
                         this, MessageBoxType.Success).ShowDialog();
+
+                    if (string.IsNullOrEmpty(UserSession.SessionToken))
+                    {
+                        return;
+                    }
 
                     NavigationHelper.NavigateTo(this, new VerifyCode(email, _isGuestRegister));
                 }

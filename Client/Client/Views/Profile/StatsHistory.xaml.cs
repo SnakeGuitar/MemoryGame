@@ -24,7 +24,7 @@ namespace Client.Views.Profile
         {
             try
             {
-                var history = await UserServiceManager.Instance.Client.GetMatchHistoryAsync(UserSession.SessionToken);
+                var history = await UserServiceManager.Instance.GetMatchHistoryAsync(UserSession.SessionToken);
                 DataGridHistory.ItemsSource = history;
             }
             catch (Exception ex)

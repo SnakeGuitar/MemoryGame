@@ -25,7 +25,7 @@ namespace Client.Views.Profile
         {
             try
             {
-                var bytes = await UserServiceManager.Instance.Client.GetUserAvatarAsync(UserSession.Email);
+                var bytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
                 if (bytes != null && bytes.Length > 0)
                 {
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);

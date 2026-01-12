@@ -313,7 +313,7 @@ namespace Client.Views.Multiplayer
 
                 try
                 {
-                    await GameServiceManager.Instance.Client.FlipCardAsync(clickedCard.Id);
+                    await GameServiceManager.Instance.FlipCardAsync(clickedCard.Id);
                 }
                 catch (Exception ex)
                 {
@@ -414,7 +414,7 @@ namespace Client.Views.Multiplayer
             {
                 try
                 {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(ChatTextBox.Text);
+                    await GameServiceManager.Instance.SendChatMessageAsync(ChatTextBox.Text);
                     ChatTextBox.Text = string.Empty;
                 }
                 catch (Exception ex)
@@ -464,7 +464,7 @@ namespace Client.Views.Multiplayer
                 {
                     try
                     {
-                        await GameServiceManager.Instance.Client.VoteToKickAsync(targetPlayerName);
+                        await GameServiceManager.Instance.VoteToKickAsync(targetPlayerName);
                     }
                     catch (Exception ex)
                     {
@@ -490,7 +490,7 @@ namespace Client.Views.Multiplayer
 
             try
             {
-                await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                await GameServiceManager.Instance.LeaveLobbyAsync();
             }
             catch (Exception ex)
             {
@@ -511,7 +511,7 @@ namespace Client.Views.Multiplayer
             {
                 try
                 {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    await GameServiceManager.Instance.LeaveLobbyAsync();
                 }
                 catch (Exception ex)
                 {

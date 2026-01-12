@@ -69,12 +69,12 @@ namespace Client.Views.Lobby
 
                 if (UserSession.IsGuest)
                 {
-                    success = await GameServiceManager.Instance.Client.JoinLobbyAsync(
+                    success = await GameServiceManager.Instance.JoinLobbyAsync(
                         UserSession.SessionToken, _lobbyCode, true, username);
                 }
                 else
                 {
-                    success = await GameServiceManager.Instance.Client.JoinLobbyAsync(
+                    success = await GameServiceManager.Instance.JoinLobbyAsync(
                         UserSession.SessionToken, _lobbyCode, false, null);
                 }
 
@@ -182,7 +182,7 @@ namespace Client.Views.Lobby
 
                 try
                 {
-                    await GameServiceManager.Instance.Client.SendChatMessageAsync(msg);
+                    await GameServiceManager.Instance.SendChatMessageAsync(msg);
                 }
                 catch (Exception ex)
                 {
@@ -268,7 +268,7 @@ namespace Client.Views.Lobby
             {
                 try
                 {
-                    await GameServiceManager.Instance.Client.LeaveLobbyAsync();
+                    await GameServiceManager.Instance.LeaveLobbyAsync();
                 }
                 catch (Exception ex)
                 {

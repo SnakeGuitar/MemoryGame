@@ -61,12 +61,6 @@ namespace Client
 
             this.Dispatcher.Invoke(() =>
             {
-                if (this.MainWindow is Login)
-                {
-                    _isHandlingDisconnect = false;
-                    return;
-                }
-
                 string title = Lang.Global_Title_ServerOffline ?? "Server Offline";
                 string message = Lang.Global_Error_ConnectionLost ?? "Connection to server lost. Returning to login screen.";
 

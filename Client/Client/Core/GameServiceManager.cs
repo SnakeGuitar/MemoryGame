@@ -112,17 +112,6 @@ namespace Client.Core
             });
         }
 
-        /// <summary>
-        /// Wrapper method to make the call semantic and safer.
-        /// </summary>
-        public async Task FlipCardAsync(int cardIndex)
-        {
-            if (Client != null && Client.State == CommunicationState.Opened)
-            {
-                await Client.FlipCardAsync(cardIndex);
-            }
-        }
-
         #region IGameLobbyServiceCallback Implementation
 
         public void ReceiveChatMessage(string senderName, string message, bool isNotification)
@@ -185,5 +174,153 @@ namespace Client.Core
         }
 
         #endregion
+
+        #region Lobby Wrappers
+
+        public async Task<bool> CreateLobbyAsync(string token, string matchCode)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.CreateLobbyAsync(token, matchCode);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[CreateLobby] Error: {ex.Message}");
+                    return false;
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> JoinLobbyAsync(string token, string matchCode, bool isGuest, string guestUsername)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    return await Client.JoinLobbyAsync(token, matchCode, isGuest, guestUsername);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[JoinLobby] Error: {ex.Message}");
+                    return false;
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+            return false;
+        }
+
+        public async Task LeaveLobbyAsync()
+        {
+            if (Client != null && Client.State == CommunicationState.Opened)
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    await Client.LeaveLobbyAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[LeaveLobby] Ignored Error: {ex.Message}");
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+        }
+
+        public void StartGameSafe(GameSettings settings)
+        {
+            if (EnsureConnection())
+            {
+                _connectionMonitor?.Stop();
+                try
+                {
+                    Client.StartGame(settings);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[StartGame] Error: {ex.Message}");
+                }
+                finally 
+                { 
+                    _connectionMonitor?.Start(); 
+                }
+            }
+        }
+
+        #endregion
+
+        #region Game Action Wrappers
+
+        public async Task FlipCardAsync(int cardIndex)
+        {
+            if (EnsureConnection())
+            {
+                try
+                {
+                    await Client.FlipCardAsync(cardIndex);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[FlipCard] Error: {ex.Message}");
+                }
+            }
+        }
+
+        public async Task SendChatMessageAsync(string message)
+        {
+            if (EnsureConnection())
+            {
+                try
+                {
+                    await Client.SendChatMessageAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Chat] Error: {ex.Message}");
+                }
+            }
+        }
+
+        public async Task VoteToKickAsync(string playerToKick)
+        {
+            if (EnsureConnection())
+            {
+                try
+                {
+                    await Client.VoteToKickAsync(playerToKick);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[VoteKick] Error: {ex.Message}");
+                }
+            }
+        }
+
+        #endregion
+
+        private bool EnsureConnection()
+        {
+            if (Client == null ||
+                Client.State == CommunicationState.Closed ||
+                Client.State == CommunicationState.Faulted)
+            {
+                InitializeClient();
+            }
+            return Client.State == CommunicationState.Opened;
+        }
     }
 }

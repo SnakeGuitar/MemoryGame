@@ -68,7 +68,7 @@ namespace Client.Views.Session
 
             try
             {
-                LoginResponse response = await UserServiceManager.Instance.Client.FinalizeRegistrationAsync(
+                LoginResponse response = await UserServiceManager.Instance.FinalizeRegistrationAsync(
                     _email,
                     username,
                     profileImage);
@@ -80,6 +80,11 @@ namespace Client.Views.Session
                     new CustomMessageBox(
                         Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
                         this, MessageBoxType.Information).ShowDialog();
+
+                    if (string.IsNullOrEmpty(UserSession.SessionToken))
+                    {
+                        return;
+                    }
 
                     NavigationHelper.NavigateTo(this, new MainMenu());
                 }

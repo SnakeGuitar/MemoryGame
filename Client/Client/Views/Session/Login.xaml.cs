@@ -68,6 +68,17 @@ namespace Client.Views.Session
                         string.Format(Lang.Global_Message_Welcome, response.User.Username),
                         this, MessageBoxType.Success).ShowDialog();
 
+                    if (string.IsNullOrEmpty(UserSession.SessionToken))
+                    {
+                        return;
+                    }
+
+                    if (UserServiceManager.Instance.Client == null ||
+                        UserServiceManager.Instance.Client.State != System.ServiceModel.CommunicationState.Opened)
+                    {
+                        return;
+                    }
+
                     NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
