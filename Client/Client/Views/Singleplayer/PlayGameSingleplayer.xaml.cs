@@ -109,7 +109,7 @@ namespace Client.Views.Singleplayer
         {
             var summaryWindow = new MatchSummary(title, stats);
             NavigationHelper.ShowDialog(this, summaryWindow);
-            ButtonBackToSelectDifficulty_Click(null, null);
+            ButtonLeaveGame_Click(null, null);
         }
 
         #endregion
@@ -134,15 +134,26 @@ namespace Client.Views.Singleplayer
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
             _gameManager.StopGame();
-            var settingsWindow = new Settings();
+
+            var settingsWindow = new Settings(false, true);
             NavigationHelper.ShowDialog(this, settingsWindow);
+
+            _gameManager.ResumeGame();
         }
 
-        public void ButtonBackToSelectDifficulty_Click(object sender, RoutedEventArgs e)
+        public void ButtonLeaveGame_Click(object sender, RoutedEventArgs e)
         {
-            UnsubscribeEvents();
-            _gameManager.StopGame();
-            NavigationHelper.NavigateTo(this, this.Owner ?? new SelectDifficulty());
+            var confirmationBox = new ConfirmationMessageBox(
+                Lang.Global_Title_LeaveGame, Lang.Global_Message_LeaveGame,
+                this, ConfirmationMessageBox.ConfirmationBoxType.Warning);
+
+            if (confirmationBox.ShowDialog() == true)
+            {
+                UnsubscribeEvents();
+                _gameManager.StopGame();
+                NavigationHelper.NavigateTo(this, this.Owner ?? new SelectDifficulty());
+            }
+            
         }
 
         protected override void OnClosed(EventArgs e)

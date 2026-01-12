@@ -185,7 +185,11 @@ namespace Client.Views.Lobby
 
             if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
             {
-                MessageBox.Show("Waiting for more players to join...", "Cannot Start", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var messageBox = new CustomMessageBox(
+                    Lang.Global_Label_CannotStart,
+                    Lang.Lobby_Message_WaitingPlayers,
+                    this, MessageBoxType.Warning);
+                messageBox.ShowDialog();
                 return;
             }
 
@@ -246,17 +250,18 @@ namespace Client.Views.Lobby
 
             Dispatcher.Invoke(() =>
             {
-                if (_isGameStarting || !this.IsLoaded)
-                {
-                    return;
-                }
+            if (_isGameStarting || !this.IsLoaded)
+            {
+                return;
+            }
 
-                var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
-                if (playerToRemove != null)
-                {
+            var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
+            if (playerToRemove != null)
+            {
+                string message = string.Format(playerName, Lang.Lobby_Notification_PlayerLeft);
                     _currentPlayers.Remove(playerToRemove);
                     UpdatePlayerUI();
-                    OnChatMessageReceived("System", $"{playerName} left the lobby.", true);
+                    OnChatMessageReceived(Lang.Global_Label_System, message, true);
                 }
             });
         }
