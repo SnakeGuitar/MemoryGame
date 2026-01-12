@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client.Core
@@ -131,6 +132,36 @@ namespace Client.Core
             catch (Exception logEx)
             {
                 Debug.WriteLine($"[CRITICAL] Failed to write log file: {logEx.Message}");
+            }
+        }
+
+        // WRAPPER
+        public static async Task<bool> ExecuteSafeAsync(Func<Task> action, Action onFailed = null)
+        {
+            try
+            {
+                await action();
+                return true;
+            }
+            catch (FaultException ex)
+            {
+                Handle(ex);
+                return false;
+            }
+            catch (CommunicationException ex)
+            {
+                Handle(ex);
+                return false;
+            }
+            catch (TimeoutException ex)
+            {
+                Handle(ex);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Handle(ex);
+                return false;
             }
         }
     }
