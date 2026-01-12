@@ -21,7 +21,7 @@
                 <Border Background="{StaticResource AccentColor}" CornerRadius="15" Padding="30">
                     <StackPanel>
 
-                        <TextBlock Text="NUEVA PARTIDA" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0,0,0,10" Opacity="0.9"/>
+                        <TextBlock Text="CREATE NEW GAME" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0,0,0,10" Opacity="0.9"/>
 
                         <Grid Margin="0,0,0,15">
                             <Grid.ColumnDefinitions>
@@ -30,12 +30,12 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <TextBlock Text="El código se generará automáticamente." Foreground="White" FontSize="12" Opacity="0.8"/>
+                                <TextBlock Text="Game code will be automatically generated." Foreground="White" FontSize="12" Opacity="0.8"/>
                             </StackPanel>
 
                             <CheckBox x:Name="checkBoxIsPublic" 
                                       Grid.Column="1"
-                                      Content="Hacer Pública"
+                                      Content="Public"
                                       Foreground="White"
                                       FontSize="14"
                                       Cursor="Hand"
@@ -50,7 +50,7 @@
 
                         <Separator Background="White" Opacity="0.3" Margin="0,20,0,20"/>
 
-                        <TextBlock Text="UNIRSE A PARTIDA" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Opacity="0.7"/>
+                        <TextBlock Text="JOIN GAME" Foreground="White" FontWeight="Bold" FontSize="14" Margin="0,0,0,5" Opacity="0.7"/>
 
                         <Button Content="{x:Static language:Lang.Global_Button_Join}" 
                                 Style="{StaticResource FormPrimaryButtonStyle}"
