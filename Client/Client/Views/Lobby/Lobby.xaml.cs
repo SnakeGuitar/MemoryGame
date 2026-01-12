@@ -184,10 +184,16 @@ namespace Client.Views.Lobby
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(msg);
                 }
+                catch(CommunicationException ex)
+                {
+                    CustomMessageBox messageBox = new CustomMessageBox(Lang.Global_Title_NetworkError, ex.Message, this, MessageBoxType.Error);
+                    messageBox.Show();
+                }
                 catch (Exception ex)
                 {
                     ExceptionManager.Handle(ex, this);
                 }
+                
             }
         }
 

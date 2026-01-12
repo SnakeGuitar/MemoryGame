@@ -109,7 +109,7 @@ namespace Client.Views.Singleplayer
         {
             var summaryWindow = new MatchSummary(title, stats);
             NavigationHelper.ShowDialog(this, summaryWindow);
-            ButtonLeaveGame_Click(null, null);
+            CloseGameAndNavigate();
         }
 
         #endregion
@@ -149,11 +149,16 @@ namespace Client.Views.Singleplayer
 
             if (confirmationBox.ShowDialog() == true)
             {
-                UnsubscribeEvents();
-                _gameManager.StopGame();
-                NavigationHelper.NavigateTo(this, this.Owner ?? new SelectDifficulty());
+                CloseGameAndNavigate();
             }
             
+        }
+
+        private void CloseGameAndNavigate()
+        {
+            UnsubscribeEvents();
+            _gameManager.StopGame();
+            NavigationHelper.NavigateTo(this, this.Owner ?? new SelectDifficulty());
         }
 
         protected override void OnClosed(EventArgs e)
