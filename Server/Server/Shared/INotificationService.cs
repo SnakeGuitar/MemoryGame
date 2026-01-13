@@ -82,7 +82,7 @@ namespace Server.Shared
             {
                 var assembly = Assembly.GetExecutingAssembly();
 
-                string resourcePath = $"Server.Resources.{resourceName}";
+                string resourcePath = $"Server.Shared.{resourceName}";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
                 {
