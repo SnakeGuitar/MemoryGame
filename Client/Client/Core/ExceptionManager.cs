@@ -10,6 +10,7 @@ using System.Windows;
 
 namespace Client.Core
 {
+    /* --- THE TANKER --- */
     public static class ExceptionManager
     {
         private static readonly object _logLock = new object();
@@ -32,18 +33,6 @@ namespace Client.Core
             LogException(ex);
 
             var details = GetExceptionDetails(ex);
-            string title = details.Title;
-            string message = details.Message;
-
-            if (isFatal)
-            {
-                message += $"\n\n{Lang.Global_Error_FatalCrash}";
-            }
-
-            if (Application.Current == null)
-            {
-                return;
-            }
 
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -54,19 +43,17 @@ namespace Client.Core
                         owner = Application.Current.MainWindow;
                     }
 
-                    var type = isFatal ? CustomMessageBox.MessageBoxType.Error : CustomMessageBox.MessageBoxType.Warning;
-
-                    CustomMessageBox messageBox;
                     try
                     {
-                        messageBox = new CustomMessageBox(title, message, owner, type);
+                        var type = isFatal ? CustomMessageBox.MessageBoxType.Error : CustomMessageBox.MessageBoxType.Warning;
+                        var msgBox = new CustomMessageBox(details.Title, details.Message, owner, type);
+                        msgBox.ShowDialog();
                     }
-                    catch
+                    catch (Exception uiEx)
                     {
-                        messageBox = new CustomMessageBox(title, message, null, type);
+                        Debug.WriteLine($"Error showing CustomMessageBox: {uiEx.Message}");
+                        MessageBox.Show(details.Message, details.Title, MessageBoxButton.OK, MessageBoxImage.Error);
                     }
-
-                    messageBox.ShowDialog();
 
                     onHandled?.Invoke();
 
@@ -78,7 +65,7 @@ namespace Client.Core
                 }
                 catch (Exception dispatchEx)
                 {
-                    Debug.WriteLine($"Failed to show exception dialog: {dispatchEx.Message}");
+                    Debug.WriteLine($"Critical error in UI: {dispatchEx.Message}");
                 }
             });
         }

@@ -1,5 +1,4 @@
-﻿using Client.Helpers;
-using Client.Properties.Langs;
+﻿using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Session;
 using System;
@@ -30,35 +29,13 @@ namespace Client.Core
 
         private void InitializeClient()
         {
-            try
-            {
-                if (Client != null)
-                {
-                    try
-                    {
-                        Client.Close();
-                    }
-                    catch
-                    {
-                        Client.Abort();
-                    }
-                }
-
-                InstanceContext context = new InstanceContext(this);
-                Client = new UserServiceClient(context);
-                Client.Open();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[UserServiceManager] Init Failed: {ex.Message}");
-            }
+            Client = WcfClientFactory.CreateClient<UserServiceClient, IUserService>
+                (Client, this, context => new UserServiceClient(context));
         }
 
         private void EnsureConnection()
         {
-            if (Client == null ||
-                Client.State == CommunicationState.Closed ||
-                Client.State == CommunicationState.Faulted)
+            if (!WcfClientFactory.IsConnectionActive(Client))
             {
                 InitializeClient();
             }

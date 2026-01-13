@@ -38,8 +38,6 @@ namespace Server.SessionService
             _penaltyCore = new PenaltyCore(dbFactory, session, new Logger(typeof(PenaltyCore)));
         }
 
-        public void Ping() { }
-
         // === Authentication ===
 
         /// <summary>

@@ -83,7 +83,7 @@
                                        FontWeight="Bold" FontSize="25" Opacity="0.8" 
                                        VerticalAlignment="Center"/>
 
-                            <Button Content="{x:Static language:Lang.Global_Button_Update}" 
+                            <Button x:Name="ButtonRefresh" Content="{x:Static language:Lang.Global_Button_Update}" 
                                     Click="ButtonRefresh_Click" HorizontalAlignment="Right"
                                     Style="{StaticResource MenuExitLobbyButtonStyle}"
                                     Width="150" Height="40" FontSize="20" Padding="20,0"

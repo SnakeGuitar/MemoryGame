@@ -8,10 +8,7 @@ namespace Server.SessionService
 {
     [ServiceContract(CallbackContract = typeof(IUserCallback))]
     public interface IUserService
-    {
-        [OperationContract]
-        void Ping();
-        
+    {   
         [OperationContract]
         ResponseDTO StartRegistration(string email, string password);
 

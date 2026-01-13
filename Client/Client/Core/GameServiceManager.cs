@@ -1,4 +1,5 @@
 ﻿using Client.GameLobbyServiceReference;
+using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -48,28 +49,13 @@ namespace Client.Core
 
         private void InitializeClient()
         {
-            try
-            {
-                if (Client != null)
-                {
-                    try { Client.Close(); } catch { Client.Abort(); }
-                }
-
-                InstanceContext context = new InstanceContext(this);
-                Client = new GameLobbyServiceClient(context);
-                Client.Open();
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[GameServiceManager] Init Failed: {ex.Message}");
-            }
+            Client = WcfClientFactory.CreateClient<GameLobbyServiceClient, IGameLobbyService>
+                (Client, this, context => new GameLobbyServiceClient(context));
         }
 
         private void EnsureConnection()
         {
-            if (Client == null ||
-                Client.State == CommunicationState.Closed ||
-                Client.State == CommunicationState.Faulted)
+            if (!WcfClientFactory.IsConnectionActive(Client))
             {
                 InitializeClient();
             }

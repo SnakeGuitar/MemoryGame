@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Lobby
@@ -23,9 +24,7 @@ namespace Client.Views.Lobby
         private readonly string _lobbyCode;
         private bool _isConnected = false;
         private bool _isGameStarting = false;
-
         private List<LobbyPlayerInfo> _currentPlayers = new List<LobbyPlayerInfo>();
-
         private int _selectedCardCount = GameConstants.DefaultCardCount;
         private int _secondsPerTurn = GameConstants.DefaultTurnTimeSeconds;
 
@@ -82,50 +81,42 @@ namespace Client.Views.Lobby
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            bool createdSuccessfully = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
-                bool success = false;
-
                 if (IsLobbyPreRegistered)
                 {
-                    success = true;
-                    Debug.WriteLine("[HostLobby] Lobby pre-registered. Skipping creation.");
+                    Debug.WriteLine("[HostLobby] Pre-registered.");
                 }
                 else
                 {
-                    success = await GameServiceManager.Instance.CreateLobbyAsync(
+                    bool result = await GameServiceManager.Instance.CreateLobbyAsync(
                         UserSession.SessionToken, _lobbyCode, false);
-                }
 
-                if (success)
-                {
-                    _isConnected = true;
-                    string myName = UserSession.Username;
-
-                    if (!_currentPlayers.Any(p => p.Name == myName))
+                    if (!result)
                     {
-                        _currentPlayers.Add(new LobbyPlayerInfo { Name = myName });
-                        UpdatePlayerUI();
-                    }
-
-                    if (!IsLobbyPreRegistered)
-                    {
-                        new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess, this, MessageBoxType.Success).ShowDialog();
+                        throw new Exception(Lang.HostLobby_Error_CreateFailed);
                     }
                 }
-                else
+            });
+
+            if (createdSuccessfully)
+            {
+                _isConnected = true;
+                string myName = UserSession.Username;
+                if (!_currentPlayers.Any(p => p.Name == myName))
                 {
-                    new CustomMessageBox(Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed, this, MessageBoxType.Error).ShowDialog();
-                    GoBackToMenu();
+                    _currentPlayers.Add(new LobbyPlayerInfo { Name = myName });
+                    UpdatePlayerUI();
+                }
+
+                if (!IsLobbyPreRegistered)
+                {
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.Lobby_Message_CreateSuccess, this, MessageBoxType.Success).ShowDialog();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                ExceptionManager.Handle(ex, this, async () =>
-                {
-                    await LeaveLobbySafe();
-                    GoBackToMenu();
-                });
+                GoBackToMenu();
             }
         }
 
@@ -195,7 +186,7 @@ namespace Client.Views.Lobby
 
         #region Game Logic
 
-        private void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
+        private async void ButtonStartMatch_Click(object sender, RoutedEventArgs e)
         {
             if (!_isConnected)
             {
@@ -204,15 +195,16 @@ namespace Client.Views.Lobby
 
             if (_currentPlayers.Count < GameConstants.MinPlayersToPlay)
             {
-                var messageBox = new CustomMessageBox(
-                    Lang.Global_Label_CannotStart,
-                    Lang.Lobby_Message_WaitingPlayers,
-                    this, MessageBoxType.Warning);
-                messageBox.ShowDialog();
+                new CustomMessageBox(Lang.Global_Label_CannotStart, Lang.Lobby_Message_WaitingPlayers, this, MessageBoxType.Warning).ShowDialog();
                 return;
             }
 
-            try
+            if (ButtonStart != null)
+            {
+                ButtonStart.IsEnabled = false;
+            }
+
+            bool started = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 var settings = new GameSettings
                 {
@@ -220,20 +212,16 @@ namespace Client.Views.Lobby
                     TurnTimeSeconds = _secondsPerTurn
                 };
 
-                if (ButtonStart != null)
-                {
-                    ButtonStart.IsEnabled = false;
-                }
-
                 GameServiceManager.Instance.StartGameSafe(settings);
-            }
-            catch (Exception ex)
+                await Task.CompletedTask;
+            });
+
+            if (!started)
             {
                 if (ButtonStart != null)
                 {
                     ButtonStart.IsEnabled = true;
                 }
-                ExceptionManager.Handle(ex, this);
             }
         }
 
@@ -242,9 +230,7 @@ namespace Client.Views.Lobby
             Dispatcher.Invoke(() =>
             {
                 _isGameStarting = true;
-
                 UnsubscribeEvents();
-
                 var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
 
                 if (this.Owner != null)
@@ -269,15 +255,15 @@ namespace Client.Views.Lobby
 
             Dispatcher.Invoke(() =>
             {
-            if (_isGameStarting || !this.IsLoaded)
-            {
-                return;
-            }
+                if (_isGameStarting || !this.IsLoaded)
+                {
+                    return;
+                }
 
-            var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
-            if (playerToRemove != null)
-            {
-                string message = string.Format(playerName, Lang.Lobby_Notification_PlayerLeft);
+                var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
+                if (playerToRemove != null)
+                {
+                    string message = string.Format(playerName, Lang.Lobby_Notification_PlayerLeft);
                     _currentPlayers.Remove(playerToRemove);
                     UpdatePlayerUI();
                     OnChatMessageReceived(Lang.Global_Label_System, message, true);
@@ -289,17 +275,13 @@ namespace Client.Views.Lobby
         {
             if (ChatTextBox != null && !string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                string msg = ChatTextBox.Text;
+                string message = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
 
-                try
+                await ExceptionManager.ExecuteSafeAsync(async () =>
                 {
-                    await GameServiceManager.Instance.SendChatMessageAsync(msg);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Chat Error: {ex.Message}");
-                }
+                    await GameServiceManager.Instance.SendChatMessageAsync(message);
+                });
             }
         }
 

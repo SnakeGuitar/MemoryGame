@@ -38,38 +38,42 @@ namespace Client.Views.Multiplayer
                 return;
             }
 
-            try
+            ButtonCreateLobby.IsEnabled = false;
+
+            var hostLobby = new HostLobby();
+            string generatedCode = hostLobby.LabelGameCode.Content?.ToString();
+            bool isPublic = checkBoxIsPublic.IsChecked == true;
+
+            if (string.IsNullOrEmpty(generatedCode))
             {
-                var hostLobby = new HostLobby();
-                string generatedCode = hostLobby.LabelGameCode.Content?.ToString();
-
-                if (string.IsNullOrEmpty(generatedCode))
-                {
-                    new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_CodeGenerationFailed, this, MessageBoxType.Error).ShowDialog();
-                    return;
-                }
-
-                bool isPublic = checkBoxIsPublic.IsChecked == true;
-                bool created = await GameServiceManager.Instance.CreateLobbyAsync(UserSession.SessionToken, generatedCode, isPublic);
-
-                if (created)
-                {
-                    hostLobby.IsLobbyPreRegistered = true;
-                    NavigationHelper.NavigateTo(this, hostLobby);
-                }
-                else
-                {
-                    new CustomMessageBox(Lang.Global_Title_Error, Lang.HostLobby_Error_CreateFailed, this, MessageBoxType.Error).ShowDialog();
-                    hostLobby.Close();
-                }
+                hostLobby.Close();
+                new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_CodeGenerationFailed, this, MessageBoxType.Error).ShowDialog();
+                ButtonCreateLobby.IsEnabled = true;
+                return;
             }
-            catch (Exception ex)
-            {
-                string errorMessage = LocalizationHelper.GetString(ex);
 
-                new CustomMessageBox(
-                    Lang.Global_Title_LoginFailed, errorMessage,
-                    this, MessageBoxType.Error).ShowDialog();
+            bool created = await ExceptionManager.ExecuteSafeAsync(async () =>
+            {
+                bool result = await GameServiceManager.Instance.CreateLobbyAsync(
+                    UserSession.SessionToken,
+                    generatedCode,
+                    isPublic);
+
+                if (!result)
+                {
+                    throw new Exception(Lang.HostLobby_Error_CreateFailed);
+                }
+            });
+
+            if (created)
+            {
+                hostLobby.IsLobbyPreRegistered = true;
+                NavigationHelper.NavigateTo(this, hostLobby);
+            }
+            else
+            {
+                hostLobby.Close();
+                ButtonCreateLobby.IsEnabled = true;
             }
         }
 

@@ -8,10 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Lobby
@@ -62,53 +62,41 @@ namespace Client.Views.Lobby
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            bool joinedSuccessfully = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
-                bool success;
-                string username = UserSession.Username;
-
+                bool result;
                 if (UserSession.IsGuest)
                 {
-                    success = await GameServiceManager.Instance.JoinLobbyAsync(
-                        UserSession.SessionToken, _lobbyCode, true, username);
+                    result = await GameServiceManager.Instance.JoinLobbyAsync(
+                        UserSession.SessionToken, _lobbyCode, true, UserSession.Username);
                 }
                 else
                 {
-                    success = await GameServiceManager.Instance.JoinLobbyAsync(
+                    result = await GameServiceManager.Instance.JoinLobbyAsync(
                         UserSession.SessionToken, _lobbyCode, false, null);
                 }
 
-                if (success)
+                if (!result)
                 {
-                    _isConnected = true;
-
-                    if (!_currentPlayers.Any(p => p.Name == username))
-                    {
-                        _currentPlayers.Add(new LobbyPlayerInfo { Name = username });
-                        UpdatePlayerUI();
-                    }
-
-                    OnChatMessageReceived("System", $"{username} has joined the lobby.", true);
-
-                    string successMsg = Lang.Lobby_Notification_PlayerJoined.Contains("{0}")
-                        ? string.Format(Lang.Lobby_Notification_PlayerJoined, username)
-                        : Lang.Lobby_Notification_PlayerJoined;
-
-                    new CustomMessageBox(Lang.Global_Title_Success, successMsg, this, MessageBoxType.Information).ShowDialog();
+                    throw new Exception(Lang.Lobby_Error_JoinFailed);
                 }
-                else
-                {
-                    new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_JoinFailed, this, MessageBoxType.Error).ShowDialog();
-                    GoBackToMenu();
-                }
-            }
-            catch (Exception ex)
+            });
+
+            if (joinedSuccessfully)
             {
-                ExceptionManager.Handle(ex, this, async () =>
+                _isConnected = true;
+
+                if (!_currentPlayers.Any(p => p.Name == UserSession.Username))
                 {
-                    await LeaveLobbySafe();
-                    this.Close();
-                });
+                    _currentPlayers.Add(new LobbyPlayerInfo { Name = UserSession.Username });
+                    UpdatePlayerUI();
+                }
+
+                OnChatMessageReceived("System", $"{UserSession.Username} joined.", true);
+            }
+            else
+            {
+                GoBackToMenu();
             }
         }
 
@@ -160,40 +148,29 @@ namespace Client.Views.Lobby
 
         private void ButtonReady_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn)
+            if (sender is Button button)
             {
-                btn.IsEnabled = false;
-                btn.Content = "Waiting...";
+                button.IsEnabled = false;
+                button.Content = "Waiting...";
             }
         }
 
         private void ButtonInvite_Click(object sender, RoutedEventArgs e)
         {
-            var inviteDialog = new InviteFriendDialog(_lobbyCode);
-            NavigationHelper.ShowDialog(this, inviteDialog);
+            NavigationHelper.ShowDialog(this, new InviteFriendDialog(_lobbyCode));
         }
 
         private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
         {
             if (ChatTextBox != null && !string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                string msg = ChatTextBox.Text;
+                string message = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
 
-                try
+                await ExceptionManager.ExecuteSafeAsync(async () =>
                 {
-                    await GameServiceManager.Instance.SendChatMessageAsync(msg);
-                }
-                catch(CommunicationException ex)
-                {
-                    CustomMessageBox messageBox = new CustomMessageBox(Lang.Global_Title_NetworkError, ex.Message, this, MessageBoxType.Error);
-                    messageBox.Show();
-                }
-                catch (Exception ex)
-                {
-                    ExceptionManager.Handle(ex, this);
-                }
-                
+                    await GameServiceManager.Instance.SendChatMessageAsync(message);
+                });
             }
         }
 
@@ -208,11 +185,6 @@ namespace Client.Views.Lobby
                 await LeaveLobbySafe();
                 GoBackToMenu();
             }
-        }
-
-        private void GoBackToMenu()
-        {
-            NavigationHelper.NavigateTo(this, this.Owner ?? new MultiplayerMenu());
         }
 
         #endregion
@@ -266,6 +238,11 @@ namespace Client.Views.Lobby
             }
 
             base.OnClosed(e);
+        }
+
+        private void GoBackToMenu()
+        {
+            NavigationHelper.NavigateTo(this, this.Owner ?? new MultiplayerMenu());
         }
 
         private async Task LeaveLobbySafe()

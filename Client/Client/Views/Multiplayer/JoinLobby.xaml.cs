@@ -23,19 +23,21 @@ namespace Client.Views.Multiplayer
         public JoinLobby()
         {
             InitializeComponent();
+            LoadPublicMatches();
         }
 
         private async void LoadPublicMatches()
         {
-            try
+            ButtonRefresh.IsEnabled = false;
+
+
+            await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 var lobbies = await GameServiceManager.Instance.GetPublicLobbiesAsync();
                 ListBoxPublicLobbies.ItemsSource = lobbies;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error loading lobbies: {ex.Message}");
-            }
+            });
+
+            ButtonRefresh.IsEnabled = true;
         }
 
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
@@ -60,11 +62,7 @@ namespace Client.Views.Multiplayer
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = Regex.IsMatch(
-                e.Text,
-                "[^0-9]+",
-                RegexOptions.None,
-                TimeSpan.FromMilliseconds(100));
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
