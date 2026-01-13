@@ -66,56 +66,31 @@ namespace Server.GameService
 
         public void HandleFlipCard(string playerId, int cardIndex)
         {
+            GameDeck.GameCard c1 = null, c2 = null;
             string imageToSend = null;
-            bool isMatch = false;
-            bool isSecondCard = false;
-            GameDeck.GameCard card1 = null;
-            GameDeck.GameCard card2 = null;
+            bool isMatch = false, isSecond = false;
 
             lock (_gameLock)
             {
-                if (!IsGameInProgress || _isProcessingMismatch)
-                {
-                    return;
-                }
+                if (!IsMoveLegal(playerId, cardIndex, out c2)) return;
 
-                var currentPlayer = _players[_currentPlayerIndex];
-                if (currentPlayer.Id != playerId)
-                {
-                    return;
-                }
-
-                var card = _deck.GetCard(cardIndex);
-                if (card == null || card.IsMatched)
-                {
-                    return;
-                }
-
-                if (_firstFlippedCard != null && _firstFlippedCard.Index == cardIndex)
-                {
-                    return;
-                }
-
-                imageToSend = card.Info.ImageIdentifier;
+                imageToSend = c2.Info.ImageIdentifier;
 
                 if (_firstFlippedCard == null)
                 {
-                    _firstFlippedCard = card;
+                    _firstFlippedCard = c2;
                 }
                 else
                 {
-                    isSecondCard = true;
-                    card1 = _firstFlippedCard;
-                    card2 = card;
+                    isSecond = true;
+                    c1 = _firstFlippedCard;
                     _firstFlippedCard = null;
-
                     _turnTimer.Stop();
 
-                    if (card1.Info.CardId == card2.Info.CardId)
+                    if (c1.Info.CardId == c2.Info.CardId)
                     {
                         isMatch = true;
-                        card1.IsMatched = true;
-                        card2.IsMatched = true;
+                        c1.IsMatched = c2.IsMatched = true;
                         _scores[playerId]++;
                     }
                     else
@@ -125,22 +100,40 @@ namespace Server.GameService
                 }
             }
 
-            if (imageToSend != null)
+            if (imageToSend != null) _notifier.NotifyShowCard(cardIndex, imageToSend);
+
+            if (isSecond)
             {
-                _notifier.NotifyShowCard(cardIndex, imageToSend);
+                if (isMatch) HandleMatch(playerId, c1, c2);
+                else HandleMismatch(c1, c2);
+            }
+        }
+
+        private bool IsMoveLegal(string playerId, int cardIndex, out GameDeck.GameCard card)
+        {
+            card = _deck.GetCard(cardIndex);
+
+            if (!IsGameInProgress || _isProcessingMismatch)
+            {
+                return false;
             }
 
-            if (isSecondCard)
+            if (_players[_currentPlayerIndex].Id != playerId)
             {
-                if (isMatch)
-                {
-                    HandleMatch(playerId, card1, card2);
-                }
-                else
-                {
-                    HandleMismatch(card1, card2);
-                }
+                return false;
             }
+
+            if (card == null || card.IsMatched)
+            {
+                return false;
+            }
+
+            if (_firstFlippedCard != null && _firstFlippedCard.Index == cardIndex)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void HandleMatch(string playerId, GameDeck.GameCard c1, GameDeck.GameCard c2)
@@ -239,7 +232,7 @@ namespace Server.GameService
             _turnTimer.Restart();
         }
 
-        private GameSettings SanitizeSettings(GameSettings s)
+        private static GameSettings SanitizeSettings(GameSettings s)
         {
             if (s.CardCount < 16 || s.CardCount % 2 != 0)
             {

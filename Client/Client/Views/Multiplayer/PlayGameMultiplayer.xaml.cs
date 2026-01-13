@@ -257,7 +257,7 @@ namespace Client.Views.Multiplayer
                 int index = _players.FindIndex(p => p.Name == playerName);
                 if (index >= 0 && index < _playerScores.Length)
                 {
-                    _playerScores[index].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {score}";
+                    _playerScores[index].Content = $"{Lang.PlayGameMultiplayer_Label_FoundPairs} {score}";
                 }
             });
         }
@@ -295,6 +295,25 @@ namespace Client.Views.Multiplayer
                     _playerTimes[activeIndex].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {timeString}";
                 }
             });
+        }
+
+        private void AddSystemMessageToChat(string message)
+        {
+            ChatListBox.Items.Add($"[SISTEMA]: {message}");
+        }
+
+        private void HandleAutoWin()
+        {
+            _gameManager.StopGame();
+
+            CustomMessageBox winMsg = new CustomMessageBox(
+                "Lang.Global_Title_Info",
+                "¡Ganaste! El otro jugador ha abandonado la partida.",
+                this,
+                MessageBoxType.Information);
+            winMsg.ShowDialog();
+
+            NavigationHelper.NavigateTo(this, new MultiplayerMenu());
         }
 
         private async void Card_Click(object sender, RoutedEventArgs e)
@@ -387,23 +406,27 @@ namespace Client.Views.Multiplayer
             });
         }
 
-        private void OnPlayerLeft(string playerName)
+        private void OnPlayerLeft(string username)
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
+                AddSystemMessageToChat($"{username} ha abandonado la partida.");
+
+                // 2. ACTUALIZAR LISTA LOCAL
+                var playerToRemove = _players.FirstOrDefault(p => p.Name == username);
+                if (playerToRemove != null)
                 {
-                    return;
+                    _players.Remove(playerToRemove);
+
+                    // Actualizar la UI de los tableros de puntuación (ocultar el panel del jugador que se fue)
+                    UpdatePlayerUI(); // Asegúrate de tener un método que refresque los Labels/Borders
                 }
 
-                ChatListBox.Items.Add($"--- {playerName} left the game ---");
-                int index = _players.FindIndex(p => p.Name == playerName);
-
-                if (index >= 0 && index < _playerBorders.Length)
+                // 3. VALIDAR VICTORIA AUTOMÁTICA
+                // Si quedamos solo nosotros (Count == 1) y la partida estaba en curso
+                if (_players.Count == 1 && _gameManager.IsGameInProgress)
                 {
-                    _playerBorders[index].Opacity = 0.5;
-                    _playerNames[index].Content += " (Left)";
-                    _playerBorders[index].ContextMenu = null;
+                    HandleAutoWin();
                 }
             });
         }

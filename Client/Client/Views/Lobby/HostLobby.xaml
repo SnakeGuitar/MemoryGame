@@ -24,14 +24,14 @@
 
                 <Grid Grid.Row="0" Margin="40,20,40,10">
                     <Label Content="{x:Static lang:Lang.Global_Title_Multiplayer}" 
-                           Style="{StaticResource LobbyTitleStyle}"
+                           Style="{StaticResource LobbyTitleStyle}" FontSize="60"
                            HorizontalAlignment="Left"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <Label Content="{x:Static lang:Lang.HostLobby_Label_GameCode}" 
-                               Style="{StaticResource SubTitleStyle}" 
+                               Style="{StaticResource SubTitleStyle}" FontSize="30"
                                Foreground="{StaticResource AccentForegroundColor}"/>
-                        <Label x:Name="LabelGameCode" Content="000000" 
+                        <Label x:Name="LabelGameCode" Content="000000" FontSize="32"
                                Style="{StaticResource SubTitleStyle}" 
                                Foreground="{StaticResource AccentForegroundColor}"
                                FontWeight="Bold"/>
