@@ -385,6 +385,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Pangolin-Regular.ttf #Pangolin.
+        /// </summary>
+        public static string Global_BodyFont {
+            get {
+                return ResourceManager.GetString("Global_BodyFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Accept.
         /// </summary>
         public static string Global_Button_Accept {
@@ -867,15 +876,6 @@ namespace Client.Properties.Langs {
         public static string Global_Error_UserNotFound {
             get {
                 return ResourceManager.GetString("Global_Error_UserNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Pangolin-Regular.ttf #Pangolin.
-        /// </summary>
-        public static string Global_FontName {
-            get {
-                return ResourceManager.GetString("Global_FontName", resourceCulture);
             }
         }
         
@@ -1366,6 +1366,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Comico-Regular.ttf #false.
+        /// </summary>
+        public static string Global_TitleFont {
+            get {
+                return ResourceManager.GetString("Global_TitleFont", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Code cannot be empty.
         /// </summary>
         public static string Global_ValidationCode_Empty {
@@ -1690,6 +1699,33 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a You cannot kick yourself.
+        /// </summary>
+        public static string KickVote_Message_CantVoteYourself {
+            get {
+                return ResourceManager.GetString("KickVote_Message_CantVoteYourself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Vote to Kick: {0}? Please Confirm your Vote.
+        /// </summary>
+        public static string KickVote_Message_VoteKickPlayer {
+            get {
+                return ResourceManager.GetString("KickVote_Message_VoteKickPlayer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Confirm Vote.
+        /// </summary>
+        public static string KickVote_Title_ConfirmVote {
+            get {
+                return ResourceManager.GetString("KickVote_Title_ConfirmVote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Invite Friend.
         /// </summary>
         public static string Lobby_Button_Invite {
@@ -1749,6 +1785,15 @@ namespace Client.Properties.Langs {
         public static string Lobby_Message_CreateSuccess {
             get {
                 return ResourceManager.GetString("Lobby_Message_CreateSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Messages longer than 50 characters cannot be sent to the chat :/.
+        /// </summary>
+        public static string Lobby_Message_InvalidNumberChar {
+            get {
+                return ResourceManager.GetString("Lobby_Message_InvalidNumberChar", resourceCulture);
             }
         }
         
@@ -1965,6 +2010,33 @@ namespace Client.Properties.Langs {
         public static string PlayerProfile_Message_NotAvaible {
             get {
                 return ResourceManager.GetString("PlayerProfile_Message_NotAvaible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Found Pairs:.
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_FoundPairs {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_FoundPairs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You have found: {0} pairs  Well done! :).
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_Score {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_Score", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Turn Time:.
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_TimeTurn {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_TimeTurn", resourceCulture);
             }
         }
         

@@ -207,12 +207,17 @@ namespace Client.Helpers
 
         public static void ApplyLanguageFont()
         {
-            string fontName = Lang.Global_FontName;
-            string fontPath = $"pack://application:,,,/Resources/Fonts/{fontName}";
-            FontFamily newFont = new FontFamily(fontPath);
+            string titleFontName = Lang.Global_TitleFont;
+            string bodyFontName = Lang.Global_BodyFont;
 
-            Application.Current.Resources["TitleFont"] = newFont;
-            Application.Current.Resources["BodyFont"] = newFont;
+            string titleFontPath = $"pack://application:,,,/Resources/Fonts/{titleFontName}";
+            string bodyFontPath = $"pack://application:,,,/Resources/Fonts/{bodyFontName}";
+
+            FontFamily newTitleFont = new FontFamily(titleFontPath);
+            FontFamily newBodyFont = new FontFamily(bodyFontPath);
+
+            Application.Current.Resources["TitleFont"] = newTitleFont;
+            Application.Current.Resources["BodyFont"] = newBodyFont;
         }
     }
 }

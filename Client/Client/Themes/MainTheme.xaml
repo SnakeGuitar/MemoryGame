@@ -22,7 +22,7 @@
 
     <SolidColorBrush x:Key="GreenGame" Color="#3A6351"/>
 
-    <FontFamily x:Key="TitleFont">pack://application:,,,/Resources/Fonts/#Comico, pack://application:,,,/Resources/Fonts/#Pangolin Regular, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
+    <FontFamily x:Key="TitleFont">pack://application:,,,/Resources/Fonts/#false, pack://application:,,,/Resources/Fonts/#Pangolin Regular, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
     <FontFamily x:Key="BodyFont">pack://application:,,,/Resources/Fonts/#Pangolin Regular, pack://application:,,,/Resources/Fonts/#Hachi Maru Pop</FontFamily>
     
 
@@ -354,12 +354,12 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="#CCFFFFFF"/>
+                            <Setter TargetName="border" Property="Background" Value="Transparent"/>
                             <Setter Property="Foreground" Value="Black"/>
                             <Setter Property="BorderBrush" Value="Black"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource AccentForegroundColor}"/>
+                            <Setter TargetName="border" Property="Background" Value="Transparent"/>
                             <Setter Property="Foreground" Value="Black"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

@@ -747,7 +747,7 @@
   <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>Acesso negado. Você não tem permissão para realizar esta ação.</value>
   </data>
-  <data name="Global_FontName" xml:space="preserve">
+  <data name="Global_BodyFont" xml:space="preserve">
     <value>Pangolin-Regular.ttf #Pangolin</value>
   </data>
   <data name="Global_Button_Leave" xml:space="preserve">
@@ -852,28 +852,53 @@
   <data name="Settings_Label_Fullscreen" xml:space="preserve">
     <value>Modo de tela cheia</value>
   </data>
-	<data name="JoinLobby_Label_PublicGames" xml:space="preserve">
-  <value>JOGOS PÚBLICOS</value>
-</data>
-	<data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
-  <value>Sala de Espera</value>
-</data>
-	<data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
-  <value>* Duplo clique para entrar</value>
-</data>
-	<data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
-  <value>Criar Novo Jogo</value>
-</data>
-	<data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
-  <value>O código do jogo será gerado automaticamente.</value>
-</data>
-	<data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
-  <value>Público</value>
-</data>
-	<data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
-  <value>Entrar no Jogo</value>
-</data>
-	<data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
-  <value>Erro interno: Não foi possível criar o código da sala.</value>
-</data>
+  <data name="JoinLobby_Label_PublicGames" xml:space="preserve">
+    <value>JOGOS PÚBLICOS</value>
+  </data>
+  <data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
+    <value>Sala de Espera</value>
+  </data>
+  <data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
+    <value>* Duplo clique para entrar</value>
+  </data>
+  <data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
+    <value>Criar Novo Jogo</value>
+  </data>
+  <data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
+    <value>O código do jogo será gerado automaticamente.</value>
+  </data>
+  <data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
+    <value>Público</value>
+  </data>
+  <data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
+    <value>Entrar no Jogo</value>
+  </data>
+  <data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
+    <value>Erro interno: Não foi possível criar o código da sala.</value>
+  </data>
+  <data name="Global_TitleFont" xml:space="preserve">
+    <value>Comico-Regular.ttf #false</value>
+  </data>
+  <data name="Lobby_Message_InvalidNumberChar" xml:space="preserve">
+    <value>Não é possível enviar mensagens com mais de 50 caracteres para o chat :/</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_FoundPairs" xml:space="preserve">
+    <value>Paires Trouvées :</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_TimeTurn" xml:space="preserve">
+    <value>Tempo da Jogada:</value>
+  </data>
+  <data name="KickVote_Message_CantVoteYourself" xml:space="preserve">
+    <value>Você não pode votar para expulsar a si mesmo</value>
+  </data>
+  <data name="KickVote_Title_ConfirmVote" xml:space="preserve">
+    <value>Confirmar Voto</value>
+  </data>
+  <data name="KickVote_Message_VoteKickPlayer" xml:space="preserve">
+    <value>Votar para expulsar: {0}? Por favor, confirme seu voto</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PlayGameMultiplayer_Label_Score" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

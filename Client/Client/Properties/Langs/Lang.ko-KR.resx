@@ -747,7 +747,7 @@
   <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>액세스가 거부되었습니다. 이 작업을 수행할 권한이 없습니다.</value>
   </data>
-  <data name="Global_FontName" xml:space="preserve">
+  <data name="Global_BodyFont" xml:space="preserve">
     <value>Jua-Regular.ttf #Jua</value>
   </data>
   <data name="Global_Button_Leave" xml:space="preserve">
@@ -853,28 +853,53 @@
   <data name="Settings_Label_Fullscreen" xml:space="preserve">
     <value>전체 화면 모드</value>
   </data>
-	<data name="JoinLobby_Label_PublicGames" xml:space="preserve">
-  <value>공개 게임</value>
-</data>
-	<data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
-  <value>대기실</value>
-</data>
-	<data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
-  <value>* 더블 클릭하여 참가</value>
-</data>
-	<data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
-  <value>새 게임 만들기</value>
-</data>
-	<data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
-  <value>게임 코드가 자동으로 생성됩니다.</value>
-</data>
-	<data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
-  <value>공개</value>
-</data>
-	<data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
-  <value>게임 참가</value>
-</data>
-	<data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
-  <value>내부 오류: 로비 코드를 생성할 수 없습니다.</value>
-</data>
+  <data name="JoinLobby_Label_PublicGames" xml:space="preserve">
+    <value>공개 게임</value>
+  </data>
+  <data name="JoinLobby_Label_WaitingRoom" xml:space="preserve">
+    <value>대기실</value>
+  </data>
+  <data name="JoinLobby_Label_DoubleClickInfo" xml:space="preserve">
+    <value>* 더블 클릭하여 참가</value>
+  </data>
+  <data name="MultiplayerMenu_Label_CreateGame" xml:space="preserve">
+    <value>새 게임 만들기</value>
+  </data>
+  <data name="MultiplayerMenu_Label_AutoCodeGeneration" xml:space="preserve">
+    <value>게임 코드가 자동으로 생성됩니다.</value>
+  </data>
+  <data name="MultiplayerMenu_CheckBox_Public" xml:space="preserve">
+    <value>공개</value>
+  </data>
+  <data name="MultiplayerMenu_Label_JoinGame" xml:space="preserve">
+    <value>게임 참가</value>
+  </data>
+  <data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
+    <value>내부 오류: 로비 코드를 생성할 수 없습니다.</value>
+  </data>
+  <data name="Global_TitleFont" xml:space="preserve">
+    <value>Jua-Regular.ttf #Jua</value>
+  </data>
+  <data name="Lobby_Message_InvalidNumberChar" xml:space="preserve">
+    <value>50자 이상의 메시지는 채팅으로 보낼 수 없습니다 :/</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_FoundPairs" xml:space="preserve">
+    <value>찾은 쌍:</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_TimeTurn" xml:space="preserve">
+    <value>턴 시간:</value>
+  </data>
+  <data name="KickVote_Message_CantVoteYourself" xml:space="preserve">
+    <value>자기 자신을 추방하기 위해 투표할 수 없습니다.</value>
+  </data>
+  <data name="KickVote_Title_ConfirmVote" xml:space="preserve">
+    <value>투표 확인</value>
+  </data>
+  <data name="KickVote_Message_VoteKickPlayer" xml:space="preserve">
+    <value>{0}님을 추방하시겠습니까? 투표를 확인해 주세요</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PlayGameMultiplayer_Label_Score" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>
