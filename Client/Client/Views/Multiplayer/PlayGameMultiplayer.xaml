@@ -128,7 +128,7 @@
                                                         <Border x:Name="CardBorder" CornerRadius="5" BorderBrush="White" BorderThickness="2" Background="Transparent">
                                                             <Image Source="{Binding DisplayImage}" Stretch="UniformToFill"/>
                                                         </Border>
-                                                        <Border x:Name="MatchedOverlay" Background="#6600FF00" CornerRadius="5" Visibility="Collapsed"/>
+                                                        <Border x:Name="MatchedOverlay" Background="#3210F800" CornerRadius="5" Visibility="Collapsed"/>
                                                     </Grid>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
@@ -174,7 +174,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" Grid.Column="0" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" MaxLength="50" Grid.Column="0" VerticalContentAlignment="Center"/>
                         <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" Width="60" Margin="5,0,0,0"/>
                     </Grid>
                 </Grid>

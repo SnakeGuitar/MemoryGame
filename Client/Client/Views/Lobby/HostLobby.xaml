@@ -124,10 +124,9 @@
                                                   FontSize="35" Width="120" Height="50"
                                                   Style="{StaticResource FormComboBoxStyle}">
                                             <ComboBoxItem Content="16"/>
-                                            <ComboBoxItem Content="20"/>
                                             <ComboBoxItem Content="24"/>
                                             <ComboBoxItem Content="30"/>
-                                            <ComboBoxItem Content="36"/>
+                                            <ComboBoxItem Content="40"/>
                                         </ComboBox>
 
                                         <Label Content="{x:Static lang:Lang.Global_Label_Cards}" 

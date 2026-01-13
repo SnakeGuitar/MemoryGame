@@ -13,7 +13,7 @@
 
         <Viewbox Stretch="Uniform">
 
-            <Grid Width="1450" Height="900">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -40,7 +40,7 @@
                                    Foreground="{StaticResource AccentForegroundColor}" 
                                    FontFamily="{StaticResource BodyFont}" HorizontalAlignment="Left"
                                    FontWeight="Bold" FontSize="20" Opacity="0.8" 
-                                   Margin="95,0,0,10"/>
+                                   Margin="150,0,0,10"/>
 
                         <Grid Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>

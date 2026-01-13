@@ -5,104 +5,124 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lang="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
-        Title="Lobby" Height="720" Width="1280"
+        
+        Title="Lobby" 
+        MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PrimaryTextColor}"
         Loaded="Window_Loaded">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Viewbox Stretch="Uniform">
 
-        <Grid Grid.Row="0" Margin="20,10,20,0">
-            <Label Content="{x:Static lang:Lang.Global_Title_Lobby}" Style="{StaticResource LobbyTitleStyle}" 
-                   HorizontalAlignment="Left"/>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Label Content="{x:Static lang:Lang.HostLobby_Label_GameCode}" 
-                       Style="{StaticResource SubTitleStyle}" 
-                       Foreground="{StaticResource AccentForegroundColor}"
-                       FontSize="24" Margin="0,0,10,0"/>
-                <Label x:Name="LabelLobbyCode" Content="000000" 
-                       Style="{StaticResource SubTitleStyle}" 
-                       Foreground="{StaticResource AccentForegroundColor}"
-                       FontSize="24" FontWeight="Bold"/>
-            </StackPanel>
-        </Grid>
-
-        <Grid Grid.Row="1" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0" Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Label Content="{x:Static lang:Lang.Global_Title_Players}" 
-                       Style="{StaticResource LobbySubTitleStyle}"/>
-
-                <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}">
-                    <ListBox x:Name="PlayersListBox" Style="{StaticResource LobbyListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-                </Border>
-            </Grid>
-
-            <Grid Grid.Column="1" Margin="10">
+            <Grid Width="1450" Height="900">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="{x:Static lang:Lang.Global_Title_Chat}" 
-                       Style="{StaticResource LobbySubTitleStyle}"/>
+                <Grid Grid.Row="0" Margin="40,20,40,10">
+                    <Label Content="{x:Static lang:Lang.Global_Title_Lobby}" 
+                           Style="{StaticResource LobbyTitleStyle}" FontSize="60"
+                           HorizontalAlignment="Left"/>
 
-                <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}">
-                    <ListBox x:Name="ChatListBox" Style="{StaticResource LobbyListBoxStyle}" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-                </Border>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Label Content="{x:Static lang:Lang.HostLobby_Label_GameCode}" 
+                               Style="{StaticResource SubTitleStyle}" 
+                               Foreground="{StaticResource AccentForegroundColor}"
+                               FontSize="30" Margin="0,0,10,0"/>
+                        <Label x:Name="LabelLobbyCode" Content="000000" 
+                               Style="{StaticResource SubTitleStyle}" 
+                               Foreground="{StaticResource AccentForegroundColor}"
+                               FontSize="32" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
 
-                <Grid Grid.Row="2" Margin="10,0,10,10">
+                <Grid Grid.Row="1" Margin="20">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Margin="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{x:Static lang:Lang.Global_Title_Players}" 
+                               Style="{StaticResource LobbySubTitleStyle}"/>
+
+                        <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}" Margin="0,10,0,0">
+                            <ListBox x:Name="PlayersListBox" 
+                                     Style="{StaticResource LobbyListBoxStyle}" 
+                                     FontSize="38" 
+                                     d:ItemsSource="{d:SampleData ItemCount=5}"/>
+                        </Border>
+                    </Grid>
+
+                    <Grid Grid.Column="1" Margin="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Content="{x:Static lang:Lang.Global_Title_Chat}" 
+                               Style="{StaticResource LobbySubTitleStyle}"/>
+
+                        <Border Grid.Row="1" Style="{StaticResource QuadrantBorderStyle}" Margin="0,10,0,15">
+                            <ListBox x:Name="ChatListBox" 
+                                     Style="{StaticResource LobbyListBoxStyle}" 
+                                     FontSize="25" 
+                                     d:ItemsSource="{d:SampleData ItemCount=5}"/>
+                        </Border>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox x:Name="ChatTextBox" 
+                                     Style="{StaticResource ChatTextBoxStyle}"
+                                     Height="45" FontSize="28"/>
+
+                            <Button Content="{x:Static lang:Lang.Global_Button_Send}" 
+                                    Style="{StaticResource SendButtonStyle}" 
+                                    Grid.Column="1" Height="45"
+                                    Click="ButtonSendMessageChat_Click"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="2" Margin="50,10,50,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}"/>
+                    <Button x:Name="ButtonBack" 
+                            Content="{x:Static lang:Lang.Global_Button_Leave}" 
+                            Style="{StaticResource MenuExitLobbyButtonStyle}"
+                            Grid.Column="0" FontSize="35"
+                            Click="ButtonBackToMainMenu_Click"/>
 
-                    <Button Content="{x:Static lang:Lang.Global_Button_Send}" 
-                            Style="{StaticResource SendButtonStyle}" 
-                            Grid.Column="1" Click="ButtonSendMessageChat_Click"/>
+                    <Button x:Name="ButtonInvite" 
+                            Content="{x:Static lang:Lang.InviteFriendDialog_Title_InviteFriend}" 
+                            Style="{StaticResource MenuExitLobbyButtonStyle}"
+                            Grid.Column="1" HorizontalAlignment="Center" FontSize="35"
+                            Click="ButtonInvite_Click"/>
+
+                    <Button x:Name="ButtonReady" 
+                            Content="{x:Static lang:Lang.Global_Button_Ready}" 
+                            Style="{StaticResource PrimaryLobbyButtonStyle}"
+                            Grid.Column="2" FontSize="35"
+                            Click="ButtonReady_Click"/>
                 </Grid>
             </Grid>
-        </Grid>
-
-        <Grid Grid.Row="2" Margin="40,0,40,30">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <Button x:Name="ButtonBack" 
-                    Content="{x:Static lang:Lang.Global_Button_Leave}" 
-                    Style="{StaticResource MenuExitLobbyButtonStyle}"
-                    Grid.Column="0" Click="ButtonBackToMainMenu_Click"/>
-
-            <Button x:Name="ButtonInvite" 
-                    Content="{x:Static lang:Lang.InviteFriendDialog_Title_InviteFriend}" 
-                    Style="{StaticResource MenuExitLobbyButtonStyle}"
-                    Grid.Column="1" HorizontalAlignment="Center" Click="ButtonInvite_Click"/>
-
-            <Button x:Name="ButtonReady" 
-                    Content="{x:Static lang:Lang.Global_Button_Ready}" 
-                    Style="{StaticResource PrimaryLobbyButtonStyle}"
-                    Grid.Column="2" Click="ButtonReady_Click"/>
-        </Grid>
+        </Viewbox>
     </Grid>
 </Window>

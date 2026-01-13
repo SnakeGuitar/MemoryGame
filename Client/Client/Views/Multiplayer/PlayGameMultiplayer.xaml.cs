@@ -60,7 +60,7 @@ namespace Client.Views.Multiplayer
                 int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
                 if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
                 {
-                    _playerTimes[activeIndex].Content = $"Time: {GameConstants.DefaultTurnTimeSeconds}";
+                    _playerTimes[activeIndex].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {GameConstants.DefaultTurnTimeSeconds}";
                 }
             }
 
@@ -83,8 +83,8 @@ namespace Client.Views.Multiplayer
                 {
                     _playerBorders[i].Visibility = Visibility.Visible;
                     _playerNames[i].Content = _players[i].Name;
-                    _playerScores[i].Content = "Pairs: 0";
-                    _playerTimes[i].Content = "Time: --";
+                    _playerScores[i].Content = Lang.PlayGameMultiplayer_Label_FoundPairs;
+                    _playerTimes[i].Content = Lang.PlayGameMultiplayer_Label_TimeTurn;
 
                     _playerBorders[i].Tag = _players[i].Name; // Important for context menu
 
@@ -169,7 +169,7 @@ namespace Client.Views.Multiplayer
                 {
                     if (label != null && label.Visibility == Visibility.Visible)
                     {
-                        label.Content = "Time: --";
+                        label.Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} --";
                     }
                 }
 
@@ -257,7 +257,7 @@ namespace Client.Views.Multiplayer
                 int index = _players.FindIndex(p => p.Name == playerName);
                 if (index >= 0 && index < _playerScores.Length)
                 {
-                    _playerScores[index].Content = $"Pairs: {score}";
+                    _playerScores[index].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {score}";
                 }
             });
         }
@@ -272,7 +272,7 @@ namespace Client.Views.Multiplayer
                 }
 
                 string myScoreText = GetMyCurrentScore();
-                ShowMatchSummary($"{winnerName} Wins!", $"{Lang.Global_Label_Score}: {myScoreText}");
+                ShowMatchSummary(winnerName, myScoreText);
             });
         }
 
@@ -292,7 +292,7 @@ namespace Client.Views.Multiplayer
                 int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
                 if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
                 {
-                    _playerTimes[activeIndex].Content = $"Time: {timeString}";
+                    _playerTimes[activeIndex].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {timeString}";
                 }
             });
         }
@@ -410,6 +410,16 @@ namespace Client.Views.Multiplayer
 
         private async void ButtonSendMessageChat_Click(object sender, RoutedEventArgs e)
         {
+            string message = ChatTextBox.Text?.Trim();
+
+
+            if (message.Length > MAX_CHAT_MESSAGES)
+            {
+                CustomMessageBox messageBox = new CustomMessageBox(Lang.Global_Title_Warning, Lang.Lobby_Message_InvalidNumberChar, this, MessageBoxType.Warning);
+                messageBox.ShowDialog();
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
                 try
@@ -454,11 +464,12 @@ namespace Client.Views.Multiplayer
             {
                 if (targetPlayerName == UserSession.Username)
                 {
-                    new CustomMessageBox(Lang.Global_Title_Warning, "You cannot kick yourself.", this, MessageBoxType.Warning).ShowDialog();
+                    new CustomMessageBox(Lang.Global_Title_Warning, Lang.KickVote_Message_CantVoteYourself, this, MessageBoxType.Warning).ShowDialog();
                     return;
                 }
 
-                var confirmation = new ConfirmationMessageBox($"Vote to kick {targetPlayerName}?", "Confirm Vote", this, ConfirmationMessageBox.ConfirmationBoxType.Question);
+                string messageVote = string.Format(Lang.KickVote_Message_VoteKickPlayer, targetPlayerName);
+                var confirmation = new ConfirmationMessageBox(Lang.KickVote_Title_ConfirmVote, messageVote, this, ConfirmationMessageBox.ConfirmationBoxType.Question);
 
                 if (confirmation.ShowDialog() == true)
                 {

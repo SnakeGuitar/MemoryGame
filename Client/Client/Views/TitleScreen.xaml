@@ -8,7 +8,7 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
         Title="TitleScreen" 
-        MinHeight="600" MinWidth="500" 
+        MinHeight="600" MinWidth="600" 
         WindowStartupLocation="CenterScreen">
 
     <Grid Background="{StaticResource BackgroundColor}">
@@ -21,7 +21,7 @@
 
                 <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center"
-                            Width="500" Margin="0,0,0,50">
+                            Width="550" Margin="0,0,0,50">
 
                     <TextBlock Style="{StaticResource TitleTextStyle}"
                                Text="{x:Static language:Lang.TitleScreen_Label_Memorama}"/>
@@ -37,17 +37,16 @@
                                 Click="ButtonLogIn_Click"/>
 
                         <Button Content="{x:Static language:Lang.Global_Button_SignIn}"
-                                Style="{StaticResource SecondaryButtonStyle}" Width="260"
+                                Style="{StaticResource PrimaryButtonStyle}" Width="260"
                                 Click="ButtonSignIn_Click" />
 
                         <Button Content="{x:Static language:Lang.Global_Button_Settings}"
-                                Margin="0,30,0,0"
+                                
                                 Style="{StaticResource SettingsButtonStyle}"
-                                Click="ButtonSettings_Click" Width="200" Height="50"
-                                FontSize="20"/>
+                                Click="ButtonSettings_Click" Width="266" Height="55"/>
 
                         <Button Content="{x:Static language:Lang.Global_Button_ExitGame}"
-                                Style="{StaticResource SecondaryButtonStyle}"
+                                Style="{StaticResource SecondaryButtonStyle}" Margin="0,30,0,0"
                                 Click="ButtonExitGame_Click" Width="200" Height="50"
                                 FontSize="20"/>
                     </StackPanel>

@@ -24,6 +24,10 @@ namespace Client.Views.Multiplayer
             {
                 ButtonCreateLobby.IsEnabled = false;
                 ButtonCreateLobby.Opacity = 0.5;
+                checkBoxIsPublic.IsEnabled = false;
+                checkBoxIsPublic.Opacity = 0.5;
+                TextBlockTitle.Visibility = Visibility.Collapsed;
+                TextBlockSubtitle.Text = Lang.Global_Error_GuestsNotAllowed;
             }
         }
 

@@ -20,7 +20,7 @@
 
                 <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center" 
-                            Width="700" Margin="0,0,0,50">
+                            Width="550" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Title_Multiplayer}" 
                            Style="{StaticResource TitleLabelStyle}"/>
@@ -28,60 +28,58 @@
                     <Border Background="{StaticResource AccentColor}" 
                             CornerRadius="15">
 
-                        <StackPanel Margin="30">
+                        <StackPanel Margin="20">
 
-                            <TextBlock Text="{x:Static language:Lang.MultiplayerMenu_Label_CreateGame}" 
-                                       Style="{StaticResource MessageBoxTextStyle}" 
-                                       FontSize="28" 
+                            <TextBlock Name="TextBlockTitle"
+                                       Text="{x:Static language:Lang.MultiplayerMenu_Label_CreateGame}" 
+                                       Style="{StaticResource MessageBoxTextStyle}" FontWeight="Bold"
                                        HorizontalAlignment="Center"
                                        Margin="0,0,0,10"/>
 
                             <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static language:Lang.MultiplayerMenu_Label_AutoCodeGeneration}" 
+                                    <TextBlock Name="TextBlockSubtitle" Width= "Auto"
+                                               TextWrapping="Wrap"
+                                               Text="{x:Static language:Lang.MultiplayerMenu_Label_AutoCodeGeneration}" 
                                                FontFamily="{StaticResource BodyFont}"
                                                Foreground="{StaticResource AccentForegroundColor}" 
-                                               FontSize="16" 
-                                               Opacity="0.9"
-                                               HorizontalAlignment="Center"/>
+                                               FontSize="16" Opacity="0.9"
+                                               HorizontalAlignment="Center" TextAlignment="Center"/>
                                 </StackPanel>
 
-                                <CheckBox x:Name="checkBoxIsPublic" 
-                                          Grid.Column="1"
-                                          Content="{x:Static language:Lang.MultiplayerMenu_CheckBox_Public}"
-                                          Style="{StaticResource FormCheckBoxStyle}"
-                                          Width="Auto"
-                                          Margin="20,0,0,0"
-                                          VerticalAlignment="Center"/>
+                                
                             </Grid>
 
                             <Button x:Name="ButtonCreateLobby" 
                                     Content="{x:Static language:Lang.MultiplayerMenu_Button_CreateLobby}" 
                                     Style="{StaticResource CreateLobbyButtonStyle}"
-                                    Width="300"
-                                    Height="55"
+                                    Width="300" Height="55"
                                     Click="ButtonCreateLobby_Click"/>
 
+                            <CheckBox x:Name="checkBoxIsPublic" 
+                                        Grid.Column="1"
+                                        Content="{x:Static language:Lang.MultiplayerMenu_CheckBox_Public}"
+                                        Style="{StaticResource FormCheckBoxStyle}"
+                                        Width="Auto" Margin="0,0,0,0" VerticalAlignment="Center"/>
+
                             <Separator Background="{StaticResource AccentForegroundColor}" 
-                                       Opacity="0.4" 
+                                       Opacity="0.5" 
                                        Margin="20,25,20,25"/>
 
                             <TextBlock Text="{x:Static language:Lang.MultiplayerMenu_Label_JoinGame}" 
                                        Style="{StaticResource MessageBoxTextStyle}" 
-                                       FontSize="24" 
+                                       FontSize="25" FontWeight="Bold"
                                        HorizontalAlignment="Center"
                                        Margin="0,0,0,10"
                                        Opacity="0.9"/>
 
                             <Button Content="{x:Static language:Lang.Global_Button_Join}" 
                                     Style="{StaticResource FormPrimaryButtonStyle}"
-                                    Width="250"
-                                    Height="50"
+                                    Width="250" Height="50"
                                     Click="ButtonJoinLobby_Click"/>
                         </StackPanel>
                     </Border>

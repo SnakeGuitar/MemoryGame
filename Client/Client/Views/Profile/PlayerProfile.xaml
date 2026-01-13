@@ -61,7 +61,7 @@
 
                         <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,60,0">
 
-                            <Border Width="250" Height="250" 
+                            <Border Width="260" Height="260" 
                                     BorderBrush="{StaticResource PrimaryTextColor}" 
                                     BorderThickness="3" CornerRadius="15"
                                     Margin="0,0,0,20">
@@ -86,7 +86,7 @@
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
 
-                            <Viewbox Stretch="Uniform" HorizontalAlignment="Left" MaxWidth="550" Height="80">
+                            <Viewbox Stretch="Uniform" HorizontalAlignment="Left" MaxWidth="680" Height="150">
                                 <TextBlock x:Name="TextBlockUsername" FontSize="90"
                                            Text="Username"
                                            Style="{StaticResource TitleTextStyle}"
