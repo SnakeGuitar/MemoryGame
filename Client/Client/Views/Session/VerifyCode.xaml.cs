@@ -62,51 +62,43 @@ namespace Client.Views.Session
 
             ButtonVerifyCode.IsEnabled = false;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 ResponseDTO response;
-                string messageSuccess = Lang.VerifyCode_Message_Success;
-
                 if (_isGuestRegister)
                 {
                     response = await UserServiceManager.Instance.VerifyGuestRegistrationAsync(UserSession.UserId, _email, code);
-                    messageSuccess = Lang.VerifyCode_Message_GuestSuccess;
                 }
                 else
                 {
                     response = await UserServiceManager.Instance.VerifyRegistrationAsync(_email, code);
                 }
 
-                if (response.Success)
+                if (!response.Success)
                 {
-                    new CustomMessageBox(
-                        Lang.Global_Title_Success, messageSuccess,
-                        this, MessageBoxType.Success).ShowDialog();
+                    throw new Exception(GetString(response.MessageKey));
+                }
+            });
 
-                    if (_isGuestRegister)
-                    {
-                        UserSession.EndSession();
-                        NavigationHelper.NavigateTo(this, new Login());
-                    }
-                    else
-                    {
-                        NavigationHelper.NavigateTo(this, new SetupProfile(_email));
-                    }
+            if (success)
+            {
+                string message = _isGuestRegister ? Lang.VerifyCode_Message_GuestSuccess : Lang.VerifyCode_Message_Success;
+
+                new CustomMessageBox(Lang.Global_Title_Success, message, this, MessageBoxType.Success).ShowDialog();
+
+                if (_isGuestRegister)
+                {
+                    UserSession.EndSession();
+                    NavigationHelper.NavigateTo(this, new Login());
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
-                    var msgBox = new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error);
-                    msgBox.ShowDialog();
-
-                    ButtonVerifyCode.IsEnabled = true;
+                    NavigationHelper.NavigateTo(this, new SetupProfile(_email));
                 }
             }
-            catch (Exception ex)
+            else
             {
-                ExceptionManager.Handle(ex, this, () => ButtonVerifyCode.IsEnabled = true);
+                ButtonVerifyCode.IsEnabled = true;
             }
         }
 
@@ -114,32 +106,21 @@ namespace Client.Views.Session
         {
             ButtonResendCode.IsEnabled = false;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
-                ResponseDTO response = await UserServiceManager.Instance.ResendVerificationCodeAsync(_email);
+                var response = await UserServiceManager.Instance.ResendVerificationCodeAsync(_email);
+                if (!response.Success)
+                {
+                    throw new Exception(GetString(response.MessageKey));
+                }
+            });
 
-                if (response.Success)
-                {
-                    new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.Verify_Message_CodeResent,
-                        this, MessageBoxType.Success).ShowDialog();
-                }
-                else
-                {
-                    string errorMessage = GetString(response.MessageKey);
-                    new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error).ShowDialog();
-                }
-            }
-            catch (Exception ex)
+            if (success)
             {
-                ExceptionManager.Handle(ex, this);
+                new CustomMessageBox(Lang.Global_Title_Success, Lang.Verify_Message_CodeResent, this, MessageBoxType.Success).ShowDialog();
             }
-            finally
-            {
-                ButtonResendCode.IsEnabled = true;
-            }
+
+            ButtonResendCode.IsEnabled = true;
         }
 
         private void ButtonBackToSignIn_Click(object sender, RoutedEventArgs e)

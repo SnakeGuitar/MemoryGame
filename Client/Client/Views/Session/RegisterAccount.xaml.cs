@@ -52,7 +52,7 @@ namespace Client.Views.Session
 
             ButtonAcceptRegisterAccount.IsEnabled = false;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 ResponseDTO response;
 
@@ -66,33 +66,27 @@ namespace Client.Views.Session
                     response = await UserServiceManager.Instance.StartRegistrationAsync(email, password);
                 }
 
-                if (response.Success)
+                if (!response.Success)
                 {
-                    new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
-                        this, MessageBoxType.Success).ShowDialog();
-
-                    if (string.IsNullOrEmpty(UserSession.SessionToken))
-                    {
-                        return;
-                    }
-
-                    NavigationHelper.NavigateTo(this, new VerifyCode(email, _isGuestRegister));
+                    throw new Exception(GetString(response.MessageKey));
                 }
-                else
-                {
-                    string errorMessage = GetString(response.MessageKey);
+            });
 
-                    new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error).ShowDialog();
-
-                    ButtonAcceptRegisterAccount.IsEnabled = true;
-                }
-            }
-            catch (Exception ex)
+            if (success)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonAcceptRegisterAccount.IsEnabled = true);
+                new CustomMessageBox(
+                    Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
+                    this, MessageBoxType.Success).ShowDialog();
+
+                var verifyCode = new VerifyCode(email, _isGuestRegister);
+                verifyCode.Owner = this;
+                verifyCode.Show();
+
+                this.Hide();
+            }
+            else
+            {
+                ButtonAcceptRegisterAccount.IsEnabled = true;
             }
         }
 

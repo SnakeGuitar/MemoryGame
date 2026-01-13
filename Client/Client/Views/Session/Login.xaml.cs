@@ -55,49 +55,34 @@ namespace Client.Views.Session
             ButtonAcceptLogin.IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.LoginAsync(email, password);
 
                 if (response.Success)
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
-
-                    new CustomMessageBox(
-                        Lang.Global_Title_LoginSuccess,
-                        string.Format(Lang.Global_Message_Welcome, response.User.Username),
-                        this, MessageBoxType.Success).ShowDialog();
-
-                    if (string.IsNullOrEmpty(UserSession.SessionToken))
-                    {
-                        return;
-                    }
-
-                    if (UserServiceManager.Instance.Client == null ||
-                        UserServiceManager.Instance.Client.State != System.ServiceModel.CommunicationState.Opened)
-                    {
-                        return;
-                    }
-
-                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
-
-                    new CustomMessageBox(
-                        Lang.Global_Title_LoginFailed, errorMessage,
-                        this, MessageBoxType.Error).ShowDialog();
+                    throw new Exception(GetString(response.MessageKey));
                 }
-            }
-            catch (Exception ex)
+            });
+
+            Mouse.OverrideCursor = null;
+
+            if (success)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonAcceptLogin.IsEnabled = true);
+                new CustomMessageBox(
+                    Lang.Global_Title_LoginSuccess,
+                    string.Format(Lang.Global_Message_Welcome, UserSession.Username),
+                    this, MessageBoxType.Success).ShowDialog();
+
+                NavigationHelper.NavigateTo(this, new MainMenu());
             }
-            finally
+            else
             {
                 ButtonAcceptLogin.IsEnabled = true;
-                Mouse.OverrideCursor = null;
             }
         }
 

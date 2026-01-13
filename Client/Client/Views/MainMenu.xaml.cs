@@ -26,7 +26,6 @@ namespace Client.Views
         public MainMenu()
         {
             InitializeComponent();
-
             UsernameDisplay.Content = UserSession.Username;
 
             if (UserSession.IsGuest)
@@ -71,10 +70,10 @@ namespace Client.Views
             if (UserSession.IsGuest)
             {
                 string message = string.Format(Lang.PlayerProfile_Message_NotAvaible, UserSession.Username);
-                var msgBox = new CustomMessageBox(
+                var messageBox = new CustomMessageBox(
                     Lang.Global_Title_NotAvailableFunction, message,
                     this, MessageBoxType.Warning);
-                msgBox.ShowDialog();
+                messageBox.ShowDialog();
                 return;
             }
 
@@ -86,7 +85,7 @@ namespace Client.Views
             NavigationHelper.NavigateTo(this, new RegisterAccount(isGuestRegister: true));
         }
 
-        private async void ButtonExitGame_Click(object sender, RoutedEventArgs e)
+        private void ButtonExitGame_Click(object sender, RoutedEventArgs e)
         {
             var confirmationBox = new ConfirmationMessageBox(
                 Lang.Global_Title_ExitGame, Lang.Global_Message_ExitGame,
@@ -94,13 +93,6 @@ namespace Client.Views
 
             if (confirmationBox.ShowDialog() == true)
             {
-                if (sender is FrameworkElement button)
-                {
-                    button.IsEnabled = false;
-                }
-
-                await Task.WhenAny(PerformLogoutAsync(), Task.Delay(2000));
-
                 NavigationHelper.ExitApplication();
             }
         }
@@ -111,46 +103,21 @@ namespace Client.Views
 
         private async Task LoadAvatarAsync()
         {
-            try
+            await ExceptionManager.ExecuteSafeAsync(async () =>
             {
-                byte[] avatarBytes = await UserServiceManager.Instance.Client.GetUserAvatarAsync(UserSession.Email);
+                byte[] avatarBytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
 
                 if (avatarBytes != null && avatarBytes.Length > 0)
                 {
                     ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(avatarBytes);
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"[MainMenu] Failed to load avatar: {ex.Message}");
-            }
+            });
         }
 
         private void OnProfileUpdated()
         {
             UsernameDisplay.Content = UserSession.Username;
             _ = LoadAvatarAsync();
-        }
-
-        private static async Task PerformLogoutAsync()
-        {
-            try
-            {
-                string token = UserSession.SessionToken;
-
-                if (!string.IsNullOrEmpty(token))
-                {
-                    await UserServiceManager.Instance.LogoutAsync(token);
-                }
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                UserSession.EndSession();
-            }
         }
 
         #endregion
@@ -161,41 +128,28 @@ namespace Client.Views
         {
             _keepAliveTimer = new DispatcherTimer();
             _keepAliveTimer.Interval = TimeSpan.FromSeconds(KEEP_ALIVE_INTERVAL_SECONDS);
-            _keepAliveTimer.Tick += async (s, e) => await SendHeartbeatAsync();
+            _keepAliveTimer.Tick += async (s, e) => await SendHeartbeatSafeAsync();
             _keepAliveTimer.Start();
         }
 
-        private async Task SendHeartbeatAsync()
+        private async Task SendHeartbeatSafeAsync()
         {
-            try
+            bool connectionAlive = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
-                var response = await UserServiceManager.Instance.Client.RenewSessionAsync(UserSession.SessionToken);
+                var response = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
 
                 if (!response.Success)
                 {
-                    Debug.WriteLine("[MainMenu] Heartbeat: Session expired server-side.");
-                    HandleSessionExpiration();
+                    throw new Exception(Lang.Global_Error_SessionExpired);
                 }
-            }
-            catch (Exception ex)
+            });
+
+            if (!connectionAlive)
             {
-                Debug.WriteLine($"[MainMenu] Heartbeat failed: {ex.Message}");
+                _keepAliveTimer.Stop();
+                UserSession.EndSession();
+                NavigationHelper.NavigateTo(this, new Login());
             }
-        }
-
-        private void HandleSessionExpiration()
-        {
-            _keepAliveTimer?.Stop();
-
-            new CustomMessageBox(
-                Lang.Global_Title_Error,
-                Lang.Global_Error_SessionExpired,
-                this,
-                MessageBoxType.Error).ShowDialog();
-
-            UserSession.EndSession();
-
-            NavigationHelper.NavigateTo(this, new Login());
         }
 
         #endregion
@@ -206,11 +160,6 @@ namespace Client.Views
         {
             _keepAliveTimer?.Stop();
             UserSession.ProfileUpdated -= OnProfileUpdated;
-
-            if (Application.Current.MainWindow == this)
-            {
-                _ = PerformLogoutAsync();
-            }
             base.OnClosed(e);
         }
 

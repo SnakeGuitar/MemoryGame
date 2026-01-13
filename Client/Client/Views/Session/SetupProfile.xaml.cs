@@ -66,41 +66,32 @@ namespace Client.Views.Session
 
             ButtonAcceptSetupProfile.IsEnabled = false;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.FinalizeRegistrationAsync(
-                    _email,
-                    username,
-                    profileImage);
+                    _email, username, profileImage);
 
                 if (response.Success)
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
-
-                    new CustomMessageBox(
-                        Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
-                        this, MessageBoxType.Information).ShowDialog();
-
-                    if (string.IsNullOrEmpty(UserSession.SessionToken))
-                    {
-                        return;
-                    }
-
-                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
-                    string errorMessage = GetString(response.MessageKey);
-                    new CustomMessageBox(
-                        Lang.Global_Title_Error, errorMessage,
-                        this, MessageBoxType.Error).ShowDialog();
-
-                    ButtonAcceptSetupProfile.IsEnabled = true;
+                    throw new Exception(GetString(response.MessageKey));
                 }
-            }
-            catch (Exception ex)
+            });
+
+            if (success)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonAcceptSetupProfile.IsEnabled = true);
+                new CustomMessageBox(
+                    Lang.Global_Title_Success, Lang.SetupProfile_Message_Success,
+                    this, MessageBoxType.Information).ShowDialog();
+
+                NavigationHelper.NavigateTo(this, new MainMenu());
+            }
+            else
+            {
+                ButtonAcceptSetupProfile.IsEnabled = true;
             }
         }
 

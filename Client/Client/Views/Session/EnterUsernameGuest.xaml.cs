@@ -44,38 +44,32 @@ namespace Client.Views.Session
 
             ButtonAcceptUsernameGuest.IsEnabled = false;
 
-            try
+            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.LoginAsGuestAsync(username);
 
                 if (response.Success)
                 {
                     UserSession.StartSession(response.SessionToken, response.User);
-
-                    new CustomMessageBox(
-                        Lang.Global_Title_LoginAsGuestSuccess,
-                        string.Format(Lang.Global_Message_Welcome, response.User.Username),
-                        this, MessageBoxType.Success).ShowDialog();
-
-                    if (string.IsNullOrEmpty(UserSession.SessionToken))
-                    {
-                        return;
-                    }
-
-                    NavigationHelper.NavigateTo(this, new MainMenu());
                 }
                 else
                 {
-                    new CustomMessageBox(
-                        Lang.Global_Title_Error, GetString(response.MessageKey),
-                        this, MessageBoxType.Error).ShowDialog();
-
-                    ButtonAcceptUsernameGuest.IsEnabled = true;
+                    throw new Exception(GetString(response.MessageKey));
                 }
-            }
-            catch (Exception ex)
+            });
+
+            if (success)
             {
-                ExceptionManager.Handle(ex, this, () => ButtonAcceptUsernameGuest.IsEnabled = true);
+                new CustomMessageBox(
+                    Lang.Global_Title_LoginAsGuestSuccess,
+                    string.Format(Lang.Global_Message_Welcome, UserSession.Username),
+                    this, MessageBoxType.Success).ShowDialog();
+
+                NavigationHelper.NavigateTo(this, new MainMenu());
+            }
+            else
+            {
+                ButtonAcceptUsernameGuest.IsEnabled = true;
             }
         }
 

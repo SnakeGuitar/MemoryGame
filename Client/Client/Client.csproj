@@ -68,7 +68,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Core\MusicManager.cs" />
-    <Compile Include="Core\ServerConnectionMonitor.cs" />
     <Compile Include="Helpers\ClientHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\LocalizationHelper.cs" />

@@ -1,8 +1,8 @@
 ﻿using Client.Core;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client.Helpers
@@ -15,7 +15,6 @@ namespace Client.Helpers
             {
                 return;
             }
-
             if (currentWindow.WindowState == WindowState.Maximized)
             {
                 nextWindow.WindowState = WindowState.Maximized;
@@ -30,14 +29,23 @@ namespace Client.Helpers
             }
 
             WindowHelper.ApplySavedSetting(nextWindow);
-            nextWindow.Show();
             Application.Current.MainWindow = nextWindow;
-
-            Application.Current.Windows
+            nextWindow.Show();
+            var windowsToClose = Application.Current.Windows
                 .Cast<Window>()
                 .Where(window => window != nextWindow)
-                .ToList()
-                .ForEach(window => window.Close());
+                .ToList();
+
+            foreach (var window in windowsToClose)
+            {
+                try
+                {
+                    window.Close();
+                }
+                catch
+                {
+                }
+            }
         }
 
         public static bool? ShowDialog(Window parentWindow, Window dialogWindow)
@@ -56,19 +64,19 @@ namespace Client.Helpers
             return dialog;
         }
 
-        public static void ExitApplication()
+        public static async void ExitApplication()
         {
             try
             {
-                if (UserSession.IsGuest)
+                if (!string.IsNullOrEmpty(UserSession.SessionToken))
                 {
-                    UserServiceManager.Instance.Client.LogoutGuestAsync(UserSession.SessionToken);
+                    await UserServiceManager.Instance.LogoutAsync(UserSession.SessionToken);
                 }
                 UserSession.EndSession();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"[Exit Error]: {ex}");
+                System.Diagnostics.Debug.WriteLine($"[Exit Error]: {ex.Message}");
             }
             finally
             {

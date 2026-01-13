@@ -2,6 +2,7 @@
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Utilities;
+using Client.Views;
 using Client.Views.Controls;
 using Client.Views.Session;
 using System;
@@ -27,7 +28,6 @@ namespace Client
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -43,65 +43,13 @@ namespace Client
             base.OnStartup(e);
 
             EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
-            GameServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
-            UserServiceManager.Instance.ServerConnectionLost += OnGlobalServerConnectionLost;
-
             InitializeBackgroundMusic();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            GameServiceManager.Instance.ServerConnectionLost -= OnGlobalServerConnectionLost;
-            UserServiceManager.Instance.ServerConnectionLost -= OnGlobalServerConnectionLost;
             base.OnExit(e);
         }
-
-        #region Global Disconnect Handler
-        private void OnGlobalServerConnectionLost()
-        {
-            if (_isHandlingDisconnect) return;
-            _isHandlingDisconnect = true;
-
-            this.Dispatcher.Invoke(() =>
-            {
-                string title = Lang.Global_Title_ServerOffline ?? "Server Offline";
-                string message = Lang.Global_Error_ConnectionLost ?? "Connection to server lost. Returning to login screen.";
-
-                Window currentOwner = this.MainWindow;
-                if (currentOwner != null && !currentOwner.IsVisible) currentOwner = null;
-
-                var msgBox = new CustomMessageBox(
-                    title,
-                    message,
-                    currentOwner,
-                    CustomMessageBox.MessageBoxType.Error);
-
-                msgBox.ShowDialog();
-
-                UserSession.EndSession();
-
-                NavigateToLoginCleanly();
-
-                _isHandlingDisconnect = false;
-            });
-        }
-
-        private void NavigateToLoginCleanly()
-        {
-            Login loginWindow = new Login();
-
-            Window oldWindow = this.MainWindow;
-
-            this.MainWindow = loginWindow;
-            loginWindow.Show();
-
-            if (oldWindow != null)
-            {
-                oldWindow.Close();
-            }
-        }
-
-        #endregion
 
         #region Window Lifecycle Handlers
 
