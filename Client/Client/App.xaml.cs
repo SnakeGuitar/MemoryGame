@@ -46,11 +46,6 @@ namespace Client
             InitializeBackgroundMusic();
         }
 
-        protected override void OnExit(ExitEventArgs e)
-        {
-            base.OnExit(e);
-        }
-
         #region Window Lifecycle Handlers
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
@@ -68,7 +63,7 @@ namespace Client
         {
             if (this.Windows.Count == 0)
             {
-                NavigationHelper.ExitApplication();
+                _ = NavigationHelper.ExitApplication();
             }
         }
 
@@ -100,7 +95,7 @@ namespace Client
 
         #region Music
 
-        private void InitializeBackgroundMusic()
+        private static void InitializeBackgroundMusic()
         {
             try
             {

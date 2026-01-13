@@ -10,8 +10,6 @@ namespace Client.Test.Helpers
     {
         #region Username Tests
 
-        // --- Boundary Value Analysis: Minimum Length (3) ---
-
         [TestMethod]
         public void ValidateUsername_Boundary_MinMinus1_ReturnsTooSmall()
         {
@@ -29,8 +27,6 @@ namespace Client.Test.Helpers
         {
             Assert.AreEqual(ValidationCode.Success, ValidationHelper.ValidateUsername("abcd"));
         }
-
-        // --- Boundary Value Analysis: Maximum Length (30) ---
 
         [TestMethod]
         public void ValidateUsername_Boundary_MaxMinus1_ReturnsSuccess()
@@ -52,8 +48,6 @@ namespace Client.Test.Helpers
             string username = new string('a', 31);
             Assert.AreEqual(ValidationCode.UsernameTooLong, ValidationHelper.ValidateUsername(username));
         }
-
-        // --- Equivalence Partitioning: Character Sets ---
 
         [TestMethod]
         public void ValidateUsername_Chars_Alphanumeric_ReturnsSuccess()
@@ -119,8 +113,6 @@ namespace Client.Test.Helpers
 
         #region Password Tests
 
-        // --- Boundary Value Analysis: Minimum Length (8) ---
-
         [TestMethod]
         public void ValidatePassword_Boundary_MinMinus1_ReturnsLengthInvalid()
         {
@@ -139,12 +131,9 @@ namespace Client.Test.Helpers
             Assert.AreEqual(ValidationCode.Success, ValidationHelper.ValidatePassword("Aa1!aaaaa"));
         }
 
-        // --- Boundary Value Analysis: Maximum Length (100) ---
-
         [TestMethod]
         public void ValidatePassword_Boundary_MaxMinus1_ReturnsSuccess()
         {
-            // 99 chars
             string pass = "Aa1!" + new string('a', 95);
             Assert.AreEqual(ValidationCode.Success, ValidationHelper.ValidatePassword(pass));
         }
@@ -152,7 +141,6 @@ namespace Client.Test.Helpers
         [TestMethod]
         public void ValidatePassword_Boundary_Max_ReturnsSuccess()
         {
-            // 100 chars
             string pass = "Aa1!" + new string('a', 96);
             Assert.AreEqual(ValidationCode.Success, ValidationHelper.ValidatePassword(pass));
         }
@@ -160,12 +148,9 @@ namespace Client.Test.Helpers
         [TestMethod]
         public void ValidatePassword_Boundary_MaxPlus1_ReturnsLengthInvalid()
         {
-            // 101 chars
             string pass = "Aa1!" + new string('a', 97);
             Assert.AreEqual(ValidationCode.PasswordLengthInvalid, ValidationHelper.ValidatePassword(pass));
         }
-
-        // --- Equivalence Partitioning: Complexity Rules ---
 
         [TestMethod]
         public void ValidatePassword_MissingUpper_ReturnsError()
@@ -207,8 +192,6 @@ namespace Client.Test.Helpers
 
         #region Email Tests
 
-        // --- Boundary Value Analysis: Maximum Length (255) ---
-
         [TestMethod]
         public void ValidateEmail_Boundary_Max_ReturnsSuccess()
         {
@@ -228,8 +211,6 @@ namespace Client.Test.Helpers
 
             Assert.AreEqual(ValidationCode.EmailTooLong, ValidationHelper.ValidateEmail(email));
         }
-
-        // --- Equivalence Partitioning: Structure ---
 
         [TestMethod]
         public void ValidateEmail_Format_Simple_ReturnsSuccess()
@@ -312,8 +293,6 @@ namespace Client.Test.Helpers
         {
             Assert.AreEqual(ValidationCode.CodeLengthInvalid, ValidationHelper.ValidateVerifyCode("1234567", 6));
         }
-
-        // --- Equivalence Partitioning: Content ---
 
         [TestMethod]
         public void ValidateVerifyCode_Content_Numeric_ReturnsSuccess()

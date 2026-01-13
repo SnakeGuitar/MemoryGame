@@ -28,7 +28,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_KnownKey_InvalidCredentials_ReturnsCorrectResource()
         {
-            // Verify mapping for a standard auth error
             var result = LocalizationHelper.GetString(LocalizationHelper.ServerKeys.InvalidCredentials);
             Assert.AreEqual(Lang.Global_Error_InvalidCredentials, result);
         }
@@ -36,7 +35,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_KnownKey_EmailInUse_ReturnsCorrectResource()
         {
-            // Verify mapping for a registration error
             var result = LocalizationHelper.GetString(LocalizationHelper.ServerKeys.EmailInUse);
             Assert.AreEqual(Lang.Global_Error_EmailInUse, result);
         }
@@ -44,7 +42,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_KnownKey_AccountPenalized_ReturnsHardcodedString()
         {
-            // This specific case returns a hardcoded string in your logic, not a Lang resource
             var result = LocalizationHelper.GetString(LocalizationHelper.ServerKeys.AccountPenalized);
             Assert.AreEqual("Your account has been penalized.", result);
         }
@@ -52,7 +49,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_HardcodedDatabaseKey_ReturnsUnknownError()
         {
-            // Test the manual case strings like "Global_Error_Database"
             var result = LocalizationHelper.GetString("Global_Error_Database");
             Assert.AreEqual(Lang.Global_ServiceError_Unknown, result);
         }
@@ -61,7 +57,7 @@ namespace Client.Tests.Helpers
         public void GetString_UnknownRandomKey_ReturnsUnknownError()
         {
             var result = LocalizationHelper.GetString("Some_Random_Error_That_Does_Not_Exist");
-            Assert.AreEqual(Lang.Global_ServiceError_Unknown, result); // Default case
+            Assert.AreEqual(Lang.Global_ServiceError_Unknown, result);
         }
 
         #endregion
@@ -96,7 +92,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_ExceptionEndpointNotFound_ReturnsOfflineMessage()
         {
-            // Simulates server being down/unreachable
             var ex = new EndpointNotFoundException();
             var result = LocalizationHelper.GetString(ex);
 
@@ -115,7 +110,6 @@ namespace Client.Tests.Helpers
         [TestMethod]
         public void GetString_ExceptionCommunication_ReturnsNetworkDownMessage()
         {
-            // CommunicationException is the base for many WCF errors
             var ex = new CommunicationException();
             var result = LocalizationHelper.GetString(ex);
 

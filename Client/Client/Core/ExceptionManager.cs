@@ -10,7 +10,6 @@ using System.Windows;
 
 namespace Client.Core
 {
-    /* --- THE TANKER --- */
     public static class ExceptionManager
     {
         private static readonly object _logLock = new object();
@@ -122,7 +121,6 @@ namespace Client.Core
             }
         }
 
-        // WRAPPER
         public static async Task<bool> ExecuteSafeAsync(Func<Task> action, Action onFailed = null)
         {
             try

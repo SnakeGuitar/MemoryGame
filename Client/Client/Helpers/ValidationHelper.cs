@@ -19,7 +19,7 @@ namespace Client.Helpers
         private static readonly Regex EmailRegex = new Regex(
                 @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase,
-                TimeSpan.FromMilliseconds(250)); // RFC 5322 REGEX
+                TimeSpan.FromMilliseconds(250));
         public static ValidationCode ValidateUsername(string username)
         {
 

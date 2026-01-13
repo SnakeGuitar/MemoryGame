@@ -26,17 +26,14 @@ namespace Client.Tests.Helpers
         [Test]
         public void GenerateGameCode_ReturnsValueWithinRange()
         {
-            // Logic: guarantees range [100000, 999999]
             int codeValue = int.Parse(ClientHelper.GenerateGameCode());
 
-            // NUnit Specific assertion for range
             Assert.That(codeValue, Is.InRange(100000, 999999));
         }
 
         [Test]
         public void GenerateGameCode_IsRandom()
         {
-            // Verify that calling it twice doesn't return the exact same value immediately
             string code1 = ClientHelper.GenerateGameCode();
             string code2 = ClientHelper.GenerateGameCode();
 
@@ -46,7 +43,6 @@ namespace Client.Tests.Helpers
         [Test]
         public void GenerateGameCode_MultipleIterations_AlwaysValid()
         {
-            // Run loop to ensure stability across multiple random generations
             Assert.DoesNotThrow(() =>
             {
                 for (int i = 0; i < 1000; i++)

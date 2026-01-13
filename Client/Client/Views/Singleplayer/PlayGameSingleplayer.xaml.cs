@@ -91,7 +91,7 @@ namespace Client.Views.Singleplayer
 
         private void OnGameWon()
         {
-            string winnerName = UserSession.Username ?? "Player";
+            string winnerName = UserSession.Username;
             string statsInfo = $"{Lang.Global_Label_Score} {LabelScore.Content} | {Lang.MatchSummary_Label_TimeRemaining} {LabelTimer.Content}";
 
             ShowMatchSummary(winnerName, statsInfo);

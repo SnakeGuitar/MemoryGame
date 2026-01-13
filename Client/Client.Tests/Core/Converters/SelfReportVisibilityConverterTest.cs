@@ -63,7 +63,7 @@ namespace Client.Test.Core.Converters
         public void Convert_ValueIsNotString_ReturnsVisible()
         {
             UserSession.Username = "PlayerOne";
-            int value = 123; // Incorrect type
+            int value = 123;
 
             var result = _converter.Convert(value, typeof(Visibility), null, CultureInfo.InvariantCulture);
 

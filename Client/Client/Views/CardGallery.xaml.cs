@@ -1,5 +1,5 @@
 ﻿using Client.Helpers;
-using Client.Properties.Langs; // Importante
+using Client.Properties.Langs;
 using System;
 using System.Collections.Generic;
 using System.Windows;

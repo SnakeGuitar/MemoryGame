@@ -69,7 +69,6 @@ namespace Client.Helpers
 
             switch (serverMessageKey)
             {
-                // --- AUTH & SESSION ---
                 case ServerKeys.InvalidCredentials:
                     return Lang.Global_Error_InvalidCredentials;
 
@@ -83,7 +82,6 @@ namespace Client.Helpers
                 case ServerKeys.AccountPenalized:
                     return "Your account has been penalized.";
 
-                // --- REGISTRATION ---
                 case ServerKeys.PasswordInvalid:
                     return Lang.Global_Error_PasswordInvalid;
                 case ServerKeys.EmailInUse:
@@ -101,7 +99,6 @@ namespace Client.Helpers
                 case ServerKeys.UsernameInUse:
                     return Lang.Global_Error_UsernameInUse;
 
-                // --- PERFIL ---
                 case ServerKeys.UserNotFound:
                     return Lang.Global_Error_UserNotFound;
                 case ServerKeys.ImageInvalid:
@@ -111,7 +108,6 @@ namespace Client.Helpers
                 case ServerKeys.SameUsername:
                     return Lang.EditProfile_Label_ErrorSameUsername;
 
-                // --- SOCIAL ---
                 case ServerKeys.SelfAddFriend:
                     return Lang.Social_Error_SelfAdd;
                 case ServerKeys.AlreadyFriends:
@@ -119,7 +115,6 @@ namespace Client.Helpers
                 case ServerKeys.RequestExists:
                     return Lang.Social_Error_RequestExists;
 
-                // --- KOWLOON GENERIC ERRORS ---
                 case ServerKeys.ServiceErrorDatabase:
                 case "Global_Error_Database":
                 case "Global_Error_DatabaseError":
@@ -138,13 +133,11 @@ namespace Client.Helpers
                 case ValidationHelper.ValidationCode.Success:
                     return string.Empty;
 
-                // --- EMAIL ---
                 case ValidationHelper.ValidationCode.EmailEmpty:
                     return Lang.Global_ValidationEmail_Empty;
                 case ValidationHelper.ValidationCode.EmailInvalidFormat:
                     return Lang.Global_ValidationEmail_InvalidFormat;
 
-                // --- PASSWORD ---
                 case ValidationHelper.ValidationCode.PasswordEmpty:
                     return Lang.Global_ValidationPassword_Empty;
 
@@ -160,7 +153,6 @@ namespace Client.Helpers
                 case ValidationHelper.ValidationCode.PasswordMissingDigit:
                     return Lang.Global_ValidationPassword_MissingDigit;
 
-                // --- USERNAME ---
                 case ValidationHelper.ValidationCode.UsernameEmpty:
                     return Lang.Global_ValidationUsername_Empty;
 
@@ -173,7 +165,6 @@ namespace Client.Helpers
                 case ValidationHelper.ValidationCode.UsernameInvalidChars:
                     return Lang.Global_ValidationUsername_InvalidChars;
 
-                // --- VERIFICATION CODE ---
                 case ValidationHelper.ValidationCode.CodeEmpty:
                     return Lang.Global_ValidationCode_Empty;
 

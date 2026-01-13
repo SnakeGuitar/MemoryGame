@@ -57,7 +57,6 @@ namespace Client.Test.Core
 
         #region Callback Event Tests
 
-        // --- ReceiveChatMessage ---
 
         [Test]
         public void ReceiveChatMessage_PassesCorrectSender()
@@ -81,7 +80,6 @@ namespace Client.Test.Core
             Assert.That(receivedMsg, Is.EqualTo("Hello"));
         }
 
-        // --- PlayerJoined ---
 
         [Test]
         public void PlayerJoined_InvokesEventWithCorrectName()
@@ -94,7 +92,6 @@ namespace Client.Test.Core
             Assert.That(joinedPlayer, Is.EqualTo("NewPlayer"));
         }
 
-        // --- PlayerLeft ---
 
         [Test]
         public void PlayerLeft_InvokesEventWithCorrectName()
@@ -107,7 +104,6 @@ namespace Client.Test.Core
             Assert.That(leftPlayer, Is.EqualTo("OldPlayer"));
         }
 
-        // --- UpdatePlayerList ---
 
         [Test]
         public void UpdatePlayerList_EventReceivesNotNullList()
@@ -139,7 +135,6 @@ namespace Client.Test.Core
             LobbyPlayerInfo[] receivedList = null;
             GameServiceManager.Instance.PlayerListUpdated += (list) => receivedList = list;
 
-            // Se agrega DateTimeKind.Utc para evitar advertencia
             var fakeList = new LobbyPlayerInfo[] {
                 new LobbyPlayerInfo { Name = "P1", JoinedAt = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
             };
@@ -147,8 +142,6 @@ namespace Client.Test.Core
 
             Assert.That(receivedList[0].Name, Is.EqualTo("P1"));
         }
-
-        // --- GameStarted ---
 
         [Test]
         public void GameStarted_EventReceivesNotNullBoard()
@@ -174,8 +167,6 @@ namespace Client.Test.Core
             Assert.That(receivedBoard.Count, Is.EqualTo(1));
         }
 
-        // --- UpdateTurn ---
-
         [Test]
         public void UpdateTurn_InvokesEventWithCorrectPlayer()
         {
@@ -186,8 +177,6 @@ namespace Client.Test.Core
 
             Assert.That(turnPlayer, Is.EqualTo("CurrentPlayer"));
         }
-
-        // --- ShowCard ---
 
         [Test]
         public void ShowCard_InvokesEventWithCorrectIndex()
@@ -211,8 +200,6 @@ namespace Client.Test.Core
             Assert.That(imgId, Is.EqualTo("image_rabbit"));
         }
 
-        // --- HideCards ---
-
         [Test]
         public void HideCards_InvokesEventWithCorrectIndex1()
         {
@@ -235,8 +222,6 @@ namespace Client.Test.Core
             Assert.That(c2, Is.EqualTo(2));
         }
 
-        // --- SetCardsAsMatched ---
-
         [Test]
         public void SetCardsAsMatched_InvokesEvent()
         {
@@ -247,8 +232,6 @@ namespace Client.Test.Core
 
             Assert.That(eventFired, Is.True);
         }
-
-        // --- UpdateScore ---
 
         [Test]
         public void UpdateScore_InvokesEventWithCorrectScore()
@@ -261,7 +244,6 @@ namespace Client.Test.Core
             Assert.That(score, Is.EqualTo(100));
         }
 
-        // --- GameFinished ---
 
         [Test]
         public void GameFinished_InvokesEventWithCorrectWinner()
@@ -281,7 +263,7 @@ namespace Client.Test.Core
         [Test]
         public async Task CreateLobbyAsync_ReturnsFalse_WhenServerOffline()
         {
-            bool result = await GameServiceManager.Instance.CreateLobbyAsync("token", "matchCode");
+            bool result = await GameServiceManager.Instance.CreateLobbyAsync("token", "matchCode", false);
             Assert.That(result, Is.False);
         }
 
@@ -302,7 +284,6 @@ namespace Client.Test.Core
         [Test]
         public void LeaveLobbyAsync_DoesNotCrash_WhenServerOffline()
         {
-            // Usamos Assert.DoesNotThrowAsync para manejar correctamente la tarea asíncrona
             Assert.DoesNotThrowAsync(async () =>
                 await GameServiceManager.Instance.LeaveLobbyAsync());
         }

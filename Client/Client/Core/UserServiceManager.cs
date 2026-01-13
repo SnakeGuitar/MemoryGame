@@ -104,16 +104,24 @@ namespace Client.Core
                 {
                     try
                     {
-                        if (UserSession.IsGuest) Client.LogoutGuest(token);
-                        else Client.Logout(token);
+                        if (UserSession.IsGuest)
+                        {
+                            Client.LogoutGuest(token);
+                        }
+                        else
+                        {
+                            Client.Logout(token);
+                        }
                     }
                     catch
                     {
+
                     }
                 });
             }
             catch
             {
+
             }
         }
 

@@ -13,7 +13,7 @@ namespace Client.Helpers
 {
     public static class ImageHelper
     {
-        private const int MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
+        private const int MAX_IMAGE_SIZE = 5 * 1024 * 1024;
         
         public static BitmapImage ByteArrayToImageSource(byte[] imageData)
         {

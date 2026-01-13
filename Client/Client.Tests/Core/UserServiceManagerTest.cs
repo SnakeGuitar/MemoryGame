@@ -41,8 +41,6 @@ namespace Client.Test.Core
 
         #region Registration Tests
 
-        // --- StartRegistrationAsync ---
-
         [Test]
         public async Task StartRegistrationAsync_ReturnsNotNull_WhenServerOffline()
         {
@@ -63,8 +61,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.StartRegistrationAsync("test@email.com", "pass");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- InitiateGuestRegistrationAsync ---
 
         [Test]
         public async Task InitiateGuestRegistrationAsync_ReturnsNotNull_WhenServerOffline()
@@ -87,8 +83,6 @@ namespace Client.Test.Core
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
 
-        // --- VerifyRegistrationAsync ---
-
         [Test]
         public async Task VerifyRegistrationAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -102,8 +96,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.VerifyRegistrationAsync("test@email.com", "123456");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- VerifyGuestRegistrationAsync ---
 
         [Test]
         public async Task VerifyGuestRegistrationAsync_ReturnsFailure_WhenServerOffline()
@@ -119,8 +111,6 @@ namespace Client.Test.Core
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
 
-        // --- ResendVerificationCodeAsync ---
-
         [Test]
         public async Task ResendVerificationCodeAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -134,8 +124,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.ResendVerificationCodeAsync("test@email.com");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- FinalizeRegistrationAsync ---
 
         [Test]
         public async Task FinalizeRegistrationAsync_ReturnsFailure_WhenServerOffline()
@@ -155,8 +143,6 @@ namespace Client.Test.Core
 
         #region Session Tests
 
-        // --- LoginAsGuestAsync ---
-
         [Test]
         public async Task LoginAsGuestAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -170,8 +156,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.LoginAsGuestAsync("GuestUser");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- LoginAsync ---
 
         [Test]
         public async Task LoginAsync_ReturnsFailure_WhenServerOffline()
@@ -187,8 +171,6 @@ namespace Client.Test.Core
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
 
-        // --- LogoutAsync ---
-
         [Test]
         public void LogoutAsync_DoesNotCrash_WhenServerOffline()
         {
@@ -199,16 +181,12 @@ namespace Client.Test.Core
 
         #region Profile Tests
 
-        // --- GetUserAvatarAsync ---
-
         [Test]
         public async Task GetUserAvatarAsync_ReturnsNull_WhenServerOffline()
         {
             var result = await UserServiceManager.Instance.GetUserAvatarAsync("test@email.com");
             Assert.That(result, Is.Null);
         }
-
-        // --- UpdateUserAvatarAsync ---
 
         [Test]
         public async Task UpdateUserAvatarAsync_ReturnsFailure_WhenServerOffline()
@@ -224,8 +202,6 @@ namespace Client.Test.Core
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
 
-        // --- ChangePasswordAsync ---
-
         [Test]
         public async Task ChangePasswordAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -240,8 +216,6 @@ namespace Client.Test.Core
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
 
-        // --- ChangeUsernameAsync ---
-
         [Test]
         public async Task ChangeUsernameAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -255,8 +229,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.ChangeUsernameAsync("token", "newUser");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- UpdatePersonalInfoAsync ---
 
         [Test]
         public async Task UpdatePersonalInfoAsync_ReturnsFailure_WhenServerOffline()
@@ -276,8 +248,6 @@ namespace Client.Test.Core
 
         #region Social & History Tests
 
-        // --- GetMatchHistoryAsync ---
-
         [Test]
         public async Task GetMatchHistoryAsync_ReturnsNotNull_WhenServerOffline()
         {
@@ -291,8 +261,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.GetMatchHistoryAsync("token");
             Assert.That(result, Is.Empty);
         }
-
-        // --- GetFriendsListAsync ---
 
         [Test]
         public async Task GetFriendsListAsync_ReturnsNotNull_WhenServerOffline()
@@ -308,8 +276,6 @@ namespace Client.Test.Core
             Assert.That(result, Is.Empty);
         }
 
-        // --- GetPendingRequestsAsync ---
-
         [Test]
         public async Task GetPendingRequestsAsync_ReturnsNotNull_WhenServerOffline()
         {
@@ -324,8 +290,6 @@ namespace Client.Test.Core
             Assert.That(result, Is.Empty);
         }
 
-        // --- AddSocialNetworkAsync ---
-
         [Test]
         public async Task AddSocialNetworkAsync_ReturnsFailure_WhenServerOffline()
         {
@@ -339,8 +303,6 @@ namespace Client.Test.Core
             var result = await UserServiceManager.Instance.AddSocialNetworkAsync("token", "account");
             Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
         }
-
-        // --- RemoveSocialNetworkAsync ---
 
         [Test]
         public async Task RemoveSocialNetworkAsync_ReturnsFailure_WhenServerOffline()
