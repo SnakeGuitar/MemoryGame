@@ -7,7 +7,7 @@ using Assert = NUnit.Framework.Assert;
 namespace Client.Tests.Helpers
 {
     [TestFixture]
-    public class ClientHelperTests
+    public class ClientHelperTest
     {
         [Test]
         public void GenerateGameCode_ReturnsStringWithLengthSix()

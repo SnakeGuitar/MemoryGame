@@ -21,6 +21,7 @@ namespace Client.Helpers
             }
             else if (currentWindow.WindowState == WindowState.Normal)
             {
+                nextWindow.WindowStartupLocation = WindowStartupLocation.Manual;
                 nextWindow.WindowState = currentWindow.WindowState;
                 nextWindow.Width = currentWindow.Width;
                 nextWindow.Height = currentWindow.Height;
