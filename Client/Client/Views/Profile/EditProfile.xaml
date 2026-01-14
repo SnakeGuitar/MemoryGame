@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
-        
-        Title="Edit Profile" 
+
         MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 
@@ -26,7 +25,7 @@
 
         <Viewbox Stretch="Uniform">
 
-            <Grid Width="1450" Height="900">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -36,7 +35,7 @@
                 <Label Grid.Row="0" 
                        Content="{x:Static language:Lang.EditProfile_Label_EditProfile}" 
                        Style="{StaticResource TitleLabelStyle}"
-                       Margin="0,15,0,5"/>
+                       Margin="0,8,0,5"/>
 
                 <Border Grid.Row="1" 
                         Background="{StaticResource PrimaryTextColor}" 
@@ -50,7 +49,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" Margin="0,0,30,0">
+                        <StackPanel Grid.Column="0">
 
                             <GroupBox Header="{x:Static language:Lang.Global_Label_Avatar}" 
                                       Style="{StaticResource GroupBoxStyle}">
@@ -127,7 +126,7 @@
                                                  Margin="0,0,10,0"/>
 
                                         <Button Grid.Column="1" 
-                                                Content="+" 
+                                                Content="{x:Static language:Lang.Friends_Label_AddFriend}" 
                                                 Style="{StaticResource PrimaryButtonStyle}" 
                                                 Width="50" Height="40" FontSize="24"
                                                 Click="ButtonAddSocial_Click"/>

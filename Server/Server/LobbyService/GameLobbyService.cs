@@ -219,19 +219,17 @@ namespace Server.LobbyService
                             string clientId = kvp.Key;
                             int score = kvp.Value;
 
-                            if (lobby.Clients.TryGetValue(clientId, out var client))
+                            if (lobby.Clients.TryGetValue(clientId, out var client) && client.UserId.HasValue)
                             {
-                                if (client.UserId.HasValue)
-                                {
-                                    var history = new matchHistory
+                                var history = new matchHistory
                                     {
                                         matchId = match.matchId,
                                         userId = client.UserId.Value,
                                         score = score,
                                         winnerId = winnerUserId
-                                    };
-                                    db.matchHistory.Add(history);
-                                }
+                                    
+                                };
+                                db.matchHistory.Add(history);
                             }
                         }
 
@@ -296,16 +294,17 @@ namespace Server.LobbyService
 
         private void HandleDisconnection(string sessionId)
         {
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
             var client = _stateManager.RemoveClient(sessionId, out var gameCode);
 
-            if (client != null)
+            if (client != null && lobby != null)
             {
-                var lobby = _stateManager.GetLobbyBySession(sessionId);
-                if (lobby != null)
-                {
-                    _notifier.NotifyLeave(lobby, client.Name);
-                    _logger.LogInfo($"Client {client.Name} disconnected from lobby {gameCode} (Session: {sessionId})");
-                }
+                _notifier.NotifyLeave(lobby, client.Name);
+                _logger.LogInfo($"Client {client.Name} disconnected from lobby {gameCode} (Session: {sessionId})");
+            }
+            else
+            {
+                _logger.LogWarn($"Client disconnected but lobby could not be resolved. Session: {sessionId}");
             }
         }
 

@@ -27,6 +27,8 @@ namespace Client.Views.Multiplayer
         private readonly GameManager _gameManager;
         private readonly List<LobbyPlayerInfo> _players;
         private string _currentTurnPlayer;
+        private Dictionary<string, int> _localScores = new Dictionary<string, int>();
+        private bool _isGameFinished = false;
 
         private Border[] _playerBorders;
         private Label[] _playerNames;
@@ -43,6 +45,14 @@ namespace Client.Views.Multiplayer
 
             _players = players ?? new List<LobbyPlayerInfo>();
             Cards = new ObservableCollection<Card>();
+
+            _localScores.Clear();
+            foreach (var p in from p in _players
+                              where !_localScores.ContainsKey(p.Name)
+                              select p)
+            {
+                _localScores.Add(p.Name, 0);
+            }
 
             InitializeUIArrays();
             GameBoard.ItemsSource = Cards;
@@ -81,23 +91,37 @@ namespace Client.Views.Multiplayer
             {
                 if (i < _players.Count)
                 {
+                    var player = _players[i];
+
                     _playerBorders[i].Visibility = Visibility.Visible;
-                    _playerNames[i].Content = _players[i].Name;
-                    _playerScores[i].Content = "Pairs: 0";
-                    _playerTimes[i].Content = "Time: --";
+                    _playerNames[i].Content = player.Name;
 
-                    _playerBorders[i].Tag = _players[i].Name;
+                    int score = _localScores.ContainsKey(player.Name) ? _localScores[player.Name] : 0;
 
-                    if (_players[i].Name == UserSession.Username)
+                    _playerScores[i].Content = $"{Lang.PlayGameMultiplayer_Label_FoundPairs} {score}";
+                    _playerTimes[i].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} --";
+                    _playerBorders[i].Tag = player.Name;
+
+                    if (player.Name == UserSession.Username)
                     {
                         _playerNames[i].Foreground = Brushes.Gold;
                         _playerNames[i].FontWeight = FontWeights.Bold;
+                    }
+                    else
+                    {
+                        _playerNames[i].Foreground = Brushes.White;
+                        _playerNames[i].FontWeight = FontWeights.Normal;
                     }
                 }
                 else
                 {
                     _playerBorders[i].Visibility = Visibility.Collapsed;
                 }
+            }
+
+            if (!string.IsNullOrEmpty(_currentTurnPlayer))
+            {
+                HighlightActivePlayer(_currentTurnPlayer);
             }
         }
 
@@ -158,13 +182,6 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
-
-                _currentTurnPlayer = nextPlayerName;
-
                 foreach (var label in _playerTimes)
                 {
                     if (label != null && label.Visibility == Visibility.Visible)
@@ -173,10 +190,23 @@ namespace Client.Views.Multiplayer
                     }
                 }
 
+                bool isNewPlayer = _currentTurnPlayer != nextPlayerName;
+                _currentTurnPlayer = nextPlayerName;
+
                 HighlightActivePlayer(nextPlayerName);
 
-                _gameManager.UpdateTurnDuration(seconds);
-                _gameManager.ResetTurnTimer();
+                int activeIndex = _players.FindIndex(p => p.Name == nextPlayerName);
+                if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
+                {
+                    TimeSpan t = TimeSpan.FromSeconds(seconds);
+                    _playerTimes[activeIndex].Content = $"{Lang.PlayGameMultiplayer_Label_TimeTurn} {t:mm\\:ss}";
+                }
+
+                if (isNewPlayer)
+                {
+                    _gameManager.UpdateTurnDuration(seconds);
+                    _gameManager.ResetTurnTimer();
+                }
             });
         }
 
@@ -184,11 +214,6 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
-
                 var card = Cards.FirstOrDefault(c => c.Id == cardIndex);
                 if (card != null)
                 {
@@ -201,11 +226,6 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
-
                 var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
                 var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
 
@@ -224,11 +244,6 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
-
                 var c1 = Cards.FirstOrDefault(c => c.Id == idx1);
                 var c2 = Cards.FirstOrDefault(c => c.Id == idx2);
 
@@ -249,9 +264,13 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
+                if (_localScores.ContainsKey(playerName))
                 {
-                    return;
+                    _localScores[playerName] = score;
+                }
+                else
+                {
+                    _localScores.Add(playerName, score);
                 }
 
                 int index = _players.FindIndex(p => p.Name == playerName);
@@ -266,10 +285,8 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
+                _isGameFinished = true;
+                _gameManager.StopGame();
 
                 string myScoreText = GetMyCurrentScore();
                 ShowMatchSummary(winnerName, myScoreText);
@@ -284,11 +301,6 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
-                {
-                    return;
-                }
-
                 int activeIndex = _players.FindIndex(p => p.Name == _currentTurnPlayer);
                 if (activeIndex >= 0 && activeIndex < _playerTimes.Length)
                 {
@@ -391,19 +403,31 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
+                string messagePlayerLeft = $"--- {playerName} {Lang.PlayGameMultiplayer_Label_LeftGame} ---";
+                ChatListBox.Items.Add(messagePlayerLeft);
+                if (ChatListBox.Items.Count > 0)
                 {
-                    return;
+                    ChatListBox.ScrollIntoView(ChatListBox.Items[ChatListBox.Items.Count - 1]);
+                };
+
+                var playerToRemove = _players.FirstOrDefault(p => p.Name == playerName);
+                if (playerToRemove != null)
+                {
+                    _players.Remove(playerToRemove);
+                    SetupPlayerUI();
                 }
 
-                ChatListBox.Items.Add($"--- {playerName} left the game ---");
-                int index = _players.FindIndex(p => p.Name == playerName);
-
-                if (index >= 0 && index < _playerBorders.Length)
+                if (_players.Count == 1 && !_isGameFinished)
                 {
-                    _playerBorders[index].Opacity = 0.5;
-                    _playerNames[index].Content += " (Left)";
-                    _playerBorders[index].ContextMenu = null;
+                    _isGameFinished = true;
+                    _gameManager?.StopGame();
+
+                    string messageLastPlayerLeft = string.Format(Lang.PlayGameMultiplayer_Label_PlayersLeft, playerName);
+                    CustomMessageBox winMessage = new CustomMessageBox(Lang.Global_Title_Information,
+                        messageLastPlayerLeft, this, MessageBoxType.Information);
+                    winMessage.ShowDialog();
+
+                    NavigationHelper.NavigateTo(this, new MultiplayerMenu());
                 }
             });
         }

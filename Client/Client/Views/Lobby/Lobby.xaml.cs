@@ -92,7 +92,7 @@ namespace Client.Views.Lobby
                     UpdatePlayerUI();
                 }
 
-                OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerJoined}.", true);
+                OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerJoined}", true);
             }
             else
             {
