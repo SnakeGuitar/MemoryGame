@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,6 +84,12 @@ namespace Client.Views.Lobby
         {
             bool createdSuccessfully = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+
                 if (IsLobbyPreRegistered)
                 {
                     Debug.WriteLine("[HostLobby] Pre-registered.");
@@ -206,6 +213,12 @@ namespace Client.Views.Lobby
 
             bool started = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+
                 var settings = new GameSettings
                 {
                     CardCount = _selectedCardCount,

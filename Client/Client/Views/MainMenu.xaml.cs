@@ -140,7 +140,7 @@ namespace Client.Views
 
                 if (!response.Success)
                 {
-                    throw new Exception(Lang.Global_Error_SessionExpired);
+                    throw new FaultException(Lang.Global_Error_SessionExpired);
                 }
             });
 

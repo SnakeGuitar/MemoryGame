@@ -5,6 +5,7 @@ using Client.Properties.Langs;
 using Client.Views.Controls;
 using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,9 +32,14 @@ namespace Client.Views.Multiplayer
         {
             ButtonRefresh.IsEnabled = false;
 
-
             await ExceptionManager.ExecuteSafeAsync(async () =>
             {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+
                 var lobbies = await GameServiceManager.Instance.GetPublicLobbiesAsync();
                 ListBoxPublicLobbies.ItemsSource = lobbies;
             });

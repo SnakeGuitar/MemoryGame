@@ -3,6 +3,7 @@ using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Views.Controls;
 using System;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,25 +17,27 @@ namespace Client.Views.Profile
         public PlayerProfile()
         {
             InitializeComponent();
-            _ = LoadCurrentAvatar();
+            _ = InitializeProfileAsync();
             LoadData();
             UserSession.ProfileUpdated += LoadData;
         }
 
-        private async Task LoadCurrentAvatar()
+        private async Task InitializeProfileAsync()
         {
-            try
+            await ExceptionManager.ExecuteSafeAsync(async () =>
             {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+
                 var bytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
                 if (bytes != null && bytes.Length > 0)
                 {
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
                 }
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.Handle(ex, this);
-            }
+            });
         }
 
         private void LoadData()
@@ -108,7 +111,7 @@ namespace Client.Views.Profile
 
         private void OnProfileUpdated()
         {
-            _ = LoadCurrentAvatar();
+            _ = InitializeProfileAsync();
         }
 
         protected override void OnClosed(EventArgs e)

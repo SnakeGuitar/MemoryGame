@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -41,6 +42,8 @@ namespace Client.Views.Multiplayer
         {
             InitializeComponent();
 
+            this.Loaded += OnWindowLoaded;
+
             _players = players ?? new List<LobbyPlayerInfo>();
             Cards = new ObservableCollection<Card>();
 
@@ -65,6 +68,22 @@ namespace Client.Views.Multiplayer
             }
 
             StartGameSafe(serverCards);
+        }
+
+        private async void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            await ExceptionManager.ExecuteSafeAsync(async () =>
+            {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+            },
+            onFailed: () =>
+            {
+                this.Close();
+            });
         }
 
         private void InitializeUIArrays()
@@ -311,15 +330,14 @@ namespace Client.Views.Multiplayer
                     return;
                 }
 
-                try
+                await ExceptionManager.ExecuteSafeAsync(async () =>
                 {
                     await GameServiceManager.Instance.FlipCardAsync(clickedCard.Id);
-                }
-                catch (Exception ex)
+                },
+                onFailed: () =>
                 {
-                    Debug.WriteLine($"Error sending flip: {ex.Message}");
-                    ExceptionManager.Handle(ex, this);
-                }
+                    this.Close();
+                });
             }
         }
 
@@ -412,7 +430,6 @@ namespace Client.Views.Multiplayer
         {
             string message = ChatTextBox.Text?.Trim();
 
-
             if (message.Length > MAX_CHAT_MESSAGES)
             {
                 CustomMessageBox messageBox = new CustomMessageBox(Lang.Global_Title_Warning, Lang.Lobby_Message_InvalidNumberChar, this, MessageBoxType.Warning);
@@ -422,15 +439,11 @@ namespace Client.Views.Multiplayer
 
             if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                try
+                await ExceptionManager.ExecuteSafeAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(ChatTextBox.Text);
                     ChatTextBox.Text = string.Empty;
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Chat Error: {ex.Message}");
-                }
+                });
             }
         }
 
@@ -473,15 +486,10 @@ namespace Client.Views.Multiplayer
 
                 if (confirmation.ShowDialog() == true)
                 {
-                    try
+                    await ExceptionManager.ExecuteSafeAsync(async () =>
                     {
                         await GameServiceManager.Instance.VoteToKickAsync(targetPlayerName);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error voting kick: {ex.Message}");
-                        ExceptionManager.Handle(ex, this);
-                    }
+                    });
                 }
             }
         }

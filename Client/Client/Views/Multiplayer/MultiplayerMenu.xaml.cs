@@ -5,6 +5,7 @@ using Client.Properties.Langs;
 using Client.Views.Controls;
 using Client.Views.Lobby;
 using System;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Automation.Peers;
 using static Client.Views.Controls.CustomMessageBox;
@@ -58,6 +59,13 @@ namespace Client.Views.Multiplayer
 
             bool created = await ExceptionManager.ExecuteSafeAsync(async () =>
             {
+                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+
+                if (!sessionCheck.Success)
+                {
+                    throw new FaultException(sessionCheck.MessageKey);
+                }
+
                 bool result = await GameServiceManager.Instance.CreateLobbyAsync(
                     UserSession.SessionToken,
                     generatedCode,
