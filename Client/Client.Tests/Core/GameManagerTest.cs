@@ -213,10 +213,8 @@ namespace Client.Test.Core
             string lastTimeStr = "";
             _gameManager.TimerUpdated += (t) => lastTimeStr = t;
 
-            // Simulate one tick
             InvokePrivateMethod(_gameManager, "GameTimer_Tick", null, EventArgs.Empty);
 
-            // 60s - 1s = 59s -> "00:59"
             Assert.That(lastTimeStr, Is.EqualTo("00:59"));
         }
 

@@ -6,6 +6,7 @@ using Client.Views.Controls;
 using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
@@ -23,10 +24,10 @@ namespace Client.Views.Multiplayer
         public JoinLobby()
         {
             InitializeComponent();
-            LoadPublicMatches();
+            _ = LoadPublicMatches();
         }
 
-        private async void LoadPublicMatches()
+        private async Task LoadPublicMatches()
         {
             ButtonRefresh.IsEnabled = false;
 
@@ -42,7 +43,7 @@ namespace Client.Views.Multiplayer
 
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
-            LoadPublicMatches();
+            _ = LoadPublicMatches();
         }
 
         private void ListBoxPublicLobbies_MouseDoubleClick(object sender, MouseButtonEventArgs e)

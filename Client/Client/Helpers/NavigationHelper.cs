@@ -120,7 +120,7 @@ namespace Client.Helpers
             return dialog;
         }
 
-        public static async void ExitApplication()
+        public static async Task ExitApplication()
         {
             try
             {

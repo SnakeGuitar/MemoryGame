@@ -13,7 +13,6 @@ namespace Client.Tests.Helpers
     [Apartment(ApartmentState.STA)]
     public class ImageHelperTests
     {
-        // Limit defined in ImageHelper
         private const int MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
         /// <summary>

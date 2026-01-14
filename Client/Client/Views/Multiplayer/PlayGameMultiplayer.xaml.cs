@@ -86,7 +86,7 @@ namespace Client.Views.Multiplayer
                     _playerScores[i].Content = "Pairs: 0";
                     _playerTimes[i].Content = "Time: --";
 
-                    _playerBorders[i].Tag = _players[i].Name; // Important for context menu
+                    _playerBorders[i].Tag = _players[i].Name;
 
                     if (_players[i].Name == UserSession.Username)
                     {

@@ -194,6 +194,7 @@ namespace Client.Core
         /// <param name="action">The async function to execute.</param>
         /// <param name="onFailed">Optional action to execute if the task fails.</param>
         /// <returns>True if the action succeeded; otherwise, false.</returns>
+
         public static async Task<bool> ExecuteSafeAsync(Func<Task> action, Action onFailed = null)
         {
             try

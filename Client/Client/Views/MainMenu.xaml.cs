@@ -93,7 +93,7 @@ namespace Client.Views
 
             if (confirmationBox.ShowDialog() == true)
             {
-                NavigationHelper.ExitApplication();
+                _ = NavigationHelper.ExitApplication();
             }
         }
 
