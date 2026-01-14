@@ -747,9 +747,6 @@
   <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>Acesso negado. Você não tem permissão para realizar esta ação.</value>
   </data>
-  <data name="Global_BodyFont" xml:space="preserve">
-    <value>Pangolin-Regular.ttf #Pangolin</value>
-  </data>
   <data name="Global_Button_Leave" xml:space="preserve">
     <value>Sair</value>
   </data>
@@ -876,6 +873,9 @@
   <data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
     <value>Erro interno: Não foi possível criar o código da sala.</value>
   </data>
+  <data name="Global_BodyFont" xml:space="preserve">
+    <value>Pangolin-Regular.ttf #Pangolin</value>
+  </data>
   <data name="Global_TitleFont" xml:space="preserve">
     <value>Comico-Regular.ttf #false</value>
   </data>
@@ -899,6 +899,9 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="PlayGameMultiplayer_Label_Score" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Global_Title_DatabaseDown" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>

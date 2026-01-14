@@ -747,9 +747,6 @@
   <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>アクセスが拒否されました。この操作を実行する権限がありません。</value>
   </data>
-  <data name="Global_BodyFont" xml:space="preserve">
-    <value>HachiMaruPop-Regular.ttf #Hachi Maru Pop</value>
-  </data>
   <data name="Global_Button_Leave" xml:space="preserve">
     <value>離れる</value>
   </data>
@@ -877,6 +874,9 @@
   <data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
     <value>内部エラー：ロビーコードを作成できませんでした。</value>
   </data>
+  <data name="Global_BodyFont" xml:space="preserve">
+    <value>HachiMaruPop-Regular.ttf #Hachi Maru Pop</value>
+  </data>
   <data name="Global_TitleFont" xml:space="preserve">
     <value>HachiMaruPop-Regular.ttf #Hachi Maru Pop</value>
   </data>
@@ -900,6 +900,9 @@
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="PlayGameMultiplayer_Label_Score" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Global_Title_DatabaseDown" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
 </root>

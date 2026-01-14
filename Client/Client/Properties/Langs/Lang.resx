@@ -748,9 +748,6 @@ You need to log in with your new account :)</value>
   <data name="Global_Error_AccessDenied" xml:space="preserve">
     <value>Access denied. You do not have permission to perform this action.</value>
   </data>
-  <data name="Global_BodyFont" xml:space="preserve">
-    <value>Pangolin-Regular.ttf #Pangolin</value>
-  </data>
   <data name="Global_Button_Leave" xml:space="preserve">
     <value>Leave</value>
   </data>
@@ -877,6 +874,9 @@ You need to log in with your new account :)</value>
   <data name="Lobby_Error_CodeGenerationFailed" xml:space="preserve">
     <value>Internal error: Lobby code couldn't be created.</value>
   </data>
+  <data name="Global_BodyFont" xml:space="preserve">
+    <value>Pangolin-Regular.ttf #Pangolin</value>
+  </data>
   <data name="Global_TitleFont" xml:space="preserve">
     <value>Comico-Regular.ttf #false</value>
   </data>
@@ -900,5 +900,8 @@ You need to log in with your new account :)</value>
   </data>
   <data name="PlayGameMultiplayer_Label_Score" xml:space="preserve">
     <value>You have found: {0} pairs  Well done! :)</value>
+  </data>
+  <data name="Global_Title_DatabaseDown" xml:space="preserve">
+    <value>Database Server Error</value>
   </data>
 </root>
