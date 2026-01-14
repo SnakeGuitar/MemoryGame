@@ -34,7 +34,7 @@
 
         <Viewbox Stretch="Uniform">
 
-            <Grid Width="1200" Height="725">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -47,7 +47,7 @@
                         BorderThickness="5" Margin="0,70,0,20"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Width="1100" Padding="45">
+                        Width="1100" Height="Auto" Padding="45">
 
                     <Border.Effect>
                         <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="10" Opacity="0.5"/>
@@ -59,7 +59,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,60,0">
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,70,0">
 
                             <Border Width="260" Height="260" 
                                     BorderBrush="{StaticResource PrimaryTextColor}" 
