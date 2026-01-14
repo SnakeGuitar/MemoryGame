@@ -154,15 +154,6 @@ namespace Client.Views.Lobby
 
         #region Interaction Handlers
 
-        private void ButtonReady_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-            {
-                button.IsEnabled = false;
-                button.Content = "Waiting...";
-            }
-        }
-
         private void ButtonInvite_Click(object sender, RoutedEventArgs e)
         {
             NavigationHelper.ShowDialog(this, new InviteFriendDialog(_lobbyCode));

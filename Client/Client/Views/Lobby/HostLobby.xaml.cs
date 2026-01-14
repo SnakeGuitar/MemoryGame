@@ -298,6 +298,11 @@ namespace Client.Views.Lobby
             }
         }
 
+        private void ButtonInvite_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationHelper.ShowDialog(this, new InviteFriendDialog(_lobbyCode));
+        }
+
         private async void ButtonBackToMenu_Click(object sender, RoutedEventArgs e)
         {
             var confirmationBox = new ConfirmationMessageBox(

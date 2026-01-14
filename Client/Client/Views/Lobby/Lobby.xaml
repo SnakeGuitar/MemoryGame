@@ -113,14 +113,8 @@
                     <Button x:Name="ButtonInvite" 
                             Content="{x:Static lang:Lang.InviteFriendDialog_Title_InviteFriend}" 
                             Style="{StaticResource MenuExitLobbyButtonStyle}"
-                            Grid.Column="1" HorizontalAlignment="Center" FontSize="35"
+                            Grid.Column="1" HorizontalAlignment="Right" FontSize="35"
                             Click="ButtonInvite_Click"/>
-
-                    <Button x:Name="ButtonReady" 
-                            Content="{x:Static lang:Lang.Global_Button_Ready}" 
-                            Style="{StaticResource PrimaryLobbyButtonStyle}"
-                            Grid.Column="2" FontSize="35"
-                            Click="ButtonReady_Click"/>
                 </Grid>
             </Grid>
         </Viewbox>

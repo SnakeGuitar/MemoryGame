@@ -126,7 +126,7 @@
                                                  Margin="0,0,10,0"/>
 
                                         <Button Grid.Column="1" 
-                                                Content="{x:Static language:Lang.Friends_Label_AddFriend}" 
+                                                Content="+" 
                                                 Style="{StaticResource PrimaryButtonStyle}" 
                                                 Width="50" Height="40" FontSize="24"
                                                 Click="ButtonAddSocial_Click"/>
