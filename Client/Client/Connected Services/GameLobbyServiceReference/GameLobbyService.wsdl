@@ -20,12 +20,6 @@
       <xsd:import schemaLocation="http://localhost:53000/?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/Server.LobbyService" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IGameLobbyService_Ping_InputMessage">
-    <wsdl:part name="parameters" element="tns:Ping" />
-  </wsdl:message>
-  <wsdl:message name="IGameLobbyService_Ping_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PingResponse" />
-  </wsdl:message>
   <wsdl:message name="IGameLobbyService_JoinLobby_InputMessage">
     <wsdl:part name="parameters" element="tns:JoinLobby" />
   </wsdl:message>
@@ -117,10 +111,6 @@
     <wsdl:part name="parameters" element="tns:GameFinished" />
   </wsdl:message>
   <wsdl:portType name="IGameLobbyService">
-    <wsdl:operation name="Ping">
-      <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/Ping" message="tns:IGameLobbyService_Ping_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/PingResponse" message="tns:IGameLobbyService_Ping_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="JoinLobby">
       <wsdl:input wsaw:Action="http://tempuri.org/IGameLobbyService/JoinLobby" message="tns:IGameLobbyService_JoinLobby_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IGameLobbyService/JoinLobbyResponse" message="tns:IGameLobbyService_JoinLobby_OutputMessage" />
@@ -197,15 +187,6 @@
   <wsdl:binding name="NetTcpBinding_IGameLobbyService" type="tns:IGameLobbyService">
     <wsp:PolicyReference URI="#NetTcpBinding_IGameLobbyService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="Ping">
-      <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/Ping" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="JoinLobby">
       <soap12:operation soapAction="http://tempuri.org/IGameLobbyService/JoinLobby" style="document" />
       <wsdl:input>

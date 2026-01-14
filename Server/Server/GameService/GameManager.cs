@@ -57,40 +57,48 @@ namespace Server.GameService
                 }
 
                 IsGameInProgress = true;
+                _isProcessingMismatch = false;
+                _firstFlippedCard = null;
                 _currentPlayerIndex = new Random().Next(_players.Count);
+                _currentPlayerIndex = (_currentPlayerIndex - 1 + _players.Count) % _players.Count;
             }
 
             _notifier.NotifyGameStarted(_deck.GetBoardInfo());
-            StartNewTurn();
+            StartNewTurn(samePlayer: false);
         }
 
         public void HandleFlipCard(string playerId, int cardIndex)
         {
-            GameDeck.GameCard c1 = null, c2 = null;
             string imageToSend = null;
-            bool isMatch = false, isSecond = false;
+            bool isMatch = false;
+            bool isSecondCard = false;
+            GameDeck.GameCard card1 = null;
+            GameDeck.GameCard card2 = null;
 
             lock (_gameLock)
             {
-                if (!IsMoveLegal(playerId, cardIndex, out c2)) return;
+                if (!CanFlipCard(playerId, cardIndex, out card2))
+                {
+                    return;
+                }
 
-                imageToSend = c2.Info.ImageIdentifier;
+                imageToSend = card2.Info.ImageIdentifier;
 
                 if (_firstFlippedCard == null)
                 {
-                    _firstFlippedCard = c2;
+                    _firstFlippedCard = card2;
                 }
                 else
                 {
-                    isSecond = true;
-                    c1 = _firstFlippedCard;
+                    isSecondCard = true;
+                    card1 = _firstFlippedCard;
                     _firstFlippedCard = null;
-                    _turnTimer.Stop();
+                    _turnTimer.Pause();
 
-                    if (c1.Info.CardId == c2.Info.CardId)
+                    if (card1.Info.CardId == card2.Info.CardId)
                     {
                         isMatch = true;
-                        c1.IsMatched = c2.IsMatched = true;
+                        card1.IsMatched = card2.IsMatched = true;
                         _scores[playerId]++;
                     }
                     else
@@ -100,16 +108,25 @@ namespace Server.GameService
                 }
             }
 
-            if (imageToSend != null) _notifier.NotifyShowCard(cardIndex, imageToSend);
-
-            if (isSecond)
+            if (imageToSend != null)
             {
-                if (isMatch) HandleMatch(playerId, c1, c2);
-                else HandleMismatch(c1, c2);
+                _notifier.NotifyShowCard(cardIndex, imageToSend);
+            }
+
+            if (isSecondCard)
+            {
+                if (isMatch)
+                {
+                    HandleMatch(playerId, card1, card2);
+                }
+                else
+                {
+                    HandleMismatch(card1, card2);
+                }
             }
         }
 
-        private bool IsMoveLegal(string playerId, int cardIndex, out GameDeck.GameCard card)
+        private bool CanFlipCard(string playerId, int cardIndex, out GameDeck.GameCard card)
         {
             card = _deck.GetCard(cardIndex);
 
@@ -144,8 +161,18 @@ namespace Server.GameService
 
             lock (_gameLock)
             {
-                score = _scores[playerId];
-                playerName = _players.First(p => p.Id == playerId).Name;
+                if (_scores.ContainsKey(playerId))
+                {
+                    score = _scores[playerId];
+                }
+
+                var playerObj = _players.FirstOrDefault(p => p.Id == playerId);
+
+                if (playerObj != null)
+                {
+                    playerName = playerObj.Name;
+                }
+
                 isGameOver = _deck.IsAllMatched();
 
                 if (isGameOver)
@@ -177,7 +204,7 @@ namespace Server.GameService
                     _isProcessingMismatch = false;
                 }
 
-                AdvanceTurn();
+                StartNewTurn(samePlayer: false);
             });
         }
 
@@ -202,17 +229,8 @@ namespace Server.GameService
 
             if (shouldAdvance)
             {
-                AdvanceTurn();
+                StartNewTurn(samePlayer: false);
             }
-        }
-
-        private void AdvanceTurn()
-        {
-            lock (_gameLock)
-            {
-                _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
-            }
-            StartNewTurn();
         }
 
         private void StartNewTurn(bool samePlayer = false)
@@ -225,11 +243,21 @@ namespace Server.GameService
                 {
                     return;
                 }
+
+                if (!samePlayer)
+                {
+                    _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
+                    _turnTimer.Restart(_settings.TurnTimeSeconds);
+                }
+                else
+                {
+                    _turnTimer.Resume();
+                }
+
+                if (_currentPlayerIndex >= _players.Count) _currentPlayerIndex = 0;
                 name = _players[_currentPlayerIndex].Name;
             }
-
             _notifier.NotifyTurnChange(name, _settings.TurnTimeSeconds);
-            _turnTimer.Restart();
         }
 
         private static GameSettings SanitizeSettings(GameSettings s)
@@ -351,13 +379,13 @@ namespace Server.GameService
             _turnTimer.Dispose();
 
             string winnerId = null;
-            string winnerName = "Draw";
+            string winnerName = "PlayGameMultiplayer_Label_Tie";
 
             lock (_gameLock)
             {
                 if (_players.Count == 1)
                 {
-                    var survivor = _players.First();
+                    var survivor = _players[0];
                     winnerId = survivor.Id;
                     winnerName = survivor.Name;
                 }
@@ -368,7 +396,7 @@ namespace Server.GameService
 
                     if (winners.Count == 1)
                     {
-                        winnerId = winners.First();
+                        winnerId = winners[0];
                         winnerName = _players.First(p => p.Id == winnerId).Name;
                     }
                 }
