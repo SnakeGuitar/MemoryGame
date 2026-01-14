@@ -4,6 +4,7 @@ using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
+using System.ServiceModel;
 using System.Windows;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
@@ -68,7 +69,7 @@ namespace Client.Views.Session
 
                 if (!response.Success)
                 {
-                    throw new Exception(GetString(response.MessageKey));
+                    throw new FaultException(response.MessageKey);
                 }
             });
 
@@ -78,11 +79,7 @@ namespace Client.Views.Session
                     Lang.Global_Title_Success, Lang.RegisterAccount_Message_Success,
                     this, MessageBoxType.Success).ShowDialog();
 
-                var verifyCode = new VerifyCode(email, _isGuestRegister);
-                verifyCode.Owner = this;
-                verifyCode.Show();
-
-                this.Hide();
+                NavigationHelper.NavigateTo(this, new VerifyCode(email, _isGuestRegister));
             }
             else
             {

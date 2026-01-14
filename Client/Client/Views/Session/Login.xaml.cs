@@ -4,6 +4,7 @@ using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
+using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
@@ -65,7 +66,7 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    throw new Exception(GetString(response.MessageKey));
+                    throw new FaultException(response.MessageKey);
                 }
             });
 

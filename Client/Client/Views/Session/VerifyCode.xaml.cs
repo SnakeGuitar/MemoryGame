@@ -4,6 +4,7 @@ using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
+using System.ServiceModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -76,7 +77,7 @@ namespace Client.Views.Session
 
                 if (!response.Success)
                 {
-                    throw new Exception(GetString(response.MessageKey));
+                    throw new FaultException(response.MessageKey);
                 }
             });
 
@@ -111,7 +112,7 @@ namespace Client.Views.Session
                 var response = await UserServiceManager.Instance.ResendVerificationCodeAsync(_email);
                 if (!response.Success)
                 {
-                    throw new Exception(GetString(response.MessageKey));
+                    throw new FaultException(response.MessageKey);
                 }
             });
 

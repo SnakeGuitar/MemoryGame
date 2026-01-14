@@ -6,6 +6,7 @@ using Client.Views.Controls;
 using Microsoft.Win32;
 using System;
 using System.IO;
+using System.ServiceModel;
 using System.Windows;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Helpers.ValidationHelper;
@@ -77,7 +78,7 @@ namespace Client.Views.Session
                 }
                 else
                 {
-                    throw new Exception(GetString(response.MessageKey));
+                    throw new FaultException(response.MessageKey);
                 }
             });
 
