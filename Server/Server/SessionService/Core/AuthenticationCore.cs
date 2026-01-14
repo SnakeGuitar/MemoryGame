@@ -500,7 +500,7 @@ namespace Server.SessionService.Core
                     }
                         
 
-                    if (guestUser.isGuest != true)
+                    if (!guestUser.isGuest)
                     {
                         return new ResponseDTO { Success = false, MessageKey = "Global_Error_AlreadyRegistered" };
                     }

@@ -904,4 +904,13 @@ You need to log in with your new account :)</value>
   <data name="Global_Title_DatabaseDown" xml:space="preserve">
     <value>Database Server Error</value>
   </data>
+  <data name="PlayGameMultiplayer_Label_Tie" xml:space="preserve">
+    <value>Tie</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_LeftGame" xml:space="preserve">
+    <value>left the game</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
+    <value>You won! {0} left the game</value>
+  </data>
 </root>

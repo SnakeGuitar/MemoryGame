@@ -92,7 +92,7 @@ namespace Client.Views.Lobby
                     UpdatePlayerUI();
                 }
 
-                OnChatMessageReceived("System", $"{UserSession.Username} joined.", true);
+                OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerJoined}.", true);
             }
             else
             {
@@ -218,7 +218,7 @@ namespace Client.Views.Lobby
                 {
                     _currentPlayers.Remove(player);
                     UpdatePlayerUI();
-                    OnChatMessageReceived("System", $"{name} left the lobby.", true);
+                    OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerLeft}", true);
                 }
             });
         }

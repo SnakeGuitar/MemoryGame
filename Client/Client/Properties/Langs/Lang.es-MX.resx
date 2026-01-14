@@ -623,7 +623,7 @@ El código de la sala es: {0}</value>
     <value>No puedes denunciarte a ti mismo</value>
   </data>
   <data name="ReportUserDialog_Title_ReportSuccess" xml:space="preserve">
-    <value>Reporte enviando</value>
+    <value>Reporte enviado</value>
   </data>
   <data name="ReportUserDialog_Message_ReportSuccess" xml:space="preserve">
     <value>El usuario ha sido denunciado correctamente. Los administradores revisarán el caso :)</value>
@@ -899,11 +899,19 @@ Por favor inténtalo de nuevo</value>
   <data name="KickVote_Message_VoteKickPlayer" xml:space="preserve">
     <value>¿Votar para expulsar a: {0}? Por favor confirma tu voto</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="PlayGameMultiplayer_Label_Score" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="PlayGameMultiplayer_Label_Score" xml:space="preserve">
+    <value>Has encontrado: {0} pares. ¡Bien hecho! :)</value>
   </data>
   <data name="Global_Title_DatabaseDown" xml:space="preserve">
     <value>Error de base de datos</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_Tie" xml:space="preserve">
+    <value>Empate</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_LeftGame" xml:space="preserve">
+    <value>abandonó el juego</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
+    <value>¡Ganaste! {0} abandonó la partida</value>
   </data>
 </root>

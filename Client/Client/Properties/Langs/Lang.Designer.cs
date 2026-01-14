@@ -1204,6 +1204,15 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Database Server Error.
+        /// </summary>
+        public static string Global_Title_DatabaseDown {
+            get {
+                return ResourceManager.GetString("Global_Title_DatabaseDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error.
         /// </summary>
         public static string Global_Title_Error {
@@ -2023,11 +2032,38 @@ namespace Client.Properties.Langs {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a left the game.
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_LeftGame {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_LeftGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You won! {0} left the game.
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_PlayersLeft {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_PlayersLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a You have found: {0} pairs  Well done! :).
         /// </summary>
         public static string PlayGameMultiplayer_Label_Score {
             get {
                 return ResourceManager.GetString("PlayGameMultiplayer_Label_Score", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tie.
+        /// </summary>
+        public static string PlayGameMultiplayer_Label_Tie {
+            get {
+                return ResourceManager.GetString("PlayGameMultiplayer_Label_Tie", resourceCulture);
             }
         }
         

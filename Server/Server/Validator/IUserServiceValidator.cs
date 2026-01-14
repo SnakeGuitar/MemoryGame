@@ -25,7 +25,7 @@ namespace Server.Validator
         private static readonly Regex EmailRegex = new Regex(
                 @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase,
-                TimeSpan.FromMilliseconds(250)); // RFC 5322 REGEX
+                TimeSpan.FromMilliseconds(250));
 
         public bool IsValidEmail(string email)
         {

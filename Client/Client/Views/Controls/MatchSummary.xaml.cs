@@ -16,7 +16,12 @@ namespace Client.Views.Controls
             InitializeComponent();
             var textMessageBrush = (SolidColorBrush)Application.Current.FindResource("AccentForegroundColor");
 
-            if (winnerName == UserSession.Username)
+            if(winnerName == "PlayGameMultiplayer_Label_Tie")
+            {
+                TextBlockWinner.Text = Lang.PlayGameMultiplayer_Label_Tie;
+                LabelSubtitle.Visibility = Visibility.Collapsed;
+            }
+            else if (winnerName == UserSession.Username)
             {
                 TextBlockWinner.Text = Lang.MatchSummary_Label_Win;
             }

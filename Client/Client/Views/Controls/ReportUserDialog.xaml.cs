@@ -20,7 +20,7 @@ namespace Client.Views.Controls
             InitializeComponent();
             _targetUsername = targetUsername;
             _matchId = matchId;
-            TextTargetUser.Text = $"Target: {_targetUsername}";
+            TextTargetUser.Text = $"{Lang.Global_Label_Username}: {_targetUsername}";
         }
 
         private async void ButtonReport_Click(object sender, RoutedEventArgs e)
@@ -44,7 +44,7 @@ namespace Client.Views.Controls
                 if (response.Success)
                 {
                     new CustomMessageBox(
-                        Lang.ReportUserDialog_Title_ReportSuccess, Lang.ReportUserDialog_Message_Report,
+                        Lang.ReportUserDialog_Title_ReportSuccess, Lang.ReportUserDialog_Message_ReportSuccess,
                         this, MessageBoxType.Success).ShowDialog();
                     this.Close();
                 }

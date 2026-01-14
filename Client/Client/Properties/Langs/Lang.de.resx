@@ -900,8 +900,16 @@
   <data name="PlayGameMultiplayer_Label_Score" xml:space="preserve">
     <value>Du hast {0} Paare gefunden. Gut gemacht! :)</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Global_Title_DatabaseDown" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="Global_Title_DatabaseDown" xml:space="preserve">
+    <value>Datenbankserver-Fehler</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_Tie" xml:space="preserve">
+    <value>Unentschieden</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_LeftGame" xml:space="preserve">
+    <value>hat das Spiel verlassen</value>
+  </data>
+  <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
+    <value>Du hast gewonnen! {0} hat das Spiel verlassen</value>
   </data>
 </root>

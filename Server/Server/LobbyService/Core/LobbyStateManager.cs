@@ -136,13 +136,10 @@ namespace Server.LobbyService.Core
 
         public Lobby GetLobbyBySession(string sessionId)
         {
-            if (_sessionToLobbyCode.TryGetValue(sessionId, out var gameCode))
+            if (_sessionToLobbyCode.TryGetValue(sessionId, out var gameCode) && _lobbies.TryGetValue(gameCode, out var lobby))
             {
-                if (_lobbies.TryGetValue(gameCode, out var lobby))
-                { 
-                    _logger.LogInfo($"Lobby {gameCode} retrieved for session {sessionId}.");
-                    return lobby; 
-                }
+                _logger.LogInfo($"Lobby {gameCode} retrieved for session {sessionId}.");
+                return lobby;
             }
             _logger.LogWarn($"No lobby found for session {sessionId}.");
             return null;
@@ -183,13 +180,11 @@ namespace Server.LobbyService.Core
 
         public GameManager GetGameManager(string sessionId)
         {
-            if (_sessionToLobbyCode.TryGetValue(sessionId, out var gameCode))
+            if (_sessionToLobbyCode.TryGetValue(sessionId, out var gameCode) && _games.TryGetValue(gameCode, out var manager))
             {
-                if (_games.TryGetValue(gameCode, out var manager))
-                {
-                    _logger.LogInfo($"GameManager retrieved for session {sessionId} in game {gameCode}.");
-                    return manager; 
-                }
+                _logger.LogInfo($"GameManager retrieved for session {sessionId} in game {gameCode}.");
+                return manager; 
+
             }
             _logger.LogWarn($"No GameManager found for session {sessionId}.");
             return null;

@@ -52,7 +52,8 @@
                                FontSize="40" FontWeight="Bold" Foreground="{StaticResource NormalColor}"
                                Margin="0,0,0,10"/>
 
-                    <Label Content="{x:Static language:Lang.MatchSummary_Label_Summary}"
+                    <Label x:Name="LabelSubtitle"
+                           Content="{x:Static language:Lang.MatchSummary_Label_Summary}"
                            Style="{StaticResource RegisterLabelStyle}" Foreground="{StaticResource BackgroundColor}"/>
 
                     <TextBlock x:Name="TextBlockScore" 
