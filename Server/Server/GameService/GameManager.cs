@@ -64,7 +64,11 @@ namespace Server.GameService
             }
 
             _notifier.NotifyGameStarted(_deck.GetBoardInfo());
-            StartNewTurn(samePlayer: false);
+
+            Task.Delay(2000).ContinueWith(_ =>
+                {
+                    StartNewTurn(samePlayer: false);
+                });    
         }
 
         public void HandleFlipCard(string playerId, int cardIndex)

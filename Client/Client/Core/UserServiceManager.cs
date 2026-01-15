@@ -20,8 +20,6 @@ namespace Client.Core
 
         public UserServiceClient Client { get; private set; }
 
-        public event Action ServerConnectionLost;
-
         private UserServiceManager()
         {
             InitializeClient();
