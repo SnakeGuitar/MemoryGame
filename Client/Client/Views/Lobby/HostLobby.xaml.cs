@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Models;
@@ -100,7 +101,7 @@ namespace Client.Views.Lobby
                         throw new Exception(Lang.HostLobby_Error_CreateFailed);
                     }
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (createdSuccessfully)
             {
@@ -223,7 +224,7 @@ namespace Client.Views.Lobby
 
                 GameServiceManager.Instance.StartGameSafe(settings);
                 await Task.CompletedTask;
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (!started && ButtonStart != null)
             {
@@ -287,7 +288,7 @@ namespace Client.Views.Lobby
                 await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(message);
-                }, this);
+                }, this, NetworkFailPolicy.ShowWarningOnly);
             }
         }
 

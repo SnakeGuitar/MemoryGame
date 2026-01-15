@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
@@ -71,7 +72,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (success)
             {

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
 using static Client.Helpers.ValidationHelper;
+using Client.Core.Exceptions;
 
 namespace Client.Views.Profile
 {

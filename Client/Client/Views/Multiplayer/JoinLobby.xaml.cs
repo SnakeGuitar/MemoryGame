@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Properties.Langs;
@@ -42,7 +43,7 @@ namespace Client.Views.Multiplayer
 
                 var lobbies = await GameServiceManager.Instance.GetPublicLobbiesAsync();
                 ListBoxPublicLobbies.ItemsSource = lobbies;
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             ButtonRefresh.IsEnabled = true;
         }
@@ -97,7 +98,7 @@ namespace Client.Views.Multiplayer
             {
                 var check = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
                 if (!check.Success) throw new FaultException(check.MessageKey);
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (canJoin)
             {

@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Views.Controls;
@@ -111,7 +112,7 @@ namespace Client.Views
                 {
                     ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(avatarBytes);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
         }
 
         private void OnProfileUpdated()
@@ -142,7 +143,7 @@ namespace Client.Views
                 {
                     throw new FaultException(Lang.Global_Error_SessionExpired);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.CriticalExit);
 
             if (!connectionAlive)
             {

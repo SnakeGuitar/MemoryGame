@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Properties.Langs;
@@ -88,7 +89,7 @@ namespace Client.Views.Lobby
                 {
                     throw new Exception(Lang.Lobby_Error_JoinFailed);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (joinedSuccessfully)
             {
@@ -169,7 +170,7 @@ namespace Client.Views.Lobby
                 await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(message);
-                }, this);
+                }, this, NetworkFailPolicy.ShowWarningOnly);
             }
         }
 

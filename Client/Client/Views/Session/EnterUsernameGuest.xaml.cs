@@ -1,9 +1,9 @@
 using Client.Core;
+using Client.Core.Exceptions;
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
 using Client.Views.Controls;
-using System;
 using System.ServiceModel;
 using System.Windows;
 using System.Windows.Input;
@@ -13,9 +13,6 @@ using static Client.Views.Controls.CustomMessageBox;
 
 namespace Client.Views.Session
 {
-    /// <summary>
-    /// Lógica de interacción para ChooseUsernameGuest.xaml
-    /// </summary>
     public partial class EnterUsernameGuest : Window
     {
         public EnterUsernameGuest()
@@ -57,7 +54,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (success)
             {

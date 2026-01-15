@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Properties.Langs;
@@ -61,7 +62,7 @@ namespace Client.Views.Multiplayer
                 {
                     throw new Exception(Lang.HostLobby_Error_CreateFailed);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (success)
             {

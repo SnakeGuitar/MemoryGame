@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using static Client.Helpers.LocalizationHelper;
 using static Client.Views.Controls.CustomMessageBox;
+using Client.Core.Exceptions;
 
 namespace Client.Views.Controls
 {

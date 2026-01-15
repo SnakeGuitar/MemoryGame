@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
 using Client.Models;
@@ -460,7 +461,7 @@ namespace Client.Views.Multiplayer
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(ChatTextBox.Text);
                     ChatTextBox.Text = string.Empty;
-                }, this);
+                }, this, NetworkFailPolicy.AskToRetryOrExit);
             }
         }
 
@@ -506,7 +507,7 @@ namespace Client.Views.Multiplayer
                     await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                     {
                         await GameServiceManager.Instance.VoteToKickAsync(targetPlayerName);
-                    }, this);
+                    }, this, NetworkFailPolicy.ShowWarningOnly);
                 }
             }
         }
@@ -543,7 +544,7 @@ namespace Client.Views.Multiplayer
             UnsubscribeEvents();
             _gameManager.StopGame();
 
-            if (GameServiceManager.Instance.Client.State == System.ServiceModel.CommunicationState.Opened)
+            if (GameServiceManager.Instance.Client.State == CommunicationState.Opened)
             {
                 try
                 {

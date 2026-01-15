@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.Helpers;
 using Client.Models;
 using Client.Properties.Langs;

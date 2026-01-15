@@ -1,4 +1,5 @@
 ﻿using Client.Core;
+using Client.Core.Exceptions;
 using Client.Helpers;
 using Client.Properties.Langs;
 using Client.UserServiceReference;
@@ -34,11 +35,7 @@ namespace Client.Views.Session
 
         private void NumericOnly_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = Regex.IsMatch(
-                e.Text,
-                "[^0-9]+",
-                RegexOptions.None,
-                TimeSpan.FromMilliseconds(100));
+            e.Handled = Regex.IsMatch(e.Text, "[^0-9]+", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -79,7 +76,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (success)
             {
@@ -114,7 +111,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.ShowWarningOnly);
 
             if (success)
             {
