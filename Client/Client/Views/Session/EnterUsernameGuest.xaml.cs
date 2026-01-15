@@ -45,7 +45,7 @@ namespace Client.Views.Session
 
             ButtonAcceptUsernameGuest.IsEnabled = false;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.LoginAsGuestAsync(username);
 
@@ -57,7 +57,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             if (success)
             {

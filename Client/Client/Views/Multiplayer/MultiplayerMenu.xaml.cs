@@ -36,31 +36,17 @@ namespace Client.Views.Multiplayer
         {
             if (UserSession.IsGuest)
             {
-                new CustomMessageBox(
-                    Lang.Global_Title_NotAvailableFunction,
-                    Lang.Global_Error_GuestsNotAllowed,
-                    this, MessageBoxType.Warning).ShowDialog();
                 return;
             }
 
             ButtonCreateLobby.IsEnabled = false;
-
             var hostLobby = new HostLobby();
             string generatedCode = hostLobby.LabelGameCode.Content?.ToString();
             bool isPublic = checkBoxIsPublic.IsChecked == true;
 
-            if (string.IsNullOrEmpty(generatedCode))
-            {
-                hostLobby.Close();
-                new CustomMessageBox(Lang.Global_Title_Error, Lang.Lobby_Error_CodeGenerationFailed, this, MessageBoxType.Error).ShowDialog();
-                ButtonCreateLobby.IsEnabled = true;
-                return;
-            }
-
-            bool created = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
-
                 if (!sessionCheck.Success)
                 {
                     throw new FaultException(sessionCheck.MessageKey);
@@ -75,9 +61,9 @@ namespace Client.Views.Multiplayer
                 {
                     throw new Exception(Lang.HostLobby_Error_CreateFailed);
                 }
-            });
+            }, this);
 
-            if (created)
+            if (success)
             {
                 hostLobby.IsLobbyPreRegistered = true;
                 NavigationHelper.NavigateTo(this, hostLobby);

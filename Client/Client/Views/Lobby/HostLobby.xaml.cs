@@ -34,6 +34,7 @@ namespace Client.Views.Lobby
         #region Public Properties
 
         public bool IsLobbyPreRegistered { get; set; } = false;
+        public string LobbyCode => _lobbyCode;
 
         #endregion
 
@@ -47,15 +48,10 @@ namespace Client.Views.Lobby
             {
                 LabelGameCode.Content = _lobbyCode;
             }
-            if (LabelTimerValue != null)
-            {
-                LabelTimerValue.Content = _secondsPerTurn.ToString();
-            }
-            if (ComboBoxNumberOfCards != null)
-            {
-                ComboBoxNumberOfCards.SelectedIndex = 0;
-            }
+
             ConfigureEvents();
+
+            this.Loaded += Window_Loaded;
         }
 
         #region Event Configuration
@@ -82,7 +78,7 @@ namespace Client.Views.Lobby
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            bool createdSuccessfully = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool createdSuccessfully = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
                 if (!sessionCheck.Success)
@@ -104,7 +100,7 @@ namespace Client.Views.Lobby
                         throw new Exception(Lang.HostLobby_Error_CreateFailed);
                     }
                 }
-            });
+            }, this);
 
             if (createdSuccessfully)
             {
@@ -211,7 +207,7 @@ namespace Client.Views.Lobby
                 ButtonStart.IsEnabled = false;
             }
 
-            bool started = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool started = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
                 if (!sessionCheck.Success)
@@ -227,7 +223,7 @@ namespace Client.Views.Lobby
 
                 GameServiceManager.Instance.StartGameSafe(settings);
                 await Task.CompletedTask;
-            });
+            }, this);
 
             if (!started)
             {
@@ -291,10 +287,10 @@ namespace Client.Views.Lobby
                 string message = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
 
-                await ExceptionManager.ExecuteSafeAsync(async () =>
+                await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(message);
-                });
+                }, this);
             }
         }
 

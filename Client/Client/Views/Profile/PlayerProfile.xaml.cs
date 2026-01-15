@@ -3,7 +3,6 @@ using Client.Helpers;
 using Client.Properties.Langs;
 using Client.Views.Controls;
 using System;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,27 +16,25 @@ namespace Client.Views.Profile
         public PlayerProfile()
         {
             InitializeComponent();
-            _ = InitializeProfileAsync();
             LoadData();
+            _ = LoadCurrentAvatar();
             UserSession.ProfileUpdated += LoadData;
         }
 
-        private async Task InitializeProfileAsync()
+        private async Task LoadCurrentAvatar()
         {
-            await ExceptionManager.ExecuteSafeAsync(async () =>
+            try
             {
-                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
-                if (!sessionCheck.Success)
-                {
-                    throw new FaultException(sessionCheck.MessageKey);
-                }
-
                 var bytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
                 if (bytes != null && bytes.Length > 0)
                 {
                     ImageAvatar.Source = ImageHelper.ByteArrayToImageSource(bytes);
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Handle(ex, this);
+            }
         }
 
         private void LoadData()
@@ -84,7 +81,7 @@ namespace Client.Views.Profile
                         UserServiceManager.Instance.Client.LogoutAsync(UserSession.SessionToken);
                     }
                 }
-                catch (Exception ex) 
+                catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"[Logout Error]: {ex}");
                 }
@@ -111,7 +108,7 @@ namespace Client.Views.Profile
 
         private void OnProfileUpdated()
         {
-            _ = InitializeProfileAsync();
+            _ = LoadCurrentAvatar();
         }
 
         protected override void OnClosed(EventArgs e)

@@ -97,7 +97,6 @@ namespace Client.Views.Profile
                 case ValidationCode.UsernameInvalidChars:
                     message = Lang.Global_Error_UsernameInvalidChars ?? "Username contains invalid characters.";
                     break;
-
                 case ValidationCode.PasswordEmpty:
                     message = Lang.EditProfile_Label_ErrorPasswordFields;
                     break;

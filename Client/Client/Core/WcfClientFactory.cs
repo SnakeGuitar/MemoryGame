@@ -57,10 +57,10 @@ namespace Client.Core
         {
             if (client.Endpoint.Binding is System.ServiceModel.Channels.Binding binding)
             {
-                binding.OpenTimeout = TimeSpan.FromSeconds(3);
-                binding.CloseTimeout = TimeSpan.FromSeconds(3);
-                binding.SendTimeout = TimeSpan.FromSeconds(5);
-                binding.ReceiveTimeout = TimeSpan.FromMinutes(10);
+                binding.OpenTimeout = TimeSpan.FromSeconds(5);
+                binding.CloseTimeout = TimeSpan.FromSeconds(5);
+                binding.SendTimeout = TimeSpan.FromSeconds(10);
+                binding.ReceiveTimeout = TimeSpan.FromMinutes(20);
             }
         }
 

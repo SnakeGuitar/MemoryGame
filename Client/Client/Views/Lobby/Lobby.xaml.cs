@@ -63,7 +63,7 @@ namespace Client.Views.Lobby
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            bool joinedSuccessfully = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool joinedSuccessfully = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
 
@@ -88,7 +88,7 @@ namespace Client.Views.Lobby
                 {
                     throw new Exception(Lang.Lobby_Error_JoinFailed);
                 }
-            });
+            }, this);
 
             if (joinedSuccessfully)
             {
@@ -166,10 +166,10 @@ namespace Client.Views.Lobby
                 string message = ChatTextBox.Text;
                 ChatTextBox.Text = string.Empty;
 
-                await ExceptionManager.ExecuteSafeAsync(async () =>
+                await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(message);
-                });
+                }, this);
             }
         }
 

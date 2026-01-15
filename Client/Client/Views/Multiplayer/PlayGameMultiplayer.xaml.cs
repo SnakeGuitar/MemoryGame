@@ -64,6 +64,7 @@ namespace Client.Views.Multiplayer
             SetupPlayerUI();
 
             _gameManager = new GameManager(Cards);
+            _gameManager.IsMultiplayerMode = true;
             ConfigureEvents();
 
             if (_players.Count > 0)
@@ -82,18 +83,14 @@ namespace Client.Views.Multiplayer
 
         private async void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
-            await ExceptionManager.ExecuteSafeAsync(async () =>
+            await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
                 if (!sessionCheck.Success)
                 {
                     throw new FaultException(sessionCheck.MessageKey);
                 }
-            },
-            onFailed: () =>
-            {
-                this.Close();
-            });
+            }, this);
         }
 
         private void InitializeUIArrays()
@@ -342,14 +339,10 @@ namespace Client.Views.Multiplayer
                     return;
                 }
 
-                await ExceptionManager.ExecuteSafeAsync(async () =>
+                await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.FlipCardAsync(clickedCard.Id);
-                },
-                onFailed: () =>
-                {
-                    this.Close();
-                });
+                }, this);
             }
         }
 
@@ -463,11 +456,11 @@ namespace Client.Views.Multiplayer
 
             if (!string.IsNullOrWhiteSpace(ChatTextBox.Text))
             {
-                await ExceptionManager.ExecuteSafeAsync(async () =>
+                await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                 {
                     await GameServiceManager.Instance.SendChatMessageAsync(ChatTextBox.Text);
                     ChatTextBox.Text = string.Empty;
-                });
+                }, this);
             }
         }
 
@@ -510,10 +503,10 @@ namespace Client.Views.Multiplayer
 
                 if (confirmation.ShowDialog() == true)
                 {
-                    await ExceptionManager.ExecuteSafeAsync(async () =>
+                    await ExceptionManager.ExecuteNetworkCallAsync(async () =>
                     {
                         await GameServiceManager.Instance.VoteToKickAsync(targetPlayerName);
-                    });
+                    }, this);
                 }
             }
         }

@@ -913,4 +913,17 @@
   <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
     <value>あなたの勝ちです！{0} がゲームを退出しました</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Global_Error_DatabaseCritical" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Global_Error_Timeout" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Global_Title_ConnectionError" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

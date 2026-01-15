@@ -32,7 +32,7 @@ namespace Client.Views.Multiplayer
         {
             ButtonRefresh.IsEnabled = false;
 
-            await ExceptionManager.ExecuteSafeAsync(async () =>
+            await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
                 if (!sessionCheck.Success)
@@ -42,7 +42,7 @@ namespace Client.Views.Multiplayer
 
                 var lobbies = await GameServiceManager.Instance.GetPublicLobbiesAsync();
                 ListBoxPublicLobbies.ItemsSource = lobbies;
-            });
+            }, this);
 
             ButtonRefresh.IsEnabled = true;
         }
@@ -80,7 +80,7 @@ namespace Client.Views.Multiplayer
             }
         }
 
-        private void ButtonAcceptCode_Click(object sender, RoutedEventArgs e)
+        private async void ButtonAcceptCode_Click(object sender, RoutedEventArgs e)
         {
             string lobbyCode = TextBoxLobbyCode.Text?.Trim();
             LabelCodeError.Content = "";
@@ -93,13 +93,27 @@ namespace Client.Views.Multiplayer
                 return;
             }
 
-            var lobbyWindow = new Lobby.Lobby(lobbyCode);
-            NavigationHelper.NavigateTo(this, lobbyWindow);
+            bool canJoin = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
+            {
+                var check = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
+                if (!check.Success) throw new FaultException(check.MessageKey);
+            }, this);
+
+            if (canJoin)
+            {
+                NavigationHelper.NavigateTo(this, new Lobby.Lobby(lobbyCode));
+            }
+            else
+            {
+                ButtonAcceptCode.IsEnabled = true;
+            }
         }
 
         private void ButtonBackToMainMenu_Click(object sender, RoutedEventArgs e)
         {
             NavigationHelper.NavigateTo(this, this.Owner ?? new MultiplayerMenu());
         }
+
+        
     }
 }

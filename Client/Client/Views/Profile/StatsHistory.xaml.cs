@@ -3,7 +3,6 @@ using Client.Helpers;
 using Client.UserServiceReference;
 using Client.Views.Controls;
 using System;
-using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,16 +22,15 @@ namespace Client.Views.Profile
 
         private async Task LoadMatchHistory()
         {
-            await ExceptionManager.ExecuteSafeAsync(async () =>
+            try
             {
-                var sessionCheck = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
-                if (!sessionCheck.Success)
-                {
-                    throw new FaultException(sessionCheck.MessageKey);
-                }
                 var history = await UserServiceManager.Instance.GetMatchHistoryAsync(UserSession.SessionToken);
                 DataGridHistory.ItemsSource = history;
-            });
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Handle(ex, this);
+            }
         }
 
         private void ButtonBack_Click(object sender, RoutedEventArgs e)

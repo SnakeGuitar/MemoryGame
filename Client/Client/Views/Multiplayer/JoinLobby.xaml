@@ -56,7 +56,7 @@
                                      Margin="0,0,20,0" 
                                      VerticalContentAlignment="Center"/>
 
-                            <Button Grid.Column="1" 
+                            <Button x:Name="ButtonAcceptCode" Grid.Column="1" 
                                     Content="{x:Static language:Lang.Global_Button_Join}" 
                                     Style="{StaticResource PrimaryLobbyButtonStyle}" 
                                     Width="160" Height="60" FontSize="24"

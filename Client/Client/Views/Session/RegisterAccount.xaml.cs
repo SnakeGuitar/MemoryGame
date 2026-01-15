@@ -53,7 +53,7 @@ namespace Client.Views.Session
 
             ButtonAcceptRegisterAccount.IsEnabled = false;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 ResponseDTO response;
 
@@ -71,7 +71,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             if (success)
             {

@@ -67,7 +67,7 @@ namespace Client.Views.Session
 
             ButtonAcceptSetupProfile.IsEnabled = false;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.FinalizeRegistrationAsync(
                     _email, username, profileImage);
@@ -80,7 +80,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             if (success)
             {

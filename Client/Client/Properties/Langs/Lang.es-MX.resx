@@ -914,4 +914,16 @@ Por favor inténtalo de nuevo</value>
   <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
     <value>¡Ganaste! {0} abandonó la partida</value>
   </data>
+  <data name="Global_Error_DatabaseCritical" xml:space="preserve">
+    <value>Volviendo al menú de inicio</value>
+  </data>
+  <data name="Global_Error_Timeout" xml:space="preserve">
+    <value>El servidor no respondió en tiempo</value>
+  </data>
+  <data name="Global_Title_ConnectionError" xml:space="preserve">
+    <value>Error de conexión</value>
+  </data>
+  <data name="Global_Message_RetryConnection" xml:space="preserve">
+    <value>¿Quieres tratar de reconectarte?</value>
+  </data>
 </root>

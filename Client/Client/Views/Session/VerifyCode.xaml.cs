@@ -63,7 +63,7 @@ namespace Client.Views.Session
 
             ButtonVerifyCode.IsEnabled = false;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 ResponseDTO response;
                 if (_isGuestRegister)
@@ -79,7 +79,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             if (success)
             {
@@ -107,14 +107,14 @@ namespace Client.Views.Session
         {
             ButtonResendCode.IsEnabled = false;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var response = await UserServiceManager.Instance.ResendVerificationCodeAsync(_email);
                 if (!response.Success)
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             if (success)
             {

@@ -913,4 +913,16 @@ You need to log in with your new account :)</value>
   <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
     <value>You won! {0} left the game</value>
   </data>
+  <data name="Global_Error_DatabaseCritical" xml:space="preserve">
+    <value>Returning to title screen</value>
+  </data>
+  <data name="Global_Error_Timeout" xml:space="preserve">
+    <value>Server didn't respond in time</value>
+  </data>
+  <data name="Global_Title_ConnectionError" xml:space="preserve">
+    <value>Connection Error</value>
+  </data>
+  <data name="Global_Message_RetryConnection" xml:space="preserve">
+    <value>Would you like to try to reconnect?</value>
+  </data>
 </root>

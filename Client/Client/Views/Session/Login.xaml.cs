@@ -56,7 +56,7 @@ namespace Client.Views.Session
             ButtonAcceptLogin.IsEnabled = false;
             Mouse.OverrideCursor = Cursors.Wait;
 
-            bool success = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool success = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 LoginResponse response = await UserServiceManager.Instance.LoginAsync(email, password);
 
@@ -68,7 +68,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            });
+            }, this);
 
             Mouse.OverrideCursor = null;
 

@@ -103,7 +103,7 @@ namespace Client.Views
 
         private async Task LoadAvatarAsync()
         {
-            await ExceptionManager.ExecuteSafeAsync(async () =>
+            await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 byte[] avatarBytes = await UserServiceManager.Instance.GetUserAvatarAsync(UserSession.Email);
 
@@ -111,7 +111,7 @@ namespace Client.Views
                 {
                     ProfilePicture.Source = ImageHelper.ByteArrayToImageSource(avatarBytes);
                 }
-            });
+            }, this);
         }
 
         private void OnProfileUpdated()
@@ -134,7 +134,7 @@ namespace Client.Views
 
         private async Task SendHeartbeatSafeAsync()
         {
-            bool connectionAlive = await ExceptionManager.ExecuteSafeAsync(async () =>
+            bool connectionAlive = await ExceptionManager.ExecuteNetworkCallAsync(async () =>
             {
                 var response = await UserServiceManager.Instance.RenewSessionAsync(UserSession.SessionToken);
 
@@ -142,7 +142,7 @@ namespace Client.Views
                 {
                     throw new FaultException(Lang.Global_Error_SessionExpired);
                 }
-            });
+            }, this);
 
             if (!connectionAlive)
             {
