@@ -10,6 +10,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using System.Net.Mail;
+using System.Diagnostics;
 
 namespace Server.LobbyService
 {
@@ -194,50 +195,80 @@ namespace Server.LobbyService
 
         private void OnGameEnded(Lobby lobby, string winnerClientId, Dictionary<string, int> scores)
         {
-            Task.Run(() =>
+            Task.Run(() => SaveMatchDataSafely(lobby, winnerClientId, scores));
+        }
+
+        private void SaveMatchDataSafely(Lobby lobby, string winnerClientId, Dictionary<string, int> scores)
+        {
+            try
             {
                 ServerExceptionManager.SafeExecute(() =>
                 {
                     using (var db = _dbFactory.Create())
                     {
-                        var match = new match
-                        {
-                            startDateTime = DateTime.UtcNow,
-                            endDateTime = DateTime.UtcNow
-                        };
-                        db.match.Add(match);
-                        db.SaveChanges();
+                        var match = CreateAndSaveMatch(db);
+                        int? winnerUserId = GetWinnerUserId(lobby, winnerClientId);
 
-                        int? winnerUserId = null;
-                        if (lobby.Clients.TryGetValue(winnerClientId, out var winnerClient))
-                        {
-                            winnerUserId = winnerClient.UserId;
-                        }
+                        SavePlayersHistory(db, lobby, match.matchId, scores, winnerUserId);
 
-                        foreach (var kvp in scores)
-                        {
-                            string clientId = kvp.Key;
-                            int score = kvp.Value;
-
-                            if (lobby.Clients.TryGetValue(clientId, out var client) && client.UserId.HasValue)
-                            {
-                                var history = new matchHistory
-                                    {
-                                        matchId = match.matchId,
-                                        userId = client.UserId.Value,
-                                        score = score,
-                                        winnerId = winnerUserId
-                                    
-                                };
-                                db.matchHistory.Add(history);
-                            }
-                        }
-
-                        db.SaveChanges();
-                        _logger.LogInfo($"Match stats saved for Game {lobby.GameCode}. Match ID: {match.matchId}");
+                        _logger.LogInfo($"Match stats saved for Game {lobby.GameCode}. ID: {match.matchId}");
                     }
                 }, _logger, "OnGameEnded_BackgroundTask");
-            });
+            }
+            catch (FaultException ex) when (ex.Message == "Global_ServiceError_Database")
+            {
+                NotifyDatabaseError(lobby);
+            }
+        }
+
+        private match CreateAndSaveMatch(memoryGameDBEntities db)
+        {
+            var match = new match { startDateTime = DateTime.UtcNow, endDateTime = DateTime.UtcNow };
+            db.match.Add(match);
+            db.SaveChanges();
+            return match;
+        }
+
+        private static int? GetWinnerUserId(Lobby lobby, string winnerClientId)
+        {
+            if (!string.IsNullOrEmpty(winnerClientId) && lobby.Clients.TryGetValue(winnerClientId, out var winner))
+            {
+                return winner.UserId;
+            }
+            return null;
+        }
+
+        private void SavePlayersHistory(memoryGameDBEntities db, Lobby lobby, int matchId, Dictionary<string, int> scores, int? winnerId)
+        {
+            foreach (var scoreInfo in scores)
+            {
+                if (lobby.Clients.TryGetValue(scoreInfo.Key, out var client) && client.UserId.HasValue)
+                {
+                    db.matchHistory.Add(new matchHistory
+                    {
+                        matchId = matchId,
+                        userId = client.UserId.Value,
+                        score = scoreInfo.Value,
+                        winnerId = winnerId
+                    });
+                }
+            }
+            db.SaveChanges();
+        }
+
+        private static void NotifyDatabaseError(Lobby lobby)
+        {
+            foreach (var client in lobby.Clients.Values)
+            {
+                try
+                {
+                    client.Callback.ReceiveChatMessage("System", "Global_Error_RegisterDatabase", true);
+                }
+                catch (Exception)
+                {
+                    Debug.WriteLine("Exception");
+                }
+            }
         }
 
         public void FlipCard(int cardIndex)
