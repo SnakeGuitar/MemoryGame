@@ -925,4 +925,22 @@
   <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>Connexion perdue. Reconnexion ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>Votre compte a été pénalisé</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>Les résultats ne seront pas enregistrés dans la base de données</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>Pas de connexion au service de base de données</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>Voter para excluir</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

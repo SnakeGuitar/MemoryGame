@@ -926,4 +926,22 @@
   <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>接続が切れました。再接続中 ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>あなたのアカウントはペナルティを受けました</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>データベースサービスエラー：結果はデータベースに記録されません</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>データベースサービスへの接続がありません</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>キック投票</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

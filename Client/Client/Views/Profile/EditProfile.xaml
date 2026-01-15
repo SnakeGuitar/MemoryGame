@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
 
+        Title="{x:Static language:Lang.EditProfile_Label_EditProfile}"
         MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 

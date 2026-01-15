@@ -270,7 +270,7 @@ namespace Client.Views.Lobby
                 var playerToRemove = _currentPlayers.FirstOrDefault(p => p.Name == playerName);
                 if (playerToRemove != null)
                 {
-                    string message = string.Format(playerName, Lang.Lobby_Notification_PlayerLeft);
+                    string message = string.Format(Lang.Lobby_Notification_PlayerLeft, playerName);
                     _currentPlayers.Remove(playerToRemove);
                     UpdatePlayerUI();
                     OnChatMessageReceived(Lang.Global_Label_System, message, true);

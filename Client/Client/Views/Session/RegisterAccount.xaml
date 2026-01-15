@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
-        Title="RegisterAccount" 
+        Title="{x:Static language:Lang.Global_Button_SignIn}" 
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 
@@ -21,7 +21,7 @@
 
                 <StackPanel HorizontalAlignment="Center" 
                             VerticalAlignment="Center"
-                            Width="550" Margin="0,0,0,50">
+                            Width="650" Margin="0,0,0,50">
 
                     <Label Content="{x:Static language:Lang.Global_Button_SignIn}"
                            x:Name="TitleRegister"

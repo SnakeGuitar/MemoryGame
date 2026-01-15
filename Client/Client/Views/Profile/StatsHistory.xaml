@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
-        Title="Match History" 
+        Title="{x:Static language:Lang.StatsHistory_Title_StatsHistory}" 
         MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen">
 
@@ -30,15 +30,14 @@
 
                 <Label Grid.Row="0" 
                        Content="{x:Static language:Lang.StatsHistory_Title_StatsHistory}" 
-                       Style="{StaticResource TitleLabelStyle}"
-                       Margin="0,30,0,20"/>
+                       Style="{StaticResource TitleLabelStyle}"/>
 
                 <Border Grid.Row="1" 
                         Background="{StaticResource PrimaryTextColor}" 
                         CornerRadius="20" 
                         BorderBrush="{StaticResource AccentColor}" 
                         BorderThickness="4"
-                        Margin="100,10,100,30"
+                        Margin="50,10,50,30"
                         Padding="20">
 
                     <Grid>
@@ -126,7 +125,7 @@
                                             <Button Content="{x:Static language:Lang.Global_Button_Report}"
                                                     Tag="{Binding}" 
                                                     Style="{StaticResource HardButtonStyle}"
-                                                    Foreground="White" FontSize="18"
+                                                    Foreground="White" FontSize="20"
                                                     Height="40" Width="120"
                                                     Click="ButtonReport_Click"
                                                     Visibility="{Binding WinnerName, Converter={StaticResource SelfReportVisibilityConverter}, ConverterParameter={x:Type Visibility}}"/>

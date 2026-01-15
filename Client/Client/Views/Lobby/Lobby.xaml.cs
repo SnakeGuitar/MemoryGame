@@ -101,7 +101,8 @@ namespace Client.Views.Lobby
                     UpdatePlayerUI();
                 }
 
-                OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerJoined}", true);
+                string message = string.Format(Lang.Lobby_Notification_PlayerJoined, UserSession.Username);
+                OnChatMessageReceived(Lang.Global_Label_System, message, true);
             }
             else
             {
@@ -218,7 +219,8 @@ namespace Client.Views.Lobby
                 {
                     _currentPlayers.Remove(player);
                     UpdatePlayerUI();
-                    OnChatMessageReceived(Lang.Global_Label_System, $"{UserSession.Username} {Lang.Lobby_Notification_PlayerLeft}", true);
+                    string message = string.Format(Lang.Lobby_Notification_PlayerLeft, UserSession.Username);
+                    OnChatMessageReceived(Lang.Global_Label_System, message, true);
                 }
             });
         }

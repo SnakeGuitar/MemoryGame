@@ -398,7 +398,7 @@ namespace Client.Views.Profile
                     SocialNetworksList.Add(newSocial);
                     UserSession.SocialNetworks.Add(newSocial);
 
-                    new CustomMessageBox(Lang.Global_Title_Success, "(˶ˆᗜˆ˵)", this, MessageBoxType.Success).ShowDialog();
+                    new CustomMessageBox(Lang.Global_Title_Success, Lang.PlayerProfile_Message_SocialNetwork, this, MessageBoxType.Success).ShowDialog();
                 }
                 else
                 {

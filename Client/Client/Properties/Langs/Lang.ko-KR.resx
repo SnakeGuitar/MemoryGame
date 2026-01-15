@@ -926,4 +926,22 @@
   <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>연결이 끊겼습니다. 재연결 중 ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>귀하의 계정이 처벌되었습니다</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>데이터베이스 서비스 오류: 결과가 데이터베이스에 기록되지 않습니다</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>데이터베이스 서비스에 연결되지 않았습니다</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>강퇴 투표</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

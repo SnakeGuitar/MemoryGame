@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
-        Title="Join Lobby" 
+        
+        Title="{x:Static language:Lang.Global_Button_Join}" 
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 

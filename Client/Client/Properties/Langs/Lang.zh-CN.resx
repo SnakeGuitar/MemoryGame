@@ -926,4 +926,22 @@
   <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>连接已断开。正在重新连接 ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>您的账户已被处罚</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>结果将不会记录在数据库中</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>无法连接到数据库服务</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>投票踢出</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
 </root>

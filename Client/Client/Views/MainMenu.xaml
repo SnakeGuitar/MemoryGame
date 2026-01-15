@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
-        Title="MainMenu" 
+        Title="{x:Static language:Lang.TitleScreen_Label_Memorama}" 
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 

@@ -6,7 +6,7 @@
         xmlns:lang="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
         
-        Title="Host Lobby" 
+        Title="{x:Static lang:Lang.Global_Title_Lobby}" 
         MinHeight="600" MinWidth="500"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PrimaryTextColor}"

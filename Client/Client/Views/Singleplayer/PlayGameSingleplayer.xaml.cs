@@ -30,7 +30,6 @@ namespace Client.Views.Singleplayer
         {
             InitializeComponent();
 
-            // Safety fallback for layout config
             if (config.NumberRows * config.NumberColumns != config.NumberOfCards)
             {
                 config.NumberRows = 4;

@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Client.Views.Multiplayer"
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
-        Title="MultiplayerMenu" 
         
+        Title="{x:Static language:Lang.Global_Title_Multiplayer}"
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 

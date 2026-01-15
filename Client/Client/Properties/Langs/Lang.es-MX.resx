@@ -926,4 +926,22 @@ Por favor inténtalo de nuevo</value>
   <data name="Global_Message_RetryConnection" xml:space="preserve">
     <value>¿Quieres tratar de reconectarte?</value>
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>Conexión perdida. Reconectando ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>Tu cuenta ha sido supendida</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>Los resultados no se registrarán en la base de datos</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>No hay Conexión con el Servicio de la Base de Datos</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>Votar para expulsar</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" xml:space="preserve">
+    <value>Red social Registrada</value>
+  </data>
 </root>

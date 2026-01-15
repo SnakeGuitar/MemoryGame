@@ -925,4 +925,22 @@ You need to log in with your new account :)</value>
   <data name="Global_Message_RetryConnection" xml:space="preserve">
     <value>Would you like to try to reconnect?</value>
   </data>
+  <data name="Global_Message_Reconnecting" xml:space="preserve">
+    <value>Connection lost. Reconnecting ({0}/{1})...</value>
+  </data>
+  <data name="Global_Message_AccountPenalized" xml:space="preserve">
+    <value>Your Account has been Penalized</value>
+  </data>
+  <data name="Global_Error_RegisterDatabase" xml:space="preserve">
+    <value>The results will not be recorded in the database</value>
+  </data>
+  <data name="Global_ServiceError_Database" xml:space="preserve">
+    <value>No Connection to Database Service</value>
+  </data>
+  <data name="KickVote_Label_Vote" xml:space="preserve">
+    <value>Vote to Kick</value>
+  </data>
+  <data name="PlayerProfile_Message_SocialNetwork" xml:space="preserve">
+    <value>Registered Social Network</value>
+  </data>
 </root>

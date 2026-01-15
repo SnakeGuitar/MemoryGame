@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:language="clr-namespace:Client.Properties.Langs"
         
-        Title="SelectDifficulty" 
+        Title="{x:Static language:Lang.Global_Title_Singleplayer}" 
         MinHeight="600" MinWidth="500" 
         WindowStartupLocation="CenterScreen">
 

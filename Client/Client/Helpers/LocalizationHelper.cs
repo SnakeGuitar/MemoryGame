@@ -57,6 +57,7 @@ namespace Client.Helpers
             public const string ErrorDatabase = "Global_Error_Database";
             public const string ErrorUnknown = "Global_Error_Unknown";
             public const string ErrorDatabaseError = "Global_Error_DatabaseError";
+            public const string ErrorRegisterDatabase = "Global_Error_RegisterDatabase";
             public const string ErrorUnexpectedError = "Global_Error_UnexpectedError";
             public const string ErrorUnknownError = "Global_Error_UnknownError";
             #endregion
@@ -80,7 +81,7 @@ namespace Client.Helpers
                     return Lang.Global_Error_InvalidToken;
 
                 case ServerKeys.AccountPenalized:
-                    return "Your account has been penalized.";
+                    return Lang.Global_Message_AccountPenalized;
 
                 case ServerKeys.PasswordInvalid:
                     return Lang.Global_Error_PasswordInvalid;
@@ -115,10 +116,13 @@ namespace Client.Helpers
                 case ServerKeys.RequestExists:
                     return Lang.Social_Error_RequestExists;
 
+                case ServerKeys.ErrorRegisterDatabase:
+                    return Lang.Global_Error_RegisterDatabase;
+
                 case ServerKeys.ServiceErrorDatabase:
-                case "Global_Error_Database":
-                case "Global_Error_DatabaseError":
-                    return Lang.Global_ServiceError_Unknown;
+                case ServerKeys.ErrorDatabase:
+                case ServerKeys.ErrorDatabaseError:
+                    return Lang.Global_ServiceError_Database;
 
                 case ServerKeys.ServiceErrorUnknown:
                 default:
