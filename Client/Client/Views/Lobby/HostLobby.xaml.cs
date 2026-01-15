@@ -225,12 +225,9 @@ namespace Client.Views.Lobby
                 await Task.CompletedTask;
             }, this);
 
-            if (!started)
+            if (!started && ButtonStart != null)
             {
-                if (ButtonStart != null)
-                {
-                    ButtonStart.IsEnabled = true;
-                }
+                ButtonStart.IsEnabled = true;
             }
         }
 
