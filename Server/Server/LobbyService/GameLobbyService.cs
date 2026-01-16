@@ -262,11 +262,11 @@ namespace Server.LobbyService
             {
                 try
                 {
-                    client.Callback.ReceiveChatMessage("System", "Global_Error_RegisterDatabase", true);
+                    client.Callback.ReceiveChatMessage("System", "Unexpected database error. Unable to saave changes.", true);
                 }
                 catch (Exception)
                 {
-                    Debug.WriteLine("Exception");
+                    Debug.WriteLine("Database exception");
                 }
             }
         }
