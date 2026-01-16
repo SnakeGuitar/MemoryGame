@@ -111,15 +111,15 @@ namespace Client.Core
                             Client.Logout(token);
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-
+                        System.Diagnostics.Debug.WriteLine($"Error ignorado: {ex.Message}");
                     }
                 });
             }
-            catch
+            catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine($"Error ignorado: {ex.Message}");
             }
         }
 

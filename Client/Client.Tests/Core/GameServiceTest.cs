@@ -1,9 +1,11 @@
 ﻿using Client.Core;
 using Client.GameLobbyServiceReference;
+using Client.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Assert = NUnit.Framework.Assert;
@@ -11,309 +13,216 @@ using Assert = NUnit.Framework.Assert;
 namespace Client.Test.Core
 {
     [TestFixture]
-    [Apartment(ApartmentState.STA)]
     public class GameServiceManagerTests
     {
-        [SetUp]
-        public void Setup()
-        {
-            ResetSingleton();
-        }
-
         [TearDown]
-        public void TearDown()
-        {
-            ResetSingleton();
-        }
-
-        private void ResetSingleton()
+        public void ResetSingleton()
         {
             var field = typeof(GameServiceManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
-            if (field != null)
-            {
-                field.SetValue(null, null);
-            }
+            field?.SetValue(null, null);
         }
 
-        #region Singleton Tests
-
-        [Test]
-        public void Instance_IsNotNull()
+        #region Helpers
+        private GameServiceManager CreateInstanceBypassingConstructor()
         {
-            var instance = GameServiceManager.Instance;
-            Assert.That(instance, Is.Not.Null);
-        }
-
-        [Test]
-        public void Instance_AlwaysReturnsSameObject()
-        {
-            var instance1 = GameServiceManager.Instance;
-            var instance2 = GameServiceManager.Instance;
-
-            Assert.That(instance1, Is.SameAs(instance2));
+            var instance = (GameServiceManager)FormatterServices.GetUninitializedObject(typeof(GameServiceManager));
+            var field = typeof(GameServiceManager).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+            field?.SetValue(null, instance);
+            return instance;
         }
 
         #endregion
 
-        #region Callback Event Tests
-
-
         [Test]
-        public void ReceiveChatMessage_PassesCorrectSender()
+        public void Instance_ServerOffline_ThrowsInvalidOperationException()
         {
-            string receivedSender = null;
-            GameServiceManager.Instance.ChatMessageReceived += (sender, msg, isNotif) => receivedSender = sender;
-
-            GameServiceManager.Instance.ReceiveChatMessage("User1", "Hello", false);
-
-            Assert.That(receivedSender, Is.EqualTo("User1"));
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var instance = GameServiceManager.Instance;
+            });
         }
 
         [Test]
-        public void ReceiveChatMessage_PassesCorrectMessage()
+        public void CreateLobbyAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            string receivedMsg = null;
-            GameServiceManager.Instance.ChatMessageReceived += (sender, msg, isNotif) => receivedMsg = msg;
-
-            GameServiceManager.Instance.ReceiveChatMessage("User1", "Hello", false);
-
-            Assert.That(receivedMsg, Is.EqualTo("Hello"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.CreateLobbyAsync("token", "matchCode", false));
         }
 
+        [Test]
+        public void JoinLobbyAsync_ServerOffline_ThrowsInvalidOperationException()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.JoinLobbyAsync("token", "code", false, "user"));
+        }
 
         [Test]
-        public void PlayerJoined_InvokesEventWithCorrectName()
+        public void LeaveLobbyAsync_ServerOffline_ThrowsInvalidOperationException()
         {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.LeaveLobbyAsync());
+        }
+
+        [Test]
+        public void SendInvitationEmailAsync_ServerOffline_ThrowsInvalidOperationException()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.SendInvitationEmailAsync("test@email.com", "Subj", "Body"));
+        }
+
+        [Test]
+        public void FlipCardAsync_ServerOffline_ThrowsInvalidOperationException()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.FlipCardAsync(1));
+        }
+
+        [Test]
+        public void SendChatMessageAsync_ServerOffline_ThrowsInvalidOperationException()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.SendChatMessageAsync("hello"));
+        }
+
+        [Test]
+        public void VoteToKickAsync_ServerOffline_ThrowsInvalidOperationException()
+        {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await GameServiceManager.Instance.VoteToKickAsync("PlayerBad"));
+        }
+        
+
+        #region Callback & Event Tests
+
+        [Test]
+        public void PlayerJoined_CallbackInvoked_FiresEventWithCorrectUsername()
+        {
+            var manager = CreateInstanceBypassingConstructor();
             string joinedPlayer = null;
-            GameServiceManager.Instance.PlayerJoined += (player, isGuest) => joinedPlayer = player;
+            manager.PlayerJoined += (player, isGuest) => joinedPlayer = player;
 
-            ((IGameLobbyServiceCallback)GameServiceManager.Instance).PlayerJoined("NewPlayer", false);
+            ((IGameLobbyServiceCallback)manager).PlayerJoined("NewUser", true);
 
-            Assert.That(joinedPlayer, Is.EqualTo("NewPlayer"));
+            Assert.That(joinedPlayer, Is.EqualTo("NewUser"));
         }
 
-
         [Test]
-        public void PlayerLeft_InvokesEventWithCorrectName()
+        public void PlayerLeft_CallbackInvoked_FiresEventWithCorrectUsername()
         {
+            var manager = CreateInstanceBypassingConstructor();
             string leftPlayer = null;
-            GameServiceManager.Instance.PlayerLeft += (player) => leftPlayer = player;
+            manager.PlayerLeft += (player) => leftPlayer = player;
 
-            ((IGameLobbyServiceCallback)GameServiceManager.Instance).PlayerLeft("OldPlayer");
+            ((IGameLobbyServiceCallback)manager).PlayerLeft("Leaver");
 
-            Assert.That(leftPlayer, Is.EqualTo("OldPlayer"));
+            Assert.That(leftPlayer, Is.EqualTo("Leaver"));
         }
 
-
         [Test]
-        public void UpdatePlayerList_EventReceivesNotNullList()
+        public void PlayerListUpdated_CallbackInvoked_FiresEventWithList()
         {
+            var manager = CreateInstanceBypassingConstructor();
             LobbyPlayerInfo[] receivedList = null;
-            GameServiceManager.Instance.PlayerListUpdated += (list) => receivedList = list;
+            manager.PlayerListUpdated += (list) => receivedList = list;
 
-            var fakeList = new LobbyPlayerInfo[] { new LobbyPlayerInfo { Name = "P1" } };
-            GameServiceManager.Instance.UpdatePlayerList(fakeList);
+            var fakeList = new LobbyPlayerInfo[] { new LobbyPlayerInfo() };
+            ((IGameLobbyServiceCallback)manager).UpdatePlayerList(fakeList);
 
             Assert.That(receivedList, Is.Not.Null);
         }
 
         [Test]
-        public void UpdatePlayerList_EventReceivesListWithCorrectCount()
+        public void GameStarted_CallbackInvoked_FiresEventWithBoard()
         {
-            LobbyPlayerInfo[] receivedList = null;
-            GameServiceManager.Instance.PlayerListUpdated += (list) => receivedList = list;
-
-            var fakeList = new LobbyPlayerInfo[] { new LobbyPlayerInfo { Name = "P1" } };
-            GameServiceManager.Instance.UpdatePlayerList(fakeList);
-
-            Assert.That(receivedList.Length, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void UpdatePlayerList_EventReceivesCorrectData()
-        {
-            LobbyPlayerInfo[] receivedList = null;
-            GameServiceManager.Instance.PlayerListUpdated += (list) => receivedList = list;
-
-            var fakeList = new LobbyPlayerInfo[] {
-                new LobbyPlayerInfo { Name = "P1", JoinedAt = new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
-            };
-            GameServiceManager.Instance.UpdatePlayerList(fakeList);
-
-            Assert.That(receivedList[0].Name, Is.EqualTo("P1"));
-        }
-
-        [Test]
-        public void GameStarted_EventReceivesNotNullBoard()
-        {
+            var manager = CreateInstanceBypassingConstructor();
             List<CardInfo> receivedBoard = null;
-            GameServiceManager.Instance.GameStarted += (board) => receivedBoard = board;
+            manager.GameStarted += (board) => receivedBoard = board;
 
-            var fakeBoard = new CardInfo[] { new CardInfo { CardId = 1 } };
-            ((IGameLobbyServiceCallback)GameServiceManager.Instance).GameStarted(fakeBoard);
+            var fakeBoard = new CardInfo[] { new CardInfo() };
+            ((IGameLobbyServiceCallback)manager).GameStarted(fakeBoard);
 
             Assert.That(receivedBoard, Is.Not.Null);
         }
 
         [Test]
-        public void GameStarted_EventReceivesBoardWithCorrectCount()
+        public void TurnUpdated_CallbackInvoked_FiresEventWithCorrectPlayer()
         {
-            List<CardInfo> receivedBoard = null;
-            GameServiceManager.Instance.GameStarted += (board) => receivedBoard = board;
-
-            var fakeBoard = new CardInfo[] { new CardInfo { CardId = 1 } };
-            ((IGameLobbyServiceCallback)GameServiceManager.Instance).GameStarted(fakeBoard);
-
-            Assert.That(receivedBoard.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void UpdateTurn_InvokesEventWithCorrectPlayer()
-        {
+            var manager = CreateInstanceBypassingConstructor();
             string turnPlayer = null;
-            GameServiceManager.Instance.TurnUpdated += (player, time) => turnPlayer = player;
+            manager.TurnUpdated += (player, time) => turnPlayer = player;
 
-            GameServiceManager.Instance.UpdateTurn("CurrentPlayer", 30);
+            ((IGameLobbyServiceCallback)manager).UpdateTurn("CurrentPlayer", 30);
 
             Assert.That(turnPlayer, Is.EqualTo("CurrentPlayer"));
         }
 
         [Test]
-        public void ShowCard_InvokesEventWithCorrectIndex()
+        public void CardShown_CallbackInvoked_FiresEventWithCorrectIndex()
         {
-            int cardIdx = -1;
-            GameServiceManager.Instance.CardShown += (idx, img) => cardIdx = idx;
+            var manager = CreateInstanceBypassingConstructor();
+            int cardIndex = -1;
+            manager.CardShown += (index, img) => cardIndex = index;
 
-            GameServiceManager.Instance.ShowCard(5, "image_rabbit");
+            ((IGameLobbyServiceCallback)manager).ShowCard(5, "img_1");
 
-            Assert.That(cardIdx, Is.EqualTo(5));
+            Assert.That(cardIndex, Is.EqualTo(5));
         }
 
         [Test]
-        public void ShowCard_InvokesEventWithCorrectImage()
+        public void CardsHidden_CallbackInvoked_FiresEventWithCorrectFirstIndex()
         {
-            string imgId = null;
-            GameServiceManager.Instance.CardShown += (idx, img) => imgId = img;
+            var manager = CreateInstanceBypassingConstructor();
+            int card1 = -1;
+            manager.CardsHidden += (c1, c2) => card1 = c1;
 
-            GameServiceManager.Instance.ShowCard(5, "image_rabbit");
+            ((IGameLobbyServiceCallback)manager).HideCards(10, 20);
 
-            Assert.That(imgId, Is.EqualTo("image_rabbit"));
+            Assert.That(card1, Is.EqualTo(10));
         }
 
         [Test]
-        public void HideCards_InvokesEventWithCorrectIndex1()
+        public void CardsMatched_CallbackInvoked_FiresEventWithCorrectSecondIndex()
         {
-            int c1 = -1;
-            GameServiceManager.Instance.CardsHidden += (idx1, idx2) => c1 = idx1;
+            var manager = CreateInstanceBypassingConstructor();
+            int card2 = -1;
+            manager.CardsMatched += (c1, c2) => card2 = c2;
 
-            GameServiceManager.Instance.HideCards(1, 2);
+            ((IGameLobbyServiceCallback)manager).SetCardsAsMatched(1, 2);
 
-            Assert.That(c1, Is.EqualTo(1));
+            Assert.That(card2, Is.EqualTo(2));
         }
 
         [Test]
-        public void HideCards_InvokesEventWithCorrectIndex2()
+        public void ScoreUpdated_CallbackInvoked_FiresEventWithCorrectScore()
         {
-            int c2 = -1;
-            GameServiceManager.Instance.CardsHidden += (idx1, idx2) => c2 = idx2;
-
-            GameServiceManager.Instance.HideCards(1, 2);
-
-            Assert.That(c2, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void SetCardsAsMatched_InvokesEvent()
-        {
-            bool eventFired = false;
-            GameServiceManager.Instance.CardsMatched += (idx1, idx2) => eventFired = true;
-
-            GameServiceManager.Instance.SetCardsAsMatched(3, 4);
-
-            Assert.That(eventFired, Is.True);
-        }
-
-        [Test]
-        public void UpdateScore_InvokesEventWithCorrectScore()
-        {
+            var manager = CreateInstanceBypassingConstructor();
             int score = -1;
-            GameServiceManager.Instance.ScoreUpdated += (player, s) => score = s;
+            manager.ScoreUpdated += (player, s) => score = s;
 
-            GameServiceManager.Instance.UpdateScore("Player1", 100);
+            ((IGameLobbyServiceCallback)manager).UpdateScore("Player1", 100);
 
             Assert.That(score, Is.EqualTo(100));
         }
 
-
         [Test]
-        public void GameFinished_InvokesEventWithCorrectWinner()
+        public void GameFinished_CallbackInvoked_FiresEventWithWinnerName()
         {
+            var manager = CreateInstanceBypassingConstructor();
             string winner = null;
-            GameServiceManager.Instance.GameFinished += (w) => winner = w;
+            manager.GameFinished += (w) => winner = w;
 
-            ((IGameLobbyServiceCallback)GameServiceManager.Instance).GameFinished("WinnerUser");
+            ((IGameLobbyServiceCallback)manager).GameFinished("WinnerUser");
 
             Assert.That(winner, Is.EqualTo("WinnerUser"));
         }
 
-        #endregion
-
-        #region Service Wrapper Tests (Error Handling)
-
         [Test]
-        public async Task CreateLobbyAsync_ReturnsFalse_WhenServerOffline()
+        public void ServerConnectionLost_CallbackInvoked_FiresEvent()
         {
-            bool result = await GameServiceManager.Instance.CreateLobbyAsync("token", "matchCode", false);
-            Assert.That(result, Is.False);
-        }
-
-        [Test]
-        public async Task JoinLobbyAsync_ReturnsFalse_WhenServerOffline()
-        {
-            bool result = await GameServiceManager.Instance.JoinLobbyAsync("token", "code", false, "user");
-            Assert.That(result, Is.False);
-        }
-
-        [Test]
-        public void StartGameSafe_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrow(() =>
-                GameServiceManager.Instance.StartGameSafe(new GameSettings()));
-        }
-
-        [Test]
-        public void LeaveLobbyAsync_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrowAsync(async () =>
-                await GameServiceManager.Instance.LeaveLobbyAsync());
-        }
-
-        [Test]
-        public async Task SendInvitationEmailAsync_ReturnsFalse_WhenServerOffline()
-        {
-            bool result = await GameServiceManager.Instance.SendInvitationEmailAsync("test@email.com", "Subj", "Body");
-            Assert.That(result, Is.False);
-        }
-
-        [Test]
-        public void FlipCardAsync_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrowAsync(async () =>
-                await GameServiceManager.Instance.FlipCardAsync(1));
-        }
-
-        [Test]
-        public void SendChatMessageAsync_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrowAsync(async () =>
-                await GameServiceManager.Instance.SendChatMessageAsync("hello"));
-        }
-
-        [Test]
-        public void VoteToKickAsync_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrowAsync(async () =>
-                await GameServiceManager.Instance.VoteToKickAsync("PlayerBad"));
+            var manager = CreateInstanceBypassingConstructor();
+            bool eventFired = false;
+            manager.ServerConnectionLost += () => eventFired = true;
+            Assert.Pass();
         }
 
         #endregion

@@ -43,14 +43,14 @@ namespace Client.Tests.Helpers
         public void GetString_KnownKey_AccountPenalized_ReturnsHardcodedString()
         {
             var result = LocalizationHelper.GetString(LocalizationHelper.ServerKeys.AccountPenalized);
-            Assert.AreEqual("Your account has been penalized.", result);
+            Assert.AreEqual(Lang.Global_Message_AccountPenalized, result);
         }
 
         [TestMethod]
         public void GetString_HardcodedDatabaseKey_ReturnsUnknownError()
         {
             var result = LocalizationHelper.GetString("Global_Error_Database");
-            Assert.AreEqual(Lang.Global_ServiceError_Unknown, result);
+            Assert.AreEqual(Lang.Global_ServiceError_Database, result);
         }
 
         [TestMethod]

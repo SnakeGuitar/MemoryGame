@@ -17,7 +17,7 @@ namespace Client.Test.Core
 {
     [TestFixture]
     [Apartment(ApartmentState.STA)]
-    public class GameManagerTests
+    public class GameManagerTest
     {
         private GameManager _gameManager;
         private ObservableCollection<Card> _cardsCollection;

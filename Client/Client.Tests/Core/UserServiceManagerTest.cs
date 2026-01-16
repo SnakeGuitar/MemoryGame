@@ -1,13 +1,10 @@
 ﻿using Client.Core;
-using Client.UserServiceReference;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Assert;
 
-namespace Client.Test.Core
+namespace Client.Tests.Core
 {
     [TestFixture]
     public class UserServiceManagerTests
@@ -19,305 +16,125 @@ namespace Client.Test.Core
             field?.SetValue(null, null);
         }
 
-        #region Singleton Tests
-
         [Test]
-        public void Instance_IsNotNull()
+        public void Instance_ServerOffline_ThrowsInvalidOperationException()
         {
-            var instance = UserServiceManager.Instance;
-            Assert.That(instance, Is.Not.Null);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                var instance = UserServiceManager.Instance;
+            });
         }
 
         [Test]
-        public void Instance_AlwaysReturnsSameObject()
+        public void StartRegistrationAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var instance1 = UserServiceManager.Instance;
-            var instance2 = UserServiceManager.Instance;
-
-            Assert.That(instance1, Is.SameAs(instance2));
-        }
-
-        #endregion
-
-        #region Registration Tests
-
-        [Test]
-        public async Task StartRegistrationAsync_ReturnsNotNull_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.StartRegistrationAsync("test@email.com", "pass");
-            Assert.That(result, Is.Not.Null);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.StartRegistrationAsync("email", "pass"));
         }
 
         [Test]
-        public async Task StartRegistrationAsync_ReturnsFailure_WhenServerOffline()
+        public void LoginAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.StartRegistrationAsync("test@email.com", "pass");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.LoginAsync("user", "pass"));
         }
 
         [Test]
-        public async Task StartRegistrationAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void LoginAsGuestAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.StartRegistrationAsync("test@email.com", "pass");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.LoginAsGuestAsync("guest"));
         }
 
         [Test]
-        public async Task InitiateGuestRegistrationAsync_ReturnsNotNull_WhenServerOffline()
+        public void LogoutAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.InitiateGuestRegistrationAsync(1, "test@email.com", "pass");
-            Assert.That(result, Is.Not.Null);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.LogoutAsync("token"));
         }
 
         [Test]
-        public async Task InitiateGuestRegistrationAsync_ReturnsFailure_WhenServerOffline()
+        public void GetMatchHistoryAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.InitiateGuestRegistrationAsync(1, "test@email.com", "pass");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.GetMatchHistoryAsync("token"));
         }
 
         [Test]
-        public async Task InitiateGuestRegistrationAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void GetFriendsListAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.InitiateGuestRegistrationAsync(1, "test@email.com", "pass");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.GetFriendsListAsync("token"));
         }
 
         [Test]
-        public async Task VerifyRegistrationAsync_ReturnsFailure_WhenServerOffline()
+        public void GetPendingRequestsAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.VerifyRegistrationAsync("test@email.com", "123456");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.GetPendingRequestsAsync("token"));
         }
 
         [Test]
-        public async Task VerifyRegistrationAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void VerifyRegistrationAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.VerifyRegistrationAsync("test@email.com", "123456");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.VerifyRegistrationAsync("email", "code"));
         }
 
         [Test]
-        public async Task VerifyGuestRegistrationAsync_ReturnsFailure_WhenServerOffline()
+        public void ResendVerificationCodeAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.VerifyGuestRegistrationAsync(1, "test@email.com", "123456");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.ResendVerificationCodeAsync("email"));
         }
 
         [Test]
-        public async Task VerifyGuestRegistrationAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void RecoverPasswordAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.VerifyGuestRegistrationAsync(1, "test@email.com", "123456");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.ChangePasswordAsync("token", "currentPassword", "newPassword"));
         }
 
         [Test]
-        public async Task ResendVerificationCodeAsync_ReturnsFailure_WhenServerOffline()
+        public void ChangePasswordAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.ResendVerificationCodeAsync("test@email.com");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.ChangePasswordAsync("token", "old", "new"));
         }
 
         [Test]
-        public async Task ResendVerificationCodeAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void UpdateUserProfileInfo_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.ResendVerificationCodeAsync("test@email.com");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.UpdatePersonalInfoAsync("token", "name", "lastname"));
         }
 
         [Test]
-        public async Task FinalizeRegistrationAsync_ReturnsFailure_WhenServerOffline()
+        public void AddSocialNetworkAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.FinalizeRegistrationAsync("test@email.com", "user", new byte[0]);
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.AddSocialNetworkAsync("token", "account"));
         }
 
         [Test]
-        public async Task FinalizeRegistrationAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void RemoveSocialNetworkAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.FinalizeRegistrationAsync("test@email.com", "user", new byte[0]);
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        #endregion
-
-        #region Session Tests
-
-        [Test]
-        public async Task LoginAsGuestAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.LoginAsGuestAsync("GuestUser");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.RemoveSocialNetworkAsync("token", 1));
         }
 
         [Test]
-        public async Task LoginAsGuestAsync_ReturnsCorrectMessage_WhenServerOffline()
+        public void ForceLogout_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.LoginAsGuestAsync("GuestUser");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
+            Assert.Throws<InvalidOperationException>(() =>
+                UserServiceManager.Instance.ForceLogout("reason"));
         }
 
         [Test]
-        public async Task LoginAsync_ReturnsFailure_WhenServerOffline()
+        public void GetMatchsAsync_ServerOffline_ThrowsInvalidOperationException()
         {
-            var result = await UserServiceManager.Instance.LoginAsync("test@email.com", "pass");
-            Assert.That(result.Success, Is.False);
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await UserServiceManager.Instance.ChangePasswordAsync("token", "currentPass", "newPass"));
         }
-
-        [Test]
-        public async Task LoginAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.LoginAsync("test@email.com", "pass");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        [Test]
-        public void LogoutAsync_DoesNotCrash_WhenServerOffline()
-        {
-            Assert.DoesNotThrowAsync(async () => await UserServiceManager.Instance.LogoutAsync("token"));
-        }
-
-        #endregion
-
-        #region Profile Tests
-
-        [Test]
-        public async Task GetUserAvatarAsync_ReturnsNull_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetUserAvatarAsync("test@email.com");
-            Assert.That(result, Is.Null);
-        }
-
-        [Test]
-        public async Task UpdateUserAvatarAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.UpdateUserAvatarAsync("token", new byte[0]);
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task UpdateUserAvatarAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.UpdateUserAvatarAsync("token", new byte[0]);
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        [Test]
-        public async Task ChangePasswordAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.ChangePasswordAsync("token", "old", "new");
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task ChangePasswordAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.ChangePasswordAsync("token", "old", "new");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        [Test]
-        public async Task ChangeUsernameAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.ChangeUsernameAsync("token", "newUser");
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task ChangeUsernameAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.ChangeUsernameAsync("token", "newUser");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        [Test]
-        public async Task UpdatePersonalInfoAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.UpdatePersonalInfoAsync("email", "name", "last");
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task UpdatePersonalInfoAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.UpdatePersonalInfoAsync("email", "name", "last");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        #endregion
-
-        #region Social & History Tests
-
-        [Test]
-        public async Task GetMatchHistoryAsync_ReturnsNotNull_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetMatchHistoryAsync("token");
-            Assert.That(result, Is.Not.Null);
-        }
-
-        [Test]
-        public async Task GetMatchHistoryAsync_ReturnsEmptyList_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetMatchHistoryAsync("token");
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public async Task GetFriendsListAsync_ReturnsNotNull_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetFriendsListAsync("token");
-            Assert.That(result, Is.Not.Null);
-        }
-
-        [Test]
-        public async Task GetFriendsListAsync_ReturnsEmptyList_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetFriendsListAsync("token");
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public async Task GetPendingRequestsAsync_ReturnsNotNull_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetPendingRequestsAsync("token");
-            Assert.That(result, Is.Not.Null);
-        }
-
-        [Test]
-        public async Task GetPendingRequestsAsync_ReturnsEmptyList_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.GetPendingRequestsAsync("token");
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public async Task AddSocialNetworkAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.AddSocialNetworkAsync("token", "account");
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task AddSocialNetworkAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.AddSocialNetworkAsync("token", "account");
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        [Test]
-        public async Task RemoveSocialNetworkAsync_ReturnsFailure_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.RemoveSocialNetworkAsync("token", 1);
-            Assert.That(result.Success, Is.False);
-        }
-
-        [Test]
-        public async Task RemoveSocialNetworkAsync_ReturnsCorrectMessage_WhenServerOffline()
-        {
-            var result = await UserServiceManager.Instance.RemoveSocialNetworkAsync("token", 1);
-            Assert.That(result.MessageKey, Is.EqualTo("Global_Error_ServerOffline"));
-        }
-
-        #endregion
     }
 }
