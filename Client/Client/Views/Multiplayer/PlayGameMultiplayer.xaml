@@ -7,7 +7,8 @@
         xmlns:language="clr-namespace:Client.Properties.Langs"
         mc:Ignorable="d"
         
-        MinHeight="720" MinWidth="1280"
+        Title="{x:Static language:Lang.Global_Title_Multiplayer}" 
+        MinHeight="500" MinWidth="600"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource PrimaryTextColor}">
 
@@ -16,7 +17,7 @@
             <Setter Property="Background" Value="{StaticResource GreenGame}"/>
             <Setter Property="CornerRadius" Value="10"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="10,0,10,10"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
         </Style>
 
@@ -25,187 +26,184 @@
             <Setter Property="BorderBrush" Value="{StaticResource AccentColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontFamily" Value="{StaticResource BodyFont}"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="{DynamicResource BodyFont}"/>
+            <Setter Property="FontSize" Value="18"/>
         </Style>
 
         <Style x:Key="GameBoardStyle" TargetType="ItemsControl">
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <UniformGrid Rows="{Binding GameRows}" 
+                                     Columns="{Binding GameColumns}" 
+                                     HorizontalAlignment="Center" 
+                                     VerticalAlignment="Center"/>
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="484"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="300"/>
-        </Grid.ColumnDefinitions>
+    <Viewbox Stretch="Uniform">
+        <Grid Width="1450" Height="900">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="ColSide" Width="320"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Margin="0,0,153,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Label Content="{x:Static language:Lang.Global_Title_Players}" 
-                   Style="{StaticResource MainMenuTitleStyle}" Grid.Row="0" HorizontalAlignment="Center"/>
+                <Label Content="{x:Static language:Lang.Global_Title_Players}" 
+                       Style="{StaticResource MainMenuTitleStyle}" FontSize="45"
+                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
 
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
-                <StackPanel>
-                    <Border x:Name="BorderP1" Style="{StaticResource PanelContainerStyle}">
-                        <Border.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
-                            </ContextMenu>
-                        </Border.ContextMenu>
-                        <StackPanel>
-                            <Label x:Name="LabelP1Name" Content="Jugador 1" Style="{StaticResource PlayerNameStyle}" FontWeight="Bold" FontSize="18"/>
-                            <Label x:Name="LabelP1Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                            <Label x:Name="LabelP1Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
-                        </StackPanel>
-                    </Border>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Border x:Name="BorderP1" Style="{StaticResource PanelContainerStyle}">
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <StackPanel>
+                                <Label x:Name="LabelP1Name" Content="Jugador 1" Style="{StaticResource PlayerNameStyle}" FontWeight="Bold" FontSize="20"/>
+                                <Label x:Name="LabelP1Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}" FontSize="16"/>
+                                <Label x:Name="LabelP1Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}" FontSize="16"/>
+                            </StackPanel>
+                        </Border>
 
-                    <Border x:Name="BorderP2" Style="{StaticResource PanelContainerStyle}">
-                        <Border.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
-                            </ContextMenu>
-                        </Border.ContextMenu>
-                        <StackPanel>
-                            <Label x:Name="LabelP2Name" Content="Jugador 2" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
-                            <Label x:Name="LabelP2Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                            <Label x:Name="LabelP2Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
-                        </StackPanel>
-                    </Border>
+                        <Border x:Name="BorderP2" Style="{StaticResource PanelContainerStyle}">
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <StackPanel>
+                                <Label x:Name="LabelP2Name" Content="Jugador 2" Style="{StaticResource PlayerNameStyle}" FontSize="20"/>
+                                <Label x:Name="LabelP2Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}" FontSize="16"/>
+                                <Label x:Name="LabelP2Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}" FontSize="16"/>
+                            </StackPanel>
+                        </Border>
 
-                    <Border x:Name="BorderP3" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
-                        <Border.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
-                            </ContextMenu>
-                        </Border.ContextMenu>
-                        <StackPanel>
-                            <Label x:Name="LabelP3Name" Content="Jugador 3" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
-                            <Label x:Name="LabelP3Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                            <Label x:Name="LabelP3Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
-                        </StackPanel>
-                    </Border>
+                        <Border x:Name="BorderP3" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
+                            <StackPanel>
+                                <Label x:Name="LabelP3Name" Content="Jugador 3" Style="{StaticResource PlayerNameStyle}" FontSize="20"/>
+                                <Label x:Name="LabelP3Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                                <Label x:Name="LabelP3Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                            </StackPanel>
+                        </Border>
 
-                    <Border x:Name="BorderP4" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
-                        <Border.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="{x:Static language:Lang.KickVote_Label_Vote}" Click="VoteKick_Click"/>
-                            </ContextMenu>
-                        </Border.ContextMenu>
-                        <StackPanel>
-                            <Label x:Name="LabelP4Name" Content="Jugador 4" Style="{StaticResource PlayerNameStyle}" FontSize="18"/>
-                            <Label x:Name="LabelP4Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
-                            <Label x:Name="LabelP4Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
+                        <Border x:Name="BorderP4" Style="{StaticResource PanelContainerStyle}" Visibility="Collapsed">
+                            <StackPanel>
+                                <Label x:Name="LabelP4Name" Content="Jugador 4" Style="{StaticResource PlayerNameStyle}" FontSize="20"/>
+                                <Label x:Name="LabelP4Score" Content="Pares: 0" Style="{StaticResource PlayerStatStyle}"/>
+                                <Label x:Name="LabelP4Time" Content="Tiempo: --" Style="{StaticResource PlayerStatStyle}"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
 
-        <Grid Margin="350,10,10,10" Grid.ColumnSpan="2">
-            <Border Style="{StaticResource BoardContainerStyle}" CornerRadius="10" Background="#33000000">
-                <ItemsControl x:Name="GameBoard" Style="{StaticResource GameBoardStyle}" Margin="-10,0,0,0">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Width="80" Height="110" Margin="5" Click="Card_Click" Tag="{Binding Id}">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="Button">
-                                                    <Grid>
-                                                        <Border x:Name="CardBorder" CornerRadius="5" BorderBrush="White" BorderThickness="2" Background="Transparent">
-                                                            <Image Source="{Binding DisplayImage}" Stretch="UniformToFill"/>
-                                                        </Border>
-                                                        <Border x:Name="MatchedOverlay" Background="#3210F800" CornerRadius="5" Visibility="Collapsed"/>
-                                                    </Grid>
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="CardBorder" Property="BorderBrush" Value="Yellow"/>
-                                                        </Trigger>
-                                                        <DataTrigger Binding="{Binding IsMatched}" Value="True">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                            <Setter TargetName="MatchedOverlay" Property="Visibility" Value="Visible"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsFlipped}" Value="True">
-                                                            <Setter Property="IsEnabled" Value="False"/>
-                                                        </DataTrigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
-        </Grid>
+            <Grid Grid.Column="1" Margin="20">
+                <Border Style="{StaticResource BoardContainerStyle}" CornerRadius="15" Background="#44000000">
+                    <Viewbox Stretch="Uniform" Margin="20">
+                        <ItemsControl x:Name="GameBoard" Style="{StaticResource GameBoardStyle}" Margin="-10,0,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Width="80" Height="110" Margin="5" Click="Card_Click" Tag="{Binding Id}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Grid>
+                                                                <Border x:Name="CardBorder" CornerRadius="5" BorderBrush="White" BorderThickness="2" Background="Transparent">
+                                                                    <Image Source="{Binding DisplayImage}" Stretch="UniformToFill"/>
+                                                                </Border>
+                                                                <Border x:Name="MatchedOverlay" Background="#2810F800" CornerRadius="5" Visibility="Collapsed"/>
+                                                            </Grid>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="True">
+                                                                    <Setter TargetName="CardBorder" Property="BorderBrush" Value="Gold"/>
+                                                                </Trigger>
+                                                                <DataTrigger Binding="{Binding IsMatched}" Value="True">
+                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                    <Setter TargetName="MatchedOverlay" Property="Visibility" Value="Visible"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsFlipped}" Value="True">
+                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                </DataTrigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Viewbox>
+                </Border>
 
-        <Grid Grid.Column="2" Margin="10,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Button Content="👁" Width="50" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Margin="15" Click="ButtonTogglePanels_Click" Style="{StaticResource GameButtonStyle}" Opacity="0.7"/>
+            </Grid>
 
-            <Border Grid.Row="0" Style="{StaticResource PanelContainerStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}" HorizontalAlignment="Center"/>
-                    <ListBox x:Name="ChatListBox" Grid.Row="1" Style="{StaticResource ChatListBoxStyle}" Margin="0,10,0,10"/>
-                    <Grid Grid.Row="2" Height="40">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" MaxLength="50" Grid.Column="0" VerticalContentAlignment="Center"/>
-                        <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" Width="60" Margin="5,0,0,0"/>
+            <Grid x:Name="PanelSide" Grid.Column="2" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource PanelContainerStyle}" Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="{x:Static language:Lang.Global_Title_Chat}" Style="{StaticResource MainMenuTitleStyle}" HorizontalAlignment="Center"/>
+                        <ListBox x:Name="ChatListBox" Grid.Row="1" Style="{StaticResource ChatListBoxStyle}" Margin="0,10,0,10" FontSize="20" />
+
+                        <Grid Grid.Row="2" Height="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="ChatTextBox" Style="{StaticResource ChatTextBoxStyle}" MaxLength="50" VerticalContentAlignment="Center" FontSize="18"/>
+                            <Button Content="{x:Static language:Lang.Global_Button_Send}" Style="{StaticResource SendButtonStyle}" Grid.Column="1" Click="ButtonSendMessageChat_Click" Width="80" Margin="5,0,0,0"/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Border>
+                </Border>
 
-            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <Button Content="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource GameButtonStyle}" Click="ButtonSettings_Click" Margin="0,0,0,10"/>
-                <Button Content="{x:Static language:Lang.Global_Button_Leave}" Style="{StaticResource GameButtonStyle}" Click="ButtonBackToMenu_Click"/>
-            </StackPanel>
-           </Grid> <Grid x:Name="ReconnectionGrid" 
-              Visibility="Collapsed" 
-              Background="#AC000000" 
-              d:Visibility="Visible"
-              Grid.ColumnSpan="3"> <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{x:Static language:Lang.Global_Title_Warning}" 
-                           Style="{StaticResource TitleTextStyle}"
-                           Foreground="Gold" 
-                           FontWeight="Bold" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,0,0,10"/>
-                <TextBlock x:Name="TextBlockReconnection" 
-                           Text="{x:Static language:Lang.Global_Message_Reconnecting}" 
-                           Style="{StaticResource MessageBoxTextStyle}"
-                           Foreground="White"
-                           HorizontalAlignment="Center"/>
-                <ProgressBar IsIndeterminate="True" 
-                             Width="200" 
-                             Height="20" 
-                             Margin="0,20,0,20" 
-                             Foreground="Gold"/>
-            </StackPanel>
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <Button Content="{x:Static language:Lang.Global_Button_Settings}" Style="{StaticResource GameButtonStyle}" Height="60" Click="ButtonSettings_Click" Margin="0,0,0,15"/>
+                    <Button Content="{x:Static language:Lang.Global_Button_Leave}" Style="{StaticResource GameButtonStyle}" Height="60" Click="ButtonBackToMenu_Click"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="ReconnectionGrid" 
+                  Visibility="Collapsed" 
+                  Background="#CC000000" 
+                  Grid.ColumnSpan="3"
+                  d:Visibility="Visible">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="{x:Static language:Lang.Global_Title_Warning}" 
+                               Style="{StaticResource TitleTextStyle}"
+                               Foreground="Gold" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                    <TextBlock x:Name="TextBlockReconnection" 
+                               Text="{x:Static language:Lang.Global_Message_Reconnecting}" 
+                               Style="{StaticResource MessageBoxTextStyle}"
+                               Foreground="White" HorizontalAlignment="Center" FontSize="24"/>
+                    <ProgressBar IsIndeterminate="True" Width="300" Height="25" Margin="0,30,0,0" Foreground="Gold"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid> 
+    </Viewbox>
 </Window>

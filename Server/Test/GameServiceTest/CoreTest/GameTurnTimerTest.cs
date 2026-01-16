@@ -12,12 +12,12 @@ namespace Test.GameServiceTest.CoreTest
         {
             var signal = new ManualResetEvent(false);
 
-            var timer = new GameTurnTimer(1, () =>
+            var timer = new GameTurnTimer(10, () =>
             {
                 signal.Set();
             });
 
-            timer.Restart();
+            timer.Restart(1);
 
             bool received = signal.WaitOne(2000);
 
@@ -31,7 +31,7 @@ namespace Test.GameServiceTest.CoreTest
             bool called = false;
             var timer = new GameTurnTimer(1, () => called = true);
 
-            timer.Restart();
+            timer.Restart(1);
             timer.Stop();
 
             Thread.Sleep(1500);

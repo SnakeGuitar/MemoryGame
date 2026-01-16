@@ -122,7 +122,8 @@
                                         <ComboBox x:Name="ComboBoxNumberOfCards" 
                                                   Grid.Column="0" 
                                                   FontSize="35" Width="120" Height="50"
-                                                  Style="{StaticResource FormComboBoxStyle}">
+                                                  Style="{StaticResource FormComboBoxStyle}"
+                                                  SelectionChanged="ComboBoxNumberOfCards_SelectionChanged">
                                             <ComboBoxItem Content="16"/>
                                             <ComboBoxItem Content="24"/>
                                             <ComboBoxItem Content="30"/>
@@ -143,17 +144,14 @@
                                             Style="{StaticResource FormSliderStyle}"
                                             Minimum="5" Maximum="60" Value="30" 
                                             Width="300"
-                                            IsSnapToTickEnabled="True" TickFrequency="15"
+                                            IsSnapToTickEnabled="True" TickFrequency="5"
                                             ValueChanged="SliderSecondsPerTurn_ValueChanged"/>
 
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
-                                        <Label x:Name="LabelTimerValue" 
-                                               FontSize="35" 
-                                               Style="{StaticResource FormValueLabelStyle}"
+                                        <Label x:Name="LabelTimerValue" FontSize="35" Style="{StaticResource FormValueLabelStyle}"
                                                Content="30"/>
                                         <Label Content="{x:Static lang:Lang.Global_Label_Seconds}" 
-                                               Style="{StaticResource FormUnitLabelStyle}"
-                                               FontSize="35"/>
+                                               Style="{StaticResource FormUnitLabelStyle}" FontSize="35"/>
                                     </StackPanel>
                                 </StackPanel>
                             </Border>

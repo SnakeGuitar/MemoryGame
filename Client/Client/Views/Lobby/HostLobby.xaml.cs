@@ -50,6 +50,7 @@ namespace Client.Views.Lobby
                 LabelGameCode.Content = _lobbyCode;
             }
 
+            InitializeCardSelector();
             ConfigureEvents();
 
             this.Loaded += Window_Loaded;
@@ -238,7 +239,8 @@ namespace Client.Views.Lobby
             {
                 _isGameStarting = true;
                 UnsubscribeEvents();
-                var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers);
+                var layout = DifficultyPresets.CalculateLayout(cards.Count);
+                var multiplayerGame = new PlayGameMultiplayer(cards, _currentPlayers, layout.Rows, layout.Columns);
 
                 if (this.Owner != null)
                 {
@@ -321,11 +323,50 @@ namespace Client.Views.Lobby
 
         private void ComboBoxNumberOfCards_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxNumberOfCards.SelectedItem is ComboBoxItem item &&
-                int.TryParse(item.Content.ToString(), out int value))
+            if (ComboBoxNumberOfCards.SelectedItem == null)
+            {
+                return;
+            }
+
+            if(ComboBoxNumberOfCards.SelectedItem is int value)
             {
                 _selectedCardCount = value;
             }
+
+            else if (ComboBoxNumberOfCards.SelectedItem is System.Windows.Controls.ComboBoxItem item)
+            {
+                if (int.TryParse(item.Content.ToString(), out int parsedValue))
+                {
+                    _selectedCardCount = parsedValue;
+                }
+            }
+        }
+
+
+        private void InitializeCardSelector()
+        {
+            if (ComboBoxNumberOfCards != null)
+            {
+                ComboBoxNumberOfCards.Items.Clear();
+                ComboBoxNumberOfCards.Items.Add(16);
+                ComboBoxNumberOfCards.Items.Add(24);
+                ComboBoxNumberOfCards.Items.Add(30);
+                ComboBoxNumberOfCards.Items.Add(40);
+
+                ComboBoxNumberOfCards.SelectedIndex = 0;
+
+                ImageHelper.UseColorDeck = false;
+            }
+        }
+
+        private void CheckBoxColorMode_Checked(object sender, RoutedEventArgs e)
+        {
+            ImageHelper.UseColorDeck = true;
+        }
+
+        private void CheckBoxColorMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ImageHelper.UseColorDeck = false;
         }
 
         private void SliderSecondsPerTurn_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

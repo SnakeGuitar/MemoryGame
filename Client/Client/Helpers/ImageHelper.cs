@@ -1,4 +1,5 @@
-﻿using Client.Properties.Langs;
+﻿using Client.Models;
+using Client.Properties.Langs;
 using Client.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -82,6 +83,21 @@ namespace Client.Helpers
                 encoder.Save(stream);
                 return stream.ToArray();
             }
+        }
+
+        public static bool UseColorDeck { get; set; } = false;
+
+        public static string GetCardImage(string imageName)
+        {
+            if (string.IsNullOrEmpty(imageName))
+            {
+                return GameConstants.CardBackPath;
+            }
+            string basePath = UseColorDeck
+                ? GameConstants.ColorCardFrontBasePath
+                : GameConstants.NormalCardFrontBasePath;
+
+            return $"{basePath}{imageName}.png";
         }
     }
 }

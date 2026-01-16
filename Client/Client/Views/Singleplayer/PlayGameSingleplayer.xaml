@@ -74,13 +74,13 @@
         </Style>
     </Window.Resources>
 
-    <Grid Background="{StaticResource BackgroundColor}">
+    <Grid Background="{StaticResource GreenGame}">
 
         <Viewbox Stretch="Uniform">
 
             <Grid Width="1450" Height="900">
 
-                <Border Background="{StaticResource PrimaryTextColor}" CornerRadius="15" Margin="20" Padding="15">
+                <Border Background="{StaticResource PrimaryTextColor}" Padding="15">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="3*"/>
@@ -114,7 +114,7 @@
                                     </StackPanel>
                                 </Border>
 
-                                <Border Style="{StaticResource BoardContainerStyle}" Padding="20">
+                                <Border Style="{StaticResource BoardContainerStyle}" Margin="0" Padding="20">
                                     <StackPanel>
                                         <Label Content="{x:Static language:Lang.Global_Label_Score}" 
                                                Style="{StaticResource GameStatTitleStyle}" 

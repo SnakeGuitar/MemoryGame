@@ -914,18 +914,18 @@
     <value>你赢了！{0} 离开了游戏</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Global_Error_DatabaseCritical" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Error_Timeout" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Title_ConnectionError" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
+	<data name="Global_Title_ConnectionError" xml:space="preserve">
+  <value>连接错误</value>
+</data>
+	<data name="Global_Message_RetryConnection" xml:space="preserve">
+  <value>您想尝试重新连接吗？</value>
+</data>
+	<data name="Global_Error_Timeout" xml:space="preserve">
+  <value>服务器未及时响应</value>
+</data>
+	<data name="Global_Error_DatabaseCritical" xml:space="preserve">
+  <value>正在返回主屏幕</value>
+</data>
   <data name="Global_Message_Reconnecting" xml:space="preserve">
     <value>连接已断开。正在重新连接 ({0}/{1})...</value>
   </data>
@@ -941,7 +941,7 @@
   <data name="KickVote_Label_Vote" xml:space="preserve">
     <value>投票踢出</value>
   </data>
-  <data name="PlayerProfile_Message_SocialNetwork" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
+	<data name="PlayerProfile_Message_SocialNetwork" xml:space="preserve">
+  <value>已注册的社交网络</value>
+</data>
 </root>

@@ -12,6 +12,7 @@ namespace Client.ViewModels
     {
         public int Id { get; set; }
         public int PairId { get; set; }
+        public string Value { get; set; }
         private string frontImageResource;
         private readonly string _backImageResource = "/Client;component/Resources/Images/Cards/Backs/default.png";
         private bool isFlipped;
@@ -26,6 +27,7 @@ namespace Client.ViewModels
             IsMatched = false;
         }
 
+        public Card() { }
         public void SetFrontImage(string imagePath)
         {
             frontImageResource = imagePath;

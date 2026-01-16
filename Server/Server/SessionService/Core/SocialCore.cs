@@ -73,8 +73,10 @@ namespace Server.SessionService.Core
         public List<FriendRequestDTO> GetPendingRequests(string token)
         {
             var userId = _sessionManager.GetUserIdFromToken(token);
-            if (userId == null) return null;
-
+            if (userId == null)
+            {
+                return null;
+            }
 
             try
             {

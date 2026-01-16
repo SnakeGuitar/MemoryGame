@@ -2,6 +2,7 @@
 using Client.Core.Exceptions;
 using Client.GameLobbyServiceReference;
 using Client.Helpers;
+using Client.Models;
 using Client.Properties.Langs;
 using Client.Views.Controls;
 using Client.Views.Multiplayer;
@@ -199,7 +200,8 @@ namespace Client.Views.Lobby
                 UnsubscribeEvents();
                 _isGameStarting = true;
 
-                var gameWindow = new PlayGameMultiplayer(cards, _currentPlayers);
+                var layout = DifficultyPresets.CalculateLayout(cards.Count);
+                var gameWindow = new PlayGameMultiplayer(cards, _currentPlayers, layout.Rows, layout.Columns);
 
                 if (this.Owner != null)
                 {

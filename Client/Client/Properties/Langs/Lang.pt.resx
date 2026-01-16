@@ -912,19 +912,18 @@
   <data name="PlayGameMultiplayer_Label_PlayersLeft" xml:space="preserve">
     <value>Você ganhou! {0} abandonou o jogo</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Global_Error_DatabaseCritical" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Error_Timeout" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Title_ConnectionError" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Global_Message_RetryConnection" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
+	<data name="Global_Title_ConnectionError" xml:space="preserve">
+  <value>Erro de conexão</value>
+</data>
+	<data name="Global_Message_RetryConnection" xml:space="preserve">
+  <value>Gostaria de tentar reconectar?</value>
+</data>
+	<data name="Global_Error_Timeout" xml:space="preserve">
+  <value>O servidor não respondeu a tempo</value>
+</data>
+	<data name="Global_Error_DatabaseCritical" xml:space="preserve">
+  <value>Voltando para a tela inicial</value>
+</data>
   <data name="Global_Message_Reconnecting" xml:space="preserve">
     <value>Conexão perdida. Reconectando ({0}/{1})...</value>
   </data>
@@ -940,7 +939,7 @@
   <data name="KickVote_Label_Vote" xml:space="preserve">
     <value>Votar para expulsar</value>
   </data>
-  <data name="PlayerProfile_Message_SocialNetwork" xml:space="preserve">
-    <value>Rede social registrada</value>
-  </data>
+	<data name="PlayerProfile_Message_SocialNetwork" xml:space="preserve">
+  <value>Rede social registrada</value>
+</data>
 </root>

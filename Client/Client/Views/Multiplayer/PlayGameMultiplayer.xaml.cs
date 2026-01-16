@@ -6,10 +6,12 @@ using Client.Models;
 using Client.Properties.Langs;
 using Client.ViewModels;
 using Client.Views.Controls;
+using Client.Views.Session;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
@@ -31,24 +33,30 @@ namespace Client.Views.Multiplayer
         private string _currentTurnPlayer;
         private Dictionary<string, int> _localScores = new Dictionary<string, int>();
         private bool _isGameFinished = false;
+        private bool _isCinemaMode = false;
 
         private Border[] _playerBorders;
         private Label[] _playerNames;
         private Label[] _playerScores;
         private Label[] _playerTimes;
 
+        public int GameRows { get; set; }
+        public int GameColumns { get; set; }
+
         #endregion
 
         public ObservableCollection<Card> Cards { get; set; }
 
-        public PlayGameMultiplayer(List<CardInfo> serverCards, List<LobbyPlayerInfo> players)
+        public PlayGameMultiplayer(List<CardInfo> serverCards, List<LobbyPlayerInfo> players, int rows, int columns)
         {
             InitializeComponent();
 
             this.Loaded += OnWindowLoaded;
-
             _players = players ?? new List<LobbyPlayerInfo>();
+
             Cards = new ObservableCollection<Card>();
+            GameRows = rows;
+            GameColumns = columns;
 
             _localScores.Clear();
             foreach (var p in from p in _players
@@ -146,11 +154,27 @@ namespace Client.Views.Multiplayer
         {
             try
             {
+                Cards.Clear();
+
+                for (int i = 0; i < serverCards.Count; i++)
+                {
+                    var info = serverCards[i];
+                    string imagePath = ImageHelper.GetCardImage(info.ImageIdentifier);
+
+                    var newCard = new Card(i, info.CardId, imagePath)
+                    {
+                        IsFlipped = false,
+                        IsMatched = false
+                    };
+                    Cards.Add(newCard);
+                }
+
                 var config = new GameConfiguration
                 {
                     NumberOfCards = serverCards.Count,
                     TimeLimitSeconds = GameConstants.DefaultTurnTimeSeconds
                 };
+                _gameManager.IsMultiplayerMode = true;
                 _gameManager.StartMultiplayerGame(config, serverCards);
             }
             catch (Exception ex)
@@ -347,6 +371,22 @@ namespace Client.Views.Multiplayer
             }
         }
 
+        private void ButtonTogglePanels_Click(object sender, RoutedEventArgs e)
+        {
+            _isCinemaMode = !_isCinemaMode;
+
+            if (_isCinemaMode)
+            {
+                PanelSide.Visibility = Visibility.Collapsed;
+                ColSide.Width = new GridLength(0);
+            }
+            else
+            {
+                PanelSide.Visibility = Visibility.Visible;
+                ColSide.Width = new GridLength(300);
+            }
+        }
+
         private void HighlightActivePlayer(string playerName)
         {
             for (int i = 0; i < _playerNames.Length; i++)
@@ -391,8 +431,9 @@ namespace Client.Views.Multiplayer
         {
             Dispatcher.Invoke(() =>
             {
-                if (!this.IsLoaded)
+                if (isNotification && message == "Global_Error_RegisterDatabase")
                 {
+                    ExceptionManager.Handle(new FaultException("Global_Error_RegisterDatabase"), this);
                     return;
                 }
 
@@ -411,18 +452,18 @@ namespace Client.Views.Multiplayer
             });
         }
 
-        private void OnPlayerLeft(string playerName)
+        private void OnPlayerLeft(string username)
         {
             Dispatcher.Invoke(() =>
             {
-                string messagePlayerLeft = $"--- {playerName} {Lang.PlayGameMultiplayer_Label_LeftGame} ---";
+                string messagePlayerLeft = $"--- {username} {Lang.PlayGameMultiplayer_Label_LeftGame} ---";
                 ChatListBox.Items.Add(messagePlayerLeft);
                 if (ChatListBox.Items.Count > 0)
                 {
                     ChatListBox.ScrollIntoView(ChatListBox.Items[ChatListBox.Items.Count - 1]);
-                };
+                }
 
-                var playerToRemove = _players.FirstOrDefault(p => p.Name == playerName);
+                var playerToRemove = _players.FirstOrDefault(p => p.Name == username);
                 if (playerToRemove != null)
                 {
                     _players.Remove(playerToRemove);
@@ -434,7 +475,7 @@ namespace Client.Views.Multiplayer
                     _isGameFinished = true;
                     _gameManager?.StopGame();
 
-                    string messageLastPlayerLeft = string.Format(Lang.PlayGameMultiplayer_Label_PlayersLeft, playerName);
+                    string messageLastPlayerLeft = string.Format(Lang.PlayGameMultiplayer_Label_PlayersLeft, username);
                     CustomMessageBox winMessage = new CustomMessageBox(Lang.Global_Title_Information,
                         messageLastPlayerLeft, this, MessageBoxType.Information);
                     winMessage.ShowDialog();
@@ -479,7 +520,8 @@ namespace Client.Views.Multiplayer
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e)
         {
-            NavigationHelper.ShowDialog(this, new Settings());
+            var settingsWindow = new Settings(false, true);
+            NavigationHelper.ShowDialog(this, settingsWindow);
         }
 
         #endregion
@@ -552,20 +594,20 @@ namespace Client.Views.Multiplayer
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"[PlayGameMultiplayer] Error leaving lobby: {ex.Message}");
+                    Debug.WriteLine($"[PlayGameMultiplayer] Error on close: {ex.Message}");
                 }
             }
 
-            try
+            if (this.Owner != null)
             {
-                if (this.Owner != null && Application.Current.MainWindow != this.Owner)
+                try
                 {
                     this.Owner.Show();
                 }
-            }
-            catch (InvalidOperationException ex)
-            {
-                Debug.WriteLine($"[PlayGameMultiplayer] Could not show owner: {ex.Message}");
+                catch (InvalidOperationException)
+                {
+                    Debug.WriteLine($"[PlayGameMultiplayer] Error invalidOperation");
+                }
             }
 
             base.OnClosed(e);
