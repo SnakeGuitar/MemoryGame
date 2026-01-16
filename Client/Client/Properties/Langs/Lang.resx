@@ -764,7 +764,7 @@ You need to log in with your new account :)</value>
     <value>Gallery</value>
   </data>
   <data name="Global_Error_ConnectionLost" xml:space="preserve">
-    <value>Connection to server lost. Returning to login screen.</value>
+    <value>Connection to server lost.</value>
   </data>
   <data name="Global_Error_UsernameTooLong" xml:space="preserve">
     <value>Username cannot exceed 30 characters.</value>

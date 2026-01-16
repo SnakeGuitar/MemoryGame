@@ -186,7 +186,7 @@ namespace Client.Core.Exceptions
         {
             if (IsCriticalServerError(ex))
             {
-                return (Lang.Global_Title_DatabaseDown, Lang.Global_Error_DatabaseCritical);
+                return (Lang.Global_Title_DatabaseDown, Lang.Global_ServiceError_Database);
             }
             if (ex is EndpointNotFoundException)
             {
@@ -198,7 +198,7 @@ namespace Client.Core.Exceptions
             }
             if (ex is EntityException)
             {
-                return (Lang.Global_Title_DatabaseDown, Lang.Global_Error_DatabaseCritical);
+                return (Lang.Global_Title_DatabaseDown, Lang.Global_ServiceError_Database);
             }
             if (ex is CommunicationException)
             {
