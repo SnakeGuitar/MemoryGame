@@ -1,6 +1,7 @@
 ﻿using Client.Helpers;
 using Client.Properties.Langs;
 using System;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.ServiceModel;
@@ -42,52 +43,74 @@ namespace Client.Core.Exceptions
                         return false;
                     }
 
-                    if (IsTransientNetworkError(ex))
+                    if (await TrySilentRetryAsync(ex, retryCount, maxSilentRetries))
                     {
                         retryCount++;
-                        if (retryCount <= maxSilentRetries)
-                        {
-                            Debug.WriteLine($"[Network] Retry {retryCount}/{maxSilentRetries}...");
-                            await Task.Delay(500 * retryCount);
-                            continue;
-                        }
+                        continue;
                     }
 
-                    var errorInfo = GetDistinguishedErrorMessage(ex);
-                    bool isConnectionError = IsTransientNetworkError(ex) || IsCriticalServerError(ex);
-
-                    if (!isConnectionError)
+                    if (!IsConnectionError(ex))
                     {
                         Handle(ex, owner);
                         return false;
                     }
 
-                    switch (policy)
+                    bool shouldRetryManually = ApplyFailurePolicy(ex, owner, policy);
+
+                    if (shouldRetryManually)
                     {
-                        case NetworkFailPolicy.ShowWarningOnly:
-                            Handle(ex, owner);
-                            return false;
-
-                        case NetworkFailPolicy.AskToRetryOrExit:
-                            bool retry = AskUserWithLock(errorInfo.Title, errorInfo.Message, owner);
-                            if (retry)
-                            {
-                                retryCount = 0;
-                                await Task.Delay(1000);
-                                continue;
-                            }
-                            else
-                            {
-                                DialogManager.ForceNavigateToTitle(owner);
-                                return false;
-                            }
-
-                        case NetworkFailPolicy.CriticalExit:
-                            ShowErrorWithLock(errorInfo.Title, errorInfo.Message, owner);
-                            DialogManager.ForceNavigateToTitle(owner);
-                            return false;
+                        retryCount = 0;
+                        await Task.Delay(1000);
+                        continue;
                     }
+
+                    return false;
                 }
+            }
+        }
+
+        private static async Task<bool> TrySilentRetryAsync(Exception ex, int currentRetry, int maxRetries)
+        {
+            if (IsTransientNetworkError(ex) && currentRetry < maxRetries)
+            {
+                Debug.WriteLine($"[Red] Reintento {currentRetry + 1}/{maxRetries}...");
+                await Task.Delay(500 * (currentRetry + 1));
+                return true;
+            }
+            return false;
+        }
+
+        private static bool IsConnectionError(Exception ex)
+        {
+            return IsTransientNetworkError(ex) || IsCriticalServerError(ex);
+        }
+
+        private static bool ApplyFailurePolicy(Exception ex, Window owner, NetworkFailPolicy policy)
+        {
+            var errorInfo = GetDistinguishedErrorMessage(ex);
+
+            switch (policy)
+            {
+                case NetworkFailPolicy.ShowWarningOnly:
+                    LogException(ex);
+                    DialogManager.ShowWarning(errorInfo.Title, errorInfo.Message, owner);
+                    return false;
+
+                case NetworkFailPolicy.AskToRetryOrExit:
+                    bool retry = AskUserWithLock(errorInfo.Title, errorInfo.Message, owner);
+                    if (!retry)
+                    {
+                        DialogManager.ForceNavigateToTitle(owner);
+                    }
+                    return retry;
+
+                case NetworkFailPolicy.CriticalExit:
+                    ShowErrorWithLock(errorInfo.Title, errorInfo.Message, owner);
+                    DialogManager.ForceNavigateToTitle(owner);
+                    return false;
+
+                default:
+                    return false;
             }
         }
 
@@ -140,6 +163,11 @@ namespace Client.Core.Exceptions
 
         private static bool IsTransientNetworkError(Exception ex)
         {
+            if (ex is FaultException)
+            {
+                return false;
+            }
+
             return ex is TimeoutException ||
                    ex is EndpointNotFoundException ||
                    ex is CommunicationException;
@@ -168,6 +196,10 @@ namespace Client.Core.Exceptions
             {
                 return (Lang.Global_Title_NetworkError, Lang.Global_Error_Timeout);
             }
+            if (ex is EntityException)
+            {
+                return (Lang.Global_Title_DatabaseDown, Lang.Global_Error_DatabaseCritical);
+            }
             if (ex is CommunicationException)
             {
                 return (Lang.Global_Title_NetworkError, Lang.Global_Error_ConnectionLost);
@@ -195,7 +227,10 @@ namespace Client.Core.Exceptions
                     File.AppendAllText(logPath, $"[{DateTime.Now}] {ex.GetType().Name}: {ex.Message}\n");
                 }
             }
-            catch { }
+            catch 
+            {
+                Debug.WriteLine("Ignored LogException error");
+            }
         }
     }
 }
