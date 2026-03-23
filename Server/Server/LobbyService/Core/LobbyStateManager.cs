@@ -1,4 +1,4 @@
-﻿using Server.GameService;
+using Server.GameService;
 using Server.Shared;
 using System;
 using System.Collections.Concurrent;
@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Server.LobbyService.Core
 {
-    public class LobbyStateManager
+    public class LobbyStateManager : ILobbyStateManager
     {
         private readonly ConcurrentDictionary<string, Lobby> _lobbies = new ConcurrentDictionary<string, Lobby>();
         private readonly ConcurrentDictionary<string, GameManager> _games = new ConcurrentDictionary<string, GameManager>();
@@ -68,11 +68,7 @@ namespace Server.LobbyService.Core
 
         public bool TryCreateLobby(string gameCode, LobbyClient client, out Lobby lobby)
         {
-            lobby = new Lobby
-            {
-                GameCode = gameCode,
-                CreatedAt = DateTime.UtcNow
-            };
+            lobby = new Lobby(gameCode);
 
             if (_lobbies.TryAdd(gameCode, lobby))
             {

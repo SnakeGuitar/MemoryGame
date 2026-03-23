@@ -1,4 +1,4 @@
-﻿using Server.GameService;
+using Server.GameService;
 using Server.LobbyService.Core;
 using Server.SessionService;
 using Server.Shared;
@@ -17,7 +17,7 @@ namespace Server.LobbyService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class GameLobbyService : IGameLobbyService
     {
-        private readonly LobbyStateManager _stateManager;
+        private readonly ILobbyStateManager _stateManager;
         private readonly LobbyNotifier _notifier;
 
         private readonly ISessionManager _sessionManager;
@@ -32,17 +32,17 @@ namespace Server.LobbyService
             ILobbyCallbackProvider callbackProvider,
             IGameLobbyServiceValidator validator,
             ILoggerManager logger,
-            IDbContextFactory dbFactory)
+            IDbContextFactory dbFactory,
+            ILobbyStateManager stateManager)
         {
             _sessionManager = sessionManager;
             _securityService = securityService;
             _callbackProvider = callbackProvider;
             _validator = validator;
-
             _logger = logger;
-            _stateManager = new LobbyStateManager(_logger);
-            _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId), _logger);
             _dbFactory = dbFactory;
+            _stateManager = stateManager;
+            _notifier = new LobbyNotifier(sessionId => HandleDisconnection(sessionId), _logger);
         }
 
         public GameLobbyService() : this(
@@ -51,13 +51,13 @@ namespace Server.LobbyService
             new WcfLobbyCallbackProvider(),
             new GameLobbyServiceValidator(),
             new Logger(typeof(GameLobbyService)),
-            new DbContextFactory())
+            new DbContextFactory(),
+            new LobbyStateManager())
         {
         }
 
         public bool JoinLobby(string token, string gameCode, bool isGuest, string guestName = null)
         {
-            
             return ServerExceptionManager.SafeExecute(() =>
             {
                 if (!_validator.IsValidGameCode(gameCode))
@@ -73,19 +73,14 @@ namespace Server.LobbyService
                 }
 
                 var client = PrepareClient(token, isGuest, guestName);
-                if (client == null)
-                {
-                    return false;
-                }
+                if (client == null) return false;
 
-                if (_stateManager.TryJoinLobby(gameCode, client, out var lobby))
-                {
-                    _logger.LogInfo($"Client {client.Name} joined lobby {gameCode}.");
-                    _notifier.NotifyJoin(lobby, client.Name);
-                    SubscribeToDisconnect(client.Callback, client.SessionId);
-                    return true;
-                }
-                return false;
+                if (!_stateManager.TryJoinLobby(gameCode, client, out var lobby)) return false;
+
+                _logger.LogInfo($"Client {client.Name} joined lobby {gameCode}.");
+                _notifier.NotifyJoin(lobby, client.Name);
+                SubscribeToDisconnect(client.Callback, client.SessionId);
+                return true;
             }, _logger, nameof(JoinLobby));
         }
 
@@ -93,26 +88,17 @@ namespace Server.LobbyService
         {
             return ServerExceptionManager.SafeExecute(() =>
             {
-                if (!_validator.IsValidGameCode(gameCode))
-                {
-                    return false;
-                }
+                if (!_validator.IsValidGameCode(gameCode)) return false;
 
                 var client = PrepareClient(token, false, null);
-                if (client == null)
-                {
-                    return false;
-                }
+                if (client == null) return false;
 
-                if (_stateManager.TryCreateLobby(gameCode, client, out var lobby))
-                {
-                    lobby.IsPublic = isPublic;
-                    _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
-                    SubscribeToDisconnect(client.Callback, client.SessionId);
-                    return true;
-                }
+                if (!_stateManager.TryCreateLobby(gameCode, client, out var lobby)) return false;
 
-                return false;
+                lobby.IsPublic = isPublic;
+                _logger.LogInfo($"Client {client.Name} created lobby {gameCode}.");
+                SubscribeToDisconnect(client.Callback, client.SessionId);
+                return true;
             }, _logger, nameof(CreateLobby));
         }
 
@@ -133,28 +119,16 @@ namespace Server.LobbyService
         {
             ServerExceptionManager.SafeExecute(() =>
             {
-                if (!_validator.IsValidChatMessage(message))
-                {
-                    _logger.LogWarn("Invalid chat message attempted.");
-                    return;
-                }
+                if (!_validator.IsValidChatMessage(message)) return;
 
-                var sessionId = _callbackProvider.GetSessionId();
-                if (sessionId == null)
-                {
-                    _logger.LogWarn("Chat message attempted with null session ID.");
-                    return;
-                }
+                var sessionId = GetSessionIdOrThrow();
+                var lobby = GetLobbyBySessionOrThrow(sessionId);
 
-                var lobby = _stateManager.GetLobbyBySession(sessionId);
-                if (lobby != null)
+                var client = lobby.Clients.Values.FirstOrDefault(c => c.SessionId == sessionId);
+                if (client != null)
                 {
-                    var client = lobby.Clients.Values.FirstOrDefault(c => c.SessionId == sessionId);
-                    if (client != null)
-                    {
-                        _notifier.BroadcastMessage(lobby, message, false, client.Name);
-                        _logger.LogInfo($"Chat message from {client.Name} in lobby {lobby.GameCode}: {message}");
-                    }
+                    _notifier.BroadcastMessage(lobby, message, false, client.Name);
+                    _logger.LogInfo($"Chat message from {client.Name} in lobby {lobby.GameCode}: {message}");
                 }
             }, _logger, nameof(SendChatMessage));
         }
@@ -163,19 +137,8 @@ namespace Server.LobbyService
         {
             ServerExceptionManager.SafeExecute(() =>
             {
-                var sessionId = _callbackProvider.GetSessionId();
-                if (sessionId == null)
-                {
-                    _logger.LogWarn($"{nameof(StartGame)} called with null session ID.");
-                    return;
-                }
-
-                var lobby = _stateManager.GetLobbyBySession(sessionId);
-                if (lobby == null)
-                {
-                    _logger.LogWarn($"Cannot start game: Session {sessionId} not in lobby.");
-                    throw new FaultException("Not in a lobby.");
-                }
+                var sessionId = GetSessionIdOrThrow();
+                var lobby = GetLobbyBySessionOrThrow(sessionId);
 
                 if (!_stateManager.TryStartGame(sessionId, settings, out var gameCode))
                 {
@@ -262,7 +225,7 @@ namespace Server.LobbyService
             {
                 try
                 {
-                    client.Callback.ReceiveChatMessage("System", "Unexpected database error. Unable to saave changes.", true);
+                    client.Callback.ReceiveChatMessage("System", "Global_ServiceError_Database", true);
                 }
                 catch (Exception)
                 {
@@ -275,13 +238,7 @@ namespace Server.LobbyService
         {
             ServerExceptionManager.SafeExecute(() =>
             {
-                var sessionId = _callbackProvider.GetSessionId();
-                if (sessionId == null)
-                {
-                    _logger.LogWarn($"{nameof(FlipCard)} called with null session ID.");
-                    return;
-                }
-
+                var sessionId = GetSessionIdOrThrow();
                 var gameManager = _stateManager.GetGameManager(sessionId);
                 var playerId = _stateManager.GetPlayerId(sessionId);
 
@@ -300,13 +257,8 @@ namespace Server.LobbyService
         {
             ServerExceptionManager.SafeExecute(() =>
             {
-                var sessionId = _callbackProvider.GetSessionId();
-                var lobby = _stateManager.GetLobbyBySession(sessionId);
-
-                if (lobby == null)
-                {
-                    return;
-                }
+                var sessionId = GetSessionIdOrThrow();
+                var lobby = GetLobbyBySessionOrThrow(sessionId);
 
                 var gameManager = _stateManager.GetGameManager(sessionId);
                 var voterId = _stateManager.GetPlayerId(sessionId);
@@ -449,6 +401,28 @@ namespace Server.LobbyService
 
                 return publicLobbies;
             }, _logger, nameof(GetPublicLobbies));
+        }
+
+        private string GetSessionIdOrThrow()
+        {
+            var sessionId = _callbackProvider.GetSessionId();
+            if (sessionId == null)
+            {
+                _logger.LogWarn("Operation attempted with null session ID.");
+                throw new FaultException("Session expired or invalid.");
+            }
+            return sessionId;
+        }
+
+        private Lobby GetLobbyBySessionOrThrow(string sessionId)
+        {
+            var lobby = _stateManager.GetLobbyBySession(sessionId);
+            if (lobby == null)
+            {
+                _logger.LogWarn($"No lobby found for session {sessionId}.");
+                throw new FaultException("Not in a lobby.");
+            }
+            return lobby;
         }
     }
 }

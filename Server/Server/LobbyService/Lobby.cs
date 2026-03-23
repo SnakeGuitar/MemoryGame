@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,11 @@ namespace Server.LobbyService
         public DateTime CreatedAt { get; set; }
         public object LockObject { get; } = new object();
         public bool IsPublic { get; set; } = false;
+
+        public Lobby(string gameCode)
+        {
+            GameCode = gameCode;
+            CreatedAt = DateTime.UtcNow;
+        }
     }
 }
