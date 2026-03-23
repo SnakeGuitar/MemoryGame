@@ -68,6 +68,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Core\Exceptions\DialogManager.cs" />
+    <Compile Include="Core\Exceptions\ExceptionManager.cs" />
+    <Compile Include="Core\Exceptions\NetworkFailPolicy.cs" />
     <Compile Include="Core\MusicManager.cs" />
     <Compile Include="Core\WcfClientFactory.cs" />
     <Compile Include="Helpers\ClientHelper.cs" />
@@ -100,7 +103,6 @@
     </Compile>
     <Compile Include="Core\Converters\SelfReportVisibilityConverter.cs" />
     <Compile Include="Core\UserServiceManager.cs" />
-    <Compile Include="Core\ExceptionManager.cs" />
     <Compile Include="Models\GameConstants.cs" />
     <Compile Include="Core\GameManager.cs" />
     <Compile Include="Core\GameServiceManager.cs" />
@@ -442,6 +444,12 @@
     <None Include="Connected Services\GameLobbyServiceReference\item.disco" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Cards\Backs\default.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Color\africa.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Color\ana.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Color\ari.png" />
@@ -455,13 +463,6 @@
     <Resource Include="Resources\Images\Cards\Fronts\Color\saddy.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Color\sara.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Backgrounds\mainMenu.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Cards\Backs\default.png" />
-  </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Images\Cards\Fronts\Normal\africa.png" />
     <Resource Include="Resources\Images\Cards\Fronts\Normal\ana.png" />
