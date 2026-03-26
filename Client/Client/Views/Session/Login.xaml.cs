@@ -69,7 +69,7 @@ namespace Client.Views.Session
                 {
                     throw new FaultException(response.MessageKey);
                 }
-            }, this, NetworkFailPolicy.ShowWarningOnly);
+            }, this);
 
             Mouse.OverrideCursor = null;
 

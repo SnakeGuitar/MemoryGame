@@ -99,7 +99,7 @@ namespace Client.Views.Multiplayer
                 {
                     throw new FaultException(sessionCheck.MessageKey);
                 }
-            }, this);
+            }, this, NetworkFailPolicy.AskToRetryOrExit);
         }
 
         private void InitializeUIArrays()
