@@ -765,7 +765,7 @@ Por favor inténtalo de nuevo</value>
     <value>Galería</value>
   </data>
   <data name="Global_Error_ConnectionLost" xml:space="preserve">
-    <value>Conexión perdida. Regresando al inicio de sesión.</value>
+    <value>Conexión perdida.</value>
   </data>
   <data name="Global_Error_UsernameTooLong" xml:space="preserve">
     <value>El usuario no puede exceder 30 caracteres.</value>
